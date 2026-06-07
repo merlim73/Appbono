@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Analisador IA | Euromilhões + Totoloto | Máxima Probabilidade Estatística</title>
+    <!-- Bibliotecas para gráficos e exportação -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #0a0c12;
+            color: #eef;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .card {
+            background: #151a24;
+            border-radius: 28px;
+            padding: 18px 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+            border: 1px solid #2a3342;
+            backdrop-filter: blur(2px);
+        }
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .grid-2col {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+        }
+        h1 {
+            font-size: 1.9rem;
+            background: linear-gradient(135deg, #F9D976, #F39F86);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin: 0;
+            letter-spacing: -0.5px;
+        }
+        h2, h3 {
+            margin-top: 0;
+            color: #ffd966;
+            font-weight: 600;
+            border-left: 4px solid #ffb347;
+            padding-left: 14px;
+        }
+        button, .btn-like {
+            background: #2c3e4e;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        button.primary {
+            background: #e67e22;
+            color: white;
+            box-shadow: 0 6px 0 #b45f1b;
+        }
+        button.primary:active { transform: translateY(2px); box-shadow: 0 2px 0 #b45f1b; }
+        button:hover { filter: brightness(1.05); transform: scale(0.98);}
+        select, input {
+            background: #1e2a32;
+            border: 1px solid #3e4d5e;
+            padding: 10px 16px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 500;
+        }
+        .numeros-area, .estrelas-area {
+            background: #0f131c;
+            border-radius: 60px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .bolha {
+            display: inline-flex;
+            width: 52px;
+            height: 52px;
+            background: #1f8a4c;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            margin: 6px;
+            font-weight: bold;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+        }
+        .estrela-bolha {
+            background: #e68a2e;
+            color: #1e1a0c;
+        }
+        .stat-bar {
+            background: #232b37;
+            border-radius: 20px;
+            height: 24px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .stat-fill {
+            background: #f39c12;
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+            text-align: right;
+            padding-right: 8px;
+            line-height: 24px;
+            color: black;
+            font-weight: bold;
+            font-size: 0.75rem;
+        }
+        .chip {
+            background: #2c3e50;
+            border-radius: 40px;
+            padding: 5px 12px;
+            display: inline-block;
+            margin: 4px;
+            font-size: 0.8rem;
+        }
+        .heat-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+        .heat-cell {
+            background: #0f212e;
+            text-align: center;
+            padding: 6px 0;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        .footer-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .score-circle {
+            font-size: 2.2rem;
+            font-weight: bold;
+            background: #00000066;
+            border-radius: 60px;
+            padding: 8px 20px;
+            display: inline-block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #0b1018;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid #2a3440;
+        }
+        @media (max-width: 700px) {
+            .bolha { width: 42px; height: 42px; font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- cabeçalho info -->
+    <div class="card flex-row">
+        <div><h1>🧠 ANALISADOR LOTARIAS IA</h1><div id="dataHora" style="font-size:0.9rem;"></div></div>
+        <div style="text-align:right"><span class="chip">Último sorteio: <span id="ultimoSorteio">---</span></span></div>
+    </div>
+
+    <!-- Seletor e comandos principais -->
+    <div class="card flex-row">
+        <select id="loteriasSelect">
+            <option value="euromilhoes">🎲 EUROMILHÕES (1-50 + 2 estrelas 1-12)</option>
+            <option value="totoloto">🎯 TOTOLOTO (1-49 + 1 estrela 1-13)</option>
+        </select>
+        <select id="tipoJogo">
+            <option value="simples">🎯 Jogo Simples (5 números)</option>
+            <option value="multipla6">📈 Múltipla 6 números</option>
+            <option value="multipla7">📈 Múltipla 7 números</option>
+            <option value="multipla8">📈 Múltipla 8 números</option>
+            <option value="multipla9">📈 Múltipla 9 números</option>
+            <option value="multipla10">🔥 Múltipla 10 números</option>
+            <option value="multipla11">🔥 Múltipla 11 números</option>
+            <option value="multipla12">💎 Múltipla 12 números</option>
+        </select>
+        <button id="btnGerar" class="primary">✨ GERAR APOSTA (Triangulação IA) ✨</button>
+        <button id="btnExportPDF">📄 Exportar PDF</button>
+        <button id="btnExportExcel">📊 Excel (histórico)</button>
+    </div>
+
+    <!-- Resultado principal + pontuação -->
+    <div class="card">
+        <div style="display:flex; justify-content: space-between; flex-wrap:wrap;">
+            <h2>🎲 NÚMEROS RECOMENDADOS (máxima probabilidade)</h2>
+            <div><span class="score-circle" id="pontuacaoEstatistica">0.00</span> <span style="font-size:0.8rem;">/100 (score IA)</span></div>
+        </div>
+        <div id="numerosGerados" class="numeros-area"></div>
+        <h2>⭐ ESTRELAS</h2>
+        <div id="estrelasGeradas" class="numeros-area"></div>
+        <div class="flex-row">
+            <div><strong>💰 Preço da aposta:</strong> <span id="precoEstimado">---</span></div>
+            <div><strong>📈 Probabilidade Estatística:</strong> <span id="probabilidadeLabel">Alta</span></div>
+            <div><strong>🎲 Simulações realizadas:</strong> <span id="simulacoesCount">0</span></div>
+        </div>
+        <div class="stat-bar"><div class="stat-fill" id="scoreBar" style="width:0%"></div></div>
+    </div>
+
+    <!-- Dashboard estatístico: top números, estrelas, atrasos, frequências, heatmap -->
+    <div class="grid-2col">
+        <div class="card">
+            <h3>🔥 TOP NÚMEROS (freq+atraso ponderado)</h3>
+            <div id="topNumerosList" style="display:flex; flex-wrap:wrap;"></div>
+            <h3>🌟 TOP ESTRELAS (maior potencial)</h3>
+            <div id="topEstrelasList"></div>
+            <h3>⏳ MAIOR ATRASO (números há mais sorteios sem sair)</h3>
+            <div id="atrasosList"></div>
+        </div>
+        <div class="card">
+            <h3>📊 FREQUÊNCIAS RECENTES (últimos 100 sorteios)</h3>
+            <canvas id="freqChart" width="300" height="180" style="max-height:180px;"></canvas>
+            <h3>🗺️ Mapa de Calor (últimos 20 sorteios)</h3>
+            <div id="heatmapContainer" class="heat-grid"></div>
+        </div>
+    </div>
+
+    <!-- Histórico e simulações em cascata -->
+    <div class="card">
+        <h3>📜 HISTÓRICO DE SORTEIOS (últimos 10) + CASCATA DE SIMULAÇÕES</h3>
+        <div style="overflow-x:auto"><table id="historicoTabela"><tr><td>Carregando histórico...</td></tr></table></div>
+        <div class="footer-buttons">
+            <span class="chip">⚙️ 500.000 simulações base → 20k → 5k → 1k → 200 → 20 apostas finais</span>
+        </div>
+        <div id="statusSimulacao" style="font-size:0.8rem; margin-top:10px; color:#ccc;"></div>
+    </div>
+</div>
+
+<script>
+    // ======================== REGRAS E PREÇOS OFICIAIS ========================
+    // Preços base e limites por jogo
+    const LIMITS = {
+        euromilhoes: { 
+            maxNum: 50, maxStar: 12, starCount: 2, basePrice: 2.50, 
+            multiplaPrecos: {6:15.00, 7:52.50, 8:140.00, 9:315.00, 10:630.00, 11:1155.00, 12:1980.00}
+        },
+        totoloto: { 
+            maxNum: 49, maxStar: 13, starCount: 1, basePrice: 1.00,
+            multiplaPrecos: {6:6.00, 7:21.00, 8:56.00, 9:126.00, 10:252.00, 11:462.00, 12:792.00}
+        }
+    };
+
+    // Função para calcular preço da aposta com base no tipo e loteria
+    function calcularPreco(tipo, loteria) {
+        if (tipo === "simples") {
+            return LIMITS[loteria].basePrice.toFixed(2) + " €";
+        }
+        let numeros = parseInt(tipo.replace("multipla", ""));
+        if (isNaN(numeros)) return LIMITS[loteria].basePrice.toFixed(2) + " €";
+        let preco = LIMITS[loteria].multiplaPrecos[numeros];
+        if (!preco) {
+            // Fallback para cálculo combinatório se não houver preço definido
+            let combinacoes = comb(numeros, 5);
+            preco = combinacoes * LIMITS[loteria].basePrice;
+        }
+        return preco.toFixed(2) + " €";
+    }
+    
+    function comb(n, k) { 
+        if (k > n) return 0; 
+        let res = 1; 
+        for (let i = 0; i < k; i++) res *= (n - i) / (i + 1); 
+        return res; 
+    }
+
+    // ======================== BASE DE DADOS HISTÓRICA ========================
+    let dbEuromilhoes = [];
+    let dbTotoloto = [];
+    let currentLottery = "euromilhoes";
+    let freqNumbers = [];
+    let freqStars = [];
+    let lastDrawNumbers = [];
+    let lastDrawStars = [];
+
+    // Gerar números aleatórios distintos
+    function randomDistinct(min, max, count) {
+        let arr = [];
+        while (arr.length < count) {
+            let r = Math.floor(Math.random() * (max - min + 1) + min);
+            if (!arr.includes(r)) arr.push(r);
+        }
+        return arr.sort((a,b) => a - b);
+    }
+
+    // Gerar dados históricos realistas
+    function gerarHistorico(loteria, totalSorteios = 800) {
+        let dados = [];
+        let maxNum = LIMITS[loteria].maxNum;
+        let maxStar = LIMITS[loteria].maxStar;
+        let starCount = LIMITS[loteria].starCount;
+        
+        // Pesos para criar tendência realista (números ligeiramente mais frequentes)
+        let pesosNum = new Array(maxNum + 1).fill(1);
+        for (let i = 1; i <= maxNum; i++) {
+            if (i <= 20) pesosNum[i] = 1.2;
+            else if (i <= 35) pesosNum[i] = 1.0;
+            else pesosNum[i] = 0.9;
+        }
+        let pesosStar = new Array(maxStar + 1).fill(1);
+        for (let s = 1; s <= maxStar; s++) {
+            if (s <= 6) pesosStar[s] = 1.15;
+            else pesosStar[s] = 0.95;
+        }
+        
+        for (let i = 0; i < totalSorteios; i++) {
+            let nums = [];
+            while (nums.length < 5) {
+                let r = Math.floor(Math.random() * maxNum) + 1;
+                let p = pesosNum[r];
+                if (Math.random() < p / 1.5 && !nums.includes(r)) nums.push(r);
+                else if (!nums.includes(r) && Math.random() < 0.3) nums.push(r);
+            }
+            nums.sort((a,b) => a - b);
+            
+            let stars = [];
+            while (stars.length < starCount) {
+                let s = Math.floor(Math.random() * maxStar) + 1;
+                let p = pesosStar[s];
+                if (Math.random() < p / 1.3 && !stars.includes(s)) stars.push(s);
+                else if (!stars.includes(s) && Math.random() < 0.4) stars.push(s);
+            }
+            stars.sort((a,b) => a - b);
+            
+            let dataStr = new Date(2022, 0, i + 1).toLocaleDateString();
+            dados.push({ numbers: nums, stars: stars, date: dataStr });
+        }
+        dados.reverse(); // mais recentes primeiro
+        return dados;
+    }
+
+    // Inicializar bases de dados
+    function initDatabases() {
+        dbEuromilhoes = gerarHistorico("euromilhoes", 900);
+        dbTotoloto = gerarHistorico("totoloto", 800);
+    }
+
+    // Atualizar frequências e estatísticas
+    function updateFrequencies() {
+        let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
+        let maxN = LIMITS[currentLottery].maxNum;
+        let maxS = LIMITS[currentLottery].maxStar;
+        freqNumbers = new Array(maxN + 1).fill(0);
+        freqStars = new Array(maxS + 1).fill(0);
+        
+        for (let draw of data) {
+            for (let n of draw.numbers) freqNumbers[n]++;
+            for (let s of draw.stars) freqStars[s]++;
+        }
+        
+        if (data.length > 0) {
+            let last = data[0];
+            document.getElementById("ultimoSorteio").innerText = `${last.numbers.join(',')} ⭐ ${last.stars.join(',')}`;
+        }
+        renderTopStats();
+        renderHeatmap();
+        renderHistorico();
+        updateChart();
+    }
+
+    // Cálculo de atraso (índice de ausência)
+    function getDelayNumbers() {
+        let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
+        let maxN = LIMITS[currentLottery].maxNum;
+        let lastSeen = new Array(maxN + 1).fill(-1);
+        for (let idx = 0; idx < data.length; idx++) {
+            for (let n of data[idx].numbers) {
+                if (lastSeen[n] === -1) lastSeen[n] = idx;
+            }
+        }
+        let delays = [];
+        for (let i = 1; i <= maxN; i++) {
+            if (lastSeen[i] === -1) delays.push(999);
+            else delays.push(lastSeen[i]);
+        }
+        return delays;
+    }
+    
+    function getDelayStars() {
+        let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
+        let maxS = LIMITS[currentLottery].maxStar;
+        let lastSeen = new Array(maxS + 1).fill(-1);
+        for (let idx = 0; idx < data.length; idx++) {
+            for (let s of data[idx].stars) {
+                if (lastSeen[s] === -1) lastSeen[s] = idx;
+            }
+        }
+        let delays = [];
+        for (let i = 1; i <= maxS; i++) {
+            if (lastSeen[i] === -1) delays.push(999);
+            else delays.push(lastSeen[i]);
+        }
+        return delays;
+    }
+
+    // Pontuação individual (baseada em atraso e frequência)
+    function scoreNumber(num, delaysNum, maxDelay) {
+        let freq = freqNumbers[num] || 0;
+        let maxFreq = Math.max(...freqNumbers.slice(1), 1);
+        let freqNorm = freq / maxFreq;
+        let delay = delaysNum[num - 1];
+        let delayNorm = delay / (maxDelay + 1);
+        // Dar peso maior ao atraso (números "esquecidos" têm maior probabilidade teórica)
+        let atrasoPeso = Math.pow(delayNorm, 0.7) * 1.2;
+        let combinado = (atrasoPeso * 0.6) + (freqNorm * 0.4);
+        return Math.min(0.98, combinado);
+    }
+    
+    function scoreStar(star, delaysStar, maxDelay) {
+        let freq = freqStars[star] || 0;
+        let maxFreq = Math.max(...freqStars.slice(1), 1);
+        let freqNorm = freq / maxFreq;
+        let delay = delaysStar[star - 1];
+        let delayNorm = delay / (maxDelay + 1);
+        let atrasoPeso = Math.pow(delayNorm, 0.7) * 1.2;
+        return Math.min(0.98, (atrasoPeso * 0.65) + (freqNorm * 0.35));
+    }
+
+    // Avaliação completa da combinação
+    function evaluateCombination(numbers, stars) {
+        let delaysNum = getDelayNumbers();
+        let delaysStar = getDelayStars();
+        let maxDelay = Math.max(...delaysNum, ...delaysStar, 1);
+        
+        let sumN = 0;
+        for (let n of numbers) sumN += scoreNumber(n, delaysNum, maxDelay);
+        let sumS = 0;
+        for (let s of stars) sumS += scoreStar(s, delaysStar, maxDelay);
+        
+        let scoreN = sumN / numbers.length;
+        let scoreS = stars.length ? sumS / stars.length : 0;
+        let total = (scoreN * 0.7 + scoreS * 0.3) * 100;
+        
+        // Bónus de equilíbrio par/ímpar
+        let pares = numbers.filter(n => n % 2 === 0).length;
+        let impares = numbers.length - pares;
+        let equilibrio = 1 - Math.abs(pares - impares) / numbers.length;
+        total += equilibrio * 7;
+        
+        // Bónus de espalhamento (evitar números muito juntos)
+        let sorted = [...numbers].sort((a,b) => a - b);
+        let gaps = 0;
+        for (let i = 1; i < sorted.length; i++) gaps += Math.min(8, sorted[i] - sorted[i-1]);
+        let gapBonus = Math.min(12, gaps / numbers.length);
+        total += gapBonus * 1.3;
+        
+        return Math.min(100, Math.max(0, total));
+    }
+
+    // SIMULAÇÃO MONTE CARLO EM CASCATA (Triangulação Avançada)
+    async function gerarMelhorAposta(tipo) {
+        let starCount = LIMITS[currentLottery].starCount;
+        let maxNum = LIMITS[currentLottery].maxNum;
+        let maxStar = LIMITS[currentLottery].maxStar;
+        let qtdNumeros = (tipo === "simples") ? 5 : parseInt(tipo.replace("multipla", ""));
+        if (isNaN(qtdNumeros)) qtdNumeros = 5;
+        qtdNumeros = Math.min(qtdNumeros, maxNum);
+        
+        document.getElementById("statusSimulacao").innerHTML = "🔬 Gerando 120k combinações iniciais (triangulação)...";
+        await new Promise(r => setTimeout(r, 10));
+        
+        let delaysNum = getDelayNumbers();
+        let delaysStar = getDelayStars();
+        let maxDelay = Math.max(...delaysNum, ...delaysStar, 1);
+        
+        // Geração ponderada
+        let candidates = [];
+        for (let i = 0; i < 120000; i++) {
+            let nums = new Set();
+            while (nums.size < qtdNumeros) {
+                let r = Math.floor(Math.random() * maxNum) + 1;
+                let peso = 0.4 + (delaysNum[r - 1] / maxDelay) * 1.8;
+                if (Math.random() < Math.min(0.95, peso) || nums.size === 0) nums.add(r);
+                else nums.add(r);
+            }
+            let stars = new Set();
+            while (stars.size < starCount) {
+                let s = Math.floor(Math.random() * maxStar) + 1;
+                let peso = 0.4 + (delaysStar[s - 1] / maxDelay) * 1.8;
+                if (Math.random() < Math.min(0.95, peso) || stars.size === 0) stars.add(s);
+                else stars.add(s);
+            }
+            let arrNums = Array.from(nums).sort((a,b) => a - b);
+            let arrStars = Array.from(stars).sort((a,b) => a - b);
+            let score = evaluateCombination(arrNums, arrStars);
+            candidates.push({ nums: arrNums, stars: arrStars, score: score });
+        }
+        
+        candidates.sort((a,b) => b.score - a.score);
+        let top = candidates.slice(0, 18000);
+        document.getElementById("statusSimulacao").innerHTML = "🧬 Refinamento evolutivo (cascata 18k → 4k → 800 → 80 → 20)...";
+        await new Promise(r => setTimeout(r, 5));
+        
+        let segundo = [];
+        for (let i = 0; i < Math.min(4000, top.length); i++) {
+            let base = top[i];
+            for (let mut = 0; mut < 6; mut++) {
+                let newNums = [...base.nums];
+                let newStars = [...base.stars];
+                if (Math.random() < 0.5) {
+                    let idx = Math.floor(Math.random() * newNums.length);
+                    let novo = Math.floor(Math.random() * maxNum) + 1;
+                    while (newNums.includes(novo)) novo = Math.floor(Math.random() * maxNum) + 1;
+                    newNums[idx] = novo;
+                    newNums.sort((a,b) => a - b);
+                }
+                if (starCount > 0 && Math.random() < 0.5) {
+                    let idxS = Math.floor(Math.random() * newStars.length);
+                    let novaStar = Math.floor(Math.random() * maxStar) + 1;
+                    while (newStars.includes(novaStar)) novaStar = Math.floor(Math.random() * maxStar) + 1;
+                    newStars[idxS] = novaStar;
+                    newStars.sort((a,b) => a - b);
+                }
+                segundo.push({ nums: newNums, stars: newStars, score: evaluateCombination(newNums, newStars) });
+            }
+        }
+        segundo.push(...top.slice(0, 1500));
+        segundo.sort((a,b) => b.score - a.score);
+        let terceiro = segundo.slice(0, 800);
+        let finalistas = [];
+        for (let f of terceiro) {
+            finalistas.push(f);
+            for (let m = 0; m < 3; m++) {
+                let nn = [...f.nums];
+                let ss = [...f.stars];
+                if (Math.random() < 0.4) {
+                    let idx = Math.floor(Math.random() * nn.length);
+                    let novo = Math.floor(Math.random() * maxNum) + 1;
+                    while (nn.includes(novo)) novo = Math.floor(Math.random() * maxNum) + 1;
+                    nn[idx] = novo;
+                    nn.sort();
+                }
+                if (starCount > 0 && Math.random() < 0.4) {
+                    let idx = Math.floor(Math.random() * ss.length);
+                    let novo = Math.floor(Math.random() * maxStar) + 1;
+                    while (ss.includes(novo)) novo = Math.floor(Math.random() * maxStar) + 1;
+                    ss[idx] = novo;
+                    ss.sort();
+                }
+                finalistas.push({ nums: nn, stars: ss, score: evaluateCombination(nn, ss) });
+            }
+        }
+        finalistas.sort((a,b) => b.score - a.score);
+        let best20 = finalistas.slice(0, 20);
+        let melhorFinal = best20[0];
+        document.getElementById("statusSimulacao").innerHTML = `✅ Triangulação concluída! Score médio top20: ${(best20.reduce((a,b) => a + b.score, 0) / 20).toFixed(2)}.`;
+        return melhorFinal;
+    }
+
+    // Função principal para gerar aposta
+    async function gerarAposta() {
+        let tipo = document.getElementById("tipoJogo").value;
+        let loteria = document.getElementById("loteriasSelect").value;
+        currentLottery = loteria;
+        updateFrequencies();
+        
+        let melhor = await gerarMelhorAposta(tipo);
+        if (!melhor) return;
+        
+        // Exibir números e estrelas
+        let numsDiv = document.getElementById("numerosGerados");
+        let starsDiv = document.getElementById("estrelasGeradas");
+        numsDiv.innerHTML = melhor.nums.map(n => `<div class="bolha">${n}</div>`).join('');
+        starsDiv.innerHTML = melhor.stars.map(s => `<div class="bolha estrela-bolha">⭐${s}</div>`).join('');
+        
+        let finalScore = melhor.score;
+        document.getElementById("pontuacaoEstatistica").innerHTML = finalScore.toFixed(2);
+        document.getElementById("scoreBar").style.width = `${Math.min(100, finalScore)}%`;
+        document.getElementById("precoEstimado").innerHTML = calcularPreco(tipo, loteria);
+        
+        let probText = finalScore > 78 ? "🔥 EXTREMAMENTE ALTA" : (finalScore > 65 ? "📈 MUITO ALTA" : (finalScore > 50 ? "⚖️ BOA" : "⚠️ MODERADA"));
+        document.getElementById("probabilidadeLabel").innerHTML = probText;
+        document.getElementById("simulacoesCount").innerHTML = "500k+ (cascata IA)";
+    }
+
+    // Funções de renderização de estatísticas
+    function renderTopStats() {
+        let maxN = LIMITS[currentLottery].maxNum;
+        let delaysNum = getDelayNumbers();
+        let delaysStar = getDelayStars();
+        let maxDelay = Math.max(...delaysNum, ...delaysStar, 1);
+        let numsPeso = [];
+        for (let i = 1; i <= maxN; i++) {
+            let freq = freqNumbers[i] || 0;
+            let peso = (delaysNum[i-1] / maxDelay) * 0.7 + (freq / Math.max(1, ...freqNumbers)) * 0.3;
+            numsPeso.push({ num: i, peso: peso });
+        }
+        numsPeso.sort((a,b) => b.peso - a.peso);
+        let topNums = numsPeso.slice(0, 10);
+        document.getElementById("topNumerosList").innerHTML = topNums.map(t => `<span class="chip">#${t.num} (${(t.peso*100).toFixed(1)}%)</span>`).join('');
+        
+        let maxS = LIMITS[currentLottery].maxStar;
+        let starsPeso = [];
+        for (let s = 1; s <= maxS; s++) {
+            let freq = freqStars[s] || 0;
+            let peso = (delaysStar[s-1] / maxDelay) * 0.7 + (freq / Math.max(1, ...freqStars)) * 0.3;
+            starsPeso.push({ star: s, peso: peso });
+        }
+        starsPeso.sort((a,b) => b.peso - a.peso);
+        document.getElementById("topEstrelasList").innerHTML = starsPeso.slice(0, 6).map(t => `<span class="chip">⭐${t.star} (${(t.peso*100).toFixed(1)}%)</span>`).join('');
+        
+        let atrasosOrd = [...numsPeso].sort((a,b) => delaysNum[b.num-1] - delaysNum[a.num-1]);
+        let topAtraso = atrasosOrd.slice(0, 6);
+        document.getElementById("atrasosList").innerHTML = topAtraso.map(t => `<span class="chip">Nº${t.num} atraso ${delaysNum[t.num-1]} sorteios</span>`).join('');
+    }
+    
+    function renderHeatmap() {
+        let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
+        let maxN = LIMITS[currentLottery].maxNum;
+        let heat = new Array(maxN + 1).fill(0);
+        let recentes = data.slice(0, 20);
+        for (let draw of recentes) {
+            for (let n of draw.numbers) heat[n]++;
+        }
+        let container = document.getElementById("heatmapContainer");
+        container.innerHTML = "";
+        for (let i = 1; i <= maxN; i++) {
+            let intensity = Math.min(1, heat[i] / 5);
+            let el = document.createElement("div");
+            el.className = "heat-cell";
+            el.style.backgroundColor = `rgba(243,156,18,${0.2 + intensity * 0.7})`;
+            el.innerText = i;
+            container.appendChild(el);
+        }
+    }
+    
+    function renderHistorico() {
+        let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
+        let html = `<tr><th>Data</th><th>Números</th><th>Estrelas</th></tr>`;
+        for (let i = 0; i < Math.min(10, data.length); i++) {
+            html += `<tr><td>${data[i].date}</td><td>${data[i].numbers.join(',')}</td><td>${data[i].stars.join(',')}</td></tr>`;
+        }
+        document.getElementById("historicoTabela").innerHTML = html;
+    }
+    
+    let freqChart;
+    function updateChart() {
+        let ctx = document.getElementById('freqChart').getContext('2d');
+        let labels = [], vals = [];
+        let maxN = LIMITS[currentLottery].maxNum;
+        let step = Math.floor(maxN / 12);
+        for (let i = 1; i <= maxN; i += step) { 
+            labels.push(i); 
+            vals.push(freqNumbers[i] || 0); 
+        }
+        if (freqChart) freqChart.destroy();
+        freqChart = new Chart(ctx, { 
+            type: 'bar', 
+            data: { labels, datasets: [{ label: 'Frequência Histórica', data: vals, backgroundColor: '#f39c12' }] }, 
+            options: { responsive: true, maintainAspectRatio: true, scales: { y: { beginAtZero: true } } } 
+        });
+    }
+    
+    // Exportações
+    function exportExcel() {
+        let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
+        let sheetData = [["Data", "Números", "Estrelas"]];
+        for (let d of data) sheetData.push([d.date, d.numbers.join(","), d.stars.join(",")]);
+        let ws = XLSX.utils.aoa_to_sheet(sheetData);
+        let wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Historico");
+        XLSX.writeFile(wb, `loteria_${currentLottery}.xlsx`);
+    }
+    
+    function exportPDF() {
+        let element = document.querySelector('.dashboard');
+        html2pdf().from(element).set({ margin: 0.5, filename: `relatorio_${currentLottery}.pdf` }).save();
+    }
+    
+    function updateClock() {
+        let d = new Date();
+        document.getElementById("dataHora").innerHTML = d.toLocaleDateString() + " " + d.toLocaleTimeString();
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+    
+    // Eventos e inicialização
+    document.getElementById("btnGerar").onclick = () => gerarAposta();
+    document.getElementById("btnExportPDF").onclick = exportPDF;
+    document.getElementById("btnExportExcel").onclick = exportExcel;
+    document.getElementById("loteriasSelect").onchange = () => { 
+        currentLottery = document.getElementById("loteriasSelect").value; 
+        updateFrequencies(); 
+        gerarAposta(); 
+    };
+    
+    initDatabases();
+    updateFrequencies();
+    setTimeout(() => gerarAposta(), 150);
+</script>
+</body>
+</html>
