@@ -1,741 +1,1474 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>🧠 SUPER IA PREDITOR | Euromilhões + Totoloto | Deep Learning Estatístico</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { background: linear-gradient(135deg, #0a0c12 0%, #1a1f2e 100%); color: #eef; margin: 0; padding: 20px; min-height: 100vh; }
-        .dashboard { max-width: 1500px; margin: 0 auto; }
-        .card { background: rgba(21, 26, 36, 0.95); border-radius: 28px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border: 1px solid #2a3342; backdrop-filter: blur(10px); }
-        .flex-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; }
-        .grid-2col { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px; }
-        h1 { font-size: 2.2rem; background: linear-gradient(135deg, #FFD700, #FF6B35, #FF1493); -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0; letter-spacing: -1px; text-shadow: 0 0 30px rgba(255,215,0,0.3); }
-        h2, h3 { margin-top: 0; color: #ffd966; font-weight: 700; border-left: 5px solid #ff6b35; padding-left: 16px; text-shadow: 0 2px 10px rgba(255,107,53,0.3); }
-        button { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; padding: 14px 28px; border-radius: 60px; font-weight: bold; color: white; cursor: pointer; transition: all 0.3s; font-size: 1rem; box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
-        button.primary { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); box-shadow: 0 8px 25px rgba(245,87,108,0.5); }
-        button:hover { transform: translateY(-3px) scale(1.05); filter: brightness(1.15); }
-        button:active { transform: translateY(0) scale(0.98); }
-        select, input { background: #1e2a32; border: 2px solid #3e4d5e; padding: 12px 18px; border-radius: 40px; color: white; font-weight: 600; transition: all 0.3s; }
-        select:focus, input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 15px rgba(102,126,234,0.5); }
-        .numeros-area, .estrelas-area { background: linear-gradient(135deg, #0f131c 0%, #1a2332 100%); border-radius: 60px; padding: 20px; margin: 20px 0; text-align: center; border: 2px solid #2a3342; }
-        .bolha { display: inline-flex; width: 60px; height: 60px; background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); border-radius: 50%; align-items: center; justify-content: center; margin: 8px; font-weight: bold; font-size: 1.6rem; box-shadow: 0 6px 20px rgba(17,153,142,0.5); animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .estrela-bolha { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; box-shadow: 0 6px 20px rgba(245,87,108,0.5); }
-        .stat-bar { background: #232b37; border-radius: 20px; height: 32px; overflow: hidden; margin: 10px 0; box-shadow: inset 0 2px 10px rgba(0,0,0,0.5); }
-        .stat-fill { background: linear-gradient(90deg, #f39c12 0%, #e74c3c 50%, #9b59b6 100%); width: 0%; height: 100%; border-radius: 20px; text-align: right; padding-right: 12px; line-height: 32px; color: white; font-weight: bold; font-size: 0.85rem; transition: width 1s ease-out; }
-        .chip { background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); border-radius: 40px; padding: 6px 14px; display: inline-block; margin: 5px; font-size: 0.85rem; font-weight: 600; box-shadow: 0 3px 10px rgba(0,0,0,0.3); }
-        .heat-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; max-height: 200px; overflow-y: auto; padding: 10px; }
-        .heat-cell { background: #0f212e; text-align: center; padding: 8px 0; border-radius: 14px; font-size: 0.75rem; font-weight: bold; transition: all 0.3s; cursor: pointer; }
-        .heat-cell:hover { transform: scale(1.15); z-index: 10; }
-        .footer-buttons { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 24px; }
-        .score-circle { font-size: 2.8rem; font-weight: bold; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 60px; padding: 12px 28px; display: inline-block; box-shadow: 0 8px 25px rgba(102,126,234,0.5); animation: glow 2s infinite; }
-        @keyframes glow { 0%, 100% { box-shadow: 0 8px 25px rgba(102,126,234,0.5); } 50% { box-shadow: 0 8px 35px rgba(102,126,234,0.8); } }
-        table { width: 100%; border-collapse: collapse; background: #0b1018; border-radius: 20px; overflow: hidden; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
-        th, td { padding: 10px; text-align: center; border-bottom: 1px solid #2a3440; }
-        th { background: #1a2332; font-weight: 700; color: #ffd966; }
-        .model-badge { display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; margin: 3px; font-weight: 600; }
-        .prediction-card { background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%); border: 2px solid #667eea; border-radius: 20px; padding: 15px; margin: 10px 0; }
-        @media (max-width: 700px) { .bolha { width: 48px; height: 48px; font-size: 1.3rem; } h1 { font-size: 1.6rem; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🎯 LotoAnalytics Pro v12.2</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #0a0c12 0%, #1a1f2e 100%); color: #eef; padding: 12px; min-height: 100vh; }
+.container { max-width: 850px; margin: 0 auto; }
+.card { background: rgba(26, 31, 46, 0.95); border-radius: 16px; padding: 16px; margin-bottom: 12px; border: 1px solid #2a3342; backdrop-filter: blur(10px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+h1 { color: #FFD700; text-align: center; margin-bottom: 10px; font-size: 1.6rem; text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+h2 { color: #FFD700; border-left: 4px solid #FF6B35; padding-left: 10px; margin-bottom: 10px; font-size: 1.2rem; }
+h3 { color: #FFD700; margin: 10px 0 6px; font-size: 1rem; }
+button { background: linear-gradient(135deg, #667eea, #764ba2); border: none; padding: 12px 20px; border-radius: 30px; color: white; font-weight: bold; cursor: pointer; margin: 4px; min-height: 48px; font-size: 0.9rem; transition: all 0.3s; }
+button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
+button:active { transform: scale(0.95); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+button.quantum { background: linear-gradient(135deg, #00f5ff, #0099ff, #9933ff, #ff00ff); animation: quantum 3s infinite; }
+@keyframes quantum { 0%,100% { filter: hue-rotate(0deg); } 50% { filter: hue-rotate(180deg); } }
+.flex { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.flex > * { flex: 1 1 auto; min-width: 120px; }
+select, input { background: #1e2a32; border: 2px solid #3e4d5e; padding: 10px; border-radius: 20px; color: white; font-weight: 600; width: 100%; }
+label { font-weight: 600; color: #aaa; display: block; margin-bottom: 4px; font-size: 0.85rem; }
+.numeros-area { background: #0f131c; border-radius: 40px; padding: 16px; margin: 12px 0; min-height: 70px; border: 2px solid #2a3342; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.bola { display: inline-flex; width: 44px; height: 44px; background: linear-gradient(135deg, #11998e, #38ef7d); border-radius: 50%; align-items: center; justify-content: center; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 12px rgba(17,153,142,0.6); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+.estrela { background: linear-gradient(135deg, #f093fb, #f5576c); }
+.sonho { background: linear-gradient(135deg, #a8edea, #fed6e3, #d299c2); color: #0a0c12; }
+.stat-box { background: rgba(17,153,142,0.1); border: 1px solid #11998e; border-radius: 12px; padding: 10px; text-align: center; }
+.stat-box .value { font-size: 1.1rem; font-weight: bold; color: #38ef7d; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 8px; }
+.criterion-bar { background: #232b37; border-radius: 10px; height: 20px; overflow: hidden; margin: 4px 0; }
+.criterion-fill { height: 100%; text-align: center; line-height: 20px; color: white; font-weight: bold; font-size: 0.7rem; transition: width 0.5s; }
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 30px; color: white; font-weight: 600; z-index: 9999; background: #11998e; box-shadow: 0 8px 24px rgba(0,0,0,0.6); max-width: 90%; text-align: center; animation: slideIn 0.3s; }
+@keyframes slideIn { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+.toast.error { background: #f5576c; }
+.price-display { background: rgba(255,215,0,0.1); border: 2px solid #FFD700; border-radius: 12px; padding: 12px; text-align: center; margin: 12px 0; }
+.price-display .total { font-size: 1.6rem; font-weight: bold; color: #FFD700; }
+.tab { flex: 1; min-width: 100px; font-size: 0.85rem; }
+.tab.active { background: linear-gradient(135deg, #667eea, #764ba2) !important; }
+.freq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); gap: 3px; }
+.freq-cell { background: #232b37; border-radius: 6px; padding: 4px; text-align: center; font-size: 0.7rem; font-weight: bold; }
+.freq-cell.hot { background: linear-gradient(135deg, #f5576c, #ff6b6b); color: white; }
+.freq-cell.cold { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+.freq-cell.warm { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+.analysis-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #2a3342; font-size: 0.85rem; }
+.score-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
+.score-excellent { background: linear-gradient(135deg, #11998e, #38ef7d); color: #0a0c12; }
+.score-good { background: linear-gradient(135deg, #f39c12, #e67e22); color: white; }
+.score-fair { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+.score-poor { background: linear-gradient(135deg, #95a5a6, #7f8c8d); color: white; }
+.method-card { background: rgba(255,255,255,0.03); border: 1px solid #3a4a5a; border-radius: 12px; padding: 10px; margin: 6px 0; }
+.method-card h4 { color: #FFD700; }
+textarea { background: #1e2a32; border: 2px solid #3e4d5e; padding: 10px; border-radius: 12px; color: white; font-family: monospace; font-size: 0.8rem; width: 100%; min-height: 100px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+table th, table td { padding: 6px; text-align: center; border-bottom: 1px solid #2a3342; }
+table th { color: #FFD700; }
+.status-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+.status-online { background: #38ef7d; box-shadow: 0 0 10px #38ef7d; animation: pulse 1s infinite; }
+.status-offline { background: #f5576c; }
+.source-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: bold; margin: 2px; }
+.source-santacasa { background: linear-gradient(135deg, #FFD700, #FFA500); color: #0a0c12; }
+.source-api { background: linear-gradient(135deg, #00f5ff, #0099ff); color: #0a0c12; }
+.source-fallback { background: linear-gradient(135deg, #95a5a6, #7f8c8d); color: white; }
+.quantum-badge { background: linear-gradient(135deg, #00f5ff, #9933ff, #ff00ff); color: white; padding: 4px 12px; border-radius: 20px; font-weight: bold; animation: quantum 3s infinite; }
+.log-area { background: #0a0c12; border: 1px solid #2a3342; border-radius: 8px; padding: 8px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; margin-top: 10px; }
+.log-entry { padding: 2px 0; border-bottom: 1px solid #1a1f2e; }
+.log-entry.success { color: #38ef7d; }
+.log-entry.error { color: #f5576c; }
+.log-entry.info { color: #00f5ff; }
+.log-entry.warn { color: #f39c12; }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #3e4d5e; border-top-color: #38ef7d; border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 6px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.prob-jackpot { background: rgba(255,215,0,0.2); font-weight: bold; }
+</style>
 </head>
 <body>
-<div class="dashboard">
-    <div class="card flex-row">
-        <div>
-            <h1>🧠 SUPER IA PREDITOR v3.0</h1>            <div style="font-size:0.9rem; margin-top:8px;">
-                <span class="model-badge">🔬 Deep Learning</span>
-                <span class="model-badge">🧬 Algoritmos Genéticos</span>
-                <span class="model-badge">📊 Markov Chains</span>
-                <span class="model-badge">🎯 Ensemble IA</span>
-            </div>
-            <div id="dataHora" style="font-size:0.9rem; margin-top:8px;"></div>
-        </div>
-        <div style="text-align:right">
-            <span class="chip">🎲 Último: <span id="ultimoSorteio">---</span></span>
-        </div>
-    </div>
+<div class="container">
 
-    <div class="card flex-row">
-        <select id="loteriasSelect">
-            <option value="euromilhoes">🎲 EUROMILHÕES (1-50 + 2⭐ 1-12)</option>
-            <option value="totoloto">🎯 TOTOLOTO (1-49 + 1⭐ 1-13)</option>
-        </select>
-        <select id="tipoJogo">
-            <option value="simples">🎯 Jogo Simples (5 números)</option>
-            <option value="multipla6">📈 Múltipla 6 números</option>
-            <option value="multipla7">📈 Múltipla 7 números</option>
-            <option value="multipla8">📈 Múltipla 8 números</option>
-            <option value="multipla9">📈 Múltipla 9 números</option>
-            <option value="multipla10">🔥 Múltipla 10 números</option>
-            <option value="multipla11">🔥 Múltipla 11 números</option>
-            <option value="multipla12">💎 Múltipla 12 números</option>
-        </select>
-        <button id="btnGerar" class="primary">✨ GERAR APOSTA SUPER IA ✨</button>
-        <button id="btnExportPDF">📄 PDF</button>
-        <button id="btnExportExcel">📊 Excel</button>
-    </div>
+<h1>🎯 LotoAnalytics Pro <span class="quantum-badge">v12.2</span></h1>
 
+<div style="background:rgba(0,245,255,0.1);border:1px solid #00f5ff;border-radius:12px;padding:10px;margin-bottom:12px;font-size:0.85rem;">
+    <span class="status-indicator status-online"></span>
+    <strong>Sistema Ativo:</strong> CORS Proxy • Múltiplas fontes • Fallback automático
+</div>
+
+<!-- Abas -->
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+    <button class="tab active" data-tab="dashboard">📊 Dashboard</button>
+    <button class="tab" data-tab="dados">📥 Dados</button>
+    <button class="tab" data-tab="analise">🔍 Análise</button>
+    <button class="tab" data-tab="gerador">✨ Gerador</button>
+    <button class="tab" data-tab="quantum">🧠 Quantum AI</button>
+    <button class="tab" data-tab="historico">📜 Histórico</button>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="tab-dashboard" class="tab-content">
     <div class="card">
-        <div style="display:flex; justify-content: space-between; flex-wrap:wrap; align-items:center;">
-            <h2>🎯 PREVISÃO SUPER IA (Máxima Precisão)</h2>
-            <div>
-                <span class="score-circle" id="pontuacaoEstatistica">0.00</span>
-                <div style="font-size:0.8rem; margin-top:5px;">Score IA /100</div>
-            </div>
+        <h2>📊 Dashboard</h2>
+        <div class="grid-3">
+            <div class="stat-box"><h4>🎲 Euromilhões</h4><div class="value" id="dashEuro">--</div><small>Último sorteio</small></div>
+            <div class="stat-box"><h4>🎯 Totoloto</h4><div class="value" id="dashToto">--</div><small>Último sorteio</small></div>
+            <div class="stat-box"><h4>💭 EuroDreams</h4><div class="value" id="dashDreams">--</div><small>Último sorteio</small></div>
         </div>
-        <div id="numerosGerados" class="numeros-area"></div>
-        <h2>⭐ ESTRELAS PREDITAS</h2>
-        <div id="estrelasGeradas" class="numeros-area"></div>
-        <div class="flex-row">
-            <div><strong>💰 Preço:</strong> <span id="precoEstimado">---</span></div>
-            <div><strong>📈 Confiança:</strong> <span id="probabilidadeLabel">---</span></div>
-            <div><strong>🧠 Modelos IA:</strong> <span id="simulacoesCount">0</span></div>
+        <h3>🌐 Fontes</h3>
+        <div id="dataSources" style="margin:10px 0;"></div>
+        <h3>📈 Estatísticas</h3>
+        <div class="grid-3">
+            <div class="stat-box"><h4>Sorteios</h4><div class="value" id="totalDraws">0</div></div>
+            <div class="stat-box"><h4>Última atualização</h4><div class="value" id="lastUpdate" style="font-size:0.9rem;">--</div></div>
+            <div class="stat-box"><h4>Status</h4><div class="value" style="color:#38ef7d;">● Online</div></div>
         </div>
-        <div class="stat-bar"><div class="stat-fill" id="scoreBar" style="width:0%"></div></div>        
-        <div class="prediction-card">
-            <h3 style="margin-top:0;">🔮 ANÁLISE DETALHADA DA PREVISÃO</h3>
-            <div id="analiseDetalhada" style="font-size:0.9rem; line-height:1.6;"></div>
-        </div>
-    </div>
-
-    <div class="grid-2col">
-        <div class="card">
-            <h3>🔥 TOP NÚMEROS (Score Ponderado)</h3>
-            <div id="topNumerosList" style="display:flex; flex-wrap:wrap;"></div>
-            <h3>🌟 TOP ESTRELAS (Potencial)</h3>
-            <div id="topEstrelasList"></div>
-            <h3>⏳ MAIOR ATRASO (Due Numbers)</h3>
-            <div id="atrasosList"></div>
-            <h3>🔗 PARES CORRELACIONADOS</h3>
-            <div id="paresCorrelacionados" style="font-size:0.85rem;"></div>
-        </div>
-        <div class="card">
-            <h3>📊 FREQUÊNCIAS (Últimos 100 sorteios)</h3>
-            <canvas id="freqChart" width="300" height="180" style="max-height:180px;"></canvas>
-            <h3>🗺️ Mapa de Calor (Últimos 20 sorteios)</h3>
-            <div id="heatmapContainer" class="heat-grid"></div>
-            <h3>📈 TENDÊNCIA (Últimos 50 sorteios)</h3>
-            <canvas id="trendChart" width="300" height="120" style="max-height:120px;"></canvas>
-        </div>
-    </div>
-
-    <div class="card">
-        <h3>🧠 MODELOS IA ATIVOS</h3>
-        <div id="modelosIA" style="display:flex; flex-wrap:wrap; gap:10px; margin:15px 0;"></div>
-        <h3>📜 HISTÓRICO (Últimos 10 sorteios)</h3>
-        <div style="overflow-x:auto"><table id="historicoTabela"><tr><td>Carregando...</td></tr></table></div>
-        <div class="footer-buttons">
-            <span class="chip">⚙️ 7 Modelos IA + 1M Simulações + Backtesting</span>
-        </div>
-        <div id="statusSimulacao" style="font-size:0.85rem; margin-top:12px; color:#aaa;"></div>
+        <button onclick="refreshAllData()" class="quantum" style="width:100%;margin-top:10px;">🔄 Atualizar Todos</button>
     </div>
 </div>
 
+<!-- ===== DADOS ===== -->
+<div id="tab-dados" class="tab-content" style="display:none;">
+    <div class="card">
+        <h2>📥 Dados</h2>
+        <div style="background:rgba(0,245,255,0.1);border:1px solid #00f5ff;border-radius:12px;padding:10px;margin-bottom:12px;font-size:0.85rem;">
+            <strong>🌐 Sistema multi‑fonte com fallback</strong>
+            <ul style="margin:6px 0;padding-left:20px;">
+                <li>✅ Proxies CORS (AllOrigins, CorsProxy, etc.)</li>
+                <li>✅ Santa Casa e APIs europeias</li>
+                <li>✅ Parsing inteligente de JSON/HTML</li>
+                <li>✅ Cache local + retry automático</li>
+            </ul>
+        </div>
+        <label>Jogo:
+            <select id="dataGame">
+                <option value="euromilhoes">Euromilhões</option>
+                <option value="totoloto">Totoloto</option>
+                <option value="eurodreams">EuroDreams</option>
+            </select>
+        </label>
+        <label>Fonte:
+            <select id="dataSource">
+                <option value="auto">🤖 Automático</option>
+                <option value="santacasa">🏛️ Santa Casa</option>
+                <option value="api">🌐 APIs</option>
+                <option value="sample">📋 Exemplo (500)</option>
+            </select>
+        </label>
+        <div class="flex">
+            <button onclick="fetchData()" class="success" id="fetchBtn">🚀 Obter Dados</button>
+            <button onclick="loadSampleData()" style="background:#9b59b6;">📋 Exemplo Rápido</button>
+        </div>
+        <div id="fetchProgress" style="display:none;margin-top:10px;">
+            <div style="display:flex;align-items:center;gap:8px;">
+                <span class="spinner"></span>
+                <span id="fetchStatus">A processar...</span>
+            </div>
+            <div class="log-area" id="fetchLog"></div>
+        </div>
+        <h3>📝 Importação CSV</h3>
+        <label>Formato: <code>n1 n2 n3 n4 n5 e1 e2</code> (um por linha)
+            <textarea id="csvInput" placeholder="Exemplo:&#10;03 12 25 33 41 05 09&#10;07 14 22 38 44 02 11"></textarea>
+        </label>
+        <button onclick="importCSV()" class="success" style="width:100%;">📥 Importar</button>
+        <div id="dataStats" style="margin-top:12px;"></div>
+    </div>
+</div>
+
+<!-- ===== ANÁLISE ===== -->
+<div id="tab-analise" class="tab-content" style="display:none;">
+    <div class="card">
+        <h2>🔍 Análise</h2>
+        <div id="analysisContent"><p style="color:#aaa;">Carregue dados primeiro</p></div>
+    </div>
+</div>
+
+<!-- ===== GERADOR ===== -->
+<div id="tab-gerador" class="tab-content" style="display:none;">
+    <div class="card">
+        <h2>✨ Gerador</h2>
+        <div class="flex">
+            <label>Jogo:
+                <select id="gameSelect">
+                    <option value="euromilhoes">Euromilhões</option>
+                    <option value="totoloto">Totoloto</option>
+                    <option value="eurodreams">EuroDreams</option>
+                </select>
+            </label>
+            <label>Números:
+                <select id="betType"></select>
+            </label>
+            <label id="starLabel" style="display:none;">Estrelas:
+                <select id="starSelect"></select>
+            </label>
+        </div>
+        <label>Método:
+            <select id="genMethod">
+                <option value="quantum-hybrid">🌌 Quantum Híbrido</option>
+                <option value="genetic">🧬 Genético</option>
+                <option value="neural">🧠 Rede Neural</option>
+                <option value="markov">📈 Markov</option>
+                <option value="entropy">🌀 Entropia</option>
+                <option value="frequency">📊 Frequência</option>
+                <option value="gap">⏰ Lacunas</option>
+                <option value="pattern">🎯 Padrões</option>
+                <option value="fibonacci">🔢 Fibonacci</option>
+                <option value="chaos">🌪️ Caos</option>
+                <option value="montecarlo">🎲 Monte Carlo</option>
+                <option value="bayesian">📐 Bayes</option>
+                <option value="statistical">📉 Estatístico</option>
+                <option value="balanced">⚖️ Balanceado</option>
+                <option value="random">🎲 Aleatório</option>
+            </select>
+        </label>
+        <label>Qualidade:
+            <select id="genQuality">
+                <option value="1000">1000 (Rápido)</option>
+                <option value="2000" selected>2000 (Normal)</option>
+                <option value="5000">5000 (Alta)</option>
+                <option value="10000">10000 (Máxima)</option>
+            </select>
+        </label>
+        <label>Filtros:
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;">
+                <label><input type="checkbox" id="filterParity" checked> Par/Ímpar</label>
+                <label><input type="checkbox" id="filterHighLow" checked> Altos/Baixos</label>
+                <label><input type="checkbox" id="filterSum" checked> Soma</label>
+                <label><input type="checkbox" id="filterDozens" checked> Zonas</label>
+                <label><input type="checkbox" id="filterConsecutive"> Consecutivos</label>
+                <label><input type="checkbox" id="filterTails"> Caudas</label>
+            </div>
+        </label>
+        <button onclick="generateBet()" class="quantum" style="width:100%;">🌌 Gerar Aposta</button>
+        <h3>🎯 Números</h3>
+        <div id="genNumbers" class="numeros-area">Clique em "Gerar"</div>
+        <h3 id="genStarsLabel">⭐ Estrelas</h3>
+        <div id="genStars" class="numeros-area"></div>
+        <div class="price-display">
+            <div class="total" id="genPrice">0,00 €</div>
+            <p id="genPriceDetail">Selecione o tipo</p>
+        </div>
+        <div class="grid-3">
+            <div class="stat-box"><h4>Combinações</h4><div class="value" id="genComb">--</div></div>
+            <div class="stat-box"><h4>Score</h4><div class="value" id="genScore">--</div></div>
+            <div class="stat-box"><h4>Jackpot</h4><div class="value" id="genJackpot">--</div></div>
+        </div>
+        <h3>🧬 Análise (15 critérios)</h3>
+        <div id="geneticAnalysis"></div>
+        <h3>📋 Probabilidades (aproximadas)</h3>
+        <div id="genProbs"></div>
+        <button onclick="saveGeneratedBet()" class="success" style="width:100%;">💾 Guardar</button>
+    </div>
+</div>
+
+<!-- ===== QUANTUM AI ===== -->
+<div id="tab-quantum" class="tab-content" style="display:none;">
+    <div class="card">
+        <h2>🧠 Quantum AI</h2>
+        <div class="method-card"><h4>🌌 Quantum Híbrido</h4><p>Ensemble learning com superposição de estados.</p></div>
+        <div class="method-card"><h4>🧬 Genético</h4><p>Evolução com crossover e mutação adaptativa.</p></div>
+        <div class="method-card"><h4>🧠 Rede Neural</h4><p>Deep learning com múltiplas camadas.</p></div>
+        <div class="method-card"><h4>📈 Markov</h4><p>Cadeias de ordem 2 e 3.</p></div>
+        <div class="method-card"><h4>🌀 Entropia</h4><p>Maximização da diversidade.</p></div>
+        <button onclick="runQuantumAnalysis()" class="quantum" style="width:100%;margin-top:12px;">🌌 Executar Análise</button>
+        <div id="quantumResults" style="margin-top:12px;"></div>
+    </div>
+</div>
+
+<!-- ===== HISTÓRICO ===== -->
+<div id="tab-historico" class="tab-content" style="display:none;">
+    <div class="card">
+        <h2>📜 Histórico</h2>
+        <div id="savedBets" style="max-height:400px;overflow-y:auto;font-size:0.8rem;"></div>
+        <button onclick="clearSavedBets()" class="danger" style="width:100%;margin-top:10px;">🗑️ Limpar</button>
+    </div>
+</div>
+
+</div>
+
 <script>
-// ======================== CONFIGURAÇÕES ========================
-const LIMITS = {
-    euromilhoes: { maxNum: 50, maxStar: 12, starCount: 2, basePrice: 2.50, 
-        multiplaPrecos: {6:15.00, 7:52.50, 8:140.00, 9:315.00, 10:630.00, 11:1155.00, 12:1980.00} },
-    totoloto: { maxNum: 49, maxStar: 13, starCount: 1, basePrice: 1.00,
-        multiplaPrecos: {6:6.00, 7:21.00, 8:56.00, 9:126.00, 10:252.00, 11:462.00, 12:792.00} }
+// ============================================================
+// CONFIGURAÇÕES
+// ============================================================
+const GAMES = {
+    euromilhoes: { name: "Euromilhões", icon: "🎲", maxNumbers: 50, drawNumbers: 5,
+        maxStars: 12, drawStars: 2, starLabel: "Estrelas", starIcon: "⭐",
+        basePrice: 2.50, jackpotOdds: 139838160, minStars: 2, maxStarsMulti: 5 },
+    totoloto: { name: "Totoloto", icon: "🎯", maxNumbers: 49, drawNumbers: 5,
+        maxStars: 13, drawStars: 1, starLabel: "Super", starIcon: "⚡",
+        basePrice: 1.00, jackpotOdds: 24789492, minStars: 1, maxStarsMulti: 1 },
+    eurodreams: { name: "EuroDreams", icon: "💭", maxNumbers: 40, drawNumbers: 6,
+        maxStars: 5, drawStars: 1, starLabel: "Sonho", starIcon: "💭",
+        basePrice: 2.50, jackpotOdds: 19191900, minStars: 1, maxStarsMulti: 1 }
 };
 
-let dbEuromilhoes = [], dbTotoloto = [];let currentLottery = "euromilhoes";
-let freqNumbers = [], freqStars = [];
-let freqChart, trendChart;
+// ============================================================
+// ESTADO
+// ============================================================
+const State = {
+    currentGame: 'euromilhoes',
+    historicalData: JSON.parse(localStorage.getItem('lotoHistory_v12') || '{}'),
+    savedBets: JSON.parse(localStorage.getItem('lotoBets_v12') || '[]'),
+    lastGeneratedBet: null,
+    stats: null,
+    dataSources: { santacasa: { status: 'offline', draws: 0 }, api: { status: 'offline', draws: 0 }, manual: { status: 'offline', draws: 0 } }
+};
 
-// ======================== MODELO 1: CADEIAS DE MARKOV ========================
-class MarkovChain {
-    constructor() { this.transitions = {}; this.order = 2; }
-    
-    train(data) {
-        this.transitions = {};
-        for (let draw of data) {
-            let nums = draw.numbers;
-            for (let i = 0; i < nums.length; i++) {
-                let context = nums.slice(Math.max(0, i - this.order), i).join(',');
-                if (!this.transitions[context]) this.transitions[context] = {};
-                let next = nums[i];
-                this.transitions[context][next] = (this.transitions[context][next] || 0) + 1;
-            }
-        }
-    }
-    
-    predict(lastNumbers, topK = 10) {
-        let context = lastNumbers.slice(-this.order).join(',');
-        if (!this.transitions[context]) return [];
-        let probs = this.transitions[context];
-        let total = Object.values(probs).reduce((a,b) => a+b, 0);
-        let sorted = Object.entries(probs).map(([num, count]) => ({
-            num: parseInt(num), prob: count / total
-        })).sort((a,b) => b.prob - a.prob);
-        return sorted.slice(0, topK);
-    }
+// ============================================================
+// UTILITÁRIOS
+// ============================================================
+function toast(msg, isError = false) {
+    const old = document.querySelector('.toast');
+    if (old) old.remove();
+    const t = document.createElement('div');
+    t.className = 'toast' + (isError ? ' error' : '');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3000);
 }
 
-// ======================== MODELO 2: REDE NEURAL ========================
-class SimpleNeuralNet {
-    constructor(inputSize, hiddenSize, outputSize) {
-        this.weights1 = this.randomMatrix(inputSize, hiddenSize);
-        this.weights2 = this.randomMatrix(hiddenSize, outputSize);
-        this.bias1 = new Array(hiddenSize).fill(0);
-        this.bias2 = new Array(outputSize).fill(0);
-    }
-    
-    randomMatrix(rows, cols) {
-        return Array(rows).fill().map(() => Array(cols).fill().map(() => (Math.random() - 0.5) * 0.5));
-    }
-    
-    sigmoid(x) { return 1 / (1 + Math.exp(-Math.max(-500, Math.min(500, x)))); }
-    
-    predict(input) {
-        let hidden = new Array(this.weights1[0].length).fill(0);        for (let j = 0; j < this.weights1[0].length; j++) {
-            for (let i = 0; i < input.length; i++) {
-                hidden[j] += input[i] * (this.weights1[i] ? this.weights1[i][j] : 0);
-            }
-            hidden[j] = this.sigmoid(hidden[j] + this.bias1[j]);
+function combination(n, k) {
+    if (k < 0 || k > n) return 0;
+    if (k === 0 || k === n) return 1;
+    if (k > n - k) k = n - k;
+    let r = 1;
+    for (let i = 0; i < k; i++) r = r * (n - i) / (i + 1);
+    return Math.round(r);
+}
+
+function secureRandom(max) {
+    try {
+        const arr = new Uint32Array(1);
+        crypto.getRandomValues(arr);
+        return (arr[0] % max) + 1;
+    } catch (_) { return Math.floor(Math.random() * max) + 1; }
+}
+
+function generateUnique(max, count) {
+    const set = new Set();
+    while (set.size < count) set.add(secureRandom(max));
+    return Array.from(set).sort((a,b) => a-b);
+}
+
+// ============================================================
+// LOGGER
+// ============================================================
+const Logger = {
+    logArea: null,
+    init() { this.logArea = document.getElementById('fetchLog'); },
+    clear() { if (this.logArea) this.logArea.innerHTML = ''; },
+    show() { document.getElementById('fetchProgress').style.display = 'block'; },
+    hide() { document.getElementById('fetchProgress').style.display = 'none'; },
+    setStatus(msg) { document.getElementById('fetchStatus').innerHTML = '<span class="spinner"></span>' + msg; },
+    add(msg, type='info') {
+        if (!this.logArea) this.init();
+        const e = document.createElement('div');
+        e.className = 'log-entry ' + type;
+        e.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        this.logArea.appendChild(e);
+        this.logArea.scrollTop = this.logArea.scrollHeight;
+    },
+    success(msg) { this.add(msg, 'success'); },
+    error(msg) { this.add(msg, 'error'); },
+    info(msg) { this.add(msg, 'info'); },
+    warn(msg) { this.add(msg, 'warn'); }
+};
+
+// ============================================================
+// DATA FETCHER
+// ============================================================
+const CORS_PROXIES = [
+    url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+    url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+    url => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+];
+
+const DataFetcher = {
+    async fetchWithProxy(url, timeout = 10000) {
+        for (let i = 0; i < CORS_PROXIES.length; i++) {
+            try {
+                const controller = new AbortController();
+                const tid = setTimeout(() => controller.abort(), timeout);
+                const resp = await fetch(CORS_PROXIES[i](url), { signal: controller.signal });
+                clearTimeout(tid);
+                if (resp.ok) return await resp.text();
+            } catch (e) {}
         }
-        let output = new Array(this.weights2[0].length).fill(0);
-        for (let j = 0; j < this.weights2[0].length; j++) {
-            for (let i = 0; i < hidden.length; i++) {
-                output[j] += hidden[i] * this.weights2[i][j];
+        throw new Error('Todos os proxies falharam');
+    },
+
+    parseLotteryData(text, game) {
+        const cfg = GAMES[game];
+        const results = [];
+        try {
+            const json = JSON.parse(text);
+            const arrays = this._findArrays(json);
+            for (const arr of arrays) {
+                for (const item of arr) {
+                    const d = this._parseDraw(item, cfg);
+                    if (d) results.push(d);
+                }
+                if (results.length > 0) break;
             }
-            output[j] = this.sigmoid(output[j] + this.bias2[j]);
+            if (results.length > 0) return results;
+        } catch (e) {}
+        const lines = text.split(/[\n\r]+/);
+        const re = /\b(\d{1,2})\b/g;
+        for (const line of lines) {
+            const nums = [...line.matchAll(re)].map(m => parseInt(m[1])).filter(n => n >= 1 && n <= cfg.maxNumbers);
+            if (nums.length >= cfg.drawNumbers + cfg.drawStars) {
+                const numbers = nums.slice(0, cfg.drawNumbers).sort((a,b) => a-b);
+                const stars = nums.slice(cfg.drawNumbers, cfg.drawNumbers + cfg.drawStars).filter(s => s <= cfg.maxStars).sort((a,b) => a-b);
+                if (numbers.length === cfg.drawNumbers && stars.length === cfg.drawStars)
+                    results.push({ numbers, stars });
+            }
         }
-        return output;
+        return results;
+    },
+
+    _findArrays(obj, depth=0) {
+        if (depth > 5) return [];
+        const arrays = [];
+        if (Array.isArray(obj) && obj.length > 0) arrays.push(obj);
+        else if (obj && typeof obj === 'object')
+            for (const key of Object.keys(obj))
+                arrays.push(...this._findArrays(obj[key], depth+1));
+        return arrays;
+    },
+
+    _parseDraw(item, cfg) {
+        const numFields = ['numbers','nums','mainNumbers','main_numbers','bola','bolas','result','draw'];
+        const starFields = ['stars','starNumbers','star_numbers','extra','super','dream','lucky'];
+        let numbers = null, stars = null;
+        for (const f of numFields) {
+            if (item[f]) {
+                if (Array.isArray(item[f])) numbers = item[f].map(Number).filter(n => !isNaN(n));
+                else if (typeof item[f] === 'string') numbers = item[f].split(/[\s,-]+/).map(Number).filter(n => !isNaN(n));
+                if (numbers && numbers.length >= cfg.drawNumbers) break;
+            }
+        }
+        for (const f of starFields) {
+            if (item[f]) {
+                if (Array.isArray(item[f])) stars = item[f].map(Number).filter(n => !isNaN(n));
+                else if (typeof item[f] === 'string') stars = item[f].split(/[\s,-]+/).map(Number).filter(n => !isNaN(n));
+                if (stars && stars.length >= cfg.drawStars) break;
+            }
+        }
+        if (!numbers || numbers.length < cfg.drawNumbers) return null;
+        if (!stars || stars.length < cfg.drawStars) stars = generateUnique(cfg.maxStars, cfg.drawStars);
+        numbers = numbers.slice(0, cfg.drawNumbers).filter(n => n >= 1 && n <= cfg.maxNumbers);
+        stars = stars.slice(0, cfg.drawStars).filter(s => s >= 1 && s <= cfg.maxStars);
+        if (numbers.length === cfg.drawNumbers && stars.length === cfg.drawStars)
+            return { numbers: numbers.sort((a,b) => a-b), stars: stars.sort((a,b) => a-b) };
+        return null;
+    },
+
+    getUrls(game) {
+        return {
+            euromilhoes: [
+                'https://www.jogossantacasa.pt/web/interactive/results EuroMillions',
+                'https://www.lottery.net/api/lotteries/euromillions/results.json',
+                'https://api.the-lotter.com/results/euromillions'
+            ],
+            totoloto: [
+                'https://www.jogossantacasa.pt/web/interactive/results Totoloto',
+                'https://www.lottery.net/api/lotteries/totoloto/results.json'
+            ],
+            eurodreams: [
+                'https://www.jogossantacasa.pt/web/interactive/results EuroDreams',
+                'https://www.lottery.net/api/lotteries/eurodreams/results.json'
+            ]
+        }[game] || [];
+    },
+
+    async fetchFromSantaCasa(game) {
+        Logger.info('🏛️ Santa Casa...');
+        const urls = this.getUrls(game).slice(0, 1);
+        for (const url of urls) {
+            try {
+                const text = await this.fetchWithProxy(url);
+                const data = this.parseLotteryData(text, game);
+                if (data.length > 0) {
+                    State.dataSources.santacasa = { status: 'online', draws: data.length };
+                    return data;
+                }
+            } catch (e) { Logger.warn(e.message); }
+        }
+        return null;
+    },
+
+    async fetchFromAPIs(game) {
+        Logger.info('🌐 APIs...');
+        const urls = this.getUrls(game).slice(1);
+        for (const url of urls) {
+            try {
+                const text = await this.fetchWithProxy(url);
+                const data = this.parseLotteryData(text, game);
+                if (data.length > 0) {
+                    State.dataSources.api = { status: 'online', draws: data.length };
+                    return data;
+                }
+            } catch (e) { Logger.warn(e.message); }
+        }
+        return null;
+    },
+
+    generateSampleData(game, count = 500) {
+        const cfg = GAMES[game];
+        const data = [];
+        for (let i = 0; i < count; i++)
+            data.push({ numbers: generateUnique(cfg.maxNumbers, cfg.drawNumbers),
+                        stars: generateUnique(cfg.maxStars, cfg.drawStars) });
+        State.dataSources.manual = { status: 'online', draws: count };
+        return data;
+    },
+
+    async fetchData(game, source = 'auto') {
+        Logger.clear();
+        Logger.show();
+        Logger.info(`🎯 ${GAMES[game].name}`);
+        let data = null;
+        try {
+            if (source === 'sample') data = this.generateSampleData(game);
+            else if (source === 'santacasa') data = await this.fetchFromSantaCasa(game);
+            else if (source === 'api') data = await this.fetchFromAPIs(game);
+            else {
+                data = await this.fetchFromSantaCasa(game);
+                if (!data || data.length === 0) data = await this.fetchFromAPIs(game);
+                if (!data || data.length === 0) data = this.generateSampleData(game);
+            }
+        } catch (e) {
+            Logger.error('Erro: ' + e.message);
+            data = this.generateSampleData(game);
+        }
+        if (data && data.length > 0) {
+            State.historicalData[game] = data;
+            localStorage.setItem('lotoHistory_v12', JSON.stringify(State.historicalData));
+            Logger.success(`✅ ${data.length} sorteios`);
+            return data;
+        }
+        Logger.error('❌ Falha');
+        return null;
     }
-    
-    trainBatch(data, epochs = 50) {
-        for (let epoch = 0; epoch < epochs; epoch++) {
-            for (let sample of data) {
-                let output = this.predict(sample.input);
-                let error = sample.target.map((t, i) => t - output[i]);
-                let lr = 0.01;
-                for (let j = 0; j < this.weights2.length; j++) {
-                    for (let k = 0; k < this.weights2[0].length; k++) {
-                        this.weights2[j][k] += lr * error[k] * 0.5;
+};
+
+// ============================================================
+// STATS ANALYZER
+// ============================================================
+const StatsAnalyzer = {
+    analyze(game, data) {
+        const cfg = GAMES[game];
+        if (!data || data.length === 0) return null;
+        const freqNum = new Array(cfg.maxNumbers+1).fill(0);
+        const freqStar = new Array(cfg.maxStars+1).fill(0);
+        const lastSeenNum = new Array(cfg.maxNumbers+1).fill(data.length);
+        const lastSeenStar = new Array(cfg.maxStars+1).fill(data.length);
+        const recentTrend = new Array(cfg.maxNumbers+1).fill(0);
+        const recentN = Math.min(50, data.length);
+        const recentData = data.slice(-recentN);
+        data.forEach((d, idx) => {
+            d.numbers.forEach(n => { freqNum[n]++; lastSeenNum[n] = data.length - idx - 1; });
+            d.stars.forEach(s => { freqStar[s]++; lastSeenStar[s] = data.length - idx - 1; });
+        });
+        recentData.forEach((d, idx) => {
+            const w = (idx+1)/recentN;
+            d.numbers.forEach(n => recentTrend[n] += w);
+        });
+        const markovMatrix = {};
+        for (let i = 0; i < data.length - 1; i++) {
+            data[i].numbers.forEach(n1 => {
+                if (!markovMatrix[n1]) markovMatrix[n1] = {};
+                data[i+1].numbers.forEach(n2 => {
+                    markovMatrix[n1][n2] = (markovMatrix[n1][n2] || 0) + 1;
+                });
+            });
+        }
+        const sums = data.map(d => d.numbers.reduce((a,b) => a+b, 0));
+        const meanSum = sums.reduce((a,b) => a+b, 0) / sums.length;
+        const stdSum = Math.sqrt(sums.reduce((a,b) => a + Math.pow(b-meanSum,2), 0) / sums.length);
+        const parityHistory = data.map(d => d.numbers.filter(n => n%2===0).length);
+        const avgParity = parityHistory.reduce((a,b) => a+b, 0) / parityHistory.length;
+        const mid = cfg.maxNumbers/2;
+        const highLowHistory = data.map(d => d.numbers.filter(n => n>mid).length);
+        const avgHighLow = highLowHistory.reduce((a,b) => a+b, 0) / highLowHistory.length;
+        const gaps = lastSeenNum.map((v, i) => i > 0 ? v : 0);
+        return { freqNum, freqStar, lastSeenNum, lastSeenStar, gaps, recentTrend,
+                 markovMatrix, meanSum, stdSum, avgParity, avgHighLow, totalDraws: data.length };
+    },
+
+    evaluateBet(numbers, stars, stats, cfg) {
+        if (!stats) return { total: 50, criteria: {} };
+        const n = numbers.length;
+        const crit = {};
+        const maxFreq = Math.max(...stats.freqNum.slice(1)) || 1;
+        crit.frequency = numbers.reduce((acc, num) => acc + (stats.freqNum[num]||0)/maxFreq, 0) / n * 100;
+        const maxGap = Math.max(...stats.gaps.slice(1)) || 1;
+        crit.gap = numbers.reduce((acc, num) => acc + (stats.gaps[num]||0)/maxGap, 0) / n * 100;
+        const maxTrend = Math.max(...stats.recentTrend.slice(1)) || 1;
+        crit.trend = numbers.reduce((acc, num) => acc + (stats.recentTrend[num]||0)/maxTrend, 0) / n * 100;
+        const pares = numbers.filter(x => x%2===0).length;
+        crit.parity = (1 - Math.abs(pares - n/2) / (n/2||1)) * 100;
+        const mid = cfg.maxNumbers/2;
+        const altos = numbers.filter(x => x>mid).length;
+        crit.highLow = (1 - Math.abs(altos - n/2) / (n/2||1)) * 100;
+        const sum = numbers.reduce((a,b) => a+b, 0);
+        const expectedSum = n * (cfg.maxNumbers+1)/2;
+        const stdExpected = Math.sqrt(n * cfg.maxNumbers * (cfg.maxNumbers+1) / 12);
+        const zScore = Math.abs(sum - expectedSum) / stdExpected;
+        crit.sum = Math.max(0, 100 - zScore*30);
+        const zoneSize = Math.ceil(cfg.maxNumbers/5);
+        const zones = new Array(5).fill(0);
+        numbers.forEach(num => zones[Math.min(4, Math.floor((num-1)/zoneSize))]++);
+        const idealPerZone = n/5;
+        const zoneDeviation = zones.reduce((acc,z) => acc + Math.abs(z - idealPerZone), 0);
+        crit.zones = Math.max(0, 100 - zoneDeviation*20);
+        const sorted = [...numbers].sort((a,b) => a-b);
+        let consec = 0;
+        for (let i=1; i<sorted.length; i++) if (sorted[i] === sorted[i-1]+1) consec++;
+        crit.consecutive = consec <= 1 ? 100 : (consec === 2 ? 70 : 40);
+        const tails = new Set(numbers.map(n => n%10));
+        crit.tails = (tails.size / Math.min(n,10)) * 100;
+        let markovScore = 50;
+        if (stats.markovMatrix && Object.keys(stats.markovMatrix).length > 0) {
+            let t=0, v=0;
+            for (let i=0; i<numbers.length-1; i++) {
+                const n1=numbers[i], n2=numbers[i+1];
+                if (stats.markovMatrix[n1]) { t++; if (stats.markovMatrix[n1][n2]) v++; }
+            }
+            if (t>0) markovScore = (v/t)*100;
+        }
+        crit.markov = markovScore;
+        const entropy = -numbers.reduce((acc, num) => {
+            const p = (stats.freqNum[num]||1) / stats.totalDraws;
+            return acc + (p > 0 ? p * Math.log2(p) : 0);
+        }, 0);
+        crit.entropy = (entropy / Math.log2(cfg.maxNumbers)) * 100;
+        const fib = [1,2,3,5,8,13,21,34];
+        crit.fibonacci = (numbers.filter(n => fib.includes(n)).length / n) * 100;
+        const variance = numbers.reduce((acc, num) => acc + Math.pow(num - expectedSum/n, 2), 0) / n;
+        crit.chaos = Math.min(100, variance / 10);
+        crit.montecarlo = 60 + Math.random()*30;
+        crit.bayesian = (crit.frequency*0.6 + crit.trend*0.4);
+        const weights = { frequency:0.12, gap:0.08, trend:0.12, parity:0.07, highLow:0.07, sum:0.10,
+                          zones:0.08, consecutive:0.04, tails:0.04, markov:0.06, entropy:0.04,
+                          fibonacci:0.03, chaos:0.03, montecarlo:0.06, bayesian:0.06 };
+        const total = Object.entries(crit).reduce((acc, [k,v]) => acc + v * (weights[k]||0.05), 0);
+        return { total, criteria: crit };
+    }
+};
+
+// ============================================================
+// GENERATOR (15 métodos)
+// ============================================================
+const Generator = {
+    random(game, count, starCount) {
+        const cfg = GAMES[game];
+        return { numbers: generateUnique(cfg.maxNumbers, count),
+                 stars: generateUnique(cfg.maxStars, starCount || cfg.drawStars),
+                 fitness: { total: 50, criteria: {} }, method: 'random' };
+    },
+
+    frequency(game, count, starCount, stats) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const weights = stats.freqNum.map((f,i) => ({ num:i, weight: f + Math.random()*5 }));
+        weights.sort((a,b) => b.weight - a.weight);
+        const selected = [];
+        const pool = weights.filter(w => w.num > 0).map(w => w.num);
+        while (selected.length < count && pool.length > 0) {
+            const idx = Math.floor(Math.random() * Math.min(pool.length, count*2));
+            selected.push(pool[idx]);
+            pool.splice(idx, 1);
+        }
+        while (selected.length < count) {
+            const n = secureRandom(cfg.maxNumbers);
+            if (!selected.includes(n)) selected.push(n);
+        }
+        const nums = selected.slice(0,count).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'frequency' };
+    },
+
+    gap(game, count, starCount, stats) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const gaps = stats.gaps.map((g,i) => ({ num:i, gap:g }));
+        gaps.sort((a,b) => b.gap - a.gap);
+        const pool = gaps.filter(g => g.num > 0).map(g => g.num);
+        const selected = [];
+        while (selected.length < count && pool.length > 0) {
+            const idx = Math.floor(Math.random() * Math.min(pool.length, count));
+            selected.push(pool[idx]);
+            pool.splice(idx, 1);
+        }
+        while (selected.length < count) {
+            const n = secureRandom(cfg.maxNumbers);
+            if (!selected.includes(n)) selected.push(n);
+        }
+        const nums = selected.slice(0,count).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'gap' };
+    },
+
+    pattern(game, count, starCount, stats) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const trends = stats.recentTrend.map((t,i) => ({ num:i, trend: t + Math.random()*2 }));
+        trends.sort((a,b) => b.trend - a.trend);
+        const pool = trends.filter(t => t.num > 0).map(t => t.num);
+        const selected = [];
+        while (selected.length < count && pool.length > 0) {
+            const idx = Math.floor(Math.random() * Math.min(pool.length, count*2));
+            selected.push(pool[idx]);
+            pool.splice(idx, 1);
+        }
+        while (selected.length < count) {
+            const n = secureRandom(cfg.maxNumbers);
+            if (!selected.includes(n)) selected.push(n);
+        }
+        const nums = selected.slice(0,count).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'pattern' };
+    },
+
+    statistical(game, count, starCount, stats) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const maxFreq = Math.max(...stats.freqNum.slice(1)) || 1;
+        const scores = new Array(cfg.maxNumbers+1).fill(0);
+        for (let i=1; i<=cfg.maxNumbers; i++)
+            scores[i] = (stats.freqNum[i]/maxFreq)*40 + Math.random()*10;
+        const ranked = scores.map((s,i) => ({num:i, score:s})).filter(x => x.num > 0).sort((a,b) => b.score - a.score);
+        const nums = ranked.slice(0,count).map(r => r.num).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'statistical' };
+    },
+
+    balanced(game, count, starCount, stats) {
+        const cfg = GAMES[game];
+        const zoneSize = cfg.maxNumbers / 5;
+        const perZone = Math.ceil(count / 5);
+        const selected = [];
+        for (let z=0; z<5 && selected.length<count; z++) {
+            const start = Math.floor(z*zoneSize)+1;
+            const end = Math.min(Math.floor((z+1)*zoneSize), cfg.maxNumbers);
+            const pool = [];
+            for (let n=start; n<=end; n++) pool.push(n);
+            const chosen = generateUnique(pool.length, Math.min(perZone, pool.length));
+            chosen.forEach(idx => { if (!selected.includes(pool[idx-1])) selected.push(pool[idx-1]); });
+        }
+        while (selected.length < count) {
+            const n = secureRandom(cfg.maxNumbers);
+            if (!selected.includes(n)) selected.push(n);
+        }
+        const nums = selected.slice(0,count).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'balanced' };
+    },
+
+    neural(game, count, starCount, stats) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const maxFreq = Math.max(...stats.freqNum.slice(1)) || 1;
+        const maxTrend = Math.max(...stats.recentTrend.slice(1)) || 1;
+        const maxGap = Math.max(...stats.gaps.slice(1)) || 1;
+        const weights = new Array(cfg.maxNumbers+1).fill(0);
+        for (let i=1; i<=cfg.maxNumbers; i++) {
+            const input1 = stats.freqNum[i]/maxFreq;
+            const input2 = stats.recentTrend[i]/maxTrend;
+            const input3 = stats.gaps[i]/maxGap;
+            const hidden = Math.max(0, input1*0.4 + input2*0.35 + input3*0.25 + Math.random()*0.2 - 0.1);
+            weights[i] = 1 / (1 + Math.exp(-hidden*5));
+        }
+        const ranked = weights.map((w,i) => ({num:i, weight:w})).filter(x => x.num > 0).sort((a,b) => b.weight - a.weight);
+        const nums = ranked.slice(0,count).map(r => r.num).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'neural' };
+    },
+
+    markov(game, count, starCount, stats) {
+        if (!stats || !stats.markovMatrix || Object.keys(stats.markovMatrix).length === 0)
+            return this.frequency(game, count, starCount, stats);
+        const cfg = GAMES[game];
+        const start = stats.freqNum.indexOf(Math.max(...stats.freqNum.slice(1)));
+        const selected = [start];
+        const used = new Set([start]);
+        while (selected.length < count) {
+            const last = selected[selected.length-1];
+            const transitions = stats.markovMatrix[last] || {};
+            const candidates = Object.entries(transitions)
+                .map(([num, prob]) => ({ num: parseInt(num), prob }))
+                .filter(c => !used.has(c.num) && c.num >= 1 && c.num <= cfg.maxNumbers)
+                .sort((a,b) => b.prob - a.prob);
+            if (candidates.length > 0) {
+                const top = candidates.slice(0, Math.min(5, candidates.length));
+                const chosen = top[Math.floor(Math.random() * top.length)].num;
+                selected.push(chosen);
+                used.add(chosen);
+            } else {
+                const n = secureRandom(cfg.maxNumbers);
+                if (!used.has(n)) { selected.push(n); used.add(n); }
+            }
+        }
+        const nums = selected.sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'markov' };
+    },
+
+    entropy(game, count, starCount, stats) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const scores = new Array(cfg.maxNumbers+1).fill(0);
+        for (let i=1; i<=cfg.maxNumbers; i++) {
+            const freq = (stats.freqNum[i]||0) / stats.totalDraws;
+            const p = freq > 0 ? freq : 0.001;
+            scores[i] = -p * Math.log2(p) + Math.random()*0.5;
+        }
+        const ranked = scores.map((s,i) => ({num:i, score:s})).filter(x => x.num > 0).sort((a,b) => b.score - a.score);
+        const nums = ranked.slice(0,count).map(r => r.num).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'entropy' };
+    },
+
+    fibonacci(game, count, starCount, stats) {
+        const cfg = GAMES[game];
+        const fib = [];
+        let a=1, b=2;
+        while (a <= cfg.maxNumbers) { fib.push(a); const t=a+b; a=b; b=t; }
+        const selected = fib.slice(0, count);
+        while (selected.length < count) {
+            const n = secureRandom(cfg.maxNumbers);
+            if (!selected.includes(n)) selected.push(n);
+        }
+        const nums = selected.slice(0,count).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'fibonacci' };
+    },
+
+    chaos(game, count, starCount, stats) {
+        const cfg = GAMES[game];
+        let x=0.1, y=0, z=0;
+        const dt=0.01, sigma=10, rho=28, beta=8/3;
+        const selected = [];
+        for (let i=0; i<count*10 && selected.length<count; i++) {
+            const dx = sigma*(y-x)*dt;
+            const dy = (x*(rho-z)-y)*dt;
+            const dz = (x*y - beta*z)*dt;
+            x += dx; y += dy; z += dz;
+            const num = Math.abs(Math.floor(x*100)) % cfg.maxNumbers + 1;
+            if (!selected.includes(num)) selected.push(num);
+        }
+        while (selected.length < count) {
+            const n = secureRandom(cfg.maxNumbers);
+            if (!selected.includes(n)) selected.push(n);
+        }
+        const nums = selected.slice(0,count).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'chaos' };
+    },
+
+    montecarlo(game, count, starCount, stats) {
+        const cfg = GAMES[game];
+        const freq = new Array(cfg.maxNumbers+1).fill(0);
+        for (let sim=0; sim<10000; sim++) {
+            const draw = generateUnique(cfg.maxNumbers, cfg.drawNumbers);
+            draw.forEach(n => freq[n]++);
+        }
+        const ranked = freq.map((f,i) => ({num:i, freq:f})).filter(x => x.num > 0).sort((a,b) => b.freq - a.freq);
+        const nums = ranked.slice(0,count).map(r => r.num).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'montecarlo' };
+    },
+
+    bayesian(game, count, starCount, stats) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const posterior = new Array(cfg.maxNumbers+1).fill(0);
+        for (let i=1; i<=cfg.maxNumbers; i++) {
+            const prior = 1 / cfg.maxNumbers;
+            const likelihood = (stats.freqNum[i]||0) / stats.totalDraws;
+            posterior[i] = prior * likelihood;
+        }
+        const ranked = posterior.map((p,i) => ({num:i, prob:p})).filter(x => x.num > 0).sort((a,b) => b.prob - a.prob);
+        const nums = ranked.slice(0,count).map(r => r.num).sort((a,b) => a-b);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(nums, stars, stats, cfg);
+        return { numbers: nums, stars, fitness: fit, method: 'bayesian' };
+    },
+
+    genetic(game, count, starCount, stats, quality = 1000) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const popSize = 100;
+        const mutRate = 0.15;
+        let pop = [];
+        for (let i=0; i<popSize; i++) pop.push(generateUnique(cfg.maxNumbers, count));
+        let best = pop[0];
+        let bestScore = 0;
+        for (let gen=0; gen<Math.min(quality, 1000); gen++) {
+            const evaluated = pop.map(ind => ({
+                individual: ind,
+                fitness: StatsAnalyzer.evaluateBet(ind, [], stats, cfg).total
+            }));
+            evaluated.sort((a,b) => b.fitness - a.fitness);
+            if (evaluated[0].fitness > bestScore) {
+                bestScore = evaluated[0].fitness;
+                best = evaluated[0].individual;
+            }
+            const parents = evaluated.slice(0, popSize/2).map(e => e.individual);
+            const newPop = [...parents];
+            while (newPop.length < popSize) {
+                const p1 = parents[Math.floor(Math.random()*parents.length)];
+                const p2 = parents[Math.floor(Math.random()*parents.length)];
+                const child = new Set();
+                p1.forEach(n => { if (Math.random()<0.5) child.add(n); });
+                p2.forEach(n => { if (Math.random()<0.5) child.add(n); });
+                while (child.size < count) child.add(secureRandom(cfg.maxNumbers));
+                let childArr = Array.from(child).slice(0,count);
+                if (Math.random() < mutRate) {
+                    const idx = Math.floor(Math.random()*childArr.length);
+                    let newNum;
+                    do { newNum = secureRandom(cfg.maxNumbers); } while (childArr.includes(newNum));
+                    childArr[idx] = newNum;
+                }
+                newPop.push(childArr.sort((a,b) => a-b));
+            }
+            pop = newPop;
+        }
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(best, stars, stats, cfg);
+        return { numbers: best, stars, fitness: fit, method: 'genetic' };
+    },
+
+    quantumHybrid(game, count, starCount, stats, quality = 1000) {
+        if (!stats) return this.random(game, count, starCount);
+        const cfg = GAMES[game];
+        const methods = ['frequency','gap','pattern','statistical','balanced','neural','markov','entropy','fibonacci','chaos','montecarlo','bayesian'];
+        const results = [];
+        for (const m of methods) {
+            for (let i=0; i<2; i++) {
+                try {
+                    const r = this[m](game, count, starCount, stats);
+                    if (r && r.numbers.length === count) results.push(r);
+                } catch (e) {}
+            }
+        }
+        if (results.length === 0) return this.random(game, count, starCount);
+        results.sort((a,b) => b.fitness.total - a.fitness.total);
+        const top = results.slice(0, Math.min(7, results.length));
+        const freqMap = {};
+        top.forEach((r, idx) => {
+            const weight = Math.pow(2, -idx);
+            r.numbers.forEach(n => { freqMap[n] = (freqMap[n]||0) + weight; });
+        });
+        const sorted = Object.entries(freqMap).sort((a,b) => b[1] - a[1]);
+        let finalNumbers = sorted.slice(0, count).map(x => parseInt(x[0])).sort((a,b) => a-b);
+        finalNumbers = this._applyFilters(finalNumbers, stats, cfg);
+        const stars = this._generateStars(game, starCount, stats);
+        const fit = StatsAnalyzer.evaluateBet(finalNumbers, stars, stats, cfg);
+        return { numbers: finalNumbers, stars, fitness: fit, method: 'quantum-hybrid' };
+    },
+
+    // ---- Auxiliares ----
+    _generateStars(game, starCount, stats) {
+        const cfg = GAMES[game];
+        if (!stats) return generateUnique(cfg.maxStars, starCount || cfg.drawStars);
+        const scores = new Array(cfg.maxStars+1).fill(0);
+        const maxFreq = Math.max(...stats.freqStar.slice(1)) || 1;
+        const maxGap = Math.max(...stats.lastSeenStar.slice(1)) || 1;
+        for (let i=1; i<=cfg.maxStars; i++)
+            scores[i] = (stats.freqStar[i]/maxFreq)*50 + (stats.lastSeenStar[i]/maxGap)*50;
+        const ranked = scores.map((s,i) => ({num:i, score:s})).filter(x => x.num > 0).sort((a,b) => b.score - a.score);
+        const stars = ranked.slice(0, starCount).map(r => r.num);
+        while (stars.length < starCount) {
+            const s = secureRandom(cfg.maxStars);
+            if (!stars.includes(s)) stars.push(s);
+        }
+        return stars.sort((a,b) => a-b);
+    },
+
+    _applyFilters(numbers, stats, cfg) {
+        const filters = {
+            parity: document.getElementById('filterParity')?.checked,
+            highLow: document.getElementById('filterHighLow')?.checked,
+            sum: document.getElementById('filterSum')?.checked,
+            dozens: document.getElementById('filterDozens')?.checked,
+            consecutive: document.getElementById('filterConsecutive')?.checked,
+            tails: document.getElementById('filterTails')?.checked
+        };
+        let result = [...numbers];
+        let attempts = 0;
+        while (attempts < 50) {
+            let valid = true;
+            if (filters.parity) {
+                const pares = result.filter(x => x%2===0).length;
+                if (Math.abs(pares - result.length/2) > 1) valid = false;
+            }
+            if (filters.highLow) {
+                const mid = cfg.maxNumbers/2;
+                const altos = result.filter(x => x>mid).length;
+                if (Math.abs(altos - result.length/2) > 1) valid = false;
+            }
+            if (filters.sum) {
+                const sum = result.reduce((a,b) => a+b, 0);
+                const expected = result.length * (cfg.maxNumbers+1)/2;
+                const std = Math.sqrt(result.length * cfg.maxNumbers * (cfg.maxNumbers+1) / 12);
+                if (Math.abs(sum - expected) > 2*std) valid = false;
+            }
+            if (filters.dozens) {
+                const zoneSize = Math.ceil(cfg.maxNumbers/5);
+                const zones = new Array(5).fill(0);
+                result.forEach(n => zones[Math.min(4, Math.floor((n-1)/zoneSize))]++);
+                if (Math.max(...zones) > Math.ceil(result.length/2)) valid = false;
+            }
+            if (filters.consecutive) {
+                const sorted = [...result].sort((a,b) => a-b);
+                let consec = 0;
+                for (let i=1; i<sorted.length; i++) if (sorted[i] === sorted[i-1]+1) consec++;
+                if (consec > 1) valid = false;
+            }
+            if (filters.tails) {
+                const tails = new Set(result.map(n => n%10));
+                if (tails.size < Math.min(result.length-1, 5)) valid = false;
+            }
+            if (valid) break;
+            const idx = Math.floor(Math.random() * result.length);
+            let newNum;
+            do { newNum = secureRandom(cfg.maxNumbers); } while (result.includes(newNum));
+            result[idx] = newNum;
+            result.sort((a,b) => a-b);
+            attempts++;
+        }
+        return result;
+    },
+
+    // Ponto de entrada
+    generate(game, count, starCount, method, stats, quality) {
+        switch (method) {
+            case 'quantum-hybrid': return this.quantumHybrid(game, count, starCount, stats, quality);
+            case 'genetic': return this.genetic(game, count, starCount, stats, quality);
+            case 'neural': return this.neural(game, count, starCount, stats);
+            case 'markov': return this.markov(game, count, starCount, stats);
+            case 'entropy': return this.entropy(game, count, starCount, stats);
+            case 'frequency': return this.frequency(game, count, starCount, stats);
+            case 'gap': return this.gap(game, count, starCount, stats);
+            case 'pattern': return this.pattern(game, count, starCount, stats);
+            case 'fibonacci': return this.fibonacci(game, count, starCount, stats);
+            case 'chaos': return this.chaos(game, count, starCount, stats);
+            case 'montecarlo': return this.montecarlo(game, count, starCount, stats);
+            case 'bayesian': return this.bayesian(game, count, starCount, stats);
+            case 'statistical': return this.statistical(game, count, starCount, stats);
+            case 'balanced': return this.balanced(game, count, starCount, stats);
+            default: return this.random(game, count, starCount);
+        }
+    }
+};
+
+// ============================================================
+// APLICAÇÃO PRINCIPAL
+// ============================================================
+const App = {
+    init() {
+        Logger.init();
+        this.setupTabs();
+        this.setupGameSelector();
+        this.updateBetTypes();
+        this.renderSavedBets();
+        this.updateDashboard();
+        this.updateDataStats();
+        toast('🚀 LotoAnalytics v12.2 carregada!');
+    },
+
+    setupTabs() {
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(div => div.style.display = 'none');
+                document.getElementById('tab-' + btn.dataset.tab).style.display = 'block';
+                if (btn.dataset.tab === 'analise') this.renderAnalysis();
+                if (btn.dataset.tab === 'dashboard') this.updateDashboard();
+            });
+        });
+    },
+
+    setupGameSelector() {
+        const sel = document.getElementById('gameSelect');
+        const dataGame = document.getElementById('dataGame');
+        const update = () => {
+            State.currentGame = sel.value;
+            dataGame.value = State.currentGame;
+            this.updateBetTypes();
+            this.updateDataStats();
+            this.updateDashboard();
+        };
+        sel.addEventListener('change', update);
+        dataGame.addEventListener('change', () => {
+            sel.value = dataGame.value;
+            update();
+        });
+    },
+
+    updateBetTypes() {
+        const cfg = GAMES[State.currentGame];
+        const numSel = document.getElementById('betType');
+        numSel.innerHTML = '';
+        const maxNum = Math.min(10, cfg.maxNumbers);
+        for (let n = cfg.drawNumbers; n <= maxNum; n++) {
+            const opt = document.createElement('option');
+            opt.value = n;
+            opt.textContent = n + ' números';
+            if (n === cfg.drawNumbers) opt.selected = true;
+            numSel.appendChild(opt);
+        }
+
+        const starLabel = document.getElementById('starLabel');
+        const starSel = document.getElementById('starSelect');
+        starSel.innerHTML = '';
+        if (cfg.maxStarsMulti > cfg.drawStars) {
+            starLabel.style.display = 'block';
+            for (let s = cfg.drawStars; s <= cfg.maxStarsMulti; s++) {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.textContent = s + ' ' + cfg.starLabel;
+                if (s === cfg.drawStars) opt.selected = true;
+                starSel.appendChild(opt);
+            }
+        } else {
+            starLabel.style.display = 'none';
+            const opt = document.createElement('option');
+            opt.value = cfg.drawStars;
+            opt.textContent = cfg.drawStars + ' ' + cfg.starLabel;
+            starSel.appendChild(opt);
+        }
+        numSel.addEventListener('change', () => this.updatePriceDisplay());
+        starSel.addEventListener('change', () => this.updatePriceDisplay());
+        this.updatePriceDisplay();
+    },
+
+    updatePriceDisplay() {
+        const cfg = GAMES[State.currentGame];
+        const numCount = parseInt(document.getElementById('betType').value);
+        const starCount = parseInt(document.getElementById('starSelect').value);
+        const combNum = combination(numCount, cfg.drawNumbers);
+        const combStar = combination(starCount, cfg.drawStars);
+        const totalComb = combNum * combStar;
+        const price = cfg.basePrice * totalComb;
+        document.getElementById('genPrice').textContent = price.toFixed(2) + ' €';
+        document.getElementById('genComb').textContent = totalComb.toLocaleString();
+        document.getElementById('genPriceDetail').textContent = (numCount === cfg.drawNumbers && starCount === cfg.drawStars) ? 'Simples' : 'Múltipla';
+        document.getElementById('genJackpot').textContent = '1/' + cfg.jackpotOdds.toLocaleString();
+        document.getElementById('genStarsLabel').innerHTML = cfg.starIcon + ' ' + cfg.starLabel;
+    },
+
+    generateBet() {
+        try {
+            const cfg = GAMES[State.currentGame];
+            const numCount = parseInt(document.getElementById('betType').value);
+            const starCount = parseInt(document.getElementById('starSelect').value);
+            const method = document.getElementById('genMethod').value;
+            const quality = parseInt(document.getElementById('genQuality').value);
+
+            const data = State.historicalData[State.currentGame] || [];
+            const stats = data.length > 0 ? StatsAnalyzer.analyze(State.currentGame, data) : null;
+            State.stats = stats;
+
+            let result = Generator.generate(State.currentGame, numCount, starCount, method, stats, quality);
+            if (!result || !result.numbers) throw new Error('Falha na geração');
+
+            State.lastGeneratedBet = result;
+
+            document.getElementById('genNumbers').innerHTML = result.numbers.map(n => `<div class="bola">${n}</div>`).join('');
+            const starClass = State.currentGame === 'eurodreams' ? 'sonho' : 'estrela';
+            document.getElementById('genStars').innerHTML = result.stars.map(s => `<div class="bola ${starClass}">${cfg.starIcon}${s}</div>`).join('');
+
+            this.updatePriceDisplay();
+            document.getElementById('genScore').textContent = (result.fitness.total || 50).toFixed(1) + '/100';
+
+            // Análise de qualidade
+            let analysisHtml = '<div class="grid-4">';
+            const crit = result.fitness.criteria || {};
+            const names = {
+                frequency: '📊 Freq', gap: '⏰ Lacuna', trend: '📈 Tendência',
+                parity: '🔢 Par/Ímp', highLow: '⬆️⬇️ Alt/Bai', sum: '➕ Soma',
+                zones: '🎯 Zonas', consecutive: '🔗 Consec', tails: '🔢 Caudas',
+                markov: '📈 Markov', entropy: '🌀 Entropia', fibonacci: '🔢 Fib',
+                chaos: '🌪️ Caos', montecarlo: '🎲 MC', bayesian: '📐 Bayes'
+            };
+            const colors = ['#f5576c', '#667eea', '#f39c12', '#11998e', '#9b59b6', '#e74c3c', '#3498db', '#2ecc71'];
+            let idx = 0;
+            for (const [key, value] of Object.entries(crit)) {
+                const v = Math.min(100, Math.max(0, value));
+                analysisHtml += `<div><h4 style="font-size:0.75rem;">${names[key]||key}</h4><div class="criterion-bar"><div class="criterion-fill" style="width:${v}%;background:${colors[idx%8]};">${v.toFixed(0)}%</div></div></div>`;
+                idx++;
+            }
+            if (idx === 0) analysisHtml += '<div>Sem dados</div>';
+            analysisHtml += '</div>';
+            document.getElementById('geneticAnalysis').innerHTML = analysisHtml;
+
+            // ========== PROBABILIDADES MELHORADAS ==========
+            const totalCombinations = combination(cfg.maxNumbers, cfg.drawNumbers) * combination(cfg.maxStars, cfg.drawStars);
+            let probHtml = `<table>
+                <tr><th>Categoria</th><th>Probabilidade</th><th>Odds</th></tr>`;
+            // Percorre todas as combinações possíveis de acertos (k números, j estrelas)
+            for (let k = numCount; k >= 0; k--) {
+                for (let j = starCount; j >= 0; j--) {
+                    if (k === 0 && j === 0) continue;
+                    const ways = combination(numCount, k) * combination(cfg.maxNumbers - numCount, cfg.drawNumbers - k);
+                    const waysStar = combination(starCount, j) * combination(cfg.maxStars - starCount, cfg.drawStars - j);
+                    const prob = (ways * waysStar) / totalCombinations;
+                    if (prob > 0 && isFinite(prob)) {
+                        const probPercent = (prob * 100);
+                        const odds = 1 / prob;
+                        const isJackpot = (k === numCount && j === starCount);
+                        const rowClass = isJackpot ? 'class="prob-jackpot"' : '';
+                        probHtml += `<tr ${rowClass}>
+                            <td>${k}N+${j}${cfg.starIcon}</td>
+                            <td>${probPercent.toFixed(4)}%</td>
+                            <td>1/${Math.round(odds).toLocaleString()}</td>
+                        </tr>`;
                     }
                 }
             }
-        }
-    }
-}
+            probHtml += '</table>';
+            probHtml += `<p style="font-size:0.7rem;color:#aaa;margin-top:6px;">
+                * Probabilidades calculadas com base no total de combinações possíveis (${totalCombinations.toLocaleString()}).
+            </p>`;
+            document.getElementById('genProbs').innerHTML = probHtml;
 
-// ======================== MODELO 3: ALGORITMOS GENÉTICOS ========================
-class GeneticAlgorithm {
-    constructor(populationSize, mutationRate) {
-        this.populationSize = populationSize;
-        this.mutationRate = mutationRate;
-    }
-    
-    createIndividual(maxNum, count) {
-        let nums = new Set();
-        while (nums.size < count) nums.add(Math.floor(Math.random() * maxNum) + 1);
-        return Array.from(nums).sort((a,b) => a - b);
-    }
-    
-    crossover(parent1, parent2, maxNum, count) {
-        let child = new Set();
-        let crossoverPoint = Math.floor(parent1.length / 2);
-        parent1.slice(0, crossoverPoint).forEach(n => child.add(n));
-        parent2.slice(crossoverPoint).forEach(n => child.add(n));        while (child.size < count) child.add(Math.floor(Math.random() * maxNum) + 1);
-        return Array.from(child).slice(0, count).sort((a,b) => a - b);
-    }
-    
-    mutate(individual, maxNum) {
-        if (Math.random() < this.mutationRate) {
-            let idx = Math.floor(Math.random() * individual.length);
-            let newNum;
-            do { newNum = Math.floor(Math.random() * maxNum) + 1; } 
-            while (individual.includes(newNum));
-            individual[idx] = newNum;
+            toast('🌌 Aposta gerada: ' + result.method);
+        } catch (e) {
+            console.error(e);
+            toast('❌ Erro ao gerar: ' + e.message, true);
         }
-        return individual.sort((a,b) => a - b);
-    }
-    
-    evolve(population, fitnessFunc, generations, maxNum, count) {
-        for (let gen = 0; gen < generations; gen++) {
-            let scored = population.map(ind => ({ ind, fitness: fitnessFunc(ind) }));
-            scored.sort((a,b) => b.fitness - a.fitness);
-            let newPop = scored.slice(0, this.populationSize / 2).map(s => s.ind);
-            while (newPop.length < this.populationSize) {
-                let p1 = newPop[Math.floor(Math.random() * (newPop.length / 2))];
-                let p2 = newPop[Math.floor(Math.random() * (newPop.length / 2))];
-                let child = this.crossover(p1, p2, maxNum, count);
-                child = this.mutate(child, maxNum);
-                newPop.push(child);
+    },
+
+    saveGeneratedBet() {
+        if (!State.lastGeneratedBet) return toast('Gere uma aposta primeiro!', true);
+        const bet = State.lastGeneratedBet;
+        State.savedBets.push({
+            date: new Date().toISOString().slice(0,10),
+            time: new Date().toLocaleTimeString(),
+            game: State.currentGame,
+            numbers: bet.numbers,
+            stars: bet.stars,
+            method: bet.method,
+            score: bet.fitness.total
+        });
+        localStorage.setItem('lotoBets_v12', JSON.stringify(State.savedBets));
+        this.renderSavedBets();
+        toast('💾 Aposta guardada!');
+    },
+
+    renderSavedBets() {
+        const div = document.getElementById('savedBets');
+        if (State.savedBets.length === 0) { div.innerHTML = '<em>Nenhuma aposta guardada</em>'; return; }
+        let html = '<table><tr><th>Data</th><th>Jogo</th><th>Números</th><th>Extra</th><th>Método</th><th>Score</th></tr>';
+        State.savedBets.slice().reverse().forEach(b => {
+            const cfg = GAMES[b.game];
+            if (!cfg) return;
+            const cls = b.score >= 75 ? 'score-excellent' : b.score >= 60 ? 'score-good' : b.score >= 45 ? 'score-fair' : 'score-poor';
+            html += `<tr><td>${b.date}<br><small>${b.time||''}</small></td><td>${cfg.icon}</td><td>${b.numbers.join(', ')}</td><td>${cfg.starIcon}${b.stars.join(', ')}</td><td>${b.method}</td><td><span class="score-badge ${cls}">${(b.score||0).toFixed(0)}</span></td></tr>`;
+        });
+        html += '</table>';
+        div.innerHTML = html;
+    },
+
+    runQuantumAnalysis() {
+        const data = State.historicalData[State.currentGame] || [];
+        const div = document.getElementById('quantumResults');
+        if (data.length === 0) {
+            div.innerHTML = '<p style="color:#f5576c;">⚠️ Carregue dados primeiro!</p>';
+            return;
+        }
+        const stats = StatsAnalyzer.analyze(State.currentGame, data);
+        const cfg = GAMES[State.currentGame];
+        const methods = ['quantum-hybrid','genetic','neural','markov','entropy','frequency','gap','pattern','fibonacci','chaos','montecarlo','bayesian'];
+        const results = [];
+        methods.forEach(m => {
+            try {
+                const r = Generator.generate(State.currentGame, cfg.drawNumbers, cfg.drawStars, m, stats, 1000);
+                results.push({ method: m, ...r });
+            } catch (e) {}
+        });
+        results.sort((a,b) => b.fitness.total - a.fitness.total);
+        let html = '<h3>🌌 Resultados Quantum</h3><table><tr><th>Método</th><th>Números</th><th>Estrelas</th><th>Score</th></tr>';
+        results.forEach(r => {
+            const cls = r.fitness.total >= 75 ? 'score-excellent' : r.fitness.total >= 60 ? 'score-good' : 'score-fair';
+            html += `<tr><td>${r.method}</td><td>${r.numbers.join(', ')}</td><td>${r.stars.join(', ')}</td><td><span class="score-badge ${cls}">${r.fitness.total.toFixed(0)}</span></td></tr>`;
+        });
+        html += '</table>';
+        div.innerHTML = html;
+        toast('🌌 Análise Quantum concluída!');
+    },
+
+    updateDashboard() {
+        const games = ['euromilhoes', 'totoloto', 'eurodreams'];
+        games.forEach(game => {
+            const data = State.historicalData[game] || [];
+            const divId = game === 'euromilhoes' ? 'dashEuro' : game === 'totoloto' ? 'dashToto' : 'dashDreams';
+            const div = document.getElementById(divId);
+            if (data.length > 0) {
+                const last = data[data.length-1];
+                div.innerHTML = `${last.numbers.join('-')}<br><small style="color:#aaa;">${data.length} sorteios</small>`;
+            } else {
+                div.innerHTML = '<small style="color:#aaa;">Sem dados</small>';
             }
-            population = newPop;
+        });
+        let sourcesHtml = '';
+        for (const [key, source] of Object.entries(State.dataSources)) {
+            const statusClass = source.status === 'online' ? 'status-online' : 'status-offline';
+            const badgeClass = key === 'santacasa' ? 'source-santacasa' : key === 'api' ? 'source-api' : 'source-fallback';
+            sourcesHtml += `<span class="source-badge ${badgeClass}"><span class="status-indicator ${statusClass}"></span>${key.toUpperCase()}: ${source.draws} sorteios</span>`;
         }
-        let final = population.map(ind => ({ ind, fitness: fitnessFunc(ind) }));
-        final.sort((a,b) => b.fitness - a.fitness);
-        return final[0].ind;
-    }
-}
+        document.getElementById('dataSources').innerHTML = sourcesHtml;
+        const totalDraws = Object.values(State.historicalData).reduce((acc, data) => acc + (data ? data.length : 0), 0);
+        document.getElementById('totalDraws').textContent = totalDraws;
+        const lastUpdate = Object.values(State.dataSources).reduce((latest, source) => {
+            if (source.lastUpdate && (!latest || source.lastUpdate > latest)) return source.lastUpdate;
+            return latest;
+        }, null);
+        document.getElementById('lastUpdate').textContent = lastUpdate ? new Date(lastUpdate).toLocaleString('pt-PT') : '--';
+    },
 
-// ======================== MODELO 4: CORRELAÇÕES ========================
-function analyzeCorrelations(data, maxNum) {
-    let pairs = {};
-    for (let draw of data) {
-        let nums = draw.numbers;
-        for (let i = 0; i < nums.length; i++) {
-            for (let j = i + 1; j < nums.length; j++) {
-                let key = Math.min(nums[i], nums[j]) + '-' + Math.max(nums[i], nums[j]);
-                pairs[key] = (pairs[key] || 0) + 1;
-            }
+    updateDataStats() {
+        const data = State.historicalData[State.currentGame] || [];
+        const div = document.getElementById('dataStats');
+        if (data.length === 0) {
+            div.innerHTML = '<p style="color:#aaa;">Nenhum dado</p>';
+        } else {
+            div.innerHTML = `
+                <div class="grid-3">
+                    <div class="stat-box"><h4>Sorteios</h4><div class="value">${data.length}</div></div>
+                    <div class="stat-box"><h4>Último</h4><div class="value">${data[data.length-1].numbers.join('-')}</div></div>
+                    <div class="stat-box"><h4>Status</h4><div class="value" style="color:#38ef7d;">✓ OK</div></div>
+                </div>
+            `;
         }
-    }
-    let sorted = Object.entries(pairs).sort((a,b) => b[1] - a[1]);
-    return sorted.slice(0, 20);
-}
-// ======================== MODELO 5: TENDÊNCIAS ========================
-function analyzeTrends(data, maxNum) {
-    let recent = data.slice(0, 30);
-    let older = data.slice(30, 100);
-    let recentFreq = new Array(maxNum + 1).fill(0);
-    let olderFreq = new Array(maxNum + 1).fill(0);
-    
-    for (let draw of recent) for (let n of draw.numbers) recentFreq[n]++;
-    for (let draw of older) for (let n of draw.numbers) olderFreq[n]++;
-    
-    let trends = [];
-    for (let i = 1; i <= maxNum; i++) {
-        let recentRate = recentFreq[i] / Math.max(1, recent.length);
-        let olderRate = olderFreq[i] / Math.max(1, older.length);
-        let trend = recentRate - olderRate;
-        trends.push({ num: i, trend: trend, recentFreq: recentFreq[i], olderFreq: olderFreq[i] });
-    }
-    return trends.sort((a,b) => b.trend - a.trend);
-}
+    },
 
-// ======================== MODELO 6: ATRASOS ========================
-function analyzeDelays(data, maxNum) {
-    let lastSeen = new Array(maxNum + 1).fill(-1);
-    let delays = [];
-    
-    for (let idx = 0; idx < data.length; idx++) {
-        for (let n of data[idx].numbers) {
-            if (lastSeen[n] === -1) {
-                lastSeen[n] = idx;
-                delays.push({ num: n, delay: idx });
-            }
+    renderAnalysis() {
+        const data = State.historicalData[State.currentGame] || [];
+        const div = document.getElementById('analysisContent');
+        if (data.length === 0) {
+            div.innerHTML = '<p style="color:#aaa;">Carregue dados primeiro</p>';
+            return;
         }
+        const stats = StatsAnalyzer.analyze(State.currentGame, data);
+        const cfg = GAMES[State.currentGame];
+        const freqSorted = stats.freqNum.map((f,i) => ({num:i, freq:f})).filter(x => x.num > 0).sort((a,b) => b.freq - a.freq);
+        const top10 = freqSorted.slice(0, 10);
+        const bottom10 = freqSorted.slice(-10).reverse();
+        const starSorted = stats.freqStar.map((f,i) => ({num:i, freq:f})).filter(x => x.num > 0).sort((a,b) => b.freq - a.freq);
+        let html = `
+            <h3>📊 Mais Frequentes (Top 10)</h3>
+            <div class="freq-grid">${top10.map(x => `<div class="freq-cell hot">${x.num}<br>${x.freq}x</div>`).join('')}</div>
+            <h3>❄️ Menos Frequentes (Bottom 10)</h3>
+            <div class="freq-grid">${bottom10.map(x => `<div class="freq-cell cold">${x.num}<br>${x.freq}x</div>`).join('')}</div>
+            <h3>${cfg.starIcon} ${cfg.starLabel} Mais Frequentes</h3>
+            <div class="freq-grid">${starSorted.slice(0, cfg.maxStars).map(x => `<div class="freq-cell warm">${x.num}<br>${x.freq}x</div>`).join('')}</div>
+            <h3>📈 Estatísticas Gerais</h3>
+            <div class="analysis-row"><span>Soma Média:</span><strong>${stats.meanSum.toFixed(1)}</strong></div>
+            <div class="analysis-row"><span>Desvio Padrão:</span><strong>${stats.stdSum.toFixed(1)}</strong></div>
+            <div class="analysis-row"><span>Média Pares:</span><strong>${stats.avgParity.toFixed(1)}</strong></div>
+            <div class="analysis-row"><span>Média Altos:</span><strong>${stats.avgHighLow.toFixed(1)}</strong></div>
+        `;
+        div.innerHTML = html;
     }
-    
-    for (let i = 1; i <= maxNum; i++) {
-        if (lastSeen[i] === -1) delays.push({ num: i, delay: data.length });
-    }
-    
-    return delays.sort((a,b) => b.delay - a.delay);
-}
-
-// ======================== MODELO 7: CICLOS ========================
-function analyzeCycles(data, maxNum) {
-    let intervals = {};
-    for (let i = 1; i <= maxNum; i++) intervals[i] = [];
-    
-    let lastSeen = new Array(maxNum + 1).fill(-1);
-    for (let idx = 0; idx < data.length; idx++) {
-        for (let n of data[idx].numbers) {            if (lastSeen[n] !== -1) {
-                intervals[n].push(idx - lastSeen[n]);
-            }
-            lastSeen[n] = idx;
-        }
-    }
-    
-    let cycles = [];
-    for (let i = 1; i <= maxNum; i++) {
-        if (intervals[i].length > 0) {
-            let avg = intervals[i].reduce((a,b) => a+b, 0) / intervals[i].length;
-            let currentDelay = data.length - (lastSeen[i] === -1 ? data.length : lastSeen[i]);
-            let dueScore = currentDelay / avg;
-            cycles.push({ num: i, avgInterval: avg, currentDelay: currentDelay, dueScore: dueScore });
-        }
-    }
-    return cycles.sort((a,b) => b.dueScore - a.dueScore);
-}
-
-// ======================== TREINAMENTO ========================
-function prepareTrainingData(data, maxNum) {
-    let samples = [];
-    for (let i = 0; i < Math.min(200, data.length - 1); i++) {
-        let input = new Array(maxNum).fill(0);
-        for (let n of data[i].numbers) input[n-1] = 1;
-        let target = new Array(maxNum).fill(0);
-        for (let n of data[i+1].numbers) target[n-1] = 1;
-        samples.push({ input, target });
-    }
-    return samples;
-}
-
-// ======================== SISTEMA ENSEMBLE ========================
-function ensemblePrediction(data, maxNum, maxStar, starCount, qtdNumeros) {
-    document.getElementById("statusSimulacao").innerHTML = "🧠 Treinando 7 modelos de IA...";
-    
-    let markov = new MarkovChain();
-    markov.train(data.slice(0, 100));
-    
-    let nn = new SimpleNeuralNet(maxNum, 30, maxNum);
-    let trainingData = prepareTrainingData(data, maxNum);
-    nn.trainBatch(trainingData, 30);
-    
-    let ga = new GeneticAlgorithm(200, 0.15);
-    let correlations = analyzeCorrelations(data.slice(0, 200), maxNum);
-    let trends = analyzeTrends(data, maxNum);
-    let delays = analyzeDelays(data, maxNum);
-    let cycles = analyzeCycles(data, maxNum);
-    
-    let scores = new Array(maxNum + 1).fill(0);    
-    // Score 1: Markov
-    let lastDraw = data[0];
-    let markovPreds = markov.predict(lastDraw.numbers, 20);
-    for (let pred of markovPreds) scores[pred.num] += pred.prob * 25;
-    
-    // Score 2: Rede Neural
-    let nnInput = new Array(maxNum).fill(0);
-    for (let n of lastDraw.numbers) nnInput[n-1] = 1;
-    let nnOutput = nn.predict(nnInput);
-    for (let i = 0; i < nnOutput.length; i++) scores[i+1] += nnOutput[i] * 20;
-    
-    // Score 3: Tendências
-    for (let t of trends.slice(0, 15)) scores[t.num] += Math.max(0, t.trend * 30 + 10);
-    
-    // Score 4: Atrasos
-    for (let d of delays.slice(0, 12)) scores[d.num] += Math.min(20, d.delay * 0.8);
-    
-    // Score 5: Ciclos
-    for (let c of cycles.slice(0, 15)) scores[c.num] += Math.min(18, c.dueScore * 12);
-    
-    // Score 6: Correlações
-    for (let [pair, count] of correlations.slice(0, 10)) {
-        let [n1, n2] = pair.split('-').map(Number);
-        if (lastDraw.numbers.includes(n1)) scores[n2] += count * 0.5;
-        if (lastDraw.numbers.includes(n2)) scores[n1] += count * 0.5;
-    }
-    
-    // Score 7: Frequência recente
-    let recentFreq = new Array(maxNum + 1).fill(0);
-    for (let draw of data.slice(0, 50)) for (let n of draw.numbers) recentFreq[n]++;
-    let maxFreq = Math.max(...recentFreq);
-    for (let i = 1; i <= maxNum; i++) scores[i] += (recentFreq[i] / maxFreq) * 15;
-    
-    let rankedNums = [];
-    for (let i = 1; i <= maxNum; i++) rankedNums.push({ num: i, score: scores[i] });
-    rankedNums.sort((a,b) => b.score - a.score);
-    
-    document.getElementById("statusSimulacao").innerHTML = "🧬 Evolução genética (1M simulações)...";
-    let fitnessFunc = (individual) => {
-        let score = 0;
-        for (let n of individual) {
-            let ranked = rankedNums.find(r => r.num === n);
-            if (ranked) score += ranked.score;
-        }
-        let sorted = [...individual].sort((a,b) => a - b);
-        let gaps = 0;
-        for (let i = 1; i < sorted.length; i++) gaps += Math.min(10, sorted[i] - sorted[i-1]);
-        score += gaps * 0.5;
-        let pares = individual.filter(n => n % 2 === 0).length;        let equilibrio = 1 - Math.abs(pares - individual.length / 2) / (individual.length / 2);
-        score += equilibrio * 10;
-        return score;
-    };
-    
-    let initialPop = [];
-    for (let i = 0; i < 200; i++) {
-        let ind = [];
-        while (ind.length < qtdNumeros) {
-            let topIdx = Math.floor(Math.random() * 20);
-            let n = rankedNums[topIdx].num;
-            if (!ind.includes(n)) ind.push(n);
-        }
-        initialPop.push(ind);
-    }
-    
-    let bestNumbers = ga.evolve(initialPop, fitnessFunc, 100, maxNum, qtdNumeros);
-    
-    // Estrelas
-    let starScores = new Array(maxStar + 1).fill(0);
-    let starFreq = new Array(maxStar + 1).fill(0);
-    let starDelays = new Array(maxStar + 1).fill(-1);
-    
-    for (let draw of data.slice(0, 100)) for (let s of draw.stars) starFreq[s]++;
-    for (let idx = 0; idx < data.length; idx++) {
-        for (let s of data[idx].stars) {
-            if (starDelays[s] === -1) starDelays[s] = idx;
-        }
-    }
-    
-    for (let i = 1; i <= maxStar; i++) {
-        starScores[i] += (starFreq[i] / 100) * 30;
-        if (starDelays[i] !== -1) starScores[i] += Math.min(25, starDelays[i] * 1.2);
-    }
-    
-    let rankedStars = [];
-    for (let i = 1; i <= maxStar; i++) rankedStars.push({ num: i, score: starScores[i] });
-    rankedStars.sort((a,b) => b.score - a.score);
-    let bestStars = rankedStars.slice(0, starCount).map(s => s.num).sort((a,b) => a - b);
-    
-    let totalScore = 0;
-    for (let n of bestNumbers) {
-        let ranked = rankedNums.find(r => r.num === n);
-        if (ranked) totalScore += ranked.score;
-    }
-    let maxPossible = rankedNums.slice(0, qtdNumeros).reduce((a,b) => a + b.score, 0);
-    let finalScore = (totalScore / maxPossible) * 100;
-    
-    return { numbers: bestNumbers, stars: bestStars, score: finalScore, rankedNums, rankedStars, correlations, trends, delays, cycles };
-}
-// ======================== FUNÇÕES AUXILIARES ========================
-function calcularPreco(tipo, loteria) {
-    if (tipo === "simples") return LIMITS[loteria].basePrice.toFixed(2) + " €";
-    let numeros = parseInt(tipo.replace("multipla", ""));
-    if (isNaN(numeros)) return LIMITS[loteria].basePrice.toFixed(2) + " €";
-    let preco = LIMITS[loteria].multiplaPrecos[numeros];
-    if (!preco) {
-        let combinacoes = comb(numeros, 5);
-        preco = combinacoes * LIMITS[loteria].basePrice;
-    }
-    return preco.toFixed(2) + " €";
-}
-
-function comb(n, k) { if (k > n) return 0; let res = 1; for (let i = 0; i < k; i++) res *= (n - i) / (i + 1); return res; }
-
-function gerarHistorico(loteria, totalSorteios = 1000) {
-    let dados = [];
-    let maxNum = LIMITS[loteria].maxNum;
-    let maxStar = LIMITS[loteria].maxStar;
-    let starCount = LIMITS[loteria].starCount;
-    
-    let pesosNum = new Array(maxNum + 1).fill(1);
-    for (let i = 1; i <= maxNum; i++) {
-        if (i % 7 === 0) pesosNum[i] = 1.3;
-        else if (i <= 25) pesosNum[i] = 1.15;
-        else pesosNum[i] = 0.95;
-    }
-    
-    for (let i = 0; i < totalSorteios; i++) {
-        let nums = [];
-        while (nums.length < 5) {
-            let r = Math.floor(Math.random() * maxNum) + 1;
-            let p = pesosNum[r];
-            if (Math.random() < p / 1.5 && !nums.includes(r)) nums.push(r);
-            else if (!nums.includes(r) && Math.random() < 0.3) nums.push(r);
-        }
-        nums.sort((a,b) => a - b);
-        
-        let stars = [];
-        while (stars.length < starCount) {
-            let s = Math.floor(Math.random() * maxStar) + 1;
-            if (!stars.includes(s)) stars.push(s);
-        }
-        stars.sort((a,b) => a - b);
-        
-        let data = new Date(2021, 0, 1);
-        data.setDate(data.getDate() + i * 3);
-        dados.push({ numbers: nums, stars: stars, date: data.toLocaleDateString('pt-PT') });
-    }    dados.reverse();
-    return dados;
-}
-
-function initDatabases() {
-    dbEuromilhoes = gerarHistorico("euromilhoes", 1200);
-    dbTotoloto = gerarHistorico("totoloto", 1000);
-}
-
-function updateFrequencies() {
-    let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
-    let maxN = LIMITS[currentLottery].maxNum;
-    let maxS = LIMITS[currentLottery].maxStar;
-    freqNumbers = new Array(maxN + 1).fill(0);
-    freqStars = new Array(maxS + 1).fill(0);
-    
-    for (let draw of data.slice(0, 100)) {
-        for (let n of draw.numbers) freqNumbers[n]++;
-        for (let s of draw.stars) freqStars[s]++;
-    }
-    
-    if (data.length > 0) {
-        let last = data[0];
-        document.getElementById("ultimoSorteio").innerText = `${last.numbers.join(',')} ⭐ ${last.stars.join(',')}`;
-    }
-}
-
-// ======================== RENDERIZAÇÃO ========================
-function renderResults(result, tipo, loteria) {
-    let numsDiv = document.getElementById("numerosGerados");
-    let starsDiv = document.getElementById("estrelasGeradas");
-    numsDiv.innerHTML = result.numbers.map(n => `<div class="bolha">${n}</div>`).join('');
-    starsDiv.innerHTML = result.stars.map(s => `<div class="bolha estrela-bolha">⭐${s}</div>`).join('');
-    
-    document.getElementById("pontuacaoEstatistica").innerHTML = result.score.toFixed(2);
-    document.getElementById("scoreBar").style.width = `${Math.min(100, result.score)}%`;
-    document.getElementById("precoEstimado").innerHTML = calcularPreco(tipo, loteria);
-    
-    let probText = result.score > 85 ? "🔥 EXTREMA (95%+)" : (result.score > 70 ? "📈 MUITO ALTA (85%+)" : (result.score > 55 ? "⚖️ ALTA (70%+)" : "⚠️ MODERADA"));
-    document.getElementById("probabilidadeLabel").innerHTML = probText;
-    document.getElementById("simulacoesCount").innerHTML = "7 Modelos + 1M Sim";
-    
-    let analise = `<strong>📊 Números selecionados por:</strong><br>`;
-    analise += `• Markov Chains: Transições probabilísticas<br>`;
-    analise += `• Rede Neural: Padrões não-lineares<br>`;
-    analise += `• Algoritmo Genético: Otimização evolutiva<br>`;
-    analise += `• Tendências: Hot/Cold numbers<br>`;
-    analise += `• Atrasos: Due numbers (números "devidos")<br>`;
-    analise += `• Ciclos: Periodicidade estatística<br>`;
-    analise += `• Correlações: Pares frequentes<br><br>`;    analise += `<strong>🎯 Score Final:</strong> ${result.score.toFixed(2)}/100<br>`;
-    analise += `<strong>📈 Confiança:</strong> ${probText}`;
-    document.getElementById("analiseDetalhada").innerHTML = analise;
-}
-
-function renderStats(result) {
-    document.getElementById("topNumerosList").innerHTML = result.rankedNums.slice(0, 12).map(r => 
-        `<span class="chip">#${r.num} (${r.score.toFixed(1)})</span>`).join('');
-    
-    document.getElementById("topEstrelasList").innerHTML = result.rankedStars.slice(0, 6).map(r => 
-        `<span class="chip">⭐${r.num} (${r.score.toFixed(1)})</span>`).join('');
-    
-    document.getElementById("atrasosList").innerHTML = result.delays.slice(0, 8).map(d => 
-        `<span class="chip">Nº${d.num}: ${d.delay} sorteios</span>`).join('');
-    
-    document.getElementById("paresCorrelacionados").innerHTML = result.correlations.slice(0, 8).map(([pair, count]) => 
-        `<span class="chip">${pair}: ${count}x juntos</span>`).join('');
-    
-    let modelos = [
-        { nome: "Markov Chains", status: "✅ Ativo", cor: "#11998e" },
-        { nome: "Rede Neural", status: "✅ Ativo", cor: "#667eea" },
-        { nome: "Algoritmo Genético", status: "✅ Ativo", cor: "#f093fb" },
-        { nome: "Análise Tendências", status: "✅ Ativo", cor: "#f39c12" },
-        { nome: "Análise Atrasos", status: "✅ Ativo", cor: "#e74c3c" },
-        { nome: "Análise Ciclos", status: "✅ Ativo", cor: "#9b59b6" },
-        { nome: "Correlações", status: "✅ Ativo", cor: "#3498db" }
-    ];
-    document.getElementById("modelosIA").innerHTML = modelos.map(m => 
-        `<div style="background:linear-gradient(135deg, ${m.cor} 0%, ${m.cor}88 100%); padding:10px 18px; border-radius:40px; font-weight:600; box-shadow:0 4px 15px ${m.cor}66;">
-            ${m.nome} <span style="font-size:0.8rem;">${m.status}</span>
-        </div>`).join('');
-}
-
-function renderHeatmap() {
-    let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
-    let maxN = LIMITS[currentLottery].maxNum;
-    let heat = new Array(maxN + 1).fill(0);
-    for (let draw of data.slice(0, 20)) for (let n of draw.numbers) heat[n]++;
-    
-    let container = document.getElementById("heatmapContainer");
-    container.innerHTML = "";
-    for (let i = 1; i <= maxN; i++) {
-        let intensity = Math.min(1, heat[i] / 6);
-        let el = document.createElement("div");
-        el.className = "heat-cell";
-        el.style.backgroundColor = `rgba(243,156,18,${0.15 + intensity * 0.85})`;
-        el.innerText = i;
-        el.title = `Frequência: ${heat[i]}x`;
-        container.appendChild(el);
-    }}
-
-function renderHistorico() {
-    let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
-    let html = `<tr><th>Data</th><th>Números</th><th>Estrelas</th></tr>`;
-    for (let i = 0; i < Math.min(10, data.length); i++) {
-        html += `<tr><td>${data[i].date}</td><td>${data[i].numbers.join(', ')}</td><td>⭐${data[i].stars.join(', ')}</td></tr>`;
-    }
-    document.getElementById("historicoTabela").innerHTML = html;
-}
-
-function updateCharts() {
-    let maxN = LIMITS[currentLottery].maxNum;
-    let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
-    
-    let ctx1 = document.getElementById('freqChart').getContext('2d');
-    let labels1 = [], vals1 = [];
-    let step = Math.floor(maxN / 15);
-    for (let i = 1; i <= maxN; i += step) { labels1.push(i); vals1.push(freqNumbers[i] || 0); }
-    if (freqChart) freqChart.destroy();
-    freqChart = new Chart(ctx1, { 
-        type: 'bar', 
-        data: { labels: labels1, datasets: [{ label: 'Frequência', data: vals1, backgroundColor: 'rgba(243,156,18,0.7)', borderColor: '#f39c12', borderWidth: 2 }] }, 
-        options: { responsive: true, maintainAspectRatio: true, scales: { y: { beginAtZero: true } } } 
-    });
-    
-    let ctx2 = document.getElementById('trendChart').getContext('2d');
-    let trends = [];
-    for (let i = 0; i < 20; i++) {
-        let draw = data[i];
-        if (draw) trends.push(draw.numbers.reduce((a,b) => a+b, 0) / draw.numbers.length);
-    }
-    if (trendChart) trendChart.destroy();
-    trendChart = new Chart(ctx2, {
-        type: 'line',
-        data: { labels: trends.map((_, i) => i+1), datasets: [{ label: 'Média', data: trends, borderColor: '#667eea', backgroundColor: 'rgba(102,126,234,0.1)', tension: 0.4 }] },
-        options: { responsive: true, maintainAspectRatio: true, scales: { y: { beginAtZero: false } } }
-    });
-}
-
-// ======================== FUNÇÃO PRINCIPAL ========================
-async function gerarAposta() {
-    let tipo = document.getElementById("tipoJogo").value;
-    let loteria = document.getElementById("loteriasSelect").value;
-    currentLottery = loteria;
-    updateFrequencies();
-    
-    let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
-    let maxNum = LIMITS[loteria].maxNum;
-    let maxStar = LIMITS[loteria].maxStar;    let starCount = LIMITS[loteria].starCount;
-    let qtdNumeros = (tipo === "simples") ? 5 : parseInt(tipo.replace("multipla", ""));
-    if (isNaN(qtdNumeros)) qtdNumeros = 5;
-    qtdNumeros = Math.min(qtdNumeros, maxNum);
-    
-    document.getElementById("statusSimulacao").innerHTML = "🚀 Iniciando Super IA...";
-    await new Promise(r => setTimeout(r, 50));
-    
-    let result = ensemblePrediction(data, maxNum, maxStar, starCount, qtdNumeros);
-    
-    renderResults(result, tipo, loteria);
-    renderStats(result);
-    renderHeatmap();
-    renderHistorico();
-    updateCharts();
-    
-    document.getElementById("statusSimulacao").innerHTML = `✅ Previsão concluída! Score: ${result.score.toFixed(2)}/100 | 7 modelos IA ativos`;
-}
-
-function exportExcel() {
-    let data = currentLottery === "euromilhoes" ? dbEuromilhoes : dbTotoloto;
-    let sheetData = [["Data", "Números", "Estrelas"]];
-    for (let d of data) sheetData.push([d.date, d.numbers.join(","), d.stars.join(",")]);
-    let ws = XLSX.utils.aoa_to_sheet(sheetData);
-    let wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Historico");
-    XLSX.writeFile(wb, `loteria_${currentLottery}_superia.xlsx`);
-}
-
-function exportPDF() {
-    let element = document.querySelector('.dashboard');
-    html2pdf().from(element).set({ margin: 0.5, filename: `relatorio_${currentLottery}_superia.pdf` }).save();
-}
-
-function updateClock() {
-    let d = new Date();
-    document.getElementById("dataHora").innerHTML = d.toLocaleDateString('pt-PT') + " " + d.toLocaleTimeString('pt-PT');
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-document.getElementById("btnGerar").onclick = () => gerarAposta();
-document.getElementById("btnExportPDF").onclick = exportPDF;
-document.getElementById("btnExportExcel").onclick = exportExcel;
-document.getElementById("loteriasSelect").onchange = () => { 
-    currentLottery = document.getElementById("loteriasSelect").value; 
-    updateFrequencies(); 
-    gerarAposta(); 
 };
-initDatabases();
-updateFrequencies();
-setTimeout(() => gerarAposta(), 200);
+
+// ============================================================
+// FUNÇÕES GLOBAIS
+// ============================================================
+async function fetchData() {
+    const game = document.getElementById('dataGame').value;
+    const source = document.getElementById('dataSource').value;
+    const btn = document.getElementById('fetchBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ A processar...';
+    try {
+        const data = await DataFetcher.fetchData(game, source);
+        if (data && data.length > 0) {
+            App.updateDataStats();
+            App.updateDashboard();
+            toast(`✅ ${data.length} sorteios carregados!`);
+        } else {
+            toast('❌ Falha ao obter dados', true);
+        }
+    } catch (e) {
+        toast('❌ Erro: ' + e.message, true);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 Obter Dados';
+        Logger.hide();
+    }
+}
+
+function refreshAllData() {
+    toast('🔄 A atualizar todos...');
+    const games = ['euromilhoes', 'totoloto', 'eurodreams'];
+    Promise.all(games.map(g => DataFetcher.fetchData(g, 'auto'))).then(() => {
+        App.updateDashboard();
+        toast('✅ Dados atualizados!');
+    });
+}
+
+function loadSampleData() {
+    const game = document.getElementById('dataGame').value;
+    const data = DataFetcher.generateSampleData(game, 500);
+    State.historicalData[game] = data;
+    localStorage.setItem('lotoHistory_v12', JSON.stringify(State.historicalData));
+    App.updateDataStats();
+    App.updateDashboard();
+    toast('📋 500 sorteios de exemplo carregados!');
+}
+
+function importCSV() {
+    const game = document.getElementById('dataGame').value;
+    const csv = document.getElementById('csvInput').value.trim();
+    if (!csv) return toast('Cole os dados!', true);
+    const lines = csv.split('\n').filter(l => l.trim());
+    const data = [];
+    const cfg = GAMES[game];
+    for (const line of lines) {
+        const parts = line.trim().split(/[\s,;]+/).map(Number);
+        if (parts.length >= cfg.drawNumbers + cfg.drawStars) {
+            const numbers = parts.slice(0, cfg.drawNumbers).filter(n => n >= 1 && n <= cfg.maxNumbers);
+            const stars = parts.slice(cfg.drawNumbers, cfg.drawNumbers + cfg.drawStars).filter(s => s >= 1 && s <= cfg.maxStars);
+            if (numbers.length === cfg.drawNumbers && stars.length === cfg.drawStars)
+                data.push({ numbers, stars });
+        }
+    }
+    if (data.length === 0) return toast('Nenhum sorteio válido!', true);
+    State.historicalData[game] = data;
+    State.dataSources.manual = { status: 'online', draws: data.length };
+    localStorage.setItem('lotoHistory_v12', JSON.stringify(State.historicalData));
+    App.updateDataStats();
+    App.updateDashboard();
+    toast(`✅ ${data.length} sorteios importados!`);
+}
+
+function clearSavedBets() {
+    if (!confirm('Apagar histórico?')) return;
+    State.savedBets = [];
+    localStorage.setItem('lotoBets_v12', '[]');
+    App.renderSavedBets();
+    toast('🗑️ Histórico limpo!');
+}
+
+// Expor funções globais
+window.generateBet = () => App.generateBet();
+window.saveGeneratedBet = () => App.saveGeneratedBet();
+window.fetchData = fetchData;
+window.refreshAllData = refreshAllData;
+window.loadSampleData = loadSampleData;
+window.importCSV = importCSV;
+window.clearSavedBets = clearSavedBets;
+window.runQuantumAnalysis = () => App.runQuantumAnalysis();
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', () => App.init());
 </script>
 </body>
-</html>
+    </html>
