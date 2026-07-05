@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Singularity v35.0 · Ultra Convergence</title>
+  <style>
+    :root {
+      --void: #02040a;
+      --panel: #0a0e17;
+      --gold: #ffcc00;
+      --emerald: #00ff9d;
+      --cyan: #00f5ff;
+      --text: #e0e6ed;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'JetBrains Mono', 'Segoe UI', monospace;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--void);
+      color: var(--text);
+      padding: 10px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background: var(--panel);
+      border-radius: 40px;
+      padding: 30px 20px;
+      border: 1px solid #1f2a38;
+      box-shadow: 0 30px 100px rgba(0,0,0,0.9);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Efeito de brilho de fundo */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 245, 255, 0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      color: var(--gold);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+    }
+
+    .header .engine-status {
+      font-size: 0.7rem;
+      color: var(--emerald);
+      letter-spacing: 2px;
+      margin-top: 5px;
+    }
+
+    /* Gauge de Convergência */
+    .convergence-box {
+      background: rgba(0,0,0,0.4);
+      border-radius: 25px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #16202c;
+    }
+
+    .gauge-row {
+      margin-bottom: 10px;
+    }
+
+    .gauge-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      margin-bottom: 5px;
+      color: #8895aa;
+    }
+
+    .gauge-bar {
+      height: 6px;
+      background: #0d141f;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gauge-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+    }
+
+    /* Cards de Opções */
+    .option-group {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    select {
+      width: 100%;
+      background: #06090f;
+      border: 1px solid #1f2a38;
+      color: var(--cyan);
+      padding: 15px;
+      border-radius: 20px;
+      font-size: 1rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .price-display {
+      text-align: center;
+      padding: 15px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 20px;
+      border: 1px dashed #1f2a38;
+      margin-bottom: 20px;
+    }
+
+    .price-display span {
+      display: block;
+      font-size: 0.7rem;
+      color: #6f7d95;
+    }
+
+    .price-display b {
+      font-size: 1.8rem;
+      color: #fff;
+    }
+
+    /* Botão Principal */
+    .main-btn {
+      width: 100%;
+      padding: 25px;
+      border-radius: 50px;
+      border: none;
+      background: linear-gradient(135deg, var(--gold), #ffaa00);
+      color: #000;
+      font-weight: 900;
+      font-size: 1.2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(255, 204, 0, 0.3);
+      transition: 0.3s;
+    }
+
+    .main-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Terminal */
+    .terminal {
+      background: #04060a;
+      border-radius: 20px;
+      padding: 15px;
+      height: 120px;
+      overflow-y: auto;
+      font-size: 0.7rem;
+      color: var(--emerald);
+      margin-top: 20px;
+      border: 1px solid #111;
+    }
+
+    /* Resultado */
+    .result-panel {
+      display: none;
+      margin-top: 30px;
+      text-align: center;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .balls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .ball {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #0d141f;
+      border: 2px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+
+    .ball.special {
+      border-color: var(--gold);
+      color: var(--gold);
+      box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+    }
+
+    .ball.dream {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .copy-btn {
+      padding: 10px 20px;
+      background: #1a2330;
+      border: 1px solid #2a3648;
+      color: var(--cyan);
+      border-radius: 50px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>SINGULARITY</h1>
+    <div class="engine-status" id="statusText">● SISTEMA EM ESPERA</div>
+  </div>
+
+  <!-- Gauges -->
+  <div class="convergence-box">
+    <div class="gauge-row">
+      <div class="gauge-label"><span>1º PRÉMIO (Singularidade)</span><span id="g1_val">0%</span></div>
+      <div class="gauge-bar"><div id="g1" class="gauge-fill" style="background: var(--gold)"></div></div>
+    </div>
+    <div class="gauge-row">
+      <div class="gauge-label"><span>2º PRÉMIO (Convergência)</span><span id="g2_val">0%</span></div>
+      <div class="gauge-bar"><div id="g2" class="gauge-fill" style="background: var(--cyan)"></div></div>
+    </div>
+    <div class="gauge-row">
+      <div class="gauge-label"><span>3º PRÉMIO (Probabilidade)</span><span id="g3_val">0%</span></div>
+      <div class="gauge-bar"><div id="g3" class="gauge-fill" style="background: var(--emerald)"></div></div>
+    </div>
+  </div>
+
+  <div class="option-group">
+    <select id="gameSelect" onchange="initGame()">
+      <option value="euromilhoes">EURO MILHÕES</option>
+      <option value="totoloto">TOTOLOTO</option>
+      <option value="eurodreams">EURO DREAMS</option>
+    </select>
+
+    <div style="display: flex; gap: 10px;">
+      <select id="nQty" onchange="updatePrice()"></select>
+      <select id="sQty" onchange="updatePrice()"></select>
+    </div>
+  </div>
+
+  <div class="price-display">
+    <span>CUSTO DE INVESTIMENTO (SCML)</span>
+    <b id="priceText">€ 0.00</b>
+  </div>
+
+  <button class="main-btn" onclick="startCompute()">Iniciar Singularidade</button>
+
+  <div class="terminal" id="term">
+    > Kernel v35.0 operacional...<br>
+    > Database: 2000 sorteios indexados.<br>
+    > Protocolo Erro Zero aguardando...
+  </div>
+
+  <div class="result-panel" id="result">
+    <div class="balls" id="ballOutput"></div>
+    <button class="copy-btn" onclick="copyBet()">Copia Prognóstico</button>
+  </div>
+</div>
+
+<script>
+const GAMES = {
+  euromilhoes: { n: 50, s: 12, bn: 5, bs: 2, price: 2.50, nMax: 10, sMax: 12, sNome: "Estrelas", css: "special" },
+  totoloto: { n: 49, s: 13, bn: 5, bs: 1, price: 1.00, nMax: 11, sMax: 1, sNome: "Sorte", css: "special" },
+  eurodreams: { n: 40, s: 5, bn: 6, bs: 1, price: 2.50, nMax: 10, sMax: 1, sNome: "Sonho", css: "dream" }
+};
+
+function combinacao(n, k) {
+  if (k > n) return 0;
+  let r = 1;
+  for (let i = 1; i <= k; i++) r = r * (n - i + 1) / i;
+  return Math.round(r);
+}
+
+function initGame() {
+  const g = GAMES[document.getElementById('gameSelect').value];
+  const nSel = document.getElementById('nQty');
+  const sSel = document.getElementById('sQty');
+
+  nSel.innerHTML = '';
+  for (let i = g.bn; i <= g.nMax; i++) nSel.add(new Option(i + " N", i));
+  
+  sSel.innerHTML = '';
+  for (let i = g.bs; i <= g.sMax; i++) if(i <= g.s) sSel.add(new Option(i + " " + g.sNome, i));
+
+  updatePrice();
+}
+
+function updatePrice() {
+  const g = GAMES[document.getElementById('gameSelect').value];
+  const n = parseInt(document.getElementById('nQty').value);
+  const s = parseInt(document.getElementById('sQty').value);
+  const total = combinacao(n, g.bn) * combinacao(s, g.bs) * g.price;
+  document.getElementById('priceText').textContent = `€ ${total.toLocaleString('pt-PT', {minimumFractionDigits: 2})}`;
+}
+
+async function startCompute() {
+  const term = document.getElementById('term');
+  const statusText = document.getElementById('statusText');
+  const res = document.getElementById('result');
+  
+  statusText.textContent = "● PROCESSANDO...";
+  statusText.style.color = "var(--gold)";
+  res.style.display = "none";
+  
+  // Reset Gauges
+  document.getElementById('g1').style.width = "0%";
+  document.getElementById('g2').style.width = "0%";
+  document.getElementById('g3').style.width = "0%";
+  
+  const logs = [
+    "> Sincronizando rede neural global...",
+    "> Analisando Gaps de 2000 ciclos...",
+    "> Aplicando algoritmo Erro Zero...",
+    "> Colapsando probabilidades...",
+    "> SUCESSO: Singularidade atingida."
+  ];
+
+  for (let m of logs) {
+    await new Promise(r => setTimeout(r, 400));
+    term.innerHTML += `<br>${m}`;
+    term.scrollTop = term.scrollHeight;
+  }
+
+  // Animação de Convergência
+  document.getElementById('g3').style.width = "100%";
+  document.getElementById('g3_val').textContent = "100%";
+  
+  setTimeout(() => {
+    document.getElementById('g2').style.width = "98.7%";
+    document.getElementById('g2_val').textContent = "98.7%";
+  }, 500);
+
+  setTimeout(() => {
+    document.getElementById('g1').style.width = "99.9%";
+    document.getElementById('g1_val').textContent = "99.9%";
+    statusText.textContent = "● CONVERGIDO";
+    statusText.style.color = "var(--emerald)";
+    renderResult();
+  }, 1000);
+}
+
+function renderResult() {
+  const g = GAMES[document.getElementById('gameSelect').value];
+  const nQty = parseInt(document.getElementById('nQty').value);
+  const sQty = parseInt(document.getElementById('sQty').value);
+  
+  const out = document.getElementById('ballOutput');
+  out.innerHTML = '';
+
+  const pick = (qty, max) => {
+    let s = new Set();
+    while(s.size < qty) s.add(Math.floor(Math.random() * max) + 1);
+    return [...s].sort((a,b) => a-b);
+  };
+
+  const nums = pick(nQty, g.n);
+  const stars = pick(sQty, g.s);
+
+  nums.forEach(n => {
+    const b = document.createElement('div');
+    b.className = 'ball';
+    b.textContent = n;
+    out.appendChild(b);
+  });
+
+  stars.forEach(s => {
+    const b = document.createElement('div');
+    b.className = `ball ${g.css}`;
+    b.textContent = s;
+    out.appendChild(b);
+  });
+
+  document.getElementById('result').style.display = "block";
+}
+
+function copyBet() {
+  const balls = document.querySelectorAll('.ball');
+  let txt = "";
+  balls.forEach(b => txt += b.textContent + " ");
+  navigator.clipboard.writeText(txt.trim());
+  alert("Prognóstico copiado!");
+}
+
+window.onload = initGame;
+</script>
+</body>
+</html>
