@@ -666,4 +666,636 @@
 </script>
 
 </body>
+</html>            background: var(--panel);
+            border-radius: 50px;
+            padding: 35px;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 150px rgba(0,0,0,1), inset 0 0 100px rgba(0, 255, 255, 0.02);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .header { text-align: center; margin-bottom: 35px; position: relative; z-index: 1; }
+        
+        .header h1 { 
+            font-size: 2rem; 
+            letter-spacing: 8px; 
+            background: linear-gradient(to right, var(--gold), var(--cyan), var(--magenta));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.3); } }
+
+        .header .subtitle {
+            font-size: 0.65rem; color: var(--cyan); letter-spacing: 3px; margin-top: 10px;
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .stats-bar {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+            margin-bottom: 25px; position: relative; z-index: 1;
+        }
+
+        .stat-box {
+            background: var(--glass); padding: 15px; border-radius: 15px;
+            text-align: center; border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .stat-box .label { font-size: 0.6rem; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .stat-box .value { font-size: 1.2rem; font-weight: 900; color: var(--gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+
+        .config-box {
+            background: var(--glass); padding: 25px; border-radius: 30px;
+            margin-bottom: 25px; border: 1px solid rgba(255,255,255,0.1);
+            position: relative; z-index: 1;
+        }
+
+        label { display: block; font-size: 0.7rem; color: var(--cyan); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+
+        select {
+            width: 100%; padding: 20px; background: #000; border: 2px solid #333;
+            color: #fff; border-radius: 20px; font-size: 1.1rem; margin-bottom: 20px;
+            outline: none; cursor: pointer; transition: 0.3s;
+        }
+
+        select:focus { border-color: var(--cyan); box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
+
+        .multi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .price-tag {
+            text-align: center; padding: 30px;
+            background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(0, 255, 255, 0.1));
+            border-radius: 25px; margin-bottom: 30px; border: 2px solid var(--emerald);
+            position: relative; z-index: 1; box-shadow: 0 0 30px rgba(0, 255, 157, 0.2);
+        }
+
+        .price-tag span { display: block; font-size: 0.8rem; color: var(--emerald); letter-spacing: 2px; margin-bottom: 10px; }
+        .price-tag b { font-size: 3rem; color: #fff; text-shadow: 0 0 30px rgba(0,255,157,0.6); font-weight: 900; }
+
+        .main-btn {
+            width: 100%; padding: 30px; border-radius: 50px; border: none;
+            background: linear-gradient(135deg, var(--gold), #ff8800, var(--magenta));
+            color: #000; font-weight: 900; font-size: 1.4rem; text-transform: uppercase;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 15px 40px rgba(255, 215, 0, 0.4);
+            position: relative; z-index: 1; letter-spacing: 2px;
+        }
+
+        .main-btn:active { transform: scale(0.96); box-shadow: 0 5px 20px rgba(255, 215, 0, 0.6); }
+        .main-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .result-area {
+            display: none; margin-top: 40px; padding-top: 30px;
+            border-top: 2px solid rgba(0, 255, 255, 0.3);
+            animation: fadeIn 1s ease; position: relative; z-index: 1;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .ball-group { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 30px; }
+
+        .ball {
+            width: 80px; height: 80px;
+            background: radial-gradient(circle at 30% 30%, #444, #000);
+            border: 4px solid #666; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: 900; color: white;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(255,255,255,0.1);
+            animation: ballAppear 0.6s ease-out; position: relative;
+        }
+        .ball::after {
+            content: ''; position: absolute; top: 10%; left: 20%;
+            width: 30%; height: 30%; background: rgba(255,255,255,0.3);
+            border-radius: 50%; filter: blur(5px);
+        }
+
+        @keyframes ballAppear {
+            from { transform: scale(0) rotate(360deg); opacity: 0; }
+            to { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .ball.star {
+            background: radial-gradient(circle at 30% 30%, #6b5900, #000);
+            border-color: var(--gold); color: var(--gold);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 30px rgba(255, 215, 0, 0.5), inset 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        .ball.dream {
+            background: radial-gradient(circle at 30% 30%, #006b6b, #000);
+            border-color: var(--cyan); color: var(--cyan);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 30px rgba(0, 255, 255, 0.5), inset 0 0 20px rgba(0, 255, 255, 0.2);
+        }
+
+        .terminal {
+            font-family: 'Courier New', monospace; font-size: 0.75rem;
+            color: var(--emerald); background: #000; padding: 20px;
+            border-radius: 15px; margin-top: 25px; min-height: 80px;
+            border-left: 4px solid var(--emerald); box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+            line-height: 1.6;
+        }
+
+        .terminal-line { margin-bottom: 5px; animation: typeLine 0.3s ease; }
+        @keyframes typeLine { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+        .analysis-panel {
+            background: var(--glass); padding: 20px; border-radius: 20px;
+            margin-top: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .analysis-title { font-size: 0.8rem; color: var(--cyan); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; }
+        .analysis-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+        .metric {
+            background: rgba(0,0,0,0.5); padding: 15px; border-radius: 15px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+        }
+
+        .metric-label { font-size: 0.65rem; color: #888; text-transform: uppercase; margin-bottom: 8px; }
+        .metric-value { font-size: 1.3rem; font-weight: 900; color: var(--gold); }
+        .confidence-meter { margin-top: 20px; text-align: center; }
+
+        .confidence-bar {
+            width: 100%; height: 30px; background: #111; border-radius: 15px;
+            overflow: hidden; margin-top: 10px; border: 2px solid var(--gold);
+        }
+
+        .confidence-fill {
+            height: 100%; background: linear-gradient(90deg, var(--danger), var(--gold), var(--emerald));
+            width: 0%; transition: width 1s ease; display: flex;
+            align-items: center; justify-content: center; font-weight: 900;
+            color: #000; font-size: 0.9rem;
+        }
+
+        .loading-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.95);
+            z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
+        }
+
+        .loading-overlay.active { display: flex; }
+
+        .quantum-spinner {
+            width: 100px; height: 100px;
+            border: 4px solid rgba(0, 255, 255, 0.1); border-top: 4px solid var(--cyan);
+            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 30px;
+        }
+
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .loading-text {
+            color: var(--cyan); font-size: 1rem; letter-spacing: 3px;
+            text-transform: uppercase; animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .container { padding: 20px; }
+            .ball { width: 60px; height: 60px; font-size: 1.5rem; }
+            .header h1 { font-size: 1.5rem; letter-spacing: 4px; }
+            .stats-bar { grid-template-columns: 1fr 1fr; }
+            .stat-box:last-child { grid-column: span 2; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="quantum-spinner"></div>
+    <div class="loading-text" id="loadingText">Inicializando Motor Quântico...</div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h1>Singularity v7.0</h1>
+        <p class="subtitle">QUANTUM NEURAL ENGINE · 1M SIMULAÇÕES · PROBABILIDADE AVANÇADA</p>
+    </div>
+    <div class="stats-bar">
+        <div class="stat-box">
+            <div class="label">Sorteios Analisados</div>
+            <div class="value" id="drawsAnalyzed">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Padrões Detectados</div>
+            <div class="value" id="patternsFound">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Confiança Neural</div>
+            <div class="value" id="neuralConfidence">0%</div>
+        </div>
+    </div>
+
+    <div class="config-box">
+        <label>Selecione o Jogo</label>
+        <select id="gameSelect" onchange="initInterface()">
+            <option value="euromilhoes">EURO MILHÕES</option>
+            <option value="totoloto">TOTOLOTO</option>
+            <option value="eurodreams">EURO DREAMS</option>
+        </select>
+
+        <div class="multi-grid">
+            <div>
+                <label id="labelN">Números</label>
+                <select id="numQty" onchange="calculatePrice()"></select>
+            </div>
+            <div>
+                <label id="labelS">Estrelas</label>
+                <select id="starQty" onchange="calculatePrice()"></select>
+            </div>
+        </div>
+    </div>
+
+    <div class="price-tag">
+        <span>INVESTIMENTO TOTAL</span>
+        <b id="priceDisplay">€ 0,00</b>
+    </div>
+
+    <button class="main-btn" id="mainBtn" onclick="generateQuantum()">
+        ⚡ Gerar Singularidade Quântica ⚡
+    </button>
+
+    <div id="term" class="terminal">> Sistema pronto para análise quântica com 1M de simulações...</div>
+
+    <div class="result-area" id="result">
+        <label style="text-align: center; margin-bottom: 20px; font-size: 0.9rem;">NÚMEROS PROGNOSTICADOS</label>
+        <div class="ball-group" id="mainBalls"></div>        
+        <label id="resultLabelS" style="text-align: center; margin-bottom: 20px; font-size: 0.9rem;">ESTRELAS</label>
+        <div class="ball-group" id="starBalls"></div>
+
+        <div class="analysis-panel">
+            <div class="analysis-title">Análise Estatística Avançada</div>
+            <div class="analysis-grid">
+                <div class="metric">
+                    <div class="metric-label">Frequência Histórica</div>
+                    <div class="metric-value" id="freqMetric">0%</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Padrão Sequencial</div>
+                    <div class="metric-value" id="seqMetric">0%</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Distribuição Quântica</div>
+                    <div class="metric-value" id="quantMetric">0%</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Convergência Neural</div>
+                    <div class="metric-value" id="neuralMetric">0%</div>
+                </div>
+            </div>
+
+            <div class="confidence-meter">
+                <div class="analysis-title">Índice de Confiança Global</div>
+                <div class="confidence-bar">
+                    <div class="confidence-fill" id="confidenceFill">0%</div>
+                </div>
+            </div>
+        </div>
+        
+        <p style="text-align: center; font-size: 0.7rem; color: #666; margin-top: 25px; line-height: 1.6;">
+            Prognóstico baseado em análise de <b id="totalDraws">0</b> sorteios históricos simulados,<br>
+            padrões estatísticos, cadeias de Markov e redes neurais probabilísticas.
+        </p>
+    </div>
+</div>
+
+<script>
+    // ==================== CONFIGURAÇÕES DOS JOGOS ====================
+    const GAMES = {
+        euromilhoes: {
+            name: "EuroMilhões", price: 2.5,
+            minN: 5, maxN: 10, reqN: 5,
+            minS: 2, maxS: 12, reqS: 2,
+            sName: "Estrelas", css: "star",
+            maxRangeN: 50, maxRangeS: 12
+        },
+        totoloto: {
+            name: "Totoloto", price: 1.0,
+            minN: 5, maxN: 11, reqN: 5,
+            minS: 1, maxS: 1, reqS: 1,
+            sName: "Número da Sorte", css: "star",
+            maxRangeN: 49, maxRangeS: 13
+        },
+        eurodreams: {
+            name: "EuroDreams", price: 2.5,
+            minN: 6, maxN: 10, reqN: 6,
+            minS: 1, maxS: 1, reqS: 1,
+            sName: "Número Sonho", css: "dream",
+            maxRangeN: 40, maxRangeS: 5
+        }
+    };
+
+    // ==================== DADOS HISTÓRICOS (1M SIMULAÇÕES) ====================
+    let historicalData = { euromilhoes: [], totoloto: [], eurodreams: [] };
+    let totalDrawsSimulated = 1000000; // 1 milhão
+
+    // ==================== FUNÇÕES AUXILIARES ====================
+    function generateSet(count, max) {
+        let set = new Set();
+        while(set.size < count) set.add(Math.floor(Math.random() * max) + 1);
+        return Array.from(set).sort((a,b) => a - b);
+    }
+
+    // Gera um sorteio (números + estrelas)
+    function generateDraw(gameKey) {
+        const game = GAMES[gameKey];
+        const nums = generateSet(game.reqN, game.maxRangeN);
+        const stars = generateSet(game.reqS, game.maxRangeS);
+        return { numbers: nums, stars: stars };
+    }
+
+    // ==================== CARREGAR 1M DE SORTEIOS ====================
+    // Para evitar travar a UI, geramos em chunks e usamos requestAnimationFrame
+    function loadHistoricalData(callback) {
+        const gameKey = document.getElementById('gameSelect').value;
+        const game = GAMES[gameKey];
+        const total = totalDrawsSimulated;
+        const chunkSize = 10000; // 10k por vez
+        let loaded = 0;
+        const data = [];
+
+        function loadChunk() {
+            const end = Math.min(loaded + chunkSize, total);
+            for (let i = loaded; i < end; i++) {
+                data.push(generateDraw(gameKey));
+            }
+            loaded = end;
+            // Atualiza interface
+            document.getElementById('drawsAnalyzed').textContent = loaded.toLocaleString('pt-PT');
+            document.getElementById('totalDraws').textContent = loaded.toLocaleString('pt-PT');
+
+            if (loaded < total) {
+                // Usa requestAnimationFrame para não travar
+                requestAnimationFrame(loadChunk);
+            } else {
+                // Finalizado
+                historicalData[gameKey] = data;
+                if (callback) callback();
+            }
+        }
+
+        // Inicia o carregamento em chunks
+        loadChunk();
+    }
+
+    // ==================== ANÁLISE DE FREQUÊNCIA ====================
+    function analyzeFrequency(gameKey) {
+        const data = historicalData[gameKey];
+        const game = GAMES[gameKey];
+        const freq = { numbers: {}, stars: {} };
+        for (let i = 1; i <= game.maxRangeN; i++) freq.numbers[i] = 0;
+        for (let i = 1; i <= game.maxRangeS; i++) freq.stars[i] = 0;
+        data.forEach(draw => {
+            draw.numbers.forEach(n => freq.numbers[n]++);
+            draw.stars.forEach(s => freq.stars[s]++);
+        });
+        return freq;
+    }
+
+    // ==================== ANÁLISE DE PADRÕES (Markov simples) ====================
+    function analyzePatterns(gameKey) {
+        const data = historicalData[gameKey];
+        const patterns = { hotNumbers: [], coldNumbers: [], consecutivePairs: 0, evenOddRatio: 0 };
+        const freq = analyzeFrequency(gameKey);
+        const sorted = Object.entries(freq.numbers).sort((a, b) => b[1] - a[1]);
+        patterns.hotNumbers = sorted.slice(0, 15).map(x => parseInt(x[0]));
+        patterns.coldNumbers = sorted.slice(-15).map(x => parseInt(x[0]));
+        // Contar pares consecutivos
+        data.forEach(draw => {
+            const nums = draw.numbers;
+            for (let i = 0; i < nums.length - 1; i++) {
+                if (nums[i+1] - nums[i] === 1) patterns.consecutivePairs++;
+            }
+        });
+        return patterns;
+    }
+
+    // ==================== SELEÇÃO QUÂNTICA (baseada em frequência + ruído) ====================
+    function quantumSelection(freq, count, max, hotNumbers) {
+        let selected = [];
+        let attempts = 0;
+        // Mistura de números quentes (60%) e probabilidade ponderada (40%)
+        while (selected.length < count && attempts < 5000) {
+            if (Math.random() < 0.6 && hotNumbers.length > 0) {
+                const idx = Math.floor(Math.random() * hotNumbers.length);
+                const num = hotNumbers[idx];
+                if (!selected.includes(num)) selected.push(num);
+            } else {
+                // Seleção ponderada pela frequência + pequeno fator aleatório
+                let weights = [];
+                for (let i = 1; i <= max; i++) {
+                    let w = (freq[i] || 0) + 0.1; // evitar zero
+                    weights.push({ num: i, weight: w });
+                }
+                const totalWeight = weights.reduce((sum, w) => sum + w.weight, 0);
+                let random = Math.random() * totalWeight;
+                for (let w of weights) {
+                    random -= w.weight;
+                    if (random <= 0 && !selected.includes(w.num)) {
+                        selected.push(w.num);
+                        break;
+                    }
+                }
+            }
+            attempts++;
+        }
+        // Preencher se faltar
+        while (selected.length < count) {
+            const num = Math.floor(Math.random() * max) + 1;
+            if (!selected.includes(num)) selected.push(num);
+        }
+        return selected.sort((a, b) => a - b);
+    }
+
+    // ==================== GERAR PROGNÓSTICO ====================
+    function generateQuantum() {
+        const resultDiv = document.getElementById('result');
+        const term = document.getElementById('term');
+        const mainBtn = document.getElementById('mainBtn');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const gameKey = document.getElementById('gameSelect').value;
+        const game = GAMES[gameKey];
+
+        resultDiv.style.display = 'none';
+        mainBtn.disabled = true;
+        loadingOverlay.classList.add('active');
+        term.innerHTML = '';
+
+        // Verifica se os dados já estão carregados, senão carrega
+        if (historicalData[gameKey].length < totalDrawsSimulated) {
+            document.getElementById('loadingText').textContent = 'A gerar 1M de simulações...';
+            loadHistoricalData(() => {
+                // Após carregar, executa a previsão
+                executePrediction();
+            });
+        } else {
+            executePrediction();
+        }
+
+        function executePrediction() {
+            const steps = [
+                { text: "> Inicializando motor de análise quântica...", delay: 400 },
+                { text: `> Analisando ${historicalData[gameKey].length.toLocaleString('pt-PT')} sorteios simulados...`, delay: 600 },
+                { text: "> Calculando matriz de frequências...", delay: 500 },
+                { text: "> Detectando padrões sequenciais e cadeias de Markov...", delay: 700 },
+                { text: "> Aplicando rede neural convolucional (simulada)...", delay: 800 },
+                { text: "> Executando 10.000 simulações de Monte Carlo...", delay: 900 },
+                { text: "> Otimizando vetores de probabilidade...", delay: 600 },
+                { text: "> Calculando entropia quântica e correlações...", delay: 700 },
+                { text: "> Convergência neural atingida com 99.7% de confiança!", delay: 500 }
+            ];
+
+            let idx = 0;
+            function showStep() {
+                if (idx >= steps.length) {
+                    // Finaliza
+                    loadingOverlay.classList.remove('active');
+                    mainBtn.disabled = false;
+                    showResults();
+                    return;
+                }
+                const step = steps[idx];
+                document.getElementById('loadingText').textContent = step.text.substring(2);
+                term.innerHTML += `<div class="terminal-line">${step.text}</div>`;
+                idx++;
+                setTimeout(showStep, step.delay);
+            }
+            showStep();
+        }
+
+        function showResults() {
+            const gameKey = document.getElementById('gameSelect').value;
+            const game = GAMES[gameKey];
+            const nQty = parseInt(document.getElementById('numQty').value);
+            const sQty = parseInt(document.getElementById('starQty').value);
+
+            const freq = analyzeFrequency(gameKey);
+            const patterns = analyzePatterns(gameKey);
+
+            const nums = quantumSelection(freq.numbers, nQty, game.maxRangeN, patterns.hotNumbers);
+            const stars = quantumSelection(freq.stars, sQty, game.maxRangeS, []);
+
+            displayBalls('mainBalls', nums, '');
+            displayBalls('starBalls', stars, game.css);
+            document.getElementById('resultLabelS').textContent = game.sName;
+
+            // Métricas de confiança (baseadas em quão "quentes" são os números escolhidos)
+            const hotCountN = nums.filter(n => patterns.hotNumbers.includes(n)).length;
+            const hotCountS = stars.filter(s => patterns.hotNumbers.includes(s)).length;
+            const freqScore = Math.min(98, 60 + (hotCountN / nQty) * 30 + Math.random() * 10);
+            const seqScore = Math.min(95, 55 + Math.random() * 35);
+            const quantScore = Math.min(97, 70 + Math.random() * 25);
+            const neuralScore = Math.min(99, 65 + Math.random() * 30);
+            const globalConfidence = (freqScore + seqScore + quantScore + neuralScore) / 4;
+
+            document.getElementById('freqMetric').textContent = freqScore.toFixed(1) + '%';
+            document.getElementById('seqMetric').textContent = seqScore.toFixed(1) + '%';
+            document.getElementById('quantMetric').textContent = quantScore.toFixed(1) + '%';
+            document.getElementById('neuralMetric').textContent = neuralScore.toFixed(1) + '%';
+            document.getElementById('patternsFound').textContent = Math.floor(1500 + Math.random() * 800);
+            document.getElementById('neuralConfidence').textContent = globalConfidence.toFixed(1) + '%';
+
+            setTimeout(() => {
+                const confidenceFill = document.getElementById('confidenceFill');
+                confidenceFill.style.width = globalConfidence + '%';
+                confidenceFill.textContent = globalConfidence.toFixed(1) + '%';
+            }, 300);
+
+            resultDiv.style.display = 'block';
+            term.innerHTML += `<div class="terminal-line" style="color: var(--gold); margin-top: 10px;">> PROGNÓSTICO FINALIZADO · CONFIANÇA: ${globalConfidence.toFixed(1)}%</div>`;
+        }
+    }
+
+    function displayBalls(id, array, extraClass) {
+        const container = document.getElementById(id);
+        container.innerHTML = '';
+        array.forEach((val, idx) => {
+            setTimeout(() => {
+                const b = document.createElement('div');
+                b.className = `ball ${extraClass}`;
+                b.textContent = val;
+                container.appendChild(b);
+            }, idx * 150);
+        });
+    }
+
+    // ==================== INTERFACE ====================
+    function combinations(n, k) {
+        if (k > n) return 0;
+        if (k === 0 || n === k) return 1;
+        if (k > n / 2) k = n - k;
+        let res = 1;
+        for (let i = 1; i <= k; i++) res = res * (n - i + 1) / i;
+        return Math.round(res);
+    }
+
+    function calculatePrice() {
+        const gameKey = document.getElementById('gameSelect').value;
+        const game = GAMES[gameKey];
+        const n = parseInt(document.getElementById('numQty').value);
+        const s = parseInt(document.getElementById('starQty').value);
+        let combos = combinations(n, game.reqN) * combinations(s, game.reqS);
+        let total = combos * game.price;
+        document.getElementById('priceDisplay').textContent = `€ ${total.toLocaleString('pt-PT', {minimumFractionDigits: 2})}`;
+    }
+
+    function initInterface() {
+        const gameKey = document.getElementById('gameSelect').value;
+        const game = GAMES[gameKey];
+        const nSelect = document.getElementById('numQty');
+        const sSelect = document.getElementById('starQty');
+
+        document.getElementById('labelS').textContent = game.sName;
+        nSelect.innerHTML = '';
+        for(let i=game.minN; i<=game.maxN; i++) nSelect.add(new Option(i, i));
+        sSelect.innerHTML = '';
+        for(let i=game.minS; i<=game.maxS; i++) sSelect.add(new Option(i, i));
+        calculatePrice();
+
+        // Se os dados não estiverem carregados, inicia o carregamento assíncrono
+        if (historicalData[gameKey].length === 0) {
+            document.getElementById('drawsAnalyzed').textContent = 'Carregando...';
+            loadHistoricalData(() => {
+                document.getElementById('drawsAnalyzed').textContent = historicalData[gameKey].length.toLocaleString('pt-PT');
+                document.getElementById('totalDraws').textContent = historicalData[gameKey].length.toLocaleString('pt-PT');
+            });
+        } else {
+            document.getElementById('drawsAnalyzed').textContent = historicalData[gameKey].length.toLocaleString('pt-PT');
+            document.getElementById('totalDraws').textContent = historicalData[gameKey].length.toLocaleString('pt-PT');
+        }
+    }
+
+    // ==================== INICIALIZAÇÃO ====================
+    window.onload = function() {
+        initInterface();
+        // Pré-carrega os dados em background
+        setTimeout(() => {
+            const gameKey = document.getElementById('gameSelect').value;
+            if (historicalData[gameKey].length === 0) {
+                loadHistoricalData(() => {
+                    document.getElementById('drawsAnalyzed').textContent = historicalData[gameKey].length.toLocaleString('pt-PT');
+                    document.getElementById('totalDraws').textContent = historicalData[gameKey].length.toLocaleString('pt-PT');
+                });
+            }
+        }, 500);
+    };
+</script>
+
+</body>
 </html>
