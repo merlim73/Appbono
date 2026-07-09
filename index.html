@@ -1,430 +1,338 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Singularity v35.0 · Ultra Convergence</title>
-  <style>
-    :root {
-      --void: #02040a;
-      --panel: #0a0e17;
-      --gold: #ffcc00;
-      --emerald: #00ff9d;
-      --cyan: #00f5ff;
-      --text: #e0e6ed;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SINGULARITY v5.0 · SCML Multi-Compute</title>
+    <style>
+        :root {
+            --void: #02040a;
+            --panel: rgba(10, 15, 25, 0.95);
+            --gold: #ffcc00;
+            --cyan: #00f5ff;
+            --emerald: #00ff9d;
+            --text: #ffffff;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'JetBrains Mono', 'Segoe UI', monospace;
-      -webkit-tap-highlight-color: transparent;
-    }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', system-ui, sans-serif; }
 
-    body {
-      background: var(--void);
-      color: var(--text);
-      padding: 10px;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        body {
+            background: var(--void);
+            color: var(--text);
+            display: flex;
+            justify-content: center;
+            padding: 20px 10px;
+            min-height: 100vh;
+        }
 
-    .container {
-      max-width: 500px;
-      width: 100%;
-      background: var(--panel);
-      border-radius: 40px;
-      padding: 30px 20px;
-      border: 1px solid #1f2a38;
-      box-shadow: 0 30px 100px rgba(0,0,0,0.9);
-      position: relative;
-      overflow: hidden;
-    }
+        .container {
+            max-width: 550px;
+            width: 100%;
+            background: var(--panel);
+            border-radius: 40px;
+            padding: 30px;
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            box-shadow: 0 0 100px rgba(0,0,0,1);
+            position: relative;
+        }
 
-    /* Efeito de brilho de fundo */
-    .container::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(0, 245, 255, 0.05) 0%, transparent 70%);
-      pointer-events: none;
-    }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { 
+            font-size: 1.8rem; 
+            letter-spacing: 5px; 
+            background: linear-gradient(to right, var(--gold), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
 
-    .header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+        /* Painel de Seleção */
+        .config-box {
+            background: var(--glass);
+            padding: 20px;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
 
-    .header h1 {
-      font-size: 1.8rem;
-      color: var(--gold);
-      letter-spacing: 4px;
-      text-transform: uppercase;
-    }
+        label { display: block; font-size: 0.7rem; color: var(--cyan); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
 
-    .header .engine-status {
-      font-size: 0.7rem;
-      color: var(--emerald);
-      letter-spacing: 2px;
-      margin-top: 5px;
-    }
+        select {
+            width: 100%;
+            padding: 18px;
+            background: #000;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            outline: none;
+            cursor: pointer;
+        }
 
-    /* Gauge de Convergência */
-    .convergence-box {
-      background: rgba(0,0,0,0.4);
-      border-radius: 25px;
-      padding: 15px;
-      margin-bottom: 20px;
-      border: 1px solid #16202c;
-    }
+        .multi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
-    .gauge-row {
-      margin-bottom: 10px;
-    }
+        /* Mostrador de Preço */
+        .price-tag {
+            text-align: center;
+            padding: 25px;
+            background: rgba(0, 255, 157, 0.05);
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 2px dashed var(--emerald);
+        }
 
-    .gauge-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.65rem;
-      margin-bottom: 5px;
-      color: #8895aa;
-    }
+        .price-tag span { display: block; font-size: 0.8rem; color: var(--emerald); }
+        .price-tag b { font-size: 2.5rem; color: #fff; text-shadow: 0 0 20px rgba(0,255,157,0.4); }
 
-    .gauge-bar {
-      height: 6px;
-      background: #0d141f;
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
-    }
+        .main-btn {
+            width: 100%;
+            padding: 25px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(135deg, var(--gold), #ff8800);
+            color: #000;
+            font-weight: 900;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.3);
+        }
 
-    .gauge-fill {
-      height: 100%;
-      width: 0%;
-      transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1);
-    }
+        .main-btn:active { transform: scale(0.96); }
 
-    /* Cards de Opções */
-    .option-group {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+        /* RESULTADOS GIGANTES */
+        .result-area {
+            display: none;
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            animation: fadeIn 0.8s ease;
+        }
 
-    select {
-      width: 100%;
-      background: #06090f;
-      border: 1px solid #1f2a38;
-      color: var(--cyan);
-      padding: 15px;
-      border-radius: 20px;
-      font-size: 1rem;
-      outline: none;
-      cursor: pointer;
-    }
+        .ball-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
 
-    .price-display {
-      text-align: center;
-      padding: 15px;
-      background: rgba(255,255,255,0.02);
-      border-radius: 20px;
-      border: 1px dashed #1f2a38;
-      margin-bottom: 20px;
-    }
+        .ball {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #333, #000);
+            border: 3px solid #555;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
 
-    .price-display span {
-      display: block;
-      font-size: 0.7rem;
-      color: #6f7d95;
-    }
+        .ball.star {
+            background: radial-gradient(circle at 30% 30%, #5c4b00, #000);
+            border-color: var(--gold);
+            color: var(--gold);
+        }
 
-    .price-display b {
-      font-size: 1.8rem;
-      color: #fff;
-    }
+        .ball.dream {
+            background: radial-gradient(circle at 30% 30%, #004d4d, #000);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
 
-    /* Botão Principal */
-    .main-btn {
-      width: 100%;
-      padding: 25px;
-      border-radius: 50px;
-      border: none;
-      background: linear-gradient(135deg, var(--gold), #ffaa00);
-      color: #000;
-      font-weight: 900;
-      font-size: 1.2rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(255, 204, 0, 0.3);
-      transition: 0.3s;
-    }
+        .terminal {
+            font-size: 0.7rem;
+            color: var(--emerald);
+            background: #000;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            height: 60px;
+            overflow: hidden;
+            border-left: 3px solid var(--emerald);
+        }
 
-    .main-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* Terminal */
-    .terminal {
-      background: #04060a;
-      border-radius: 20px;
-      padding: 15px;
-      height: 120px;
-      overflow-y: auto;
-      font-size: 0.7rem;
-      color: var(--emerald);
-      margin-top: 20px;
-      border: 1px solid #111;
-    }
-
-    /* Resultado */
-    .result-panel {
-      display: none;
-      margin-top: 30px;
-      text-align: center;
-      animation: fadeIn 0.5s ease;
-    }
-
-    .balls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0;
-    }
-
-    .ball {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #0d141f;
-      border: 2px solid #333;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      font-weight: bold;
-      color: #fff;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    }
-
-    .ball.special {
-      border-color: var(--gold);
-      color: var(--gold);
-      box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
-    }
-
-    .ball.dream {
-      border-color: var(--cyan);
-      color: var(--cyan);
-    }
-
-    .copy-btn {
-      padding: 10px 20px;
-      background: #1a2330;
-      border: 1px solid #2a3648;
-      color: var(--cyan);
-      border-radius: 50px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-  </style>
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
 </head>
 <body>
 
 <div class="container">
-  <div class="header">
-    <h1>SINGULARITY</h1>
-    <div class="engine-status" id="statusText">● SISTEMA EM ESPERA</div>
-  </div>
-
-  <!-- Gauges -->
-  <div class="convergence-box">
-    <div class="gauge-row">
-      <div class="gauge-label"><span>1º PRÉMIO (Singularidade)</span><span id="g1_val">0%</span></div>
-      <div class="gauge-bar"><div id="g1" class="gauge-fill" style="background: var(--gold)"></div></div>
+    <div class="header">
+        <h1>Singularity v5.0</h1>
+        <p style="font-size: 0.6rem; color: var(--cyan); letter-spacing: 2px;">QUANTUM COMPUTING · SCML EDITION</p>
     </div>
-    <div class="gauge-row">
-      <div class="gauge-label"><span>2º PRÉMIO (Convergência)</span><span id="g2_val">0%</span></div>
-      <div class="gauge-bar"><div id="g2" class="gauge-fill" style="background: var(--cyan)"></div></div>
+
+    <div class="config-box">
+        <label>Escolha o Jogo</label>
+        <select id="gameSelect" onchange="initInterface()">
+            <option value="euromilhoes">EURO MILHÕES</option>
+            <option value="totoloto">TOTOLOTO</option>
+            <option value="eurodreams">EURO DREAMS</option>
+        </select>
+
+        <div class="multi-grid">
+            <div>
+                <label id="labelN">Números</label>
+                <select id="numQty" onchange="calculatePrice()"></select>
+            </div>
+            <div>
+                <label id="labelS">Estrelas</label>
+                <select id="starQty" onchange="calculatePrice()"></select>
+            </div>
+        </div>
     </div>
-    <div class="gauge-row">
-      <div class="gauge-label"><span>3º PRÉMIO (Probabilidade)</span><span id="g3_val">0%</span></div>
-      <div class="gauge-bar"><div id="g3" class="gauge-fill" style="background: var(--emerald)"></div></div>
+
+    <div class="price-tag">
+        <span>VALOR DO INVESTIMENTO</span>
+        <b id="priceDisplay">€ 0,00</b>
     </div>
-  </div>
 
-  <div class="option-group">
-    <select id="gameSelect" onchange="initGame()">
-      <option value="euromilhoes">EURO MILHÕES</option>
-      <option value="totoloto">TOTOLOTO</option>
-      <option value="eurodreams">EURO DREAMS</option>
-    </select>
+    <button class="main-btn" onclick="generateQuantum()">Gerar Singularidade</button>
 
-    <div style="display: flex; gap: 10px;">
-      <select id="nQty" onchange="updatePrice()"></select>
-      <select id="sQty" onchange="updatePrice()"></select>
+    <div id="term" class="terminal">> Aguardando parâmetros de entrada...</div>
+
+    <div class="result-area" id="result">
+        <label style="text-align: center; margin-bottom: 15px;">Números Prognosticados</label>
+        <div class="ball-group" id="mainBalls"></div>
+        
+        <label id="resultLabelS" style="text-align: center; margin-bottom: 15px;">Estrelas</label>
+        <div class="ball-group" id="starBalls"></div>
+        
+        <p style="text-align: center; font-size: 0.7rem; color: #666; margin-top: 20px;">
+            Estes números representam a maior probabilidade de convergência dentro do ciclo atual.
+        </p>
     </div>
-  </div>
-
-  <div class="price-display">
-    <span>CUSTO DE INVESTIMENTO (SCML)</span>
-    <b id="priceText">€ 0.00</b>
-  </div>
-
-  <button class="main-btn" onclick="startCompute()">Iniciar Singularidade</button>
-
-  <div class="terminal" id="term">
-    > Kernel v35.0 operacional...<br>
-    > Database: 2000 sorteios indexados.<br>
-    > Protocolo Erro Zero aguardando...
-  </div>
-
-  <div class="result-panel" id="result">
-    <div class="balls" id="ballOutput"></div>
-    <button class="copy-btn" onclick="copyBet()">Copia Prognóstico</button>
-  </div>
 </div>
 
 <script>
-const GAMES = {
-  euromilhoes: { n: 50, s: 12, bn: 5, bs: 2, price: 2.50, nMax: 10, sMax: 12, sNome: "Estrelas", css: "special" },
-  totoloto: { n: 49, s: 13, bn: 5, bs: 1, price: 1.00, nMax: 11, sMax: 1, sNome: "Sorte", css: "special" },
-  eurodreams: { n: 40, s: 5, bn: 6, bs: 1, price: 2.50, nMax: 10, sMax: 1, sNome: "Sonho", css: "dream" }
-};
+    const GAMES = {
+        euromilhoes: {
+            name: "EuroMilhões", price: 2.5,
+            minN: 5, maxN: 10, reqN: 5,
+            minS: 2, maxS: 12, reqS: 2,
+            sName: "Estrelas", css: "star"
+        },
+        totoloto: {
+            name: "Totoloto", price: 1.0,
+            minN: 5, maxN: 11, reqN: 5,
+            minS: 1, maxS: 1, reqS: 1,
+            sName: "Número da Sorte", css: "star"
+        },
+        eurodreams: {
+            name: "EuroDreams", price: 2.5,
+            minN: 6, maxN: 10, reqN: 6,
+            minS: 1, maxS: 1, reqS: 1,
+            sName: "Número Sonho", css: "dream"
+        }
+    };
 
-function combinacao(n, k) {
-  if (k > n) return 0;
-  let r = 1;
-  for (let i = 1; i <= k; i++) r = r * (n - i + 1) / i;
-  return Math.round(r);
-}
+    function combinations(n, k) {
+        if (k > n) return 0;
+        if (k === 0 || n === k) return 1;
+        if (k > n / 2) k = n - k;
+        let res = 1;
+        for (let i = 1; i <= k; i++) {
+            res = res * (n - i + 1) / i;
+        }
+        return Math.round(res);
+    }
 
-function initGame() {
-  const g = GAMES[document.getElementById('gameSelect').value];
-  const nSel = document.getElementById('nQty');
-  const sSel = document.getElementById('sQty');
+    function initInterface() {
+        const game = GAMES[document.getElementById('gameSelect').value];
+        const nSelect = document.getElementById('numQty');
+        const sSelect = document.getElementById('starQty');
+        
+        document.getElementById('labelS').textContent = game.sName;
+        
+        nSelect.innerHTML = '';
+        for(let i=game.minN; i<=game.maxN; i++) nSelect.add(new Option(i, i));
+        
+        sSelect.innerHTML = '';
+        for(let i=game.minS; i<=game.maxS; i++) sSelect.add(new Option(i, i));
 
-  nSel.innerHTML = '';
-  for (let i = g.bn; i <= g.nMax; i++) nSel.add(new Option(i + " N", i));
-  
-  sSel.innerHTML = '';
-  for (let i = g.bs; i <= g.sMax; i++) if(i <= g.s) sSel.add(new Option(i + " " + g.sNome, i));
+        calculatePrice();
+    }
 
-  updatePrice();
-}
+    function calculatePrice() {
+        const gameKey = document.getElementById('gameSelect').value;
+        const game = GAMES[gameKey];
+        const n = parseInt(document.getElementById('numQty').value);
+        const s = parseInt(document.getElementById('starQty').value);
 
-function updatePrice() {
-  const g = GAMES[document.getElementById('gameSelect').value];
-  const n = parseInt(document.getElementById('nQty').value);
-  const s = parseInt(document.getElementById('sQty').value);
-  const total = combinacao(n, g.bn) * combinacao(s, g.bs) * g.price;
-  document.getElementById('priceText').textContent = `€ ${total.toLocaleString('pt-PT', {minimumFractionDigits: 2})}`;
-}
+        let combos = combinations(n, game.reqN) * combinations(s, game.reqS);
+        let total = combos * game.price;
 
-async function startCompute() {
-  const term = document.getElementById('term');
-  const statusText = document.getElementById('statusText');
-  const res = document.getElementById('result');
-  
-  statusText.textContent = "● PROCESSANDO...";
-  statusText.style.color = "var(--gold)";
-  res.style.display = "none";
-  
-  // Reset Gauges
-  document.getElementById('g1').style.width = "0%";
-  document.getElementById('g2').style.width = "0%";
-  document.getElementById('g3').style.width = "0%";
-  
-  const logs = [
-    "> Sincronizando rede neural global...",
-    "> Analisando Gaps de 2000 ciclos...",
-    "> Aplicando algoritmo Erro Zero...",
-    "> Colapsando probabilidades...",
-    "> SUCESSO: Singularidade atingida."
-  ];
+        document.getElementById('priceDisplay').textContent = `€ ${total.toLocaleString('pt-PT', {minimumFractionDigits: 2})}`;
+    }
 
-  for (let m of logs) {
-    await new Promise(r => setTimeout(r, 400));
-    term.innerHTML += `<br>${m}`;
-    term.scrollTop = term.scrollHeight;
-  }
+    async function generateQuantum() {
+        const resultDiv = document.getElementById('result');
+        const term = document.getElementById('term');
+        const gameKey = document.getElementById('gameSelect').value;
+        const game = GAMES[gameKey];
+        
+        resultDiv.style.display = 'none';
+        term.innerHTML = "> A iniciar motor de busca quântica...";
 
-  // Animação de Convergência
-  document.getElementById('g3').style.width = "100%";
-  document.getElementById('g3_val').textContent = "100%";
-  
-  setTimeout(() => {
-    document.getElementById('g2').style.width = "98.7%";
-    document.getElementById('g2_val').textContent = "98.7%";
-  }, 500);
+        // Simulação de "Cálculo Pesado"
+        await new Promise(r => setTimeout(r, 800));
+        term.innerHTML = "> Analisando múltiplas de Santa Casa...";
+        await new Promise(r => setTimeout(r, 800));
+        term.innerHTML = "> Singularidade atingida. Extraindo vetores...";
+        await new Promise(r => setTimeout(r, 500));
 
-  setTimeout(() => {
-    document.getElementById('g1').style.width = "99.9%";
-    document.getElementById('g1_val').textContent = "99.9%";
-    statusText.textContent = "● CONVERGIDO";
-    statusText.style.color = "var(--emerald)";
-    renderResult();
-  }, 1000);
-}
+        const nQty = parseInt(document.getElementById('numQty').value);
+        const sQty = parseInt(document.getElementById('starQty').value);
 
-function renderResult() {
-  const g = GAMES[document.getElementById('gameSelect').value];
-  const nQty = parseInt(document.getElementById('nQty').value);
-  const sQty = parseInt(document.getElementById('sQty').value);
-  
-  const out = document.getElementById('ballOutput');
-  out.innerHTML = '';
+        // Limites de sorteio reais
+        const maxRangeN = (gameKey === 'euromilhoes') ? 50 : (gameKey === 'totoloto' ? 49 : 40);
+        const maxRangeS = (gameKey === 'euromilhoes') ? 12 : (gameKey === 'totoloto' ? 13 : 5);
 
-  const pick = (qty, max) => {
-    let s = new Set();
-    while(s.size < qty) s.add(Math.floor(Math.random() * max) + 1);
-    return [...s].sort((a,b) => a-b);
-  };
+        const nums = generateSet(nQty, maxRangeN);
+        const stars = generateSet(sQty, maxRangeS);
 
-  const nums = pick(nQty, g.n);
-  const stars = pick(sQty, g.s);
+        displayBalls('mainBalls', nums, '');
+        displayBalls('starBalls', stars, game.css);
+        
+        document.getElementById('resultLabelS').textContent = game.sName;
+        resultDiv.style.display = 'block';
+        term.innerHTML = "> PROGNÓSTICO COMPLETO.";
+    }
 
-  nums.forEach(n => {
-    const b = document.createElement('div');
-    b.className = 'ball';
-    b.textContent = n;
-    out.appendChild(b);
-  });
+    function generateSet(count, max) {
+        let set = new Set();
+        while(set.size < count) {
+            set.add(Math.floor(Math.random() * max) + 1);
+        }
+        return Array.from(set).sort((a,b) => a - b);
+    }
 
-  stars.forEach(s => {
-    const b = document.createElement('div');
-    b.className = `ball ${g.css}`;
-    b.textContent = s;
-    out.appendChild(b);
-  });
+    function displayBalls(id, array, extraClass) {
+        const container = document.getElementById(id);
+        container.innerHTML = '';
+        array.forEach(val => {
+            const b = document.createElement('div');
+            b.className = `ball ${extraClass}`;
+            b.textContent = val;
+            container.appendChild(b);
+        });
+    }
 
-  document.getElementById('result').style.display = "block";
-}
-
-function copyBet() {
-  const balls = document.querySelectorAll('.ball');
-  let txt = "";
-  balls.forEach(b => txt += b.textContent + " ");
-  navigator.clipboard.writeText(txt.trim());
-  alert("Prognóstico copiado!");
-}
-
-window.onload = initGame;
+    // Iniciar no load
+    window.onload = initInterface;
 </script>
+
 </body>
 </html>
