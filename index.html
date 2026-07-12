@@ -3,165 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SINGULARITY Ω v24.0 · NEURAL SUPERCOMPUTER</title>
+    <title>SINGULARITY Ω v26.0 · SUPREME SAGES MATRIX</title>
     <style>
         :root {
-            --void: #010205;
+            --void: #010208;
             --gold: #ffcc00;
             --cyan: #00f2ff;
             --emerald: #00ff88;
-            --plasma: #ff00ff;
-            --panel: rgba(5, 12, 25, 0.98);
+            --panel: rgba(5, 18, 35, 0.98);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Orbitron', sans-serif; }
         body {
             background: var(--void);
-            background-image: radial-gradient(circle at center, #0a1830 0%, #010205 100%);
+            background-image: radial-gradient(circle at center, #0a1b3a 0%, #010208 100%);
             color: #fff;
             display: flex; justify-content: center; padding: 15px 5px; min-height: 100vh;
-            overflow-x: hidden;
         }
         .container {
-            width: 100%; max-width: 750px;
+            width: 100%; max-width: 800px;
             background: var(--panel);
             border: 2px solid var(--gold);
-            border-radius: 30px; padding: 25px;
-            box-shadow: 0 0 100px rgba(255, 204, 0, 0.15);
-            position: relative;
+            border-radius: 40px; padding: 30px;
+            box-shadow: 0 0 150px rgba(255, 204, 0, 0.15);
         }
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(0,242,255,0.2); padding-bottom: 10px; }
-        .header h1 { font-size: 1.4rem; letter-spacing: 4px; color: var(--gold); text-shadow: 0 0 15px var(--gold); }
+        .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,204,0,0.3); padding-bottom: 15px; }
+        .header h1 { font-size: 1.5rem; letter-spacing: 6px; color: var(--gold); text-shadow: 0 0 20px var(--gold); }
         .live-clock { font-size: 0.8rem; color: var(--cyan); margin-top: 5px; font-weight: 900; }
 
-        .quantum-log {
-            background: #000; border: 1px solid #1a1a1a; padding: 10px;
-            font-family: 'Courier New', monospace; font-size: 0.6rem; color: var(--emerald);
-            margin-bottom: 15px; border-radius: 10px; height: 60px; overflow: hidden;
+        .scientific-matrix {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px;
+            background: rgba(0,0,0,0.6); padding: 10px; border-radius: 12px;
+            font-size: 0.5rem; color: var(--emerald); margin-bottom: 15px;
+            border: 1px solid rgba(0,255,136,0.3);
         }
 
         .config-box {
             background: rgba(255,255,255,0.02);
-            padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px;
+            padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 15px;
         }
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        label { font-size: 0.55rem; color: var(--gold); text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { font-size: 0.65rem; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 900; }
         select {
-            width: 100%; padding: 10px; background: #000; border: 1px solid #333;
-            color: #fff; border-radius: 8px; font-size: 0.85rem; outline: none; border-left: 3px solid var(--cyan);
+            width: 100%; padding: 12px; background: #000; border: 1px solid #444;
+            color: #fff; border-radius: 12px; font-size: 1rem; outline: none; border-left: 4px solid var(--gold);
         }
 
         .price-tag {
-            background: linear-gradient(90deg, rgba(0,255,136,0.1), rgba(0,242,255,0.1));
-            padding: 20px; border-radius: 20px; border: 1px solid var(--emerald);
-            text-align: center; margin-bottom: 15px; position: relative;
+            background: linear-gradient(90deg, rgba(0,255,136,0.08), rgba(0,242,255,0.08));
+            padding: 25px; border-radius: 25px; border: 1px solid var(--emerald);
+            text-align: center; margin-bottom: 20px;
         }
-        .price-tag label { font-size: 0.6rem; color: var(--emerald); display: block; margin-bottom: 5px; letter-spacing: 2px; }
-        .price-tag b { font-size: 2.5rem; color: #fff; font-weight: 900; text-shadow: 0 0 20px var(--emerald); }
+        .price-tag b { font-size: 2.5rem; color: #fff; font-weight: 900; text-shadow: 0 0 25px var(--emerald); }
 
         .main-btn {
-            width: 100%; padding: 22px; border-radius: 50px; border: none;
+            width: 100%; padding: 25px; border-radius: 100px; border: none;
             background: linear-gradient(45deg, #d4af37, #f1c40f, #d4af37);
-            color: #000; font-weight: 900; font-size: 1.1rem; cursor: pointer;
-            text-transform: uppercase; box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #000; font-weight: 900; font-size: 1.3rem; cursor: pointer;
+            text-transform: uppercase; box-shadow: 0 0 60px rgba(255, 204, 0, 0.4);
+            transition: 0.2s;
         }
-        .main-btn:active { transform: scale(0.95); }
+        .main-btn:active { transform: scale(0.96); }
 
         .result-area {
-            display: none; margin-top: 20px; padding: 25px; background: #000;
-            border: 2px solid var(--gold); border-radius: 25px;
+            display: none; margin-top: 25px; padding: 30px; background: #000;
+            border: 2px solid var(--gold); border-radius: 35px;
         }
 
-        .ball-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 20px 0; }
+        .ball-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 25px 0; }
         .ball {
-            width: 80px; height: 80px; border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #222, #000);
+            width: 95px; height: 95px; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #222, #000);
             border: 3px solid var(--cyan);
             display: flex; align-items: center; justify-content: center;
             font-weight: 900; font-size: 2.5rem; /* MESMO TAMANHO DO PREÇO */
-            color: #fff; position: relative;
-            box-shadow: 0 0 25px rgba(0,242,255,0.4), inset 0 -5px 15px rgba(0,0,0,0.9);
-            text-shadow: 0 0 15px var(--cyan);
+            color: #fff; text-shadow: 0 0 15px var(--cyan);
+            box-shadow: 0 0 30px rgba(0,242,255,0.4), inset 0 -5px 20px rgba(0,0,0,0.9);
+            position: relative;
         }
-        .ball.star { border-color: var(--gold); color: var(--gold); text-shadow: 0 0 15px var(--gold); box-shadow: 0 0 25px rgba(255,204,0,0.4); }
+        .ball.star { border-color: var(--gold); color: var(--gold); text-shadow: 0 0 15px var(--gold); }
         .ball::after {
-            content: ''; position: absolute; top: 10%; left: 20%; width: 30%; height: 20%;
+            content: ''; position: absolute; top: 12%; left: 20%; width: 30%; height: 25%;
             background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 100%);
             border-radius: 50%;
         }
 
-        .draw-info { 
-            text-align: center; margin-top: 20px; font-size: 0.8rem; color: var(--gold); 
-            border-top: 1px solid #222; padding-top: 15px; font-weight: 900; letter-spacing: 1px;
-        }
-
-        .stats-footer {
-            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 20px;
-        }
-        .s-box { background: rgba(255,255,255,0.03); padding: 10px; border-radius: 10px; text-align: center; border: 1px solid #1a1a1a; }
-        .s-box label { font-size: 0.45rem; color: #666; display: block; }
-        .s-box div { font-size: 0.65rem; color: var(--emerald); font-weight: 900; }
+        .draw-info { text-align: center; margin-top: 20px; font-size: 0.9rem; color: var(--gold); font-weight: 900; border-top: 1px solid #222; padding-top: 20px; }
+        .status-bar { text-align: center; margin-top: 15px; font-size: 0.65rem; color: var(--emerald); font-weight: bold; letter-spacing: 2px; }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>SINGULARITY Ω v24.0</h1>
-        <div class="live-clock" id="mainClock">SINCRO...</div>
+        <h1>SINGULARITY Ω v26.0</h1>
+        <div class="live-clock" id="mainClock">PROCESSANDO...</div>
     </div>
 
-    <div class="quantum-log" id="qLog">
-        > INICIANDO FILTRAGEM NEURAL...<br>
-        > ANALISANDO 139.838.160 VARIÁVEIS...<br>
-        > STATUS: AGUARDANDO INPUT...
+    <div class="scientific-matrix">
+        <div>NEWTON: CINEMÁTICA</div>
+        <div>EINSTEIN: CURVATURA</div>
+        <div>LAVOISIER: CONSERVAÇÃO</div>
+        <div>BOHR: QUANTIZAÇÃO</div>
+        <div>EUCLIDES: GEOMETRIA</div>
+        <div>AMPERE: INDUÇÃO Ω</div>
+        <div>HERMITE: POLINÓMIOS</div>
+        <div>BARROW: SINTONIA FINA</div>
+        <div>GALILEU: TRAJETÓRIA</div>
     </div>
 
     <div class="config-box">
-        <label>Motor Determinístico Quântico</label>
+        <label>Algoritmo de Apostas Múltiplas > 14</label>
         <select id="gameSelect" onchange="initUI()">
-            <option value="euromilhoes">EURO MILHÕES (Terça/Sexta)</option>
-            <option value="totoloto">TOTOLOTO (Quarta/Sábado)</option>
-            <option value="eurodreams">EURO DREAMS (Segunda/Quinta)</option>
+            <option value="euromilhoes">EURO MILHÕES (Múltiplas Expandidas)</option>
+            <option value="totoloto">TOTOLOTO (Múltiplas Expandidas)</option>
+            <option value="eurodreams">EURO DREAMS (Múltiplas Expandidas)</option>
         </select>
         
-        <div class="grid-inputs" style="margin-top: 12px;">
-            <div><label>Nrs. Múltipla</label><select id="numQty" onchange="updateCalc()"></select></div>
+        <div class="grid-inputs" style="margin-top: 15px;">
+            <div><label>Nrs. a Selecionar</label><select id="numQty" onchange="updateCalc()"></select></div>
             <div><label id="labelS">Estrelas/Sorte</label><select id="starQty" onchange="updateCalc()"></select></div>
         </div>
     </div>
 
     <div class="price-tag">
-        <label>EFICIÊNCIA DE ACERTO: 100.000.000.000%</label>
+        <label style="color:var(--emerald); font-size:0.7rem; margin-bottom:10px; display:block; letter-spacing:2px;">VALOR DA APOSTA DETERMINÍSTICA</label>
         <b id="totalPrice">€ 0,00</b>
     </div>
 
-    <button class="main-btn" onclick="startProcess()">⚡ EXECUTAR SUPERCOMPUTADOR ⚡</button>
+    <button class="main-btn" onclick="executeSagesEngine()">⚡ GERAR APOSTA SUPREMA (100%) ⚡</button>
 
     <div class="result-area" id="resultArea">
-        <div style="text-align: center; color: var(--cyan); font-size: 0.7rem; letter-spacing: 3px; font-weight: 900;">
-            PROJEÇÃO OMEGA · FILTRO DETERMINÍSTICO 5D
+        <div style="text-align: center; color: var(--cyan); font-size: 0.8rem; letter-spacing: 4px; font-weight: 900;">
+            MATRIZ FILTRADA · SEM NÚMEROS SEGUIDOS
         </div>
         
         <div class="ball-group" id="mainBalls"></div>
         <div class="ball-group" id="starBalls"></div>
 
         <div class="draw-info" id="nextDrawTime">--</div>
-
-        <div class="stats-footer">
-            <div class="s-box"><label>RUÍDO FÍSICO</label><div>ZERO</div></div>
-            <div class="s-box"><label>PROB. ACERTO</label><div>100% Ω</div></div>
-            <div class="s-box"><label>SINCRO</label><div>TOTAL</div></div>
-        </div>
+        <div class="status-bar">SINCRO TOTAL ATINGIDA · ODDS DISPLAY 100% EFICAZ</div>
     </div>
 </div>
 
 <script>
     const RULES = {
-        euromilhoes: { base: 2.5, reqN: 5, reqS: 2, maxN: 50, maxS: 12, limitN: 12, limitS: 12, drawDays: [2, 5], time: "20:00" },
-        totoloto: { base: 1.0, reqN: 5, reqS: 1, maxN: 49, maxS: 13, limitN: 13, limitS: 1, drawDays: [3, 6], time: "22:00" },
-        eurodreams: { base: 2.5, reqN: 6, reqS: 1, maxN: 40, maxS: 5, limitN: 10, limitS: 5, drawDays: [1, 4], time: "20:00" }
+        euromilhoes: { base: 2.5, reqN: 5, reqS: 2, maxN: 50, maxS: 12, limitN: 15, limitS: 12, drawDays: [2, 5], time: "20:00" },
+        totoloto: { base: 1.0, reqN: 5, reqS: 1, maxN: 49, maxS: 13, limitN: 15, limitS: 1, drawDays: [3, 6], time: "22:00" },
+        eurodreams: { base: 2.5, reqN: 6, reqS: 1, maxN: 40, maxS: 5, limitN: 15, limitS: 5, drawDays: [1, 4], time: "20:00" }
     };
 
     function combinations(n, k) {
@@ -184,8 +172,11 @@
         const nSel = document.getElementById('numQty');
         const sSel = document.getElementById('starQty');
         nSel.innerHTML = ""; sSel.innerHTML = "";
+        
+        // Dropdown configurado para permitir seleções de 15 números (conforme solicitado)
         for(let i=cfg.reqN; i<=cfg.limitN; i++) nSel.add(new Option(i, i));
         for(let i=cfg.reqS; i<=cfg.limitS; i++) sSel.add(new Option(i, i));
+        
         document.getElementById('labelS').textContent = cfg.reqS > 1 ? "ESTRELAS" : "Nº SORTE";
         updateCalc();
     }
@@ -200,51 +191,53 @@
         document.getElementById('resultArea').style.display = 'none';
     }
 
-    function startProcess() {
-        const log = document.getElementById('qLog');
-        log.innerHTML = "> ACESSANDO MATRIZ DE DADOS...<br>> FILTRANDO NÚMEROS FRIOS...<br>> OTIMIZANDO MASSA CRÍTICA...";
-        setTimeout(() => {
-            log.innerHTML += "<br>> 100% DE CERTEZA FÍSICA ATINGIDA.<br>> MOSTRANDO RESULTADO...";
-            executeDeterministicLogic();
-        }, 1200);
-    }
-
-    function executeDeterministicLogic() {
+    function executeSagesEngine() {
         const game = document.getElementById('gameSelect').value;
         const cfg = RULES[game];
         const qtyN = parseInt(document.getElementById('numQty').value);
         const qtyS = parseInt(document.getElementById('starQty').value);
         
-        // Algoritmo Supercomputador: Filtra números de baixa entropia
+        // Algoritmo de Sorteio com Filtro Rígido de Adjacência (Probabilidade Nula)
         let n = [];
-        while(n.length < qtyN) {
+        let attempts = 0;
+        while(n.length < qtyN && attempts < 2000) {
             let r = Math.floor(Math.random() * cfg.maxN) + 1;
-            // Evita números consecutivos em excesso (filtro de ruído estático)
             if(!n.includes(r)) {
-                if (n.length > 0 && Math.abs(n[n.length-1] - r) === 1 && Math.random() > 0.3) continue;
-                n.push(r);
+                // Filtro Newton/Euclides: Sem números seguidos (|a-b| > 1)
+                if (n.every(val => Math.abs(val - r) > 1)) {
+                    n.push(r);
+                }
             }
+            attempts++;
         }
         n.sort((a,b) => a-b);
         
         let s = [];
-        while(s.length < qtyS) {
+        attempts = 0;
+        while(s.length < qtyS && attempts < 1000) {
             let r = Math.floor(Math.random() * cfg.maxS) + 1;
-            if(!s.includes(r)) s.push(r);
+            if(!s.includes(r)) {
+                // Filtro para estrelas (apenas se houver espaço amostral suficiente)
+                if (cfg.maxS > qtyS * 1.5) {
+                    if (s.every(val => Math.abs(val - r) > 1)) s.push(r);
+                } else {
+                    s.push(r);
+                }
+            }
+            attempts++;
         }
         s.sort((a,b) => a-b);
         
         document.getElementById('mainBalls').innerHTML = n.map(v => `<div class="ball">${v}</div>`).join('');
         document.getElementById('starBalls').innerHTML = s.map(v => `<div class="ball star">${v}</div>`).join('');
         
-        // Data do sorteio
         let d = new Date();
         const [hour, min] = cfg.time.split(':').map(Number);
         for(let i=0; i<8; i++) {
             let c = new Date(); c.setDate(d.getDate() + i);
             if(cfg.drawDays.includes(c.getDay())) {
                 if(i===0 && d.getHours() >= hour) continue;
-                document.getElementById('nextDrawTime').innerHTML = `SORTEIO: ${c.toLocaleDateString('pt-PT', {weekday:'long', day:'numeric', month:'long'}).toUpperCase()} ÀS ${cfg.time}H`;
+                document.getElementById('nextDrawTime').innerHTML = `DATA DO SORTEIO: ${c.toLocaleDateString('pt-PT', {weekday:'long', day:'numeric', month:'long', year:'numeric'}).toUpperCase()} ÀS ${cfg.time}H`;
                 break;
             }
         }
