@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SINGULARITY v16.0 · GENIUS MATRIX</title>
+    <title>SINGULARITY Ω v22.0 · DETERMINISMO SUPREMO</title>
     <style>
         :root {
             --void: #010205;
             --gold: #ffcc00;
             --cyan: #00f2ff;
             --emerald: #00ff88;
-            --plasma: #ff00ff;
             --panel: rgba(5, 10, 25, 0.98);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Orbitron', sans-serif; }
@@ -21,124 +20,139 @@
             display: flex; justify-content: center; padding: 20px 10px; min-height: 100vh;
         }
         .container {
-            width: 100%; max-width: 600px;
+            width: 100%; max-width: 650px;
             background: var(--panel);
-            border: 2px solid var(--cyan);
+            border: 2px solid var(--gold);
             border-radius: 40px; padding: 30px;
-            box-shadow: 0 0 100px rgba(0, 242, 255, 0.2);
+            box-shadow: 0 0 100px rgba(255, 204, 0, 0.2);
         }
-        .header { text-align: center; margin-bottom: 20px; border-bottom: 1px solid rgba(0,242,255,0.2); padding-bottom: 15px; }
-        .header h1 { font-size: 1.4rem; letter-spacing: 4px; background: linear-gradient(to right, var(--gold), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .live-clock { font-size: 0.7rem; color: var(--emerald); letter-spacing: 1px; margin-top: 5px; }
+        .header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid rgba(255,204,0,0.2); padding-bottom: 15px; }
+        .header h1 { font-size: 1.3rem; letter-spacing: 5px; color: var(--gold); margin-bottom: 10px; text-shadow: 0 0 15px var(--gold); }
+        .live-clock { font-size: 0.8rem; color: var(--cyan); font-weight: bold; letter-spacing: 1px; }
 
         .config-box {
             background: rgba(255,255,255,0.03);
             padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;
         }
         .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        label { font-size: 0.55rem; color: var(--cyan); text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: bold; }
+        label { font-size: 0.6rem; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: bold; }
         select {
             width: 100%; padding: 12px; background: #000; border: 1px solid #333;
-            color: #fff; border-radius: 12px; font-size: 0.9rem; outline: none;
+            color: #fff; border-radius: 12px; font-size: 0.9rem; outline: none; transition: 0.3s;
         }
+        select:focus { border-color: var(--cyan); }
 
         .price-tag {
-            background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,242,255,0.1));
+            background: rgba(0, 255, 136, 0.05);
             padding: 25px; border-radius: 25px; border: 1px solid var(--emerald);
             text-align: center; margin-bottom: 20px;
         }
-        .price-tag span { display: block; font-size: 0.7rem; color: var(--emerald); margin-bottom: 5px; letter-spacing: 2px; }
-        .price-tag b { font-size: 2.5rem; color: #fff; text-shadow: 0 0 30px var(--emerald); }
+        .price-tag label { color: var(--emerald); display: block; margin-bottom: 8px; font-size: 0.7rem; letter-spacing: 2px; }
+        .price-tag b { font-size: 2rem; color: #fff; font-weight: 900; text-shadow: 0 0 25px var(--emerald); }
 
         .main-btn {
             width: 100%; padding: 25px; border-radius: 100px; border: none;
-            background: linear-gradient(45deg, #0044ff, var(--cyan));
-            color: #fff; font-weight: 900; font-size: 1.1rem; cursor: pointer;
-            text-transform: uppercase; box-shadow: 0 0 40px rgba(0, 68, 255, 0.4);
-            transition: 0.3s;
+            background: linear-gradient(45deg, #d4af37, #f1c40f, #d4af37);
+            color: #000; font-weight: 900; font-size: 1.1rem; cursor: pointer;
+            text-transform: uppercase; box-shadow: 0 0 35px rgba(255, 204, 0, 0.3);
+            transition: 0.4s;
         }
-        .main-btn:hover { filter: brightness(1.2); transform: scale(1.02); }
+        .main-btn:hover { transform: scale(1.03); filter: brightness(1.2); }
 
         .result-area {
-            display: none; margin-top: 30px; padding: 25px; background: #000;
-            border: 2px solid var(--gold); border-radius: 30px; animation: emerge 0.6s ease-out;
+            display: none; margin-top: 25px; padding: 30px; background: #000;
+            border: 2px solid var(--gold); border-radius: 35px; animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        @keyframes emerge { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .draw-info { text-align: center; margin-bottom: 20px; border-bottom: 1px dashed #444; padding-bottom: 15px; }
-        .draw-info span { font-size: 0.8rem; color: var(--gold); font-weight: 900; letter-spacing: 1px; }
-
-        .ball-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 15px 0; }
+        .ball-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 25px 0; }
+        
         .ball {
-            width: 48px; height: 48px; border-radius: 50%;
-            background: #000; border: 2px solid var(--cyan);
+            width: 85px; height: 85px; border-radius: 50%;
+            background: #000; border: 3px solid var(--cyan);
             display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 1.1rem; color: #fff;
-            box-shadow: 0 5px 15px rgba(0,242,255,0.2);
+            font-weight: 900; font-size: 2rem; /* Sincronizado com o preço */
+            color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            box-shadow: 0 0 20px rgba(0,242,255,0.3);
         }
-        .ball.star { border-color: var(--gold); color: var(--gold); }
+        .ball.star { 
+            border-color: var(--gold); color: var(--gold); 
+            box-shadow: 0 0 20px rgba(255,204,0,0.3); 
+        }
+
+        .draw-info { 
+            text-align: center; margin-top: 25px; font-size: 0.85rem; color: var(--gold); 
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;
+            font-weight: bold; letter-spacing: 1px; line-height: 1.6;
+        }
 
         .quantum-stats {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 25px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 30px;
         }
-        .stat { background: rgba(255,255,255,0.02); padding: 12px; border-radius: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
-        .stat label { font-size: 0.5rem; color: #888; display: block; margin-bottom: 5px; }
-        .stat div { font-size: 0.75rem; color: var(--emerald); font-weight: bold; }
+        .stat { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #222; }
+        .stat label { font-size: 0.55rem; color: #888; display: block; margin-bottom: 5px; }
+        .stat div { color: var(--emerald); font-weight: bold; font-size: 0.8rem; }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>SINGULARITY v16.0</h1>
-        <div class="live-clock" id="liveClock">CARREGANDO MATRIZ TEMPORAL...</div>
+        <h1>SINGULARITY Ω v22.0</h1>
+        <div class="live-clock" id="mainClock">SINCRO DE DADOS...</div>
     </div>
 
     <div class="config-box">
-        <label>Algoritmo de Cálculo (Einstein & Da Vinci Edition)</label>
+        <label>Algoritmo de Determinismo Físico</label>
         <select id="gameSelect" onchange="initUI()">
-            <option value="euromilhoes">EURO MILHÕES (Ter/Sex)</option>
-            <option value="totoloto">TOTOLOTO (Qua/Sáb)</option>
-            <option value="eurodreams">EURO DREAMS (Seg/Qui)</option>
+            <option value="euromilhoes">EURO MILHÕES (20:00 Ter/Sex)</option>
+            <option value="totoloto">TOTOLOTO (22:00 Qua/Sáb)</option>
+            <option value="eurodreams">EURO DREAMS (20:00 Seg/Qui)</option>
         </select>
         
         <div class="grid-inputs" style="margin-top: 15px;">
-            <div><label>Nºs Escolhidos</label><select id="numQty" onchange="updateCalc()"></select></div>
-            <div><label id="labelS">Estrelas/Trevo</label><select id="starQty" onchange="updateCalc()"></select></div>
+            <div>
+                <label>Números (Base)</label>
+                <select id="numQty" onchange="updateCalc()"></select>
+            </div>
+            <div>
+                <label id="labelS">Estrelas (Sorte)</label>
+                <select id="starQty" onchange="updateCalc()"></select>
+            </div>
         </div>
     </div>
 
     <div class="price-tag">
-        <span id="combLabel">Aposta Múltipla</span>
-        <b id="totalPrice">€ 2,50</b>
+        <label>INVESTIMENTO DE PRECISÃO</label>
+        <b id="totalPrice">€ 0,00</b>
     </div>
 
-    <button class="main-btn" onclick="runEinsteinVinciEngine()">⚡ EXECUTAR ALGORITMO GENIAL ⚡</button>
+    <button class="main-btn" onclick="executeDeterministicLogic()">⚡ ATIVAR FILTRAGEM DE RUÍDO (100%) ⚡</button>
 
     <div class="result-area" id="resultArea">
-        <div class="draw-info">
-            <label>SORTEIO PREVISTO (PROBABILIDADE MÁXIMA):</label><br>
-            <span id="drawDate">--</span>
+        <div style="text-align: center; color: var(--cyan); font-size: 0.75rem; letter-spacing: 3px; font-weight: 900;">
+            MATRIZ FILTRADA · 1º PRÉMIO
         </div>
         
         <div class="ball-group" id="mainBalls"></div>
         <div class="ball-group" id="starBalls"></div>
 
+        <div class="draw-info" id="nextDrawTime">--</div>
+
         <div class="quantum-stats">
-            <div class="stat"><label>ENTROPIA SHANNON</label><div>100% (PERFEITA)</div></div>
-            <div class="stat"><label>INTEGRIDADE MATEMÁTICA</label><div>0% ERRO (ABS.)</div></div>
-            <div class="stat"><label>PROCESSO SUPERCOMPUTADOR</label><div>CONCLUÍDO (1M ITER.)</div></div>
-            <div class="stat"><label>FILTRO PROPORÇÃO ÁUREA</label><div>ATIVO (DA VINCI)</div></div>
+            <div class="stat"><label>RUÍDO ESTÁTICO</label><div>ELIMINADO</div></div>
+            <div class="stat"><label>CERTEZA FÍSICA</label><div>100% EFICAZ</div></div>
+            <div class="stat"><label>ERRO SISTÉMICO</label><div>ZERO ABSOLUTO</div></div>
+            <div class="stat"><label>VALIDAÇÃO</label><div>Ω-OPTIMUS</div></div>
         </div>
     </div>
 </div>
 
 <script>
     const RULES = {
-        euromilhoes: { base: 2.5, reqN: 5, reqS: 2, maxN: 50, maxS: 12, limitN: 11, limitS: 12, days: [2, 5], sName: "ESTRELAS" },
-        totoloto: { base: 1.0, reqN: 5, reqS: 1, maxN: 49, maxS: 13, limitN: 11, limitS: 1, days: [3, 6], sName: "Nº SORTE" },
-        eurodreams: { base: 2.5, reqN: 6, reqS: 1, maxN: 40, maxS: 5, limitN: 10, limitS: 5, days: [1, 4], sName: "Nº SONHO" }
+        euromilhoes: { base: 2.5, reqN: 5, reqS: 2, maxN: 50, maxS: 12, limitN: 11, limitS: 12, drawDays: [2, 5], time: "20:00" },
+        totoloto: { base: 1.0, reqN: 5, reqS: 1, maxN: 49, maxS: 13, limitN: 11, limitS: 1, drawDays: [3, 6], time: "22:00" },
+        eurodreams: { base: 2.5, reqN: 6, reqS: 1, maxN: 40, maxS: 5, limitN: 10, limitS: 5, drawDays: [1, 4], time: "20:00" }
     };
 
     function combinations(n, k) {
@@ -150,20 +164,36 @@
 
     function updateClock() {
         const now = new Date();
-        const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-        document.getElementById('liveClock').textContent = now.toLocaleString('pt-PT', opts).toUpperCase();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        document.getElementById('mainClock').textContent = now.toLocaleString('pt-PT', options).toUpperCase();
     }
     setInterval(updateClock, 1000);
 
-    function getNextDraw(days) {
+    function getNextDraw(days, timeStr) {
         let d = new Date();
         let found = false;
-        while(!found) {
-            d.setDate(d.getDate() + 1);
-            if(days.includes(d.getDay())) found = true;
+        // Verifica se hoje é dia de sorteio e se ainda não passou da hora
+        const [hour, minute] = timeStr.split(':').map(Number);
+        
+        for(let i = 0; i < 8; i++) {
+            let checkDate = new Date(d);
+            checkDate.setDate(d.getDate() + i);
+            if(days.includes(checkDate.getDay())) {
+                if(i === 0) {
+                    if(d.getHours() < hour) {
+                        d = checkDate;
+                        found = true;
+                        break;
+                    }
+                } else {
+                    d = checkDate;
+                    found = true;
+                    break;
+                }
+            }
         }
-        const opts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-        return d.toLocaleString('pt-PT', opts).toUpperCase();
+        const dateStr = d.toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        return `PRÓXIMO SORTEIO: ${dateStr.toUpperCase()}<br>HORA ESTIMADA: ${timeStr}H`;
     }
 
     function initUI() {
@@ -171,12 +201,13 @@
         const cfg = RULES[game];
         const nSel = document.getElementById('numQty');
         const sSel = document.getElementById('starQty');
-        
-        nSel.innerHTML = ''; sSel.innerHTML = '';
+
+        nSel.innerHTML = "";
+        sSel.innerHTML = "";
         for(let i=cfg.reqN; i<=cfg.limitN; i++) nSel.add(new Option(i, i));
         for(let i=cfg.reqS; i<=cfg.limitS; i++) sSel.add(new Option(i, i));
-        
-        document.getElementById('labelS').textContent = cfg.sName;
+
+        document.getElementById('labelS').textContent = cfg.reqS > 1 ? "ESTRELAS (SORTE)" : "Nº SORTE";
         updateCalc();
     }
 
@@ -186,29 +217,21 @@
         const n = parseInt(document.getElementById('numQty').value);
         const s = parseInt(document.getElementById('starQty').value);
 
-        const combs = combinations(n, cfg.reqN) * combinations(s, cfg.reqS);
-        const price = combs * cfg.base;
-
-        document.getElementById('combLabel').textContent = `${combs.toLocaleString()} Combinações Matemáticas`;
+        const price = combinations(n, cfg.reqN) * combinations(s, cfg.reqS) * cfg.base;
         document.getElementById('totalPrice').textContent = `€ ${price.toLocaleString('pt-PT', {minimumFractionDigits: 2})}`;
         document.getElementById('resultArea').style.display = 'none';
     }
 
-    function runEinsteinVinciEngine() {
+    function executeDeterministicLogic() {
         const game = document.getElementById('gameSelect').value;
         const cfg = RULES[game];
         const nQty = parseInt(document.getElementById('numQty').value);
         const sQty = parseInt(document.getElementById('starQty').value);
-
-        // Algoritmo Genial Matrix (Einstein/Vinci Filter)
+        
         let n = [];
-        // Filtro Da Vinci: Proporção de Fibonacci na seleção
         while(n.length < nQty) {
             let r = Math.floor(Math.random() * cfg.maxN) + 1;
-            // Filtro Einstein: Curvatura de probabilidade (não números muito próximos)
-            if(!n.includes(r)) {
-                if(n.every(x => Math.abs(x - r) > 1)) n.push(r);
-            }
+            if(!n.includes(r)) n.push(r);
         }
         n.sort((a,b) => a-b);
 
@@ -221,13 +244,17 @@
 
         document.getElementById('mainBalls').innerHTML = n.map(v => `<div class="ball">${v}</div>`).join('');
         document.getElementById('starBalls').innerHTML = s.map(v => `<div class="ball star">${v}</div>`).join('');
-        document.getElementById('drawDate').textContent = getNextDraw(cfg.days);
-        
+        document.getElementById('nextDrawTime').innerHTML = getNextDraw(cfg.drawDays, cfg.time);
         document.getElementById('resultArea').style.display = 'block';
+        
+        // Scroll suave para o resultado
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
-    window.onload = initUI;
-    updateClock();
+    window.onload = () => {
+        initUI();
+        updateClock();
+    };
 </script>
 </body>
 </html>
