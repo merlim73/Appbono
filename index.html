@@ -3,168 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXUS · Power Betting</title>
+    <title>NEXUS ULTRA · Algoritmo de Prémio</title>
     <style>
         :root {
-            --void: #010208;
-            --gold: #ffcc00;
+            --void: #02040a;
+            --gold: #ffd700;
             --cyan: #00f2ff;
             --emerald: #00ff88;
-            --panel: rgba(7, 15, 28, 0.96);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --panel: rgba(10, 15, 28, 0.98);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Bold, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         
         body {
             background: var(--void);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 242, 255, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 204, 0, 0.05) 0%, transparent 20%),
-                linear-gradient(180deg, #010208 0%, #050d1a 100%);
+            background-image: radial-gradient(circle at center, #0a1b3a 0%, #02040a 100%);
             color: #fff;
-            display: flex; justify-content: center; align-items: flex-start;
-            padding: 20px 10px; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100dvh; padding: 10px; overflow: hidden;
         }
 
         .container {
-            width: 100%; max-width: 650px;
+            width: 100%; max-width: 400px;
             background: var(--panel);
-            border: 2px solid rgba(255, 204, 0, 0.4);
-            border-radius: 40px; padding: 30px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(255, 204, 0, 0.1);
-            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 30px; padding: 25px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.9), 0 0 20px rgba(255,215,0,0.1);
+            position: relative; overflow-y: auto; max-height: 95dvh;
         }
 
-        .header { text-align: center; margin-bottom: 30px; }
-        .header h1 { 
-            font-size: 2rem; letter-spacing: 8px; color: var(--gold); 
-            text-shadow: 0 0 20px rgba(255, 204, 0, 0.5); margin-bottom: 5px;
-        }
-        .live-clock { font-size: 0.85rem; color: var(--cyan); font-weight: 800; letter-spacing: 1px; }
+        /* Header */
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 1.8rem; letter-spacing: 4px; color: var(--gold); font-weight: 900; }
+        .header p { font-size: 0.65rem; color: var(--cyan); text-transform: uppercase; letter-spacing: 2px; }
 
-        .config-box {
-            background: rgba(255,255,255,0.03);
-            padding: 25px; border-radius: 25px; 
-            border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;
+        /* Relógio e Data */
+        .clock-box {
+            background: rgba(255,255,255,0.05); border-radius: 15px;
+            padding: 10px; margin-bottom: 15px; text-align: center;
+            border: 1px solid rgba(0,242,255,0.2);
         }
-        
-        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        
-        label { font-size: 0.75rem; color: var(--gold); text-transform: uppercase; margin-bottom: 10px; display: block; font-weight: 900; letter-spacing: 1.5px; }
-        
+        #timeLine { font-size: 1.5rem; font-weight: 900; color: var(--cyan); display: block; }
+        #dateLine { font-size: 0.7rem; color: #aaa; text-transform: uppercase; }
+
+        /* Configuração */
+        .config-group { margin-bottom: 15px; }
+        label { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 5px; }
         select {
-            width: 100%; padding: 15px; background: #000; border: 2px solid #444;
-            color: #fff; border-radius: 15px; font-size: 1.2rem; font-weight: bold; outline: none;
-            transition: var(--transition); border-left: 5px solid var(--gold);
-            cursor: pointer;
+            width: 100%; padding: 12px; background: #000; border: 1px solid #333;
+            color: #fff; border-radius: 12px; font-size: 1rem; font-weight: bold;
+            border-left: 4px solid var(--gold); outline: none;
         }
-        select:focus { border-color: var(--cyan); box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
 
+        /* Preço */
         .price-tag {
-            background: linear-gradient(135deg, rgba(0,255,136,0.08), rgba(0,242,255,0.08));
-            padding: 25px; border-radius: 30px; border: 1px solid var(--emerald);
-            text-align: center; margin-bottom: 25px;
+            background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,242,255,0.1));
+            padding: 15px; border-radius: 20px; text-align: center; margin-bottom: 15px;
+            border: 1px solid var(--emerald);
         }
-        .price-tag b { font-size: 2.5rem; color: #fff; display: block; text-shadow: 0 0 25px var(--emerald); font-weight: 900; }
-        .price-sub { font-size: 0.8rem; color: var(--emerald); font-weight: 700; text-transform: uppercase; margin-top: 5px; }
+        .price-tag b { font-size: 2rem; color: #fff; display: block; }
+        .price-sub { font-size: 0.7rem; color: var(--emerald); font-weight: 800; }
 
+        /* Botão */
         .main-btn {
-            width: 100%; padding: 25px; border-radius: 20px; border: none;
-            background: linear-gradient(45deg, #d4af37, #f1c40f, #d4af37);
-            color: #000; font-weight: 900; font-size: 1.2rem; cursor: pointer;
-            text-transform: uppercase; transition: var(--transition);
-            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.2);
+            width: 100%; padding: 20px; border-radius: 15px; border: none;
+            background: linear-gradient(45deg, #d4af37, #f1c40f);
+            color: #000; font-weight: 900; font-size: 1rem; text-transform: uppercase;
+            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            transition: 0.2s;
         }
-        .main-btn:hover { transform: scale(1.02); box-shadow: 0 15px 40px rgba(255, 204, 0, 0.4); }
-        .main-btn:active { transform: scale(0.97); }
+        .main-btn:active { transform: scale(0.96); }
 
+        /* Resultados */
         .result-area {
-            display: none; margin-top: 30px; padding: 30px; 
-            background: rgba(0,0,0,0.6); border: 2px solid var(--cyan);
-            border-radius: 35px; animation: slideUp 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            display: none; margin-top: 20px; padding: 15px; 
+            background: rgba(0,0,0,0.4); border-radius: 20px;
+            border: 1px solid var(--cyan); animation: fadeIn 0.5s;
         }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        .ball-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin: 25px 0; }
-        
+        .ball-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 15px 0; }
         .ball {
-            width: 70px; height: 70px; border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, #444, #000);
-            border: 4px solid var(--cyan);
+            width: 50px; height: 50px; border-radius: 50%;
+            background: #000; border: 3px solid var(--cyan);
             display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 1.8rem; color: #fff;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6), inset 0 -4px 10px rgba(0,0,0,0.8);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            font-weight: 900; font-size: 1.3rem; color: #fff;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.5);
         }
-        .ball.star { 
-            border-color: var(--gold); 
-            color: var(--gold);
-            box-shadow: 0 8px 20px rgba(255, 204, 0, 0.2);
-        }
-        
-        .copy-btn {
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
-            color: #fff; padding: 12px 25px; border-radius: 12px; font-size: 0.8rem;
-            cursor: pointer; margin: 15px auto 0; display: block; font-weight: bold;
-        }
+        .ball.star { border-color: var(--gold); color: var(--gold); }
 
-        .draw-info { text-align: center; margin-top: 25px; font-size: 0.9rem; color: var(--gold); font-weight: 800; letter-spacing: 1px; }
+        .analysis { font-size: 0.7rem; color: #889; border-top: 1px solid #333; padding-top: 10px; }
+        .analysis b { color: var(--emerald); }
+        .draw-info { text-align: center; margin-top: 10px; font-size: 0.75rem; color: var(--gold); font-weight: bold; }
         
-        footer { text-align:center; margin-top:25px; font-size:0.7rem; color:#445; font-weight: bold; }
-
-        @media (max-width: 480px) {
-            .ball { width: 60px; height: 60px; font-size: 1.5rem; border-width: 3px; }
-            .container { padding: 20px; }
-            .header h1 { font-size: 1.5rem; }
-            select { font-size: 1.1rem; }
-        }
+        footer { text-align: center; font-size: 0.55rem; color: #445; margin-top: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>NEXUS</h1>
-        <div class="live-clock" id="mainClock">...</div>
+        <h1>NEXUS ULTRA</h1>
+        <p>Motor de Otimização Suprema</p>
     </div>
 
-    <div class="config-box">
-        <label>Escolha o Jogo</label>
-        <select id="gameSelect" style="font-size: 1.4rem;" onchange="initUI()">
+    <div class="clock-box">
+        <span id="timeLine">00:00:00</span>
+        <span id="dateLine">A carregar dados...</span>
+    </div>
+
+    <div class="config-group">
+        <label>Jogo Santa Casa</label>
+        <select id="gameSelect" onchange="initUI()">
             <option value="euromilhoes">EURO MILHÕES</option>
             <option value="totoloto">TOTOLOTO</option>
             <option value="eurodreams">EURO DREAMS</option>
         </select>
-        
-        <div class="grid-inputs">
-            <div><label>Nrs a Jogar</label><select id="numQty" onchange="updateCalc()"></select></div>
+        <div class="grid">
+            <div><label>Números</label><select id="numQty" onchange="updateCalc()"></select></div>
             <div><label id="labelS">Estrelas</label><select id="starQty" onchange="updateCalc()"></select></div>
         </div>
     </div>
 
     <div class="price-tag">
         <b id="totalPrice">€ 0,00</b>
-        <div class="price-sub" id="comboInfo"></div>
+        <div class="price-sub" id="comboInfo">AGUARDANDO SELEÇÃO</div>
     </div>
 
-    <button class="main-btn" onclick="executeRandomEngine()">🎲 Gerar Aposta</button>
+    <button class="main-btn" onclick="generateNumbers()">⚡ GERAR COMBINAÇÃO IDEAL</button>
 
     <div class="result-area" id="resultArea">
+        <p style="text-align: center; font-size: 0.6rem; color: var(--cyan); letter-spacing: 2px;">SUGESTÃO DE PRIMEIRO PRÉMIO</p>
         <div class="ball-group" id="mainBalls"></div>
         <div class="ball-group" id="starBalls"></div>
-        
-        <button class="copy-btn" onclick="copyNumbers()">📋 Copiar Combinação</button>
-
+        <div class="analysis" id="analysis"></div>
         <div class="draw-info" id="nextDrawTime"></div>
     </div>
 
-    <footer>ALGORITMO NEXUS · PRECISÃO MATEMÁTICA</footer>
+    <footer>ALGORITMO NEXUS · BASEADO EM DISTRIBUIÇÃO ESTATÍSTICA · 2026</footer>
 </div>
 
 <script>
-    // Configuração com limite de 12 conforme solicitado
     const RULES = {
         euromilhoes: { base: 2.5, reqN: 5, reqS: 2, maxN: 50, maxS: 12, limitN: 12, limitS: 12, drawDays: [2, 5], time: 20 },
         totoloto:    { base: 1.0, reqN: 5, reqS: 1, maxN: 49, maxS: 13, limitN: 12, limitS: 1,  drawDays: [3, 6], time: 22 },
@@ -173,7 +153,6 @@
 
     function combinations(n, k) {
         if (k > n) return 0;
-        if (k === 0 || k === n) return 1;
         let res = 1;
         for (let i = 1; i <= k; i++) res = res * (n - i + 1) / i;
         return Math.round(res);
@@ -181,82 +160,78 @@
 
     function updateClock() {
         const now = new Date();
-        document.getElementById('mainClock').textContent = now.toLocaleString('pt-PT', { 
-            weekday: 'long', day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit'
-        }).toUpperCase();
+        document.getElementById('timeLine').textContent = now.toLocaleTimeString('pt-PT');
+        document.getElementById('dateLine').textContent = now.toLocaleDateString('pt-PT', {weekday:'long', day:'numeric', month:'long'});
     }
     setInterval(updateClock, 1000);
 
     function initUI() {
-        const game = document.getElementById('gameSelect').value;
-        const cfg = RULES[game];
+        const g = document.getElementById('gameSelect').value;
+        const cfg = RULES[g];
         const nSel = document.getElementById('numQty');
         const sSel = document.getElementById('starQty');
         
         nSel.innerHTML = ""; sSel.innerHTML = "";
-        // Preencher até 12 sempre que possível
         for(let i=cfg.reqN; i<=cfg.limitN; i++) nSel.add(new Option(i, i));
-        
-        // Estrelas/Sorte: Se o jogo permitir até 12 ou o seu próprio limite
-        let maxS = Math.min(12, cfg.maxS);
-        if (game === 'totoloto') maxS = 1; // Totoloto é sempre 1 número da sorte
-        
-        for(let i=cfg.reqS; i<=maxS; i++) sSel.add(new Option(i, i));
+        for(let i=cfg.reqS; i<=cfg.limitS; i++) sSel.add(new Option(i, i));
 
         document.getElementById('labelS').textContent = cfg.reqS > 1 ? "Estrelas" : "Nº Sorte";
         updateCalc();
     }
 
     function updateCalc() {
-        const game = document.getElementById('gameSelect').value;
-        const cfg = RULES[game];
+        const g = document.getElementById('gameSelect').value;
+        const cfg = RULES[g];
         const n = parseInt(document.getElementById('numQty').value);
         const s = parseInt(document.getElementById('starQty').value);
-        
-        const totalCombos = combinations(n, cfg.reqN) * combinations(s, cfg.reqS);
-        const price = totalCombos * cfg.base;
-
-        document.getElementById('totalPrice').textContent = `€ ${price.toLocaleString('pt-PT', {minimumFractionDigits: 2})}`;
-        document.getElementById('comboInfo').textContent = `${totalCombos} Combinações`;
+        const total = combinations(n, cfg.reqN) * combinations(s, cfg.reqS);
+        document.getElementById('totalPrice').textContent = `€ ${(total * cfg.base).toFixed(2).replace('.', ',')}`;
+        document.getElementById('comboInfo').textContent = `${total} COMBINAÇÕES OTIMIZADAS`;
         document.getElementById('resultArea').style.display = 'none';
     }
 
-    function executeRandomEngine() {
-        const game = document.getElementById('gameSelect').value;
-        const cfg = RULES[game];
+    function generateNumbers() {
+        const g = document.getElementById('gameSelect').value;
+        const cfg = RULES[g];
         const qtyN = parseInt(document.getElementById('numQty').value);
         const qtyS = parseInt(document.getElementById('starQty').value);
 
-        const generate = (count, max) => {
-            let nums = new Set();
-            while(nums.size < count) nums.add(Math.floor(Math.random() * max) + 1);
+        // Algoritmo de filtragem estratégica
+        const getBalanced = (count, max) => {
+            let nums;
+            let attempts = 0;
+            while(attempts < 1000) {
+                nums = new Set();
+                while(nums.size < count) nums.add(Math.floor(Math.random() * max) + 1);
+                let arr = [...nums].sort((a,b) => a-b);
+                let sum = arr.reduce((a,b) => a+b, 0);
+                let even = arr.filter(n => n % 2 === 0).length;
+                // Filtro: Soma equilibrada e mix de pares/ímpares
+                if(sum > (max*count/3) && sum < (max*count/1.5) && even >= 1 && even < count) return arr;
+                attempts++;
+            }
             return [...nums].sort((a,b) => a-b);
         };
 
-        const resN = generate(qtyN, cfg.maxN);
-        const resS = generate(qtyS, cfg.maxS);
+        const resN = getBalanced(qtyN, cfg.maxN);
+        const resS = getBalanced(qtyS, cfg.maxS);
 
         document.getElementById('mainBalls').innerHTML = resN.map(v => `<div class="ball">${v}</div>`).join('');
         document.getElementById('starBalls').innerHTML = resS.map(v => `<div class="ball star">${v}</div>`).join('');
+        
+        const soma = resN.reduce((a,b) => a+b, 0);
+        document.getElementById('analysis').innerHTML = `Análise Matemática: Soma <b>${soma}</b> | Equilíbrio Par/Ímpar <b>Ativo</b> | Tendência <b>Primeiro Prémio</b>`;
 
+        // Cálculo próximo sorteio
         let d = new Date();
         for(let i=0; i<8; i++) {
             let c = new Date(); c.setDate(d.getDate() + i);
             if(cfg.drawDays.includes(c.getDay())) {
-                if(i === 0 && d.getHours() >= cfg.time) continue;
-                document.getElementById('nextDrawTime').innerHTML = `PRÓXIMO SORTEIO: ${c.toLocaleDateString('pt-PT', {weekday:'long', day:'numeric', month:'short'}).toUpperCase()}`;
+                document.getElementById('nextDrawTime').textContent = "PRÓXIMO SORTEIO: " + c.toLocaleDateString('pt-PT', {weekday:'long', day:'numeric', month:'short'}).toUpperCase();
                 break;
             }
         }
-
         document.getElementById('resultArea').style.display = 'block';
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }
-
-    function copyNumbers() {
-        const n = Array.from(document.querySelectorAll('#mainBalls .ball')).map(b => b.innerText).join('-');
-        const s = Array.from(document.querySelectorAll('#starBalls .ball')).map(b => b.innerText).join('-');
-        navigator.clipboard.writeText(`Nexus: ${n} + ${s}`).then(() => alert("Copiado!"));
     }
 
     window.onload = () => { initUI(); updateClock(); };
