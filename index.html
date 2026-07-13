@@ -327,4 +327,297 @@
     window.onload = () => { initUI(); updateClock(); };
 </script>
 </body>
+</html>            background: var(--panel);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 25px; padding: 25px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+            position: relative; overflow-y: auto; max-height: 95dvh;
+        }
+
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 2rem; letter-spacing: 2px; color: var(--gold); font-weight: 900; }
+        .header p { font-size: 0.8rem; color: var(--cyan); text-transform: uppercase; }
+
+        .clock-box {
+            background: rgba(255,255,255,0.03); border-radius: 15px;
+            padding: 10px; margin-bottom: 20px; text-align: center;
+            border: 1px solid rgba(0,242,255,0.1);
+        }
+        #timeLine { font-size: 1.6rem; font-weight: 900; color: var(--cyan); display: block; }
+        #dateLine { font-size: 0.9rem; color: #889; }
+
+        label { color: var(--gold); text-transform: uppercase; font-weight: 800; display: block; margin-bottom: 8px; }
+        
+        select, textarea {
+            width: 100%; padding: 12px; background: #000; border: 1px solid #444;
+            color: #fff; border-radius: 12px; font-weight: bold;
+            outline: none; appearance: none;
+        }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+
+        .exclude-box textarea {
+            border-left: 5px solid var(--danger); height: 55px;
+        }
+
+        .price-tag {
+            background: linear-gradient(135deg, rgba(0,255,136,0.05), rgba(0,242,255,0.05));
+            padding: 15px; border-radius: 15px; text-align: center; margin-bottom: 20px;
+            border: 1px solid rgba(0,255,136,0.3);
+        }
+        .price-tag b { font-size: 2rem; color: #fff; display: block; }
+        .price-sub { font-size: 0.9rem; color: var(--emerald); font-weight: 800; }
+
+        .main-btn {
+            width: 100%; padding: 20px; border-radius: 15px; border: none;
+            background: linear-gradient(45deg, #d4af37, #f1c40f);
+            color: #000; font-weight: 900; text-transform: uppercase;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .result-area {
+            display: none; margin-top: 25px; padding-top: 15px;
+            border-top: 2px solid rgba(255,215,0,0.2);
+        }
+
+        .combo-block { 
+            background: rgba(255,255,255,0.02); padding: 15px; 
+            border-radius: 20px; margin-bottom: 20px; border: 1px solid #333;
+        }
+        
+        .ball-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 15px 0; }
+        
+        .ball {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: #000; border: 3px solid var(--cyan);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 900; color: #fff; font-size: 1.3rem;
+        }
+        .ball.star { border-color: var(--gold); color: var(--gold); }
+
+        .analysis { 
+            color: #ddd; text-align: center; line-height: 1.6;
+            padding: 12px; border-top: 1px solid #333;
+        }
+        .analysis b { color: var(--emerald); }
+
+        .draw-info { 
+            text-align: center; margin-top: 10px; font-weight: bold; color: var(--gold);
+        }
+
+        .copy-btn {
+            width: 100%; margin-top: 15px; padding: 15px; border-radius: 12px;
+            border: 2px solid var(--cyan); background: transparent;
+            color: var(--cyan); font-weight: 800; cursor: pointer;
+        }
+        .copy-btn.copied { background: var(--emerald); border-color: var(--emerald); color: #000; }
+
+        footer { text-align: center; font-size: 0.7rem; color: #445; margin-top: 30px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>NEXUS ULTRA</h1>
+        <p>Statistical Elite Generator</p>
+    </div>
+
+    <div class="clock-box">
+        <span id="timeLine">00:00:00</span>
+        <span id="dateLine">...</span>
+    </div>
+
+    <div class="config-group">
+        <label>Jogo</label>
+        <select id="gameSelect" onchange="initUI()">
+            <option value="euromilhoes">EURO MILHÕES</option>
+            <option value="totoloto">TOTOLOTO</option>
+            <option value="eurodreams">EURO DREAMS</option>
+        </select>
+        
+        <div class="grid">
+            <div><label>Números</label><select id="numQty" onchange="updateCalc()"></select></div>
+            <div><label id="labelS">Estrelas</label><select id="starQty" onchange="updateCalc()"></select></div>
+        </div>
+    </div>
+
+    <div class="config-group exclude-box">
+        <label>Números a Excluir</label>
+        <textarea id="excludeInput" placeholder="Ex: 5, 18, 31" oninput="updateCalc()"></textarea>
+    </div>
+
+    <div class="config-group">
+        <label>Nº de Apostas</label>
+        <select id="howMany" onchange="updateCalc()">
+            <option value="1">1 Aposta Única</option>
+            <option value="3">3 Apostas Otimizadas</option>
+            <option value="5">5 Apostas Alta Performance</option>
+        </select>
+    </div>
+
+    <div class="price-tag">
+        <b id="totalPrice">€ 0,00</b>
+        <div class="price-sub" id="comboInfo">SISTEMA PRONTO</div>
+    </div>
+
+    <button class="main-btn" onclick="generateNumbers()">⚡ GERAR JOGOS VENCEDORES</button>
+
+    <div class="result-area" id="resultArea">
+        <div id="resultsList"></div>
+        <button class="copy-btn" id="copyBtn" onclick="copyCombination()">📋 COPIAR JOGOS</button>
+        <footer>SISTEMA DE ANÁLISE NEXUS v2.0</footer>
+    </div>
+</div>
+
+<script>
+    const RULES = {
+        euromilhoes: { base: 2.5, reqN: 5, reqS: 2, maxN: 50, maxS: 12, limitN: 12, limitS: 12, drawDays: [2, 5] },
+        totoloto:    { base: 1.0, reqN: 5, reqS: 1, maxN: 49, maxS: 13, limitN: 12, limitS: 1,  drawDays: [3, 6] },
+        eurodreams:  { base: 2.5, reqN: 6, reqS: 1, maxN: 40, maxS: 5,  limitN: 12, limitS: 5,  drawDays: [1, 4] }
+    };
+
+    let generatedData = [];
+
+    function combinations(n, k) {
+        if (k > n) return 0;
+        let res = 1;
+        for (let i = 1; i <= k; i++) res = res * (n - i + 1) / i;
+        return Math.round(res);
+    }
+
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('timeLine').textContent = now.toLocaleTimeString('pt-PT');
+        document.getElementById('dateLine').textContent = now.toLocaleDateString('pt-PT', {weekday:'long', day:'numeric', month:'long'});
+    }
+    setInterval(updateClock, 1000);
+
+    function initUI() {
+        const g = document.getElementById('gameSelect').value;
+        const cfg = RULES[g];
+        const nSel = document.getElementById('numQty');
+        const sSel = document.getElementById('starQty');
+
+        nSel.innerHTML = ""; sSel.innerHTML = "";
+        for(let i=cfg.reqN; i<=cfg.limitN; i++) nSel.add(new Option(i, i));
+        for(let i=cfg.reqS; i<=cfg.limitS; i++) sSel.add(new Option(i, i));
+
+        document.getElementById('labelS').textContent = cfg.reqS > 1 ? "Estrelas" : "Nº Sorte";
+        updateCalc();
+    }
+
+    function updateCalc() {
+        const g = document.getElementById('gameSelect').value;
+        const cfg = RULES[g];
+        const n = parseInt(document.getElementById('numQty').value);
+        const s = parseInt(document.getElementById('starQty').value);
+        const howMany = parseInt(document.getElementById('howMany').value);
+        const total = combinations(n, cfg.reqN) * combinations(s, cfg.reqS);
+        document.getElementById('totalPrice').textContent = `€ ${(total * cfg.base * howMany).toFixed(2).replace('.', ',')}`;
+        document.getElementById('resultArea').style.display = 'none';
+    }
+
+    // ALGORITMO NEXUS ELITE: Maximiza dispersão e equilíbrio
+    function getEliteNumbers(count, max, excluded = []) {
+        const pool = [];
+        for (let i = 1; i <= max; i++) if (!excluded.includes(i)) pool.push(i);
+        
+        for (let attempts = 0; attempts < 5000; attempts++) {
+            let nums = [];
+            let tempPool = [...pool];
+            for(let i=0; i<count; i++) {
+                const idx = Math.floor(Math.random() * tempPool.length);
+                nums.push(tempPool.splice(idx, 1)[0]);
+            }
+            nums.sort((a, b) => a - b);
+
+            const sum = nums.reduce((a, b) => a + b, 0);
+            const evens = nums.filter(n => n % 2 === 0).length;
+            const odds = count - evens;
+            
+            // Filtros de probabilidade realística
+            const avgSum = (count * max) / 2;
+            const sumOk = sum > (avgSum * 0.7) && sum < (avgSum * 1.3);
+            const parityOk = evens >= 1 && odds >= 1;
+            
+            // Bloqueia sequências longas (ex: 1, 2, 3)
+            let seq = 0;
+            for(let i=0; i<nums.length-1; i++) if(nums[i+1] - nums[i] === 1) seq++;
+            
+            if (sumOk && parityOk && seq <= 1) return nums;
+        }
+        return pool.slice(0, count).sort((a,b)=>a-b);
+    }
+
+    function generateNumbers() {
+        const g = document.getElementById('gameSelect').value;
+        const cfg = RULES[g];
+        const qtyN = parseInt(document.getElementById('numQty').value);
+        const qtyS = parseInt(document.getElementById('starQty').value);
+        const howMany = parseInt(document.getElementById('howMany').value);
+        const excluded = document.getElementById('excludeInput').value.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+
+        generatedData = [];
+        let html = "";
+
+        // Próximo sorteio
+        let nextDraw = "";
+        let d = new Date();
+        for (let i = 0; i < 7; i++) {
+            let c = new Date(); c.setDate(d.getDate() + i);
+            if (cfg.drawDays.includes(c.getDay())) {
+                nextDraw = "PRÓXIMO JOGO: " + c.toLocaleDateString('pt-PT', {weekday:'short', day:'numeric', month:'short'}).toUpperCase();
+                break;
+            }
+        }
+
+        for (let i = 0; i < howMany; i++) {
+            const resN = getEliteNumbers(qtyN, cfg.maxN, excluded);
+            const resS = getEliteNumbers(qtyS, cfg.maxS);
+            generatedData.push({ nums: resN, stars: resS });
+
+            html += `
+                <div class="combo-block">
+                    <div class="ball-group">${resN.map(v => `<div class="ball">${v}</div>`).join('')}</div>
+                    <div class="ball-group">${resS.map(v => `<div class="ball star">${v}</div>`).join('')}</div>
+                    <div class="analysis">
+                        Soma: <b>${resN.reduce((a,b)=>a+b,0)}</b> | 
+                        Pares: <b>${resN.filter(n=>n%2===0).length}</b> | Ímpares: <b>${resN.filter(n=>n%2!==0).length}</b>
+                    </div>
+                    <div class="draw-info">${nextDraw}</div>
+                </div>
+            `;
+        }
+
+        document.getElementById('resultsList').innerHTML = html;
+        document.getElementById('resultArea').style.display = 'block';
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function copyCombination() {
+        if (generatedData.length === 0) return;
+        
+        const text = generatedData.map((d, i) => {
+            return `Aposta ${i+1}: ${d.nums.join('-')} | [${d.stars.join('-')}]`;
+        }).join('\n');
+
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('copyBtn');
+            btn.classList.add('copied');
+            btn.textContent = '✓ COPIADO COM SUCESSO';
+            
+            // REMOVE A DATA DO ECRÃ APÓS COPIAR
+            document.querySelectorAll('.draw-info').forEach(el => el.style.display = 'none');
+            
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.textContent = '📋 COPIAR JOGOS';
+            }, 2000);
+        });
+    }
+
+    window.onload = () => { initUI(); updateClock(); };
+</script>
+</body>
 </html>
