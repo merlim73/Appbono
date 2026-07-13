@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>NEXUS ULTRA V6</title>
+  <title>NEXUS ULTRA V6 · Matemática Avançada</title>
   <style>
     :root {
       --void: #02040a;
@@ -111,7 +111,7 @@
       text-align: center;
       margin-bottom: 4px;
     }
-    .freq-col .num-item {
+    .num-item {
       display: inline-block;
       background: #111;
       padding: 2px 10px;
@@ -120,8 +120,8 @@
       font-size: 0.8rem;
       white-space: nowrap;
     }
-    .freq-col .hot { color: var(--danger); }
-    .freq-col .cold { color: var(--cyan); }
+    .num-item.hot { color: var(--danger); }
+    .num-item.cold { color: var(--cyan); }
 
     label {
       color: var(--gold);
@@ -260,7 +260,7 @@
 <div class="container">
   <div class="header">
     <h1>NEXUS ULTRA</h1>
-    <p>Jogo rápido · aleatório · filtros estatísticos</p>
+    <p>Filtragem Avançada · Probabilidade Realista</p>
   </div>
 
   <div class="clock-box">
@@ -271,7 +271,7 @@
   <div class="info-box" id="gameInfo">Escolhe o jogo para ver regras e sorteios.</div>
 
   <div class="freq-box" id="freqBox">
-    <b>📊 Frequência (5000 sorteios)</b><br>
+    <b>📊 Frequência (10.000 simulações)</b><br>
     <div id="freqContent">A simular...</div>
   </div>
 
@@ -312,7 +312,7 @@
   <div class="result-area" id="resultArea">
     <div id="resultsList"></div>
     <button class="copy-btn" id="copyBtn" onclick="copyCombination()">📋 COPIAR JOGOS</button>
-    <footer>SISTEMA NEXUS v6.0 · Probabilidade 1/1 (cada número)</footer>
+    <footer>SISTEMA NEXUS v6.1 · Filtros estatísticos avançados · Divirta-se com responsabilidade</footer>
   </div>
 </div>
 
@@ -357,6 +357,13 @@
     return true;
   }
 
+  function isFibonacci(num) {
+    if (num < 0) return false;
+    let a = 0, b = 1;
+    while (b < num) [a, b] = [b, a + b];
+    return b === num || num === 0;
+  }
+
   function combinations(n, k) {
     if (k > n) return 0;
     let res = 1;
@@ -375,9 +382,9 @@
   setInterval(updateClock, 1000);
 
   // ------------------------------------------------------------
-  // SIMULAÇÃO DE 5000 SORTEIOS (com os mesmos filtros)
+  // SIMULAÇÃO DE 10.000 SORTEIOS (com os mesmos filtros)
   // ------------------------------------------------------------
-  function simulateFrequencies(gameKey, numQty, starQty, draws = 5000) {
+  function simulateFrequencies(gameKey, numQty, starQty, draws = 10000) {
     const cfg = RULES[gameKey];
     const numFreq = new Array(cfg.maxN + 1).fill(0);
     const starFreq = new Array(cfg.maxS + 1).fill(0);
@@ -385,7 +392,6 @@
     let lastStars = [];
 
     for (let d = 0; d < draws; d++) {
-      // Geração com filtros (sem ponderação) para simulação realista
       const nums = generateRawNumbers(cfg, numQty, lastNums, []);
       const stars = generateRawStars(cfg, starQty, lastStars, []);
       nums.forEach(n => numFreq[n]++);
@@ -396,7 +402,6 @@
     return { nums: numFreq, stars: starFreq };
   }
 
-  // Geração "crua" com filtros (usada na simulação)
   function generateRawNumbers(cfg, qty, lastNums, excluded) {
     const max = cfg.maxN;
     const pool = [];
@@ -406,7 +411,7 @@
     const avoid = new Set(lastNums || []);
     const filteredPool = pool.filter(n => !avoid.has(n));
     const finalPool = filteredPool.length >= qty ? filteredPool : pool;
-    return applyFilters(finalPool, qty, cfg);
+    return advancedFilter(finalPool, qty, cfg);
   }
 
   function generateRawStars(cfg, qty, lastStars, excluded) {
@@ -418,7 +423,6 @@
     const avoid = new Set(lastStars || []);
     const filteredPool = pool.filter(s => !avoid.has(s));
     const finalPool = filteredPool.length >= qty ? filteredPool : pool;
-    // Seleção simples com filtros mínimos (atraso)
     const res = [];
     const temp = finalPool.slice();
     for (let i = 0; i < qty; i++) {
@@ -429,14 +433,16 @@
     return res.sort((a,b)=>a-b);
   }
 
-  // Aplicação de filtros rigorosos (usado na simulação e na geração ponderada)
-  function applyFilters(pool, count, cfg) {
+  // ------------------------------------------------------------
+  // FILTRO AVANÇADO (núcleo matemático)
+  // ------------------------------------------------------------
+  function advancedFilter(pool, count, cfg) {
     const max = cfg.maxN;
     const mid = Math.floor(max / 2);
     const avgSum = (count * (1 + max)) / 2;
-    const targetPrimes = count === 5 ? 1 : 2; // pelo menos 1 primo
+    const theoreticalStd = Math.sqrt((count * (max * max - 1)) / 12); // desvio padrão teórico
 
-    for (let attempts = 0; attempts < 15000; attempts++) {
+    for (let attempt = 0; attempt < 25000; attempt++) {
       let nums = [];
       let temp = pool.slice();
       for (let i = 0; i < count; i++) {
@@ -447,86 +453,77 @@
       if (nums.length < count) continue;
       nums.sort((a,b)=>a-b);
 
-      const relaxation = Math.floor(attempts / 1500);
+      const relax = Math.floor(attempt / 1800); // 14 níveis de relaxamento
 
-      // 1. Soma total dentro de 15% da média (com relaxação)
+      // 1. Soma dentro de 1.2 desvios padrão (relaxa até 2.5)
       const sum = nums.reduce((a,b)=>a+b,0);
-      const tolerance = 0.12 + (relaxation * 0.02);
-      const minSum = avgSum * (1 - tolerance);
-      const maxSum = avgSum * (1 + tolerance);
-      if (sum < minSum || sum > maxSum) continue;
+      const zSum = Math.abs(sum - avgSum) / theoreticalStd;
+      if (zSum > 1.2 + relax * 0.1) continue;
 
-      // 2. Paridade equilibrada (2 ou 3 pares para 5 números; 3 para 6)
-      const evens = nums.filter(n => n % 2 === 0).length;
-      const odds = count - evens;
-      if (relaxation < 3) {
-        if (count === 5 && (evens < 2 || evens > 3)) continue;
-        if (count === 6 && (evens < 2 || evens > 4)) continue;
-      } else {
-        if (evens === 0 || odds === 0) continue;
-      }
-
-      // 3. Distribuição altos/baixos (equilibrada)
-      const lows = nums.filter(n => n <= mid).length;
-      const highs = count - lows;
-      if (relaxation < 4) {
-        if (count === 5 && (lows < 2 || lows > 3)) continue;
-        if (count === 6 && (lows < 2 || lows > 4)) continue;
-      } else {
-        if (lows === 0 || highs === 0) continue;
-      }
-
-      // 4. Sem triplas consecutivas e no máximo 1 par consecutivo
-      let consecPairs = 0;
-      let hasTriple = false;
-      for (let i = 0; i < nums.length - 1; i++) {
-        if (nums[i+1] - nums[i] === 1) {
-          consecPairs++;
-          if (i < nums.length - 2 && nums[i+2] - nums[i+1] === 1) hasTriple = true;
-        }
-      }
-      if (hasTriple) continue;
-      if (relaxation < 5 && consecPairs > 1) continue;
-
-      // 5. Números primos: pelo menos 1 e no máximo 3
-      const primeCount = nums.filter(isPrime).length;
-      if (primeCount < 1 || primeCount > 3) continue;
-
-      // 6. Terminações distintas (máx 2 iguais)
-      const endings = {};
-      let maxEnd = 0;
-      nums.forEach(n => {
-        const d = n % 10;
-        endings[d] = (endings[d] || 0) + 1;
-        if (endings[d] > maxEnd) maxEnd = endings[d];
-      });
-      if (relaxation < 6 && maxEnd > 2) continue;
-
-      // 7. Distribuição por dezenas (máx 2 por dezena para jogos com max ≥ 40)
-      const decades = {};
-      let maxDec = 0;
-      nums.forEach(n => {
-        const dec = Math.floor((n-1)/10);
-        decades[dec] = (decades[dec] || 0) + 1;
-        if (decades[dec] > maxDec) maxDec = decades[dec];
-      });
-      if (max >= 40 && (relaxation < 5 && maxDec > 2)) continue;
-
-      // 8. Soma dos dígitos (evitar extremos) – critério extra
-      const digitSum = nums.reduce((s, n) => s + String(n).split('').reduce((a,b)=>a+parseInt(b),0), 0);
-      const avgDigit = digitSum / count;
-      if (avgDigit < 2 || avgDigit > 7) continue; // para 1-50, média ~3
-
-      // 9. Desvio padrão da amostra (evitar concentração)
+      // 2. Desvio padrão amostral próximo do teórico
       const mean = sum / count;
       const variance = nums.reduce((s, n) => s + (n - mean) ** 2, 0) / count;
-      const stdDev = Math.sqrt(variance);
-      const maxStd = (max - 1) / 3.5; // ~14 para 50 números
-      if (relaxation < 4 && stdDev < 6) continue; // demasiado concentrado
+      const std = Math.sqrt(variance);
+      const ratio = std / theoreticalStd;
+      if (ratio < 0.4 || ratio > 1.9 + relax * 0.05) continue;
 
-      // 10. Não repetir dezenas (pelo menos 3 dezenas diferentes para 5 números)
-      const uniqueDecades = Object.keys(decades).length;
-      if (relaxation < 5 && uniqueDecades < 3) continue;
+      // 3. Paridade equilibrada
+      const evens = nums.filter(n => n % 2 === 0).length;
+      if (count === 5 && (evens < 1 || evens > 4)) continue;
+      if (count === 6 && (evens < 2 || evens > 4)) continue;
+
+      // 4. Distribuição altos/baixos
+      const lows = nums.filter(n => n <= mid).length;
+      if (count === 5 && (lows < 1 || lows > 4)) continue;
+      if (count === 6 && (lows < 2 || lows > 4)) continue;
+
+      // 5. Consecutivos: máximo 1 par, zero triplas
+      let consec = 0;
+      let triple = false;
+      for (let i = 0; i < nums.length - 1; i++) {
+        if (nums[i+1] - nums[i] === 1) consec++;
+        if (i < nums.length - 2 && nums[i+1] - nums[i] === 1 && nums[i+2] - nums[i+1] === 1) triple = true;
+      }
+      if (triple || consec > 1) continue;
+
+      // 6. Primos (1-3 para 5 nums, 2-4 para 6)
+      const primes = nums.filter(isPrime).length;
+      if (count === 5 && (primes < 1 || primes > 3)) continue;
+      if (count === 6 && (primes < 2 || primes > 4)) continue;
+
+      // 7. Terminações (máximo 2 iguais)
+      const endings = {};
+      nums.forEach(n => { const d = n % 10; endings[d] = (endings[d] || 0) + 1; });
+      if (Object.values(endings).some(v => v > 2)) continue;
+
+      // 8. Distribuição por dezenas (máximo 2 por dezena se max>=40)
+      const decades = {};
+      nums.forEach(n => { const d = Math.floor((n-1)/10); decades[d] = (decades[d] || 0) + 1; });
+      if (max >= 40 && Object.values(decades).some(v => v > 2)) continue;
+      if (Object.keys(decades).length < 2) continue;
+
+      // 9. Números Fibonacci (máximo 2)
+      if (nums.filter(isFibonacci).length > 2) continue;
+
+      // 10. Soma dos dígitos total dentro de 1.5 desvios da média
+      const digitSum = nums.reduce((s, n) => s + String(n).split('').reduce((a,b)=>a+parseInt(b),0), 0);
+      const avgDigitSum = count * 4.5; // valor médio aproximado
+      if (Math.abs(digitSum - avgDigitSum) > count * 2.5) continue;
+
+      // 11. Lacuna média (gap) entre números vizinhos
+      const gaps = nums.slice(1).map((n,i) => n - nums[i-1]);
+      const avgGap = gaps.reduce((a,b)=>a+b,0) / gaps.length;
+      const maxGap = Math.max(...gaps);
+      if (avgGap < 2 || avgGap > (max / count) * 1.8 || maxGap > max * 0.6) continue;
+
+      // 12. Números espelho (ex: 12 e 21) – raros, evitamos mais de 1 par
+      let mirrorPairs = 0;
+      for (let i = 0; i < nums.length; i++) {
+        for (let j = i+1; j < nums.length; j++) {
+          if (String(nums[i]) === String(nums[j]).split('').reverse().join('')) mirrorPairs++;
+        }
+      }
+      if (mirrorPairs > 1) continue;
 
       return nums;
     }
@@ -559,9 +556,7 @@
     document.getElementById('labelS').textContent = cfg.reqS > 1 ? "Estrelas" : "Número da Sorte";
     document.getElementById('gameInfo').textContent = cfg.info;
 
-    // Atualizar frequências (assíncrono)
     updateFrequencies(g);
-
     updateCalc();
   }
 
@@ -573,9 +568,9 @@
 
     if (!freqData[key] && !isSimulating) {
       isSimulating = true;
-      document.getElementById('freqContent').innerHTML = '⏳ A simular 5000 sorteios...';
+      document.getElementById('freqContent').innerHTML = '⏳ A simular 10.000 sorteios...';
       setTimeout(() => {
-        const data = simulateFrequencies(gameKey, numQty, starQty, 5000);
+        const data = simulateFrequencies(gameKey, numQty, starQty, 10000);
         freqData[key] = data;
         isSimulating = false;
         displayFrequencies(data);
@@ -637,20 +632,15 @@
       if (!excluded.includes(i)) pool.push(i);
     }
 
-    // Atraso: evitar números dos últimos 2 sorteios
-    const avoid = new Set();
-    if (lastNums) {
-      lastNums.forEach(n => avoid.add(n));
-    }
+    const avoid = new Set(lastNums || []);
     const filteredPool = pool.filter(n => !avoid.has(n));
     const finalPool = filteredPool.length >= qty ? filteredPool : pool;
 
-    // Pesos inversos à frequência
+    // Pesos inversamente proporcionais à frequência (regressão à média)
     const weights = finalPool.map(n => 1 / ((freqData.nums[n] || 0) + 1));
     const totalWeight = weights.reduce((a,b)=>a+b, 0);
     const normWeights = weights.map(w => w / totalWeight);
 
-    // Amostragem ponderada com reposição (mas sem reposição, removemos)
     let selected = [];
     let available = finalPool.slice();
     let availW = normWeights.slice();
@@ -668,8 +658,7 @@
       available.splice(idx, 1);
       availW.splice(idx, 1);
     }
-    // Aplicar filtros rigorosos sobre a seleção inicial
-    return applyFilters(finalPool, qty, cfg);
+    return advancedFilter(finalPool, qty, cfg);
   }
 
   function getWeightedStars(cfg, qty, excluded, freqData, lastStars) {
@@ -727,18 +716,15 @@
     let html = "";
     const nextDraw = nextDrawText(cfg.drawDays);
 
-    // Histórico para atraso (últimos 2 sorteios)
     let lastNums = lastNumsHist.length ? lastNumsHist.slice(-2) : [];
     let lastStars = lastStarsHist.length ? lastStarsHist.slice(-2) : [];
 
     for (let i = 0; i < howMany; i++) {
-      // Gerar números com ponderação e filtros
       const nums = getWeightedNumbers(cfg, qtyN, excluded, freq, lastNums);
       const stars = getWeightedStars(cfg, qtyS, excluded, freq, lastStars);
 
       generatedData.push({ nums, stars });
 
-      // Atualizar histórico
       lastNums.push(nums);
       lastStars.push(stars);
       if (lastNums.length > 2) lastNums.shift();
@@ -755,7 +741,7 @@
             Pares: <b>${nums.filter(n=>n%2===0).length}</b> |
             Ímpares: <b>${nums.filter(n=>n%2!==0).length}</b>
             <br/>
-            Índice de Viabilidade Real: <b style="color: var(--emerald);">${score}%</b> (Padrão Santa Casa)
+            Índice de Viabilidade Real: <b style="color: var(--emerald);">${score}%</b>
           </div>
           <div class="draw-info">${nextDraw}</div>
         </div>
@@ -774,47 +760,40 @@
   // AVALIAÇÃO DE VIABILIDADE (MAIS REALISTA)
   // ------------------------------------------------------------
   function calculateMatchScore(nums, max) {
-    // Base: 85% se cumprir critérios mínimos
-    let score = 85.0;
     const count = nums.length;
-    const mid = Math.floor(max / 2);
     const avgSum = (count * (1 + max)) / 2;
+    const theoreticalStd = Math.sqrt((count * (max * max - 1)) / 12);
     const sum = nums.reduce((a,b)=>a+b,0);
-    const deviation = Math.abs(sum - avgSum) / avgSum;
-
-    // 1. Soma (máx +5%)
-    if (deviation < 0.05) score += 4.5;
-    else if (deviation < 0.10) score += 3.0;
-    else if (deviation < 0.15) score += 1.5;
-
-    // 2. Paridade (máx +3%)
+    const mean = sum / count;
+    const variance = nums.reduce((s, n) => s + (n - mean) ** 2, 0) / count;
+    const std = Math.sqrt(variance);
+    const zSum = Math.abs(sum - avgSum) / theoreticalStd;
+    const ratioStd = std / theoreticalStd;
     const evens = nums.filter(n => n % 2 === 0).length;
-    if (count === 5 && (evens === 2 || evens === 3)) score += 3.0;
-    else if (count === 6 && evens === 3) score += 3.0;
-    else score += 0.5;
-
-    // 3. Distribuição altos/baixos (máx +3%)
-    const lows = nums.filter(n => n <= mid).length;
-    if (count === 5 && (lows === 2 || lows === 3)) score += 3.0;
-    else if (count === 6 && lows === 3) score += 3.0;
-    else score += 0.5;
-
-    // 4. Números primos (máx +2%)
     const primes = nums.filter(isPrime).length;
-    if (primes >= 1 && primes <= 2) score += 2.0;
-    else score += 0.5;
+    const endings = new Set(nums.map(n => n % 10)).size;
+    const decades = new Set(nums.map(n => Math.floor((n-1)/10))).size;
+    const gaps = nums.slice(1).map((n,i) => n - nums[i-1]);
+    const avgGap = gaps.reduce((a,b)=>a+b,0) / gaps.length;
+    const fibCount = nums.filter(isFibonacci).length;
 
-    // 5. Terminações únicas (máx +2%)
-    const endings = new Set(nums.map(n => n % 10));
-    if (endings.size >= count - 1) score += 2.0;
-    else score += 0.5;
+    let score = 100;
 
-    // 6. Distribuição por dezenas (máx +3%)
-    const decades = new Set(nums.map(n => Math.floor((n-1)/10)));
-    if (decades.size >= 3) score += 3.0;
-    else if (decades.size >= 2) score += 1.5;
+    score -= zSum * 6;               // penaliza soma atípica
+    score -= Math.abs(1 - ratioStd) * 12; // penaliza dispersão anormal
+    if (count === 5) {
+      if (evens < 1 || evens > 4) score -= 8;
+    } else {
+      if (evens < 2 || evens > 4) score -= 8;
+    }
+    if (primes < 1 || primes > 3) score -= 6;
+    if (endings < count - 1) score -= 4;
+    if (decades < 3) score -= 5;
+    if (avgGap < 2 || avgGap > max / count * 1.5) score -= 5;
+    if (fibCount > 2) score -= 3;
+    if (new Set(nums).size < count) score -= 20; // duplicatas (não deve acontecer)
 
-    return Math.min(100.0, Math.max(60.0, score)).toFixed(1);
+    return Math.min(99.9, Math.max(60.0, score)).toFixed(1);
   }
 
   // ------------------------------------------------------------
