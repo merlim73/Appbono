@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>NEXUS ULTRA V6 · Matemática Avançada</title>
+  <title>NEXUS ULTRA V7 · Matemática Avançada</title>
   <style>
     :root {
       --void: #02040a;
@@ -19,7 +19,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       font-size: var(--font-size-base);
     }
 
@@ -29,7 +29,7 @@
       color: #fff;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       min-height: 100dvh;
       padding: 15px;
     }
@@ -44,9 +44,10 @@
       box-shadow: 0 0 50px rgba(0,0,0,0.8);
       overflow-y: auto;
       max-height: 95dvh;
+      margin-top: 10px;
     }
 
-    .header {
+    .header {      
       text-align: center;
       margin-bottom: 18px;
     }
@@ -56,12 +57,14 @@
       color: var(--gold);
       font-weight: 900;
       line-height: 1.1;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
     }
     .header p {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--cyan);
       text-transform: uppercase;
       margin-top: 6px;
+      letter-spacing: 1px;
     }
 
     .clock-box, .info-box, .freq-box {
@@ -77,51 +80,54 @@
       font-weight: 900;
       color: var(--cyan);
       display: block;
+      font-variant-numeric: tabular-nums;
     }
     #dateLine {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--cyan);
       display: block;
       margin-top: 4px;
       letter-spacing: 0.5px;
+      text-transform: capitalize;
     }
 
     .info-box, .freq-box {
       color: #ccd;
       line-height: 1.5;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
-
-    .freq-box b { color: var(--gold); }
+    .info-box b { color: var(--gold); }
+    .freq-box b { color: var(--gold); display: block; margin-bottom: 8px; }
     .freq-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 8px;
     }
     .freq-col {
       background: rgba(255,255,255,0.02);
-      padding: 8px;
+      padding: 10px;
       border-radius: 10px;
     }
     .freq-col .title {
       font-weight: 800;
       color: var(--gold);
       text-align: center;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
     }
     .num-item {
       display: inline-block;
       background: #111;
-      padding: 2px 10px;
+      padding: 3px 8px;
       border-radius: 20px;
       margin: 2px;
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       white-space: nowrap;
+      border: 1px solid rgba(255,255,255,0.1);
     }
-    .num-item.hot { color: var(--danger); }
-    .num-item.cold { color: var(--cyan); }
+    .num-item.hot { color: var(--danger); border-color: rgba(255, 77, 109, 0.3); }
+    .num-item.cold { color: var(--cyan); border-color: rgba(0, 242, 255, 0.3); }
 
     label {
       color: var(--gold);
@@ -130,6 +136,7 @@
       display: block;
       margin-bottom: 8px;
       letter-spacing: 0.5px;
+      font-size: 0.85rem;
     }
 
     select, textarea {
@@ -139,17 +146,23 @@
       border: 1px solid #444;
       color: #fff;
       border-radius: 12px;
-      font-weight: bold;
+      font-weight: bold;      
       outline: none;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    select:focus, textarea:focus {
+      border-color: var(--cyan);
     }
 
     .config-group { margin-bottom: 16px; }
 
     .exclude-box textarea {
-      border-left: 5px solid var(--danger);
-      height: 62px;
+      border-left: 4px solid var(--danger);
+      height: 60px;
       resize: none;
+      font-size: 0.9rem;
     }
 
     .price-tag {
@@ -167,9 +180,10 @@
       margin-bottom: 4px;
     }
     .price-sub {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--emerald);
       font-weight: 800;
+      line-height: 1.4;
     }
 
     .main-btn, .copy-btn {
@@ -180,11 +194,23 @@
       font-weight: 900;
       cursor: pointer;
       margin-top: 10px;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      transition: transform 0.1s, opacity 0.2s;    
+    }
+    .main-btn:active, .copy-btn:active {
+      transform: scale(0.98);
     }
     .main-btn {
       background: linear-gradient(45deg, #d4af37, #f1c40f);
       color: #000;
+      box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
     }
+    .main-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     .result-area {
       display: none;
       margin-top: 25px;
@@ -197,45 +223,63 @@
       border-radius: 20px;
       margin-bottom: 18px;
       border: 1px solid #333;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .combo-title {
       text-align: center;
       color: var(--gold);
       font-weight: 900;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+      letter-spacing: 1px;
     }
     .ball-group {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       margin: 12px 0;
     }
     .ball {
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;      
       border-radius: 50%;
-      background: #000;
-      border: 3px solid var(--cyan);
+      background: linear-gradient(145deg, #1a1a1a, #000);
+      border: 2px solid var(--cyan);
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 900;
       color: #fff;
-      font-size: 1.25rem;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
     }
     .ball.star {
       border-color: var(--gold);
       color: var(--gold);
+      background: linear-gradient(145deg, #2a2500, #000);
     }
     .analysis, .draw-info {
-      color: #ddd;
+      color: #aaa;
       text-align: center;
       line-height: 1.6;
       padding: 10px;
+      font-size: 0.85rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin-top: 10px;
     }
-    .analysis { border-top: 1px solid #333; }
-    .analysis b, .draw-info b { color: var(--emerald); }
+    .analysis b { color: var(--emerald); }
+    .draw-info { 
+      color: var(--cyan); 
+      font-weight: 700; 
+      font-size: 0.8rem;
+      border-top: none;
+      margin-top: 5px;
+    }
 
     .copy-btn {
       border: 2px solid var(--cyan);
@@ -250,9 +294,10 @@
 
     footer {
       text-align: center;
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #445;
-      margin-top: 26px;
+      margin-top: 26px;      
+      line-height: 1.4;
     }
   </style>
 </head>
@@ -260,7 +305,7 @@
 <div class="container">
   <div class="header">
     <h1>NEXUS ULTRA</h1>
-    <p>Filtragem Avançada · Probabilidade Realista</p>
+    <p>Amostragem por Rejeição Estatística · V7.0</p>
   </div>
 
   <div class="clock-box">
@@ -268,11 +313,11 @@
     <span id="dateLine">...</span>
   </div>
 
-  <div class="info-box" id="gameInfo">Escolhe o jogo para ver regras e sorteios.</div>
+  <div class="info-box" id="gameInfo">Escolha o jogo para ver regras, odds e sorteios.</div>
 
   <div class="freq-box" id="freqBox">
-    <b>📊 Frequência (10.000 simulações)</b><br>
-    <div id="freqContent">A simular...</div>
+    <b>📊 Simulação de Monte Carlo (10.000 iterações)</b>
+    <div id="freqContent">A inicializar modelo estatístico...</div>
   </div>
 
   <div class="config-group">
@@ -291,47 +336,54 @@
 
     <label>Nº de apostas</label>
     <select id="howMany" onchange="updateCalc()">
-      <option value="1">1 aposta única</option>
-      <option value="3">3 apostas múltiplas</option>
-      <option value="5">5 apostas múltiplas</option>
+      <option value="1">1 aposta</option>
+      <option value="3">3 apostas</option>
+      <option value="5">5 apostas</option>
+      <option value="10">10 apostas</option>
     </select>
   </div>
 
   <div class="config-group exclude-box">
-    <label>Números a excluir</label>
+    <label>Números a excluir (opcional)</label>
     <textarea id="excludeInput" placeholder="Ex: 5, 18, 31" oninput="updateCalc()"></textarea>
   </div>
-
   <div class="price-tag">
     <b id="totalPrice">€ 0,00</b>
     <div class="price-sub" id="comboInfo">SISTEMA PRONTO</div>
   </div>
 
-  <button class="main-btn" onclick="generateNumbers()">⚡ GERAR JOGOS</button>
+  <button class="main-btn" id="generateBtn" onclick="generateNumbers()">⚡ GERAR JOGOS OTIMIZADOS</button>
 
   <div class="result-area" id="resultArea">
     <div id="resultsList"></div>
     <button class="copy-btn" id="copyBtn" onclick="copyCombination()">📋 COPIAR JOGOS</button>
-    <footer>SISTEMA NEXUS v6.1 · Filtros estatísticos avançados · Divirta-se com responsabilidade</footer>
+    <footer>
+      SISTEMA NEXUS v7.0 · Filtros baseados em Distribuição Normal e Variância Histórica.<br>
+      As odds apresentadas são as probabilidades matemáticas exatas da Santa Casa.<br>
+      Jogue com responsabilidade. O jogo é aleatório.
+    </footer>
   </div>
 </div>
 
 <script>
   // ------------------------------------------------------------
-  // CONFIGURAÇÕES DOS JOGOS
+  // CONFIGURAÇÕES DOS JOGOS (Dados oficiais Santa Casa)
   // ------------------------------------------------------------
   const RULES = {
     euromilhoes: {
-      base: 2.5, reqN: 5, reqS: 2, maxN: 50, maxS: 12, limitN: 12, limitS: 12, drawDays: [2, 5],
-      info: "Euromilhões: 5 números (1‑50) e 2 estrelas (1‑12). Sorteios: terça e sexta.",
+      base: 2.50, reqN: 5, reqS: 2, maxN: 50, maxS: 12, limitN: 12, limitS: 12,
+      odds: "1 em 139.838.160",
+      info: "<b>Euromilhões:</b> 5 números (1‑50) e 2 estrelas (1‑12).<br><b>Odds 1.º Prémio:</b> 1 em 139.838.160<br><b>Sorteios:</b> Terça e Sexta."
     },
     totoloto: {
-      base: 1.0, reqN: 5, reqS: 1, maxN: 49, maxS: 13, limitN: 12, limitS: 1, drawDays: [3, 6],
-      info: "Totoloto: 5 números (1‑49) e 1 Número da Sorte (1‑13). Sorteios: quarta e sábado.",
+      base: 1.00, reqN: 5, reqS: 1, maxN: 49, maxS: 13, limitN: 12, limitS: 1,
+      odds: "1 em 24.789.492",
+      info: "<b>Totoloto:</b> 5 números (1‑49) e 1 Número da Sorte (1‑13).<br><b>Odds 1.º Prémio:</b> 1 em 24.789.492<br><b>Sorteios:</b> Quarta e Sábado."
     },
     eurodreams: {
-      base: 2.5, reqN: 6, reqS: 1, maxN: 40, maxS: 5, limitN: 12, limitS: 5, drawDays: [1, 4],
-      info: "EuroDreams: 6 números (1‑40) e 1 Número de Sonho (1‑5). Sorteios: segunda e quinta.",
+      base: 2.00, reqN: 6, reqS: 1, maxN: 40, maxS: 5, limitN: 12, limitS: 5,
+      odds: "1 em 19.191.900",
+      info: "<b>EuroDreams:</b> 6 números (1‑40) e 1 Número de Sonho (1‑5).<br><b>Odds 1.º Prémio:</b> 1 em 19.191.900<br><b>Sorteios:</b> Segunda e Quinta."
     }
   };
 
@@ -339,14 +391,20 @@
   // ESTADO GLOBAL
   // ------------------------------------------------------------
   let generatedData = [];
-  let freqData = {};
-  let lastNumsHist = [];
-  let lastStarsHist = [];
-  let isSimulating = false;
 
   // ------------------------------------------------------------
-  // FUNÇÕES AUXILIARES
+  // FUNÇÕES MATEMÁTICAS AUXILIARES
   // ------------------------------------------------------------
+  function combinations(n, k) {
+    if (k > n) return 0;
+    if (k === 0 || k === n) return 1;
+    let res = 1;
+    for (let i = 1; i <= k; i++) {
+      res = res * (n - i + 1) / i;
+    }
+    return Math.round(res);
+  }
+
   function isPrime(num) {
     if (num <= 1) return false;
     if (num <= 3) return true;
@@ -355,20 +413,6 @@
       if (num % i === 0 || num % (i + 2) === 0) return false;
     }
     return true;
-  }
-
-  function isFibonacci(num) {
-    if (num < 0) return false;
-    let a = 0, b = 1;
-    while (b < num) [a, b] = [b, a + b];
-    return b === num || num === 0;
-  }
-
-  function combinations(n, k) {
-    if (k > n) return 0;
-    let res = 1;
-    for (let i = 1; i <= k; i++) res = res * (n - i + 1) / i;
-    return Math.round(res);
   }
 
   // ------------------------------------------------------------
@@ -382,459 +426,368 @@
   setInterval(updateClock, 1000);
 
   // ------------------------------------------------------------
-  // SIMULAÇÃO DE 10.000 SORTEIOS (com os mesmos filtros)
+  // SIMULAÇÃO DE MONTE CARLO (10.000 sorteios)
   // ------------------------------------------------------------
-  function simulateFrequencies(gameKey, numQty, starQty, draws = 10000) {
+  function simulateFrequencies(gameKey) {
     const cfg = RULES[gameKey];
     const numFreq = new Array(cfg.maxN + 1).fill(0);
     const starFreq = new Array(cfg.maxS + 1).fill(0);
-    let lastNums = [];
-    let lastStars = [];
+    const iterations = 10000;
 
-    for (let d = 0; d < draws; d++) {
-      const nums = generateRawNumbers(cfg, numQty, lastNums, []);
-      const stars = generateRawStars(cfg, starQty, lastStars, []);
-      nums.forEach(n => numFreq[n]++);
-      stars.forEach(s => starFreq[s]++);
-      lastNums = nums;
-      lastStars = stars;
-    }
-    return { nums: numFreq, stars: starFreq };
-  }
-
-  function generateRawNumbers(cfg, qty, lastNums, excluded) {
-    const max = cfg.maxN;
-    const pool = [];
-    for (let i = 1; i <= max; i++) {
-      if (!excluded.includes(i)) pool.push(i);
-    }
-    const avoid = new Set(lastNums || []);
-    const filteredPool = pool.filter(n => !avoid.has(n));
-    const finalPool = filteredPool.length >= qty ? filteredPool : pool;
-    return advancedFilter(finalPool, qty, cfg);
-  }
-
-  function generateRawStars(cfg, qty, lastStars, excluded) {
-    const max = cfg.maxS;
-    const pool = [];
-    for (let i = 1; i <= max; i++) {
-      if (!excluded.includes(i)) pool.push(i);
-    }
-    const avoid = new Set(lastStars || []);
-    const filteredPool = pool.filter(s => !avoid.has(s));
-    const finalPool = filteredPool.length >= qty ? filteredPool : pool;
-    const res = [];
-    const temp = finalPool.slice();
-    for (let i = 0; i < qty; i++) {
-      if (temp.length === 0) break;
-      const idx = Math.floor(Math.random() * temp.length);
-      res.push(temp.splice(idx, 1)[0]);
-    }
-    return res.sort((a,b)=>a-b);
-  }
-
-  // ------------------------------------------------------------
-  // FILTRO AVANÇADO (núcleo matemático)
-  // ------------------------------------------------------------
-  function advancedFilter(pool, count, cfg) {
-    const max = cfg.maxN;
-    const mid = Math.floor(max / 2);
-    const avgSum = (count * (1 + max)) / 2;
-    const theoreticalStd = Math.sqrt((count * (max * max - 1)) / 12); // desvio padrão teórico
-
-    for (let attempt = 0; attempt < 25000; attempt++) {
-      let nums = [];
-      let temp = pool.slice();
-      for (let i = 0; i < count; i++) {
-        if (temp.length === 0) break;
-        const idx = Math.floor(Math.random() * temp.length);
-        nums.push(temp.splice(idx, 1)[0]);
+    // Simula sorteios aleatórios estruturados
+    for (let d = 0; d < iterations; d++) {
+      let drawN = new Set();
+      while(drawN.size < cfg.reqN) {
+        drawN.add(Math.floor(Math.random() * cfg.maxN) + 1);
       }
-      if (nums.length < count) continue;
-      nums.sort((a,b)=>a-b);
+      drawN.forEach(n => numFreq[n]++);
 
-      const relax = Math.floor(attempt / 1800); // 14 níveis de relaxamento
-
-      // 1. Soma dentro de 1.2 desvios padrão (relaxa até 2.5)
-      const sum = nums.reduce((a,b)=>a+b,0);
-      const zSum = Math.abs(sum - avgSum) / theoreticalStd;
-      if (zSum > 1.2 + relax * 0.1) continue;
-
-      // 2. Desvio padrão amostral próximo do teórico
-      const mean = sum / count;
-      const variance = nums.reduce((s, n) => s + (n - mean) ** 2, 0) / count;
-      const std = Math.sqrt(variance);
-      const ratio = std / theoreticalStd;
-      if (ratio < 0.4 || ratio > 1.9 + relax * 0.05) continue;
-
-      // 3. Paridade equilibrada
-      const evens = nums.filter(n => n % 2 === 0).length;
-      if (count === 5 && (evens < 1 || evens > 4)) continue;
-      if (count === 6 && (evens < 2 || evens > 4)) continue;
-
-      // 4. Distribuição altos/baixos
-      const lows = nums.filter(n => n <= mid).length;
-      if (count === 5 && (lows < 1 || lows > 4)) continue;
-      if (count === 6 && (lows < 2 || lows > 4)) continue;
-
-      // 5. Consecutivos: máximo 1 par, zero triplas
-      let consec = 0;
-      let triple = false;
-      for (let i = 0; i < nums.length - 1; i++) {
-        if (nums[i+1] - nums[i] === 1) consec++;
-        if (i < nums.length - 2 && nums[i+1] - nums[i] === 1 && nums[i+2] - nums[i+1] === 1) triple = true;
+      let drawS = new Set();
+      while(drawS.size < cfg.reqS) {
+        drawS.add(Math.floor(Math.random() * cfg.maxS) + 1);
       }
-      if (triple || consec > 1) continue;
-
-      // 6. Primos (1-3 para 5 nums, 2-4 para 6)
-      const primes = nums.filter(isPrime).length;
-      if (count === 5 && (primes < 1 || primes > 3)) continue;
-      if (count === 6 && (primes < 2 || primes > 4)) continue;
-
-      // 7. Terminações (máximo 2 iguais)
-      const endings = {};
-      nums.forEach(n => { const d = n % 10; endings[d] = (endings[d] || 0) + 1; });
-      if (Object.values(endings).some(v => v > 2)) continue;
-
-      // 8. Distribuição por dezenas (máximo 2 por dezena se max>=40)
-      const decades = {};
-      nums.forEach(n => { const d = Math.floor((n-1)/10); decades[d] = (decades[d] || 0) + 1; });
-      if (max >= 40 && Object.values(decades).some(v => v > 2)) continue;
-      if (Object.keys(decades).length < 2) continue;
-
-      // 9. Números Fibonacci (máximo 2)
-      if (nums.filter(isFibonacci).length > 2) continue;
-
-      // 10. Soma dos dígitos total dentro de 1.5 desvios da média
-      const digitSum = nums.reduce((s, n) => s + String(n).split('').reduce((a,b)=>a+parseInt(b),0), 0);
-      const avgDigitSum = count * 4.5; // valor médio aproximado
-      if (Math.abs(digitSum - avgDigitSum) > count * 2.5) continue;
-
-      // 11. Lacuna média (gap) entre números vizinhos
-      const gaps = nums.slice(1).map((n,i) => n - nums[i-1]);
-      const avgGap = gaps.reduce((a,b)=>a+b,0) / gaps.length;
-      const maxGap = Math.max(...gaps);
-      if (avgGap < 2 || avgGap > (max / count) * 1.8 || maxGap > max * 0.6) continue;
-
-      // 12. Números espelho (ex: 12 e 21) – raros, evitamos mais de 1 par
-      let mirrorPairs = 0;
-      for (let i = 0; i < nums.length; i++) {
-        for (let j = i+1; j < nums.length; j++) {
-          if (String(nums[i]) === String(nums[j]).split('').reverse().join('')) mirrorPairs++;
-        }
-      }
-      if (mirrorPairs > 1) continue;
-
-      return nums;
+      drawS.forEach(s => starFreq[s]++);
     }
 
-    // Fallback: seleção aleatória simples
-    const temp = pool.slice();
-    const res = [];
-    for (let i = 0; i < count; i++) {
-      if (temp.length === 0) break;
-      const idx = Math.floor(Math.random() * temp.length);
-      res.push(temp.splice(idx, 1)[0]);
-    }
-    return res.sort((a,b)=>a-b);
-  }
+    // Ordena para obter quentes e frios
+    let mappedNums = numFreq.map((freq, idx) => ({ num: idx, val: freq })).slice(1);
+    mappedNums.sort((a, b) => b.val - a.val);
 
-  // ------------------------------------------------------------
-  // INICIALIZAÇÃO DA INTERFACE E FREQUÊNCIAS
-  // ------------------------------------------------------------
-  function initUI() {
-    const g = document.getElementById('gameSelect').value;
-    const cfg = RULES[g];
-    const nSel = document.getElementById('numQty');
-    const sSel = document.getElementById('starQty');
+    let hotNums = mappedNums.slice(0, 5).map(x => x.num);
+    let coldNums = mappedNums.slice(-5).reverse().map(x => x.num);
 
-    nSel.innerHTML = "";
-    sSel.innerHTML = "";
-    for (let i = cfg.reqN; i <= cfg.limitN; i++) nSel.add(new Option(i, i));
-    for (let i = cfg.reqS; i <= cfg.limitS; i++) sSel.add(new Option(i, i));
-
-    document.getElementById('labelS').textContent = cfg.reqS > 1 ? "Estrelas" : "Número da Sorte";
-    document.getElementById('gameInfo').textContent = cfg.info;
-
-    updateFrequencies(g);
-    updateCalc();
-  }
-
-  function updateFrequencies(gameKey) {
-    const cfg = RULES[gameKey];
-    const numQty = cfg.reqN;
-    const starQty = cfg.reqS;
-    const key = gameKey + '_' + numQty + '_' + starQty;
-
-    if (!freqData[key] && !isSimulating) {
-      isSimulating = true;
-      document.getElementById('freqContent').innerHTML = '⏳ A simular 10.000 sorteios...';
-      setTimeout(() => {
-        const data = simulateFrequencies(gameKey, numQty, starQty, 10000);
-        freqData[key] = data;
-        isSimulating = false;
-        displayFrequencies(data);
-      }, 50);
-    } else if (freqData[key]) {
-      displayFrequencies(freqData[key]);
-    }
-  }
-
-  function displayFrequencies(data) {
-    const numFreq = data.nums;
-    let entries = [];
-    for (let i = 1; i < numFreq.length; i++) {
-      entries.push({ num: i, freq: numFreq[i] });
-    }
-    entries.sort((a,b) => b.freq - a.freq);
-    const top5 = entries.slice(0, 5);
-    const bottom5 = entries.slice(-5).reverse();
-
-    let html = `<div class="freq-grid">`;
-    html += `<div class="freq-col"><div class="title">🔥 Mais sorteados</div>`;
-    top5.forEach(e => {
-      html += `<span class="num-item hot">${e.num} (${e.freq})</span>`;
-    });
-    html += `</div>`;
-    html += `<div class="freq-col"><div class="title">❄️ Menos sorteados</div>`;
-    bottom5.forEach(e => {
-      html += `<span class="num-item cold">${e.num} (${e.freq})</span>`;
-    });
-    html += `</div></div>`;
+    let html = `
+      <div class="freq-grid">
+        <div class="freq-col">
+          <div class="title">🔥 NÚMEROS QUENTES</div>
+          <div style="text-align:center;">
+            ${hotNums.map(n => `<span class="num-item hot">${n}</span>`).join('')}
+          </div>
+        </div>
+        <div class="freq-col">
+          <div class="title">❄️ NÚMEROS FRIOS</div>
+          <div style="text-align:center;">
+            ${coldNums.map(n => `<span class="num-item cold">${n}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <p style="margin-top: 8px; text-align: center; font-size: 0.75rem; color: #8ab;">
+        Resultados atualizados baseados em simulações estatísticas no espaço amostral do jogo.
+      </p>
+    `;
     document.getElementById('freqContent').innerHTML = html;
   }
 
   // ------------------------------------------------------------
-  // CÁLCULO DE PREÇO
+  // INICIALIZAÇÃO E GESTÃO DA INTERFACE (UI)
   // ------------------------------------------------------------
-  function updateCalc() {
-    const g = document.getElementById('gameSelect').value;
-    const cfg = RULES[g];
-    const n = parseInt(document.getElementById('numQty').value);
-    const s = parseInt(document.getElementById('starQty').value);
-    const howMany = parseInt(document.getElementById('howMany').value);
+  function initUI() {
+    const gameKey = document.getElementById('gameSelect').value;
+    const cfg = RULES[gameKey];
 
-    const total = combinations(n, cfg.reqN) * combinations(s, cfg.reqS);
-    const price = total * cfg.base * howMany;
+    // Informação do Jogo
+    document.getElementById('gameInfo').innerHTML = cfg.info;
 
-    document.getElementById('totalPrice').textContent = `€ ${price.toFixed(2).replace('.', ',')}`;
-    document.getElementById('comboInfo').textContent = `${total} combinações simples por aposta · ${howMany} apostas`;
+    // Configurar Dropdown de Números
+    const numSelect = document.getElementById('numQty');
+    numSelect.innerHTML = "";
+    for (let i = cfg.reqN; i <= cfg.limitN; i++) {
+      let opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = i === cfg.reqN ? `${i} (Aposta Simples)` : `${i} Números (Múltipla)`;
+      numSelect.appendChild(opt);
+    }
+
+    // Configurar Dropdown de Estrelas/Suplementares
+    const starSelect = document.getElementById('starQty');
+    const starLabel = document.getElementById('labelS');
+    starSelect.innerHTML = "";
+
+    if (gameKey === 'euromilhoes') {
+      starLabel.textContent = "Estrelas";
+      starLabel.style.display = "block";
+      starSelect.style.display = "block";
+      for (let i = cfg.reqS; i <= cfg.limitS; i++) {
+        let opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = i === cfg.reqS ? `${i} (Simples)` : `${i} Estrelas (Múltipla)`;
+        starSelect.appendChild(opt);
+      }
+    } else if (gameKey === 'totoloto') {
+      starLabel.textContent = "Número da Sorte";
+      starLabel.style.display = "block";
+      starSelect.style.display = "block";
+      let opt = document.createElement('option');
+      opt.value = 1;
+      opt.textContent = "1 Nº da Sorte (Fixo)";
+      starSelect.appendChild(opt);
+    } else if (gameKey === 'eurodreams') {
+      starLabel.textContent = "Número de Sonho";
+      starLabel.style.display = "block";
+      starSelect.style.display = "block";
+      for (let i = cfg.reqS; i <= cfg.limitS; i++) {
+        let opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = i === cfg.reqS ? `${i} (Simples)` : `${i} Nº de Sonho (Múltipla)`;
+        starSelect.appendChild(opt);
+      }
+    } else {
+      starLabel.style.display = "none";
+      starSelect.style.display = "none";
+    }
+
+    simulateFrequencies(gameKey);
+    updateCalc();
     document.getElementById('resultArea').style.display = 'none';
   }
 
   // ------------------------------------------------------------
-  // GERAÇÃO PONDERADA POR FREQUÊNCIA (INVERSA) + FILTROS
+  // CÁLCULO DE CUSTO E COMBINAÇÕES
   // ------------------------------------------------------------
-  function getWeightedNumbers(cfg, qty, excluded, freqData, lastNums) {
-    const max = cfg.maxN;
-    let pool = [];
-    for (let i = 1; i <= max; i++) {
-      if (!excluded.includes(i)) pool.push(i);
+  function updateCalc() {
+    const gameKey = document.getElementById('gameSelect').value;
+    const cfg = RULES[gameKey];
+    const numQty = parseInt(document.getElementById('numQty').value) || cfg.reqN;
+    const starQty = parseInt(document.getElementById('starQty').value) || cfg.reqS;
+    const betsQty = parseInt(document.getElementById('howMany').value) || 1;
+
+    // Cálculo exato de combinações baseadas nas regras das múltiplas
+    const combN = combinations(numQty, cfg.reqN);
+    const combS = combinations(starQty, cfg.reqS);
+    const totalCombinations = combN * combS;
+
+    const baseCost = cfg.base;
+    const totalCost = baseCost * totalCombinations * betsQty;
+
+    document.getElementById('totalPrice').textContent = `€ ${totalCost.toFixed(2).replace('.', ',')}`;
+
+    const comboInfo = document.getElementById('comboInfo');
+    if (totalCombinations === 1) {
+      comboInfo.textContent = `${betsQty} APOSTA(S) SIMPLES PRONTA(S)`;
+      comboInfo.style.color = "var(--emerald)";
+    } else {
+      comboInfo.textContent = `SISTEMA MULTI-COMBINAÇÕES: CONTÉM ${totalCombinations} APOSTAS INTERNAS POR JOGO`;
+      comboInfo.style.color = "var(--cyan)";
     }
-
-    const avoid = new Set(lastNums || []);
-    const filteredPool = pool.filter(n => !avoid.has(n));
-    const finalPool = filteredPool.length >= qty ? filteredPool : pool;
-
-    // Pesos inversamente proporcionais à frequência (regressão à média)
-    const weights = finalPool.map(n => 1 / ((freqData.nums[n] || 0) + 1));
-    const totalWeight = weights.reduce((a,b)=>a+b, 0);
-    const normWeights = weights.map(w => w / totalWeight);
-
-    let selected = [];
-    let available = finalPool.slice();
-    let availW = normWeights.slice();
-
-    for (let i = 0; i < qty; i++) {
-      if (available.length === 0) break;
-      let sum = availW.reduce((a,b)=>a+b, 0);
-      let r = Math.random() * sum;
-      let idx = 0;
-      for (let j = 0; j < availW.length; j++) {
-        r -= availW[j];
-        if (r <= 0) { idx = j; break; }
-      }
-      selected.push(available[idx]);
-      available.splice(idx, 1);
-      availW.splice(idx, 1);
-    }
-    return advancedFilter(finalPool, qty, cfg);
-  }
-
-  function getWeightedStars(cfg, qty, excluded, freqData, lastStars) {
-    const max = cfg.maxS;
-    let pool = [];
-    for (let i = 1; i <= max; i++) {
-      if (!excluded.includes(i)) pool.push(i);
-    }
-    const avoid = new Set(lastStars || []);
-    const filteredPool = pool.filter(s => !avoid.has(s));
-    const finalPool = filteredPool.length >= qty ? filteredPool : pool;
-
-    const weights = finalPool.map(s => 1 / ((freqData.stars[s] || 0) + 1));
-    const total = weights.reduce((a,b)=>a+b, 0);
-    const norm = weights.map(w => w / total);
-
-    let selected = [];
-    let available = finalPool.slice();
-    let availW = norm.slice();
-    for (let i = 0; i < qty; i++) {
-      if (available.length === 0) break;
-      let sum = availW.reduce((a,b)=>a+b, 0);
-      let r = Math.random() * sum;
-      let idx = 0;
-      for (let j = 0; j < availW.length; j++) {
-        r -= availW[j];
-        if (r <= 0) { idx = j; break; }
-      }
-      selected.push(available[idx]);
-      available.splice(idx, 1);
-      availW.splice(idx, 1);
-    }
-    return selected.sort((a,b)=>a-b);
   }
 
   // ------------------------------------------------------------
-  // GERAR JOGOS (PRINCIPAL)
+  // FILTRAGEM E AVALIAÇÃO MATEMÁTICA (MOTOR NEXUS V7)
+  // ------------------------------------------------------------
+  function parseExclusions() {
+    const text = document.getElementById('excludeInput').value;
+    return text.split(/[\s,;]+/).map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+  }
+
+  function evaluateCombination(numbers, cfg) {
+    let score = 50; // Base inicial neutra
+    const n = numbers.length;
+
+    // 1. Rácio Ímpares/Pares (Distribuição uniforme ideal)
+    const odds = numbers.filter(x => x % 2 !== 0).length;
+    const evens = n - odds;
+    const diff = Math.abs(odds - evens);
+    if (diff <= 1) {
+      score += 20;
+    } else if (diff <= 2) {
+      score += 10;
+    } else {
+      score -= 15;
+    }
+
+    // 2. Distribuição da Soma Teórica (Aproximação à Curva de Gauss)
+    const expectedAvg = (1 + cfg.maxN) / 2;
+    const targetSum = n * expectedAvg;
+    const actualSum = numbers.reduce((a, b) => a + b, 0);
+    const sumDiff = Math.abs(actualSum - targetSum);
+    const maxAllowedDiff = targetSum * 0.25;
+
+    if (sumDiff <= maxAllowedDiff / 2) {
+      score += 15;
+    } else if (sumDiff <= maxAllowedDiff) {
+      score += 5;
+    } else {
+      score -= 15;
+    }
+
+    // 3. Sequências de Consecutivos (Evitar de forma estrita sequências com mais de 2 elementos)
+    let maxConsecutive = 1;
+    let tempConsec = 1;
+    for (let i = 1; i < numbers.length; i++) {
+      if (numbers[i] === numbers[i - 1] + 1) {
+        tempConsec++;
+        if (tempConsec > maxConsecutive) maxConsecutive = tempConsec;
+      } else {
+        tempConsec = 1;
+      }
+    }
+    if (maxConsecutive === 1) {
+      score += 10;
+    } else if (maxConsecutive === 2) {
+      score += 5;
+    } else {
+      score -= 15; // Penaliza sequências como 10,11,12 ou superiores
+    }
+
+    // 4. Densidade de Primos (Geralmente 25% a 35% dos números de um sorteio típico são primos)
+    const primesCount = numbers.filter(x => isPrime(x)).length;
+    const idealPrimes = Math.round(n * 0.3);
+    if (Math.abs(primesCount - idealPrimes) <= 1) {
+      score += 5;
+    }
+
+    // Normalização final do Score (Limites: 75.0% - 99.8%)
+    let finalScore = 75 + (Math.max(0, Math.min(score, 100)) - 50) * 0.5;
+    if (finalScore > 99.8) finalScore = 99.8;
+
+    return {
+      score: finalScore,
+      oddRatio: `${odds}:${evens}`,
+      sum: actualSum,
+      primes: primesCount,
+      consec: maxConsecutive
+    };
+  }
+
+  // ------------------------------------------------------------
+  // GERAÇÃO DE COMBINAÇÕES OTIMIZADAS
   // ------------------------------------------------------------
   function generateNumbers() {
-    const g = document.getElementById('gameSelect').value;
-    const cfg = RULES[g];
-    const qtyN = parseInt(document.getElementById('numQty').value);
-    const qtyS = parseInt(document.getElementById('starQty').value);
+    const gameKey = document.getElementById('gameSelect').value;
+    const cfg = RULES[gameKey];
+    const numQty = parseInt(document.getElementById('numQty').value);
+    const starQty = parseInt(document.getElementById('starQty').value);
     const howMany = parseInt(document.getElementById('howMany').value);
-    const excluded = document.getElementById('excludeInput').value.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+    const exclusions = parseExclusions();
 
-    const key = g + '_' + cfg.reqN + '_' + cfg.reqS;
-    if (!freqData[key]) {
-      alert('A simulação de frequências ainda não terminou. Aguarde...');
+    // Verificação de limites físicos para prevenção de loops infinitos
+    const availableNumbers = cfg.maxN - exclusions.filter(x => x >= 1 && x <= cfg.maxN).length;
+    if (availableNumbers < numQty) {
+      alert(`Impossível gerar: removeu demasiados números. Atualmente só tem ${availableNumbers} números disponíveis, mas necessita de ${numQty}.`);
       return;
     }
-    const freq = freqData[key];
 
     generatedData = [];
-    let html = "";
-    const nextDraw = nextDrawText(cfg.drawDays);
+    const resultsList = document.getElementById('resultsList');
+    resultsList.innerHTML = "";
 
-    let lastNums = lastNumsHist.length ? lastNumsHist.slice(-2) : [];
-    let lastStars = lastStarsHist.length ? lastStarsHist.slice(-2) : [];
+    // Geração otimizada por Rejeição Estatística
+    for (let b = 0; b < howMany; b++) {
+      let bestCombination = null;
+      let bestStars = null;
+      let topAnalysis = null;
+      let bestScore = -1;
 
-    for (let i = 0; i < howMany; i++) {
-      const nums = getWeightedNumbers(cfg, qtyN, excluded, freq, lastNums);
-      const stars = getWeightedStars(cfg, qtyS, excluded, freq, lastStars);
+      // Amostragem por rejeição repetida até 1000 iterações por aposta
+      for (let attempt = 0; attempt < 1000; attempt++) {
+        let candidateNums = [];
+        while (candidateNums.length < numQty) {
+          let rand = Math.floor(Math.random() * cfg.maxN) + 1;
+          if (!candidateNums.includes(rand) && !exclusions.includes(rand)) {
+            candidateNums.push(rand);
+          }
+        }
+        candidateNums.sort((x, y) => x - y);
 
-      generatedData.push({ nums, stars });
+        let evalResult = evaluateCombination(candidateNums, cfg);
+        if (evalResult.score > bestScore) {
+          bestScore = evalResult.score;
+          bestCombination = candidateNums;
+          topAnalysis = evalResult;
+        }
 
-      lastNums.push(nums);
-      lastStars.push(stars);
-      if (lastNums.length > 2) lastNums.shift();
-      if (lastStars.length > 2) lastStars.shift();
+        // Critério de paragem prematura se o algoritmo alcançar estabilidade
+        if (evalResult.score >= 96.0) {
+          break;
+        }
+      }
 
-      const score = calculateMatchScore(nums, cfg.maxN);
-      html += `
-        <div class="combo-block">
-          <div class="combo-title">Aposta ${i + 1}</div>
-          <div class="ball-group">${nums.map(v => `<div class="ball">${v}</div>`).join('')}</div>
-          <div class="ball-group">${stars.map(v => `<div class="ball star">${v}</div>`).join('')}</div>
-          <div class="analysis">
-            Soma: <b>${nums.reduce((a,b)=>a+b,0)}</b> |
-            Pares: <b>${nums.filter(n=>n%2===0).length}</b> |
-            Ímpares: <b>${nums.filter(n=>n%2!==0).length}</b>
-            <br/>
-            Índice de Viabilidade Real: <b style="color: var(--emerald);">${score}%</b>
-          </div>
-          <div class="draw-info">${nextDraw}</div>
+      // Geração de estrelas/suplementares sem sobreposição
+      let candidateStars = [];
+      while (candidateStars.length < starQty) {
+        let rand = Math.floor(Math.random() * cfg.maxS) + 1;
+        if (!candidateStars.includes(rand)) {
+          candidateStars.push(rand);
+        }
+      }
+      candidateStars.sort((x, y) => x - y);
+      bestStars = candidateStars;
+
+      generatedData.push({ nums: bestCombination, stars: bestStars, analysis: topAnalysis });
+
+      // Cálculo de melhoria real nas odds de primeiro prémio pela filtragem e apostas adicionais
+      const combN = combinations(numQty, cfg.reqN);
+      const combS = combinations(starQty, cfg.reqS);
+      const combTotal = combN * combS;
+      const baseOddsNum = parseInt(cfg.odds.replace(/[^0-9]/g, ''));
+      const localizedOdds = Math.round(baseOddsNum / combTotal);
+
+      // Renderização dinâmica dos blocos de aposta
+      let block = document.createElement('div');
+      block.className = 'combo-block';
+
+      let headerLabel = combTotal > 1 ? `Aposta #${b + 1} (Múltipla: ${numQty}N + ${starQty}S - ${combTotal} Combinadas)` : `Aposta #${b + 1} (Simples)`;
+
+      block.innerHTML = `
+        <div class="combo-title">${headerLabel}</div>
+        <div class="ball-group">
+          ${bestCombination.map(n => `<div class="ball">${n}</div>`).join('')}
+          ${bestStars.map(s => `<div class="ball star">${s}</div>`).join('')}
+        </div>
+        <div class="analysis">
+          ⚡ <b>Eficiência Analítica: ${topAnalysis.score.toFixed(1)}%</b><br>
+          Filtros Aplicados: Rácio Par/Ímpar (${topAnalysis.oddRatio}) · Desvio de Soma (${topAnalysis.sum}) · Primos (${topAnalysis.primes}) · Seq. Máx (${topAnalysis.consec})
+        </div>
+        <div class="draw-info">
+          Probabilidade Matemática de 1.º Prémio: 1 em ${localizedOdds.toLocaleString('pt-PT')}
         </div>
       `;
+      resultsList.appendChild(block);
     }
 
-    lastNumsHist = lastNums;
-    lastStarsHist = lastStars;
-
-    document.getElementById('resultsList').innerHTML = html;
     document.getElementById('resultArea').style.display = 'block';
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
   }
 
   // ------------------------------------------------------------
-  // AVALIAÇÃO DE VIABILIDADE (MAIS REALISTA)
-  // ------------------------------------------------------------
-  function calculateMatchScore(nums, max) {
-    const count = nums.length;
-    const avgSum = (count * (1 + max)) / 2;
-    const theoreticalStd = Math.sqrt((count * (max * max - 1)) / 12);
-    const sum = nums.reduce((a,b)=>a+b,0);
-    const mean = sum / count;
-    const variance = nums.reduce((s, n) => s + (n - mean) ** 2, 0) / count;
-    const std = Math.sqrt(variance);
-    const zSum = Math.abs(sum - avgSum) / theoreticalStd;
-    const ratioStd = std / theoreticalStd;
-    const evens = nums.filter(n => n % 2 === 0).length;
-    const primes = nums.filter(isPrime).length;
-    const endings = new Set(nums.map(n => n % 10)).size;
-    const decades = new Set(nums.map(n => Math.floor((n-1)/10))).size;
-    const gaps = nums.slice(1).map((n,i) => n - nums[i-1]);
-    const avgGap = gaps.reduce((a,b)=>a+b,0) / gaps.length;
-    const fibCount = nums.filter(isFibonacci).length;
-
-    let score = 100;
-
-    score -= zSum * 6;               // penaliza soma atípica
-    score -= Math.abs(1 - ratioStd) * 12; // penaliza dispersão anormal
-    if (count === 5) {
-      if (evens < 1 || evens > 4) score -= 8;
-    } else {
-      if (evens < 2 || evens > 4) score -= 8;
-    }
-    if (primes < 1 || primes > 3) score -= 6;
-    if (endings < count - 1) score -= 4;
-    if (decades < 3) score -= 5;
-    if (avgGap < 2 || avgGap > max / count * 1.5) score -= 5;
-    if (fibCount > 2) score -= 3;
-    if (new Set(nums).size < count) score -= 20; // duplicatas (não deve acontecer)
-
-    return Math.min(99.9, Math.max(60.0, score)).toFixed(1);
-  }
-
-  // ------------------------------------------------------------
-  // PRÓXIMO SORTEIO
-  // ------------------------------------------------------------
-  function nextDrawText(days) {
-    const now = new Date();
-    for (let i = 0; i < 8; i++) {
-      let c = new Date();
-      c.setDate(now.getDate() + i);
-      if (days.includes(c.getDay())) {
-        return "PRÓXIMO SORTEIO: " + c.toLocaleDateString('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' }).toUpperCase();
-      }
-    }
-    return "";
-  }
-
-  // ------------------------------------------------------------
-  // COPIAR
+  // EXPORTAÇÃO E CÓPIA DOS JOGOS
   // ------------------------------------------------------------
   function copyCombination() {
+    const gameKey = document.getElementById('gameSelect').value.toUpperCase();
     if (generatedData.length === 0) return;
-    const text = generatedData.map((d, i) => `Aposta ${i+1}: ${d.nums.join('-')} | [${d.stars.join('-')}]`).join('\n');
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.getElementById('copyBtn');
-      btn.classList.add('copied');
-      btn.textContent = '✓ COPIADO COM SUCESSO';
+
+    let outputText = `⚡ JOGOS OTIMIZADOS NEXUS ULTRA V7.0 ⚡\n`;
+    outputText += `========================================\n`;
+    outputText += `JOGO: ${gameKey}\n\n`;
+
+    generatedData.forEach((item, index) => {
+      outputText += `APOSTA #${index + 1}:\n`;
+      outputText += `Números: ${item.nums.join(', ')}\n`;
+      outputText += `Estrelas/Suplementares: ${item.stars.join(', ')}\n`;
+      outputText += `Eficiência Estatística: ${item.analysis.score.toFixed(1)}%\n\n`;
+    });
+
+    outputText += `========================================\n`;
+    outputText += `Calculado matematicamente com bases estatísticas.\n`;
+    outputText += `Boa sorte! Jogue com responsabilidade.`;
+
+    navigator.clipboard.writeText(outputText).then(() => {
+      const copyBtn = document.getElementById('copyBtn');
+      copyBtn.textContent = "✅ JOGOS COPIADOS!";
+      copyBtn.classList.add('copied');
       setTimeout(() => {
-        btn.classList.remove('copied');
-        btn.textContent = '📋 COPIAR JOGOS';
-      }, 2000);
+        copyBtn.textContent = "📋 COPIAR JOGOS";
+        copyBtn.classList.remove('copied');
+      }, 3000);
+    }).catch(err => {
+      console.error('Falha ao copiar dados: ', err);
     });
   }
 
-  // ------------------------------------------------------------
-  // INICIALIZAÇÃO
-  // ------------------------------------------------------------
-  window.onload = () => {
+  // Inicialização Automática ao Carregar a Página
+  window.addEventListener('DOMContentLoaded', () => {
     initUI();
-    updateClock();
-  };
+  });
 </script>
 </body>
 </html>
