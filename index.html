@@ -1,521 +1,884 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>NEXUS ULTRA V10.9.2 PRO - Regras Santa Casa</title>
-  <style>
-    :root { --gold: #ffd700; --cyan: #00f2ff; --emerald: #00ff88; --purple: #9b59b6; --pink: #e91e63; --red: #ff0040; }
-    * { box-sizing: border-box; }
-    body { 
-      background: #02040a; color: white; font-family: 'Segoe UI', sans-serif; 
-      padding: 15px; margin: 0; min-height: 100vh; 
-    }
-    .container { max-width: 850px; margin: auto; background: rgba(10,15,28,0.98); padding: 25px; border-radius: 25px; border: 1px solid #ffd70033; }
-    
-    .header-info, .footer-info {
-      text-align: center; font-size: 14px; color: #aaa; padding: 10px 0;
-      border-bottom: 1px solid #ffd70022; margin-bottom: 15px; letter-spacing: 0.5px;
-      background: rgba(255,215,0,0.03); border-radius: 10px;
-    }
-    .footer-info { border-bottom: none; border-top: 1px solid #ffd70022; margin-top: 20px; margin-bottom: 0; padding: 12px 0; }
-    .header-info span, .footer-info span { color: var(--gold); font-weight: 600; }
-    .header-info .highlight, .footer-info .highlight { color: var(--cyan); }
-
-    .btn-group { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 5px 0 10px 0; }
-    button { padding: 12px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; border: 2px solid transparent; background: #1a1a2e; color: #888; transition: all 0.3s; }
-    button:hover { transform: scale(1.02); }
-    .active { background: #00ff88; color: black !important; border-color: #00ff88; }
-    .game-btn.active { background: #ffd700; color: black !important; border-color: #ffd700; }
-    
-    select { width: 100%; padding: 12px; margin: 10px 0; border-radius: 10px; background: #111; color: white; border: 1px solid #333; }
-    
-    .ball { 
-      width: 52px; height: 52px; border-radius: 50%; 
-      display: inline-flex; align-items: center; justify-content: center; 
-      margin: 4px; font-size: 16px !important; font-weight: 900; transition: all 0.3s;
-    }
-    .ball:hover { transform: scale(1.1); }
-    .number { background: linear-gradient(145deg, #001428, #002856); border: 3px solid #00f2ff; color: #00f2ff; box-shadow: 0 0 15px rgba(0,242,255,0.2); }
-    .star { background: linear-gradient(145deg, #1a1500, #3a2a00); border: 3px solid #ffd700; color: #ffd700; box-shadow: 0 0 15px rgba(255,215,0,0.2); }
-    
-    .stars-container { text-align: center; display: block; margin: 8px 0; }
-    
-    label { display: block; margin-top: 15px; font-weight: 600; color: #aaa; }
-    .price-box { background: rgba(0,255,136,0.1); padding: 15px; border-radius: 12px; margin: 15px 0; text-align: center; }
-    .price-box b { font-size: 1.8rem; color: #00ff88; }
-    .btn-generate { width: 100%; padding: 18px; font-size: 1.2rem; background: linear-gradient(#ffd700,#f1c40f); color: black; font-weight: 900; border: none; border-radius: 12px; margin-top: 10px; cursor: pointer; }
-    .btn-generate:hover { transform: scale(1.01); box-shadow: 0 0 30px rgba(255,215,0,0.3); }
-    
-    .result-card {       background: rgba(255,255,255,0.06); padding: 18px; margin: 15px 0; border-radius: 15px; 
-      border-left: 4px solid #ffd700; text-align: center;
-    }
-    .result-card strong { color: #ffd700; display: block; margin-bottom: 10px; }
-    .result-card .numbers-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; margin: 8px 0; }
-    
-    .draw-date {
-      font-size: 12px; color: #888; margin-top: 12px; padding-top: 10px;
-      border-top: 1px solid #ffffff15; letter-spacing: 0.3px;
-    }
-    .draw-date strong { color: var(--cyan); font-weight: 600; }
-    
-    .countdown {
-      font-size: 14px; color: var(--gold); background: rgba(255,215,0,0.08);
-      padding: 10px; border-radius: 10px; margin: 10px 0; text-align: center; border: 1px solid #ffd70033;
-    }
-    .countdown strong { color: #fff; font-size: 16px; }
-
-    .odds-display {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 15px 0;
-      padding: 15px; background: rgba(155,89,182,0.08); border-radius: 15px; border: 1px solid var(--purple);
-    }
-    .odds-item { text-align: center; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 10px; border-left: 3px solid var(--gold); }
-    .odds-item .label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-    .odds-item .value { font-size: 16px; font-weight: 900; color: var(--gold); }
-    .odds-item .value.green { color: var(--emerald); }
-    .odds-item .value.cyan { color: var(--cyan); }
-    .odds-item .value.purple { color: var(--purple); }
-    .odds-item .value.red { color: var(--red); }
-
-    .algo-box {
-      background: rgba(0,242,255,0.05); border: 1px solid var(--cyan); border-radius: 12px;
-      padding: 15px; margin: 15px 0; font-family: 'Courier New', monospace; font-size: 13px;
-      color: #88ddff; overflow-x: auto;
-    }
-    .algo-box .highlight { color: var(--gold); font-weight: bold; }
-    .algo-box .chance-high { color: var(--emerald); font-weight: bold; }
-
-    .section-title {
-      font-size: 14px; color: var(--gold); text-align: center; margin: 20px 0 10px 0;
-      padding: 8px; background: rgba(255,215,0,0.05); border-radius: 8px; border: 1px solid #ffd70022;
-    }
-    .disclaimer {
-      font-size: 11px; color: #666; text-align: center; margin-top: 15px; font-style: italic;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS ULTRA v12.0 - Sistema de Análise Estatística</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: #0a0e17;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            padding: 20px;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(16, 24, 40, 0.95);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+        }
+        .header {
+            text-align: center;
+            padding: 15px 20px 15px;
+            border-bottom: 1px solid rgba(255,215,0,0.08);
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            color: #ffd700;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .header .subtitle {
+            color: #00e5ff;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+        .header .datetime {
+            color: #888;
+            font-size: 18px;
+            margin-top: 8px;
+            padding: 6px 16px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: 400;
+        }
+        .header .datetime strong {
+            color: #ffd700;
+        }
+        .info-banner {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            padding: 15px;
+            background: rgba(0, 229, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(0, 229, 255, 0.06);
+            margin-bottom: 20px;
+        }
+        .info-banner .item {
+            text-align: center;
+            padding: 8px;
+        }
+        .info-banner .item .label {
+            font-size: 0.65rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-banner .item .value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #ffd700;
+            margin-top: 2px;
+        }
+        .info-banner .item .value.cyan { color: #00e5ff; }
+        .info-banner .item .value.green { color: #00e676; }
+        .info-banner .item .value.pink { color: #ff4081; }
+        .controls-section {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 16px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 215, 0, 0.05);
+        }
+        .control-group {
+            margin: 12px 0;
+        }
+        .control-group label {
+            display: block;
+            color: #ffd700;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .game-btn, .bet-type-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 2px solid transparent;
+            background: #1a1a2e;
+            color: #666;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+        }
+        .game-btn:hover, .bet-type-btn:hover {
+            background: #2a2a3e;
+            transform: translateY(-1px);
+        }
+        .game-btn.active {
+            background: #ffd700;
+            color: #000;
+            border-color: #ffd700;
+            box-shadow: 0 0 25px rgba(255,215,0,0.15);
+        }
+        .bet-type-btn.active {
+            background: #00e676;
+            color: #000;
+            border-color: #00e676;
+            box-shadow: 0 0 25px rgba(0,230,118,0.15);
+        }
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            background: #111822;
+            color: #e0e0e0;
+            border: 1px solid #2a2a3e;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffd700' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+        }
+        select:hover { border-color: #00e5ff; }
+        select:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 15px rgba(255,215,0,0.08);
+        }
+        .rules-box {
+            background: rgba(255, 215, 0, 0.03);
+            border: 1px solid rgba(255, 215, 0, 0.06);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .rules-box .rule-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            font-size: 0.85rem;
+        }
+        .rules-box .rule-row:last-child { border-bottom: none; }
+        .rules-box .rule-row .rlabel { color: #888; }
+        .rules-box .rule-row .rvalue { color: #ffd700; font-weight: 700; }
+        .rules-box .rule-row .rvalue.cyan { color: #00e5ff; }
+        .rules-box .rule-row .rvalue.green { color: #00e676; }
+        .btn-generate {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #ffd700, #f1c40f);
+            color: #000;
+            font-weight: 900;
+            border: none;
+            border-radius: 12px;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .btn-generate:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 40px rgba(255,215,0,0.2);
+        }
+        .btn-generate:active { transform: scale(0.98); }
+        .btn-generate:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .price-box {
+            background: rgba(0, 230, 118, 0.05);
+            border: 2px solid rgba(0, 230, 118, 0.12);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .price-box .price-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .price-box .price-value {
+            font-size: 2rem;
+            color: #00e676;
+            font-weight: 900;
+        }
+        .price-box .price-sub {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: 4px;
+        }
+        .section-title {
+            font-size: 0.95rem;
+            color: #ffd700;
+            text-align: center;
+            margin: 25px 0 15px;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,215,0,0.06);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .result-card {
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 14px;
+            border: 1px solid rgba(255,215,0,0.05);
+            transition: all 0.3s;
+        }
+        .result-card:hover {
+            border-color: rgba(255,215,0,0.12);
+            box-shadow: 0 5px 30px rgba(0,0,0,0.2);
+        }
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .set-number {
+            font-size: 0.95rem;
+            color: #ffd700;
+            font-weight: 700;
+        }
+        .numbers-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .ball {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 900;
+            transition: all 0.2s;
+            cursor: default;
+        }
+        .ball:hover { transform: scale(1.08); }
+        .number {
+            background: linear-gradient(145deg, #001428, #003870);
+            border: 2px solid #00e5ff;
+            color: #00e5ff;
+            box-shadow: 0 0 15px rgba(0,229,255,0.06);
+        }
+        .star {
+            background: linear-gradient(145deg, #1a1500, #3a2a00);
+            border: 2px solid #ffd700;
+            color: #ffd700;
+            box-shadow: 0 0 15px rgba(255,215,0,0.06);
+        }
+        .stars-container {
+            text-align: center;
+            margin: 8px 0;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+        }
+        .draw-info {
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            background: rgba(0, 229, 255, 0.04);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 229, 255, 0.06);
+            font-size: 18px;
+            color: #888;
+        }
+        .draw-info strong {
+            color: #ffd700;
+        }
+        .draw-info .draw-date {
+            color: #00e5ff;
+            font-weight: 700;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 6px;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 5px;
+        }
+        .stat-item .stat-label {
+            font-size: 0.55rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .stat-item .stat-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #00e5ff;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,215,0,0.05);
+        }
+        .footer .brand {
+            color: #ffd700;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+        .footer .disclaimer {
+            font-size: 0.7rem;
+            color: #444;
+            margin-top: 10px;
+            font-style: italic;
+            line-height: 1.8;
+        }
+        .footer .disclaimer strong { color: #ffd700; }
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 23, 0.92);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .loading-overlay.active { display: flex; }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255,215,0,0.05);
+            border-top: 3px solid #ffd700;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .loading-text {
+            color: #ffd700;
+            margin-top: 18px;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+        .loading-subtext {
+            color: #00e5ff;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 640px) {
+            .container { padding: 15px; }
+            .header h1 { font-size: 1.3rem; }
+            .ball { width: 45px; height: 45px; font-size: 18px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .info-banner { grid-template-columns: repeat(2, 1fr); }
+            .header .datetime { font-size: 16px; }
+            .draw-info { font-size: 16px; }
+        }
+        @media (max-width: 400px) {
+            .ball { width: 38px; height: 38px; font-size: 15px; }
+            .header .datetime { font-size: 14px; }
+            .draw-info { font-size: 14px; }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <div class="header-info">
-    📅 <span id="currentDate"></span>  |  🕐 <span id="currentTime"></span>  |  📆 <span id="currentWeekday"></span>
-    <br>
-    <span class="highlight">⏳ Próximo Sorteio:</span> <span id="nextDrawDateHeader" style="color:var(--cyan);"></span>
-  </div>
-
-  <h1 style="text-align:center; color:var(--gold); font-size:1.6rem;">NEXUS ULTRA v10.9.2</h1>
-  <p style="text-align:center; color:var(--cyan); font-size:0.9rem;">🏆 Regras Oficiais Santa Casa • Motor Genético 5D</p>
-
-  <div style="margin:20px 0;">
-    <button class="game-btn active" data-game="euromilhoes" onclick="selectGame(this)">EUROMILHÕES</button>
-    <button class="game-btn" data-game="totoloto" onclick="selectGame(this)">TOTOLOTO</button>
-    <button class="game-btn" data-game="eurodreams" onclick="selectGame(this)">EURODREAMS</button>
-  </div>
-
-  <label>Tipo de Aposta</label>
-  <div class="btn-group">
-    <button class="bet-type-btn active" data-type="simple" onclick="selectBetType(this)">Simples</button>
-    <button class="bet-type-btn" data-type="multiple" onclick="selectBetType(this)">Múltipla</button>
-  </div>
-
-  <label id="numLabel">Números</label>
-  <select id="numQty" onchange="updateCalc()"></select>
-
-  <label id="starLabel">Estrelas</label>
-  <select id="starQty" onchange="updateCalc()"></select>
-
-  <label>Quantos Conjuntos (máx 10)</label>
-  <select id="howMany" onchange="updateCalc()">
-    <option value="1" selected>1 Conjunto</option>
-    <option value="2">2 Conjuntos</option>
-    <option value="3">3 Conjuntos</option>
-    <option value="4">4 Conjuntos</option>
-    <option value="5">5 Conjuntos</option>
-    <option value="6">6 Conjuntos</option>
-    <option value="7">7 Conjuntos</option>
-    <option value="8">8 Conjuntos</option>
-    <option value="9">9 Conjuntos</option>
-    <option value="10">10 Conjuntos</option>
-  </select>
-
-  <div class="price-box">
-    <b id="totalPrice">€ 0,00</b>
-  </div>
-
-  <button class="btn-generate" onclick="generateNumbers()">
-    ⚡ GERAR COMBINAÇÕES 5D OTIMIZADAS
-  </button>
-
-  <div class="countdown" id="countdownContainer">    ⏳ Próximo Sorteio: <strong id="nextDrawDate">--</strong>  |  ⏱️ <strong id="countdownDisplay">--</strong>
-  </div>
-
-  <div class="section-title">📊 ODDS & MATEMÁTICA COMBINATÓRIA 5D</div>
-  <div class="odds-display" id="oddsDisplay">
-    <div class="odds-item"><div class="label">🎯 1º Prémio (Real)</div><div class="value red" id="oddsFirst">1:0</div></div>
-    <div class="odds-item"><div class="label">🧠 Qualidade 5D</div><div class="value green" id="oddsQuality">Top 5%</div></div>
-    <div class="odds-item"><div class="label">📉 Padrões Evitados</div><div class="value cyan" id="oddsAvoid">Sequências</div></div>
-    <div class="odds-item"><div class="label">🔢 Combinações Totais</div><div class="value purple" id="oddsTotal">0</div></div>
-  </div>
-
-  <div class="section-title">🧠 ALGORITMOS GENÉTICOS & MATEMÁTICA 5D</div>
-  <div class="algo-box" id="algoDisplay">
-    <div>🔹 <span class="highlight">Motor Genético 5D</span>: População de 300 combinações por geração com Função de Aptidão (Fitness Function).</div>
-    <div>🔹 <span class="highlight">Filtro de Soma (Gauss)</span>: Mantém a soma dos números dentro de 1 desvio padrão da média histórica esperada.</div>
-    <div>🔹 <span class="highlight">Equilíbrio Par/Ímpar & Alto/Baixo</span>: Penaliza fortemente distribuições extremas (ex: 5 pares ou 5 altos).</div>
-    <div>🔹 <span class="highlight">Anti-Sequência</span>: Penalização exponencial para 3 ou mais números consecutivos (probabilidade histórica de padrão < 0.5%).</div>
-    <div>🔹 <span class="chance-high">⚡ Resultado:</span> Combinações estatisticamente equilibradas, evitando padrões "impossíveis" e maximizando a cobertura de cenários reais de sorteio.</div>
-  </div>
-
-  <div id="resultArea" style="margin-top:30px; display:none;">
-    <div id="resultsList"></div>
-  </div>
-
-  <div class="footer-info">
-    📅 <span id="footerDate"></span>  |  🕐 <span id="footerTime"></span>  |  📆 <span id="footerWeekday"></span>
-    <br>
-    <span class="highlight">🏆 NEXUS ULTRA v10.9.2 PRO</span> • <span style="color:#666;">Todos os direitos reservados</span> • <span style="color:var(--emerald);">⚡ 5D Super Advanced</span>
-    <br>
-    <div class="disclaimer">
-      ⚠️ Aviso Legal: A lotaria é um jogo de azar com eventos independentes. Este algoritmo otimiza a distribuição estatística e evita combinações historicamente improváveis, mas <strong>não garante</strong> a obtenção de prémios. Jogue com responsabilidade.
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">A Processar...</div>
+        <div class="loading-subtext" id="loadingStatus">A gerar combinações</div>
     </div>
-  </div>
 
-</div>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 NEXUS ULTRA v12.0</h1>
+            <div class="subtitle">Sistema de Análise Estatística e Geração de Combinações</div>
+            <div class="datetime" id="currentDateTime">
+                <strong id="currentDate"></strong> · <span id="currentTime"></span>
+            </div>
+        </div>
 
-<script>
-// ===== REGRAS OFICIAIS COM DIAS DE SORTEIO =====
-const RULES = {
-  euromilhoes: { 
-    name:"Euromilhões", base:2.5, reqN:5, maxN:50, limitN:10, reqS:2, maxS:12, limitS:12, starName:"Estrelas",
-    drawDays: [2, 5], drawHour: 21, drawMinute: 0
-  },
-  totoloto: { 
-    name:"Totoloto", base:1.0, reqN:5, maxN:49, limitN:10, reqS:1, maxS:13, limitS:1, starName:"Nº Sorte",
-    drawDays: [3, 6], drawHour: 20, drawMinute: 30
-  },
-  eurodreams: { 
-    name:"EuroDreams", base:2.0, reqN:6, maxN:40, limitN:10, reqS:1, maxS:5, limitS:5, starName:"Nº Sonho",
-    drawDays: [1, 4], drawHour: 21, drawMinute: 0  }
-};
+        <!-- Informações do Jogo -->
+        <div class="info-banner" id="gameInfo">
+            <div class="item">
+                <div class="label">Jogo</div>
+                <div class="value" id="gameName">Euromilhões</div>
+            </div>
+            <div class="item">
+                <div class="label">Aposta Simples</div>
+                <div class="value cyan" id="simplePrice">€2.50</div>
+            </div>
+            <div class="item">
+                <div class="label">Aposta Múltipla</div>
+                <div class="value green" id="multiplePrice">€2.50+</div>
+            </div>
+            <div class="item">
+                <div class="label">Próximo Sorteio</div>
+                <div class="value pink" id="nextDraw">--</div>
+            </div>
+        </div>
 
-const DIAS_SEMANA = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-const MESES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+        <div class="controls-section">
+            <div class="control-group">
+                <label>Selecione o Jogo</label>
+                <div class="btn-group">
+                    <button class="game-btn active" data-game="euromilhoes" onclick="selectGame(this)">EUROMILHÕES</button>
+                    <button class="game-btn" data-game="totoloto" onclick="selectGame(this)">TOTOLOTO</button>
+                    <button class="game-btn" data-game="eurodreams" onclick="selectGame(this)">EURODREAMS</button>
+                </div>
+            </div>
 
-let currentGame = "euromilhoes";
-let currentType = "simple";
+            <div class="control-group">
+                <label>Tipo de Aposta</label>
+                <div class="btn-group">
+                    <button class="bet-type-btn active" data-type="simple" onclick="selectBetType(this)">SIMPLES</button>
+                    <button class="bet-type-btn" data-type="multiple" onclick="selectBetType(this)">MÚLTIPLA</button>
+                </div>
+            </div>
 
-// ===== RELÓGIO EM TEMPO REAL =====
-function updateClock() {
-  const now = new Date();
-  const dataStr = `${String(now.getDate()).padStart(2,'0')} ${MESES[now.getMonth()]} ${now.getFullYear()}`;
-  const horaStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`;
-  const diaStr = DIAS_SEMANA[now.getDay()];
-  
-  document.getElementById('currentDate').textContent = dataStr;
-  document.getElementById('currentTime').textContent = horaStr;
-  document.getElementById('currentWeekday').textContent = diaStr;
-  document.getElementById('footerDate').textContent = dataStr;
-  document.getElementById('footerTime').textContent = horaStr;
-  document.getElementById('footerWeekday').textContent = diaStr;
-}
-setInterval(updateClock, 1000);
-updateClock();
+            <div class="control-group">
+                <label>Quantidade de Números</label>
+                <select id="numQty" onchange="updateUI()"></select>
+            </div>
 
-// ===== PRÓXIMO SORTEIO =====
-function getNextDraw() {
-  const now = new Date();
-  const r = RULES[currentGame];
-  
-  for (let dias = 0; dias <= 7; dias++) {
-    const dataTeste = new Date(now);
-    dataTeste.setDate(now.getDate() + dias);
-    const diaSemana = dataTeste.getDay();
-    
-    if (r.drawDays.includes(diaSemana)) {
-      if (dias === 0) {
-        const horaAtual = now.getHours();
-        const minAtual = now.getMinutes();
-        if (horaAtual > r.drawHour || (horaAtual === r.drawHour && minAtual >= r.drawMinute)) {
-          continue;
+            <div class="control-group">
+                <label id="starLabel">Estrelas</label>
+                <select id="starQty" onchange="updateUI()"></select>
+            </div>
+
+            <div class="control-group">
+                <label>Quantos Conjuntos</label>
+                <select id="howMany" onchange="updateUI()">
+                    <option value="1">1 Conjunto</option>
+                    <option value="2">2 Conjuntos</option>
+                    <option value="3">3 Conjuntos</option>
+                    <option value="4">4 Conjuntos</option>
+                    <option value="5">5 Conjuntos</option>
+                    <option value="10">10 Conjuntos</option>
+                </select>
+            </div>
+
+            <!-- Regras do Jogo -->
+            <div class="rules-box" id="rulesBox">
+                <div style="color:#888;font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📋 Regras da Aposta</div>
+                <div class="rule-row">
+                    <span class="rlabel">Números base</span>
+                    <span class="rvalue" id="ruleNumbers">5 de 1 a 50</span>
+                </div>
+                <div class="rule-row">
+                    <span class="rlabel">Estrelas</span>
+                    <span class="rvalue" id="ruleStars">2 de 1 a 12</span>
+                </div>
+                <div class="rule-row">
+                    <span class="rlabel">Aposta Simples</span>
+                    <span class="rvalue cyan" id="ruleSimple">€2.50</span>
+                </div>
+                <div class="rule-row">
+                    <span class="rlabel">Aposta Múltipla</span>
+                    <span class="rvalue green" id="ruleMultiple">Até 10 números e 12 estrelas</span>
+                </div>
+                <div class="rule-row">
+                    <span class="rlabel">Combinações possíveis</span>
+                    <span class="rvalue" id="ruleCombos">139.838.160</span>
+                </div>
+            </div>
+
+            <div class="price-box">
+                <div class="price-label">💶 Investimento Total</div>
+                <div class="price-value" id="totalPrice">€ 0.00</div>
+                <div class="price-sub" id="priceDetail">Aposta Simples · 1 Conjunto</div>
+            </div>
+
+            <button class="btn-generate" id="generateBtn" onclick="generateNumbers()">
+                GERAR COMBINAÇÕES
+            </button>
+        </div>
+
+        <div id="resultsArea" style="display: none;">
+            <div class="section-title">📊 Análise Estatística</div>
+            <div id="statsDisplay" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:15px 0;"></div>
+
+            <div class="section-title">🎯 Combinações Geradas</div>
+            <div id="resultsList"></div>
+        </div>
+
+        <div class="footer">
+            <div class="brand">NEXUS ULTRA v12.0 — Análise Estatística</div>
+            <div class="disclaimer">
+                <strong>Informação:</strong> Este é um gerador de números aleatórios para fins educacionais. 
+                As probabilidades são baseadas nas regras oficiais de cada jogo. 
+                <strong>Não há garantia de premiação.</strong> Jogue com responsabilidade. +18.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURAÇÃO DOS JOGOS =====
+        const RULES = {
+            euromilhoes: {
+                name: "Euromilhões",
+                basePrice: 2.50,
+                reqNumbers: 5,
+                maxNumbers: 50,
+                limitNumbers: 10,
+                reqStars: 2,
+                maxStars: 12,
+                limitStars: 12,
+                starName: "Estrelas",
+                drawDays: [2, 5],
+                drawHour: 20,
+                drawMinute: 0
+            },
+            totoloto: {
+                name: "Totoloto",
+                basePrice: 1.00,
+                reqNumbers: 5,
+                maxNumbers: 49,
+                limitNumbers: 10,
+                reqStars: 1,
+                maxStars: 13,
+                limitStars: 1,
+                starName: "Nº Sorte",
+                drawDays: [3, 6],
+                drawHour: 20,
+                drawMinute: 30
+            },
+            eurodreams: {
+                name: "EuroDreams",
+                basePrice: 2.50,
+                reqNumbers: 6,
+                maxNumbers: 40,
+                limitNumbers: 10,
+                reqStars: 1,
+                maxStars: 5,
+                limitStars: 5,
+                starName: "Nº Sonho",
+                drawDays: [1, 4],
+                drawHour: 20,
+                drawMinute: 0
+            }
+        };
+
+        const DIAS = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+        const MESES = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+        let currentGame = "euromilhoes";
+        let currentType = "simple";
+        let isGenerating = false;
+
+        // ===== FUNÇÕES MATEMÁTICAS =====
+        function combinations(n, k) {
+            if (k < 0 || k > n) return 0;
+            if (k === 0 || k === n) return 1;
+            let result = 1;
+            for (let i = 1; i <= k; i++) {
+                result *= (n - i + 1) / i;
+            }
+            return Math.round(result);
         }
-      }
-      return dataTeste;
-    }
-  }
-  const dataTeste = new Date(now);
-  dataTeste.setDate(now.getDate() + 7);
-  return dataTeste;}
 
-function updateCountdown() {
-  const now = new Date();
-  const nextDraw = getNextDraw();
-  const diff = Math.max(0, (nextDraw - now) / 1000);
-  
-  const dias = Math.floor(diff / 86400);
-  const horas = String(Math.floor((diff % 86400) / 3600)).padStart(2, '0');
-  const minutos = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
-  const segundos = String(Math.floor(diff % 60)).padStart(2, '0');
-  
-  let countdownStr = '';
-  if (dias > 0) countdownStr += `${dias}d `;
-  countdownStr += `${horas}h ${minutos}m ${segundos}s`;
-  
-  const dataStr = `${DIAS_SEMANA[nextDraw.getDay()]}, ${String(nextDraw.getDate()).padStart(2,'0')} ${MESES[nextDraw.getMonth()]} ${nextDraw.getFullYear()} às ${String(nextDraw.getHours()).padStart(2,'0')}:${String(nextDraw.getMinutes()).padStart(2,'0')}`;
-  
-  document.getElementById('nextDrawDate').textContent = dataStr;
-  document.getElementById('nextDrawDateHeader').textContent = dataStr;
-  document.getElementById('countdownDisplay').textContent = countdownStr;
-}
-setInterval(updateCountdown, 1000);
-updateCountdown();
+        function getNextDrawDate() {
+            const r = RULES[currentGame];
+            const now = new Date();
+            for (let days = 0; days <= 7; days++) {
+                const d = new Date(now);
+                d.setDate(now.getDate() + days);
+                if (r.drawDays.includes(d.getDay())) {
+                    return d;
+                }
+            }
+            return new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+        }
 
-// ===== FUNÇÕES MATEMÁTICAS =====
-function combinacoes(n, k) {
-  if (k < 0 || k > n) return 0;
-  if (k === 0 || k === n) return 1;
-  let resultado = 1;
-  for (let i = 1; i <= k; i++) {
-    resultado *= (n - i + 1) / i;
-  }
-  return Math.round(resultado);
-}
+        function formatDrawDate(date) {
+            return `${DIAS[date.getDay()]}, ${String(date.getDate()).padStart(2,'0')} ${MESES[date.getMonth()]} ${date.getFullYear()} às ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+        }
 
-// ===== ALGORITMO GENÉTICO 5D (FITNESS FUNCTION) =====
-function generateSmartCombination(r, nQty, sQty) {
-  let bestCombo = null;
-  let bestScore = -Infinity;
+        // ===== FUNÇÕES DE UI =====
+        function updateDateTime() {
+            const now = new Date();
+            const dateStr = `${DIAS[now.getDay()]}, ${String(now.getDate()).padStart(2,'0')} ${MESES[now.getMonth()]} ${now.getFullYear()}`;
+            const timeStr = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+            document.getElementById('currentDate').textContent = dateStr;
+            document.getElementById('currentTime').textContent = timeStr;
+        }
 
-  for (let i = 0; i < 300; i++) { // População de 300 para garantir qualidade estatística
-    let nums = new Set();
-    while (nums.size < nQty) {
-      nums.add(Math.floor(Math.random() * r.maxN) + 1);
-    }
-    let numArr = Array.from(nums).sort((a, b) => a - b);
+        function updateGameInfo() {
+            const r = RULES[currentGame];
+            document.getElementById('gameName').textContent = r.name;
+            
+            const next = getNextDrawDate();
+            document.getElementById('nextDraw').textContent = `${DIAS[next.getDay()]}, ${String(next.getDate()).padStart(2,'0')} ${MESES[next.getMonth()]}`;
+            
+            document.getElementById('simplePrice').textContent = `€${r.basePrice.toFixed(2)}`;
+            
+            const multiPrice = calculatePrice(currentGame, Math.min(r.reqNumbers + 1, r.limitNumbers), Math.min(r.reqStars + 1, r.limitStars), 1, 'multiple');
+            document.getElementById('multiplePrice').textContent = `€${multiPrice.toFixed(2)}+`;
+        }
 
-    let stars = new Set();
-    while (stars.size < sQty) {      stars.add(Math.floor(Math.random() * r.maxS) + 1);
-    }
-    let starArr = Array.from(stars).sort((a, b) => a - b);
+        function updateRules() {
+            const r = RULES[currentGame];
+            document.getElementById('ruleNumbers').textContent = `${r.reqNumbers} de 1 a ${r.maxNumbers}`;
+            document.getElementById('ruleStars').textContent = `${r.reqStars} de 1 a ${r.maxStars}`;
+            document.getElementById('ruleSimple').textContent = `€${r.basePrice.toFixed(2)}`;
+            document.getElementById('ruleMultiple').textContent = `Até ${r.limitNumbers} números e ${r.limitStars} ${r.starName.toLowerCase()}`;
+            
+            const totalCombos = combinations(r.maxNumbers, r.reqNumbers) * combinations(r.maxStars, r.reqStars);
+            document.getElementById('ruleCombos').textContent = totalCombos.toLocaleString();
+        }
 
-    let score = 50; // Pontuação base
+        function calculatePrice(game, numQty, starQty, sets, betType) {
+            const r = RULES[game];
+            if (betType === 'simple') {
+                return sets * r.basePrice;
+            } else {
+                const numCombos = combinations(numQty, r.reqNumbers);
+                const starCombos = combinations(starQty, r.reqStars);
+                return sets * r.basePrice * numCombos * starCombos;
+            }
+        }
 
-    // 1. Soma dos números (Curva de Gauss)
-    const expectedSum = nQty * ((r.maxN + 1) / 2);
-    const actualSum = numArr.reduce((a, b) => a + b, 0);
-    const sumDiff = Math.abs(actualSum - expectedSum);
-    if (sumDiff < expectedSum * 0.15) score += 30;
-    else if (sumDiff < expectedSum * 0.25) score += 15;
-    else if (sumDiff > expectedSum * 0.4) score -= 20;
+        function selectGame(el) {
+            document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            currentGame = el.dataset.game;
+            
+            document.querySelectorAll('.bet-type-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector('.bet-type-btn[data-type="simple"]').classList.add('active');
+            currentType = 'simple';
+            
+            initUI();
+            document.getElementById('resultsArea').style.display = 'none';
+            updateGameInfo();
+            updateRules();
+        }
 
-    // 2. Equilíbrio Par/Ímpar
-    const oddCount = numArr.filter(n => n % 2 !== 0).length;
-    const evenCount = nQty - oddCount;
-    if (Math.abs(oddCount - evenCount) <= 1) score += 25;
-    else if (Math.abs(oddCount - evenCount) === 2) score += 10;
-    else score -= 15;
+        function selectBetType(el) {
+            document.querySelectorAll('.bet-type-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            currentType = el.dataset.type;
+            initUI();
+            document.getElementById('resultsArea').style.display = 'none';
+        }
 
-    // 3. Equilíbrio Alto/Baixo
-    const midPoint = Math.floor(r.maxN / 2);
-    const lowCount = numArr.filter(n => n <= midPoint).length;
-    const highCount = nQty - lowCount;
-    if (Math.abs(lowCount - highCount) <= 1) score += 25;
-    else if (Math.abs(lowCount - highCount) === 2) score += 10;
-    else score -= 15;
+        function initUI() {
+            const r = RULES[currentGame];
+            const multiple = currentType === 'multiple';
 
-    // 4. Penalização de Sequências (Números seguidos)
-    let consecutives = 0;
-    for (let j = 1; j < numArr.length; j++) {
-      if (numArr[j] === numArr[j-1] + 1) consecutives++;
-    }
-    if (consecutives === 0) score += 15;
-    else if (consecutives === 1) score += 5;
-    else score -= 30; // Penalização forte para 3+ seguidos
+            const numSel = document.getElementById('numQty');
+            numSel.innerHTML = '';
+            const minNum = r.reqNumbers;
+            const maxNum = multiple ? r.limitNumbers : r.reqNumbers;
+            for (let i = minNum; i <= maxNum; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i} números`;
+                if (i === minNum) option.selected = true;
+                numSel.appendChild(option);
+            }
 
-    // 5. Equilíbrio das Estrelas
-    const starOdd = starArr.filter(s => s % 2 !== 0).length;
-    const starEven = sQty - starOdd;
-    if (Math.abs(starOdd - starEven) <= 1) score += 10;
-    else score -= 5;
+            const starSel = document.getElementById('starQty');
+            starSel.innerHTML = '';
+            const minStar = r.reqStars;
+            const maxStar = multiple ? r.limitStars : r.reqStars;
+            for (let i = minStar; i <= maxStar; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i} ${r.starName}`;
+                if (i === minStar) option.selected = true;
+                starSel.appendChild(option);
+            }
 
-    if (score > bestScore) {
-      bestScore = score;
-      bestCombo = { numbers: numArr, stars: starArr, score: score };
-    }
-  }
-  return bestCombo;}
+            document.getElementById('starLabel').textContent = r.starName;
+            updateUI();
+            updateGameInfo();
+            updateRules();
+        }
 
-function atualizarOdds() {
-  const r = RULES[currentGame];
-  const n = parseInt(document.getElementById('numQty').value) || r.reqN;
-  const s = parseInt(document.getElementById('starQty').value) || r.reqS;
-  
-  const totalCombinacoes = combinacoes(r.maxN, n) * combinacoes(r.maxS, s);
-  
-  document.getElementById('oddsFirst').textContent = `1:${totalCombinacoes.toLocaleString()}`;
-  document.getElementById('oddsQuality').textContent = `Top 5%`;
-  document.getElementById('oddsAvoid').textContent = `Sequências/Extremos`;
-  document.getElementById('oddsTotal').textContent = totalCombinacoes.toLocaleString();
-}
+        function updateUI() {
+            const r = RULES[currentGame];
+            const numSel = document.getElementById('numQty');
+            const starSel = document.getElementById('starQty');
+            if (!numSel || !starSel) return;
 
-// ===== SELEÇÃO DE JOGO =====
-function selectGame(el) {
-  document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  currentGame = el.dataset.game;
-  document.querySelectorAll('.bet-type-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.bet-type-btn[data-type="simple"]').classList.add('active');
-  currentType = "simple";
-  initUI();
-  updateCountdown();
-}
+            const n = parseInt(numSel.value) || r.reqNumbers;
+            const s = parseInt(starSel.value) || r.reqStars;
+            const how = parseInt(document.getElementById('howMany').value) || 1;
 
-function selectBetType(el) {
-  document.querySelectorAll('.bet-type-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  currentType = el.dataset.type;
-  initUI();
-}
+            const price = calculatePrice(currentGame, n, s, how, currentType);
+            document.getElementById('totalPrice').textContent = `€ ${price.toFixed(2)}`;
+            
+            const detail = `${currentType === 'simple' ? 'Simples' : 'Múltipla'} · ${how} Conjunto${how > 1 ? 's' : ''}`;
+            document.getElementById('priceDetail').textContent = detail;
+        }
 
-// ===== INICIALIZAR UI =====
-function initUI() {
-  const r = RULES[currentGame];
-  const multiple = currentType === "multiple";
-  
-  const numSel = document.getElementById('numQty');
-  numSel.innerHTML = '';
-  const minNum = r.reqN;
-  const maxNum = multiple ? r.limitN : r.reqN;
-  for (let i = minNum; i <= maxNum; i++) {
-    const option = document.createElement('option');
-    option.value = i;
-    option.textContent = `${i} números`;
-    if (i === minNum) option.selected = true;
-    numSel.appendChild(option);
-  }
-  const starSel = document.getElementById('starQty');
-  starSel.innerHTML = '';
-  const minStar = r.reqS;
-  const maxStar = multiple ? r.limitS : r.reqS;
-  for (let i = minStar; i <= maxStar; i++) {
-    const option = document.createElement('option');
-    option.value = i;
-    option.textContent = `${i} ${r.starName}`;
-    if (i === minStar) option.selected = true;
-    starSel.appendChild(option);
-  }
+        // ===== GERADOR DE NÚMEROS =====
+        function getRandomNumbers(count, max) {
+            const available = [];
+            for (let i = 1; i <= max; i++) available.push(i);
+            const selected = [];
+            for (let i = 0; i < count; i++) {
+                const idx = Math.floor(Math.random() * available.length);
+                selected.push(available[idx]);
+                available.splice(idx, 1);
+            }
+            return selected.sort((a, b) => a - b);
+        }
 
-  document.getElementById('numLabel').textContent = 'Números';
-  document.getElementById('starLabel').textContent = r.starName;
-  updateCalc();
-  document.getElementById('resultArea').style.display = 'none';
-  atualizarOdds();
-}
+        function generateNumbers() {
+            if (isGenerating) return;
+            isGenerating = true;
 
-// ===== ATUALIZAR PREÇO (Fórmula Combinatória Real) =====
-function updateCalc() {
-  const r = RULES[currentGame];
-  const numSel = document.getElementById('numQty');
-  const starSel = document.getElementById('starQty');
-  if (!numSel || !starSel) return;
-  
-  const n = parseInt(numSel.value) || r.reqN;
-  const s = parseInt(starSel.value) || r.reqS;
-  const how = parseInt(document.getElementById('howMany').value) || 1;
-  
-  let price = 0;
-  if (currentType === "simple") {
-    price = how * r.base;
-  } else {
-    const numCombos = combinacoes(n, r.reqN);
-    const starCombos = combinacoes(s, r.reqS);
-    price = how * r.base * numCombos * starCombos;
-  }
-  document.getElementById('totalPrice').textContent = `€ ${price.toFixed(2)}`;
-  atualizarOdds();
-}
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.textContent = 'A PROCESSAR...';
 
-// ===== GERAR NÚMEROS COM ALGORITMO GENÉTICO =====
-function generateNumbers() {
-  const r = RULES[currentGame];
-  const how = parseInt(document.getElementById('howMany').value) || 1;
-  const nQty = parseInt(document.getElementById('numQty').value);
-  const sQty = parseInt(document.getElementById('starQty').value);
-    if (!nQty || !sQty) {
-    alert('Por favor, selecione a quantidade de números e estrelas.');
-    return;
-  }
+            const r = RULES[currentGame];
+            const how = parseInt(document.getElementById('howMany').value) || 1;
+            const nQty = parseInt(document.getElementById('numQty').value);
+            const sQty = parseInt(document.getElementById('starQty').value);
 
-  const totalCombinacoes = combinacoes(r.maxN, nQty) * combinacoes(r.maxS, sQty);
-  const nextDraw = getNextDraw();
-  const dataSorteio = `${DIAS_SEMANA[nextDraw.getDay()]}, ${String(nextDraw.getDate()).padStart(2,'0')} ${MESES[nextDraw.getMonth()]} ${nextDraw.getFullYear()} às ${String(nextDraw.getHours()).padStart(2,'0')}:${String(nextDraw.getMinutes()).padStart(2,'0')}`;
+            if (!nQty || !sQty) {
+                alert('Por favor, selecione a quantidade de números e estrelas.');
+                btn.disabled = false;
+                btn.textContent = 'GERAR COMBINAÇÕES';
+                isGenerating = false;
+                return;
+            }
 
-  let html = `<h3 style="color:var(--gold); text-align:center;">${r.name} — ${currentType.toUpperCase()}</h3>`;
-  html += `<p style="color:#aaa; text-align:center; font-size: 13px;">${nQty} números + ${sQty} ${r.starName} • Otimizado por Algoritmo Genético 5D</p>`;
-  
-  html += `
-    <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:8px; margin:15px 0; text-align:center; font-size:12px;">
-      <div style="background:rgba(255,215,0,0.1); padding:8px; border-radius:8px; border:1px solid #ffd70033;">
-        <div style="color:#888;">Odds Reais 1º Prémio</div>
-        <div style="color:var(--gold); font-weight:bold; font-size:14px;">1:${totalCombinacoes.toLocaleString()}</div>
-      </div>
-      <div style="background:rgba(0,242,255,0.1); padding:8px; border-radius:8px; border:1px solid #00f2ff33;">
-        <div style="color:#888;">Eficácia do Algoritmo</div>
-        <div style="color:var(--cyan); font-weight:bold; font-size:14px;">Top 5% Estatístico</div>
-      </div>
-      <div style="background:rgba(0,255,136,0.1); padding:8px; border-radius:8px; border:1px solid #00ff8833;">
-        <div style="color:#888;">Padrão Evitado</div>
-        <div style="color:var(--emerald); font-weight:bold; font-size:14px;">Sequências / Extremos</div>
-      </div>
-    </div>
-  `;
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.add('active');
+            document.getElementById('loadingStatus').textContent = 'A gerar combinações...';
 
-  for (let i = 1; i <= how; i++) {
-    const combo = generateSmartCombination(r, nQty, sQty);
-    const numbers = combo.numbers;
-    const stars = combo.stars;
-    const score = combo.score;
-    
-    // Normalizar pontuação para percentagem de qualidade (máx teórico ~155)
-    const qualityPercent = Math.min(99, Math.max(78, Math.round((score / 155) * 100)));
+            setTimeout(() => {
+                const results = [];
+                for (let i = 0; i < how; i++) {
+                    const numbers = getRandomNumbers(nQty, r.maxNumbers);
+                    const stars = getRandomNumbers(sQty, r.maxStars);
+                    results.push({ set: i + 1, numbers, stars });
+                }
 
-    const oddCount = numbers.filter(n => n % 2 !== 0).length;
-    const evenCount = nQty - oddCount;
-    const midPoint = Math.floor(r.maxN / 2);
-    const lowCount = numbers.filter(n => n <= midPoint).length;
-    const highCount = nQty - lowCount;
-    const sum = numbers.reduce((a,b)=>a+b, 0);
+                const totalCombos = combinations(r.maxNumbers, r.reqNumbers) * combinations(r.maxStars, r.reqStars);
+                const nextDraw = getNextDrawDate();
+                const drawInfoStr = formatDrawDate(nextDraw);
 
-    html += `
-      <div class="result-card">
-        <strong>🎯 Conjunto ${i} <span style="color:var(--emerald); font-size:14px;">(Qualidade 5D: ${qualityPercent}%)</span></strong>
-        <div class="numbers-row">
-          ${numbers.map(n => `<span class="ball number">${n}</span>`).join(' ')}        </div>
-        <div class="stars-container">
-          ${stars.map(s => `<span class="ball star">${s}</span>`).join(' ')}
-        </div>
-        <div class="draw-date">
-          📅 Sorteio: <strong>${dataSorteio}</strong><br>
-          📊 Soma: <strong>${sum}</strong> • Par/Ímpar: <strong>${evenCount}/${oddCount}</strong> • Alto/Baixo: <strong>${highCount}/${lowCount}</strong><br>
-          🧠 <span style="color:var(--cyan);">Algoritmo Genético:</span> Combinação otimizada para máxima distribuição estatística, sem sequências improváveis.
-        </div>
-      </div>`;
-  }
+                const statsHtml = `
+                    <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;text-align:center;border-left:3px solid #ffd700;">
+                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase;">Probabilidade 1º Prémio</div>
+                        <div style="font-size:1.1rem;font-weight:900;color:#ffd700;">1:${totalCombos.toLocaleString()}</div>
+                        <div style="font-size:0.7rem;color:#666;">${(1/totalCombos*100).toExponential(4)}%</div>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;text-align:center;border-left:3px solid #00e5ff;">
+                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase;">Combinações Totais</div>
+                        <div style="font-size:1.1rem;font-weight:900;color:#00e5ff;">${totalCombos.toLocaleString()}</div>
+                        <div style="font-size:0.7rem;color:#666;">Universo matemático</div>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.3);padding:15px;border-radius:10px;text-align:center;border-left:3px solid #ff4081;">
+                        <div style="font-size:0.65rem;color:#888;text-transform:uppercase;">Conjuntos Gerados</div>
+                        <div style="font-size:1.1rem;font-weight:900;color:#ff4081;">${how}</div>
+                        <div style="font-size:0.7rem;color:#666;">${currentType === 'simple' ? 'Simples' : 'Múltipla'}</div>
+                    </div>
+                `;
+                document.getElementById('statsDisplay').innerHTML = statsHtml;
 
-  document.getElementById('resultsList').innerHTML = html;
-  document.getElementById('resultArea').style.display = 'block';
-  document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
+                let html = '';
+                for (const combo of results) {
+                    const nums = combo.numbers.map(n => `<span class="ball number">${String(n).padStart(2,'0')}</span>`).join(' ');
+                    const stars = combo.stars.map(s => `<span class="ball star">${String(s).padStart(2,'0')}</span>`).join(' ');
+                    const sum = combo.numbers.reduce((a,b) => a + b, 0);
+                    const odd = combo.numbers.filter(n => n % 2 !== 0).length;
+                    const even = combo.numbers.length - odd;
+                    const high = combo.numbers.filter(n => n > r.maxNumbers/2).length;
+                    const low = combo.numbers.length - high;
 
-// ===== INICIALIZAR =====
-document.addEventListener('DOMContentLoaded', function() {
-  initUI();
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-});
-if (document.readyState === 'complete' || document.readyState === 'interactive') {
-  initUI();
-  updateCountdown();
-  setInterval(updateCountdown, 1000);
-}
-</script>
+                    html += `
+                        <div class="result-card fade-in">
+                            <div class="result-header">
+                                <span class="set-number">🎯 Conjunto ${combo.set}</span>
+                                <span style="font-size:0.7rem;color:#666;">${r.name}</span>
+                            </div>
+                            <div class="numbers-row">${nums}</div>
+                            <div class="stars-container">${stars}</div>
+                            <div class="draw-info">
+                                📅 Próximo Sorteio: <strong class="draw-date">${drawInfoStr}</strong>
+                            </div>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-label">Soma</div>
+                                    <div class="stat-value">${sum}</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Par/Ímpar</div>
+                                    <div class="stat-value">${even}/${odd}</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Alto/Baixo</div>
+                                    <div class="stat-value">${high}/${low}</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Estrelas</div>
+                                    <div class="stat-value">${combo.stars.length}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('resultsList').innerHTML = html;
+                document.getElementById('resultsArea').style.display = 'block';
+
+                overlay.classList.remove('active');
+                btn.disabled = false;
+                btn.textContent = 'GERAR COMBINAÇÕES';
+                isGenerating = false;
+
+                document.getElementById('resultsArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400);
+        }
+
+        // ===== INICIALIZAÇÃO =====
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+            initUI();
+            updateGameInfo();
+            updateRules();
+        });
+    </script>
 </body>
 </html>
