@@ -337,6 +337,16 @@
             font-weight: 700;
             color: #00e5ff;
         }
+        .badge-no-consecutive {
+            display: inline-block;
+            background: rgba(0, 230, 118, 0.15);
+            color: #00e676;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            border: 1px solid rgba(0, 230, 118, 0.2);
+        }
         .footer {
             text-align: center;
             padding: 20px;
@@ -629,6 +639,90 @@
             return `${DIAS[date.getDay()]}, ${String(date.getDate()).padStart(2,'0')} ${MESES[date.getMonth()]} ${date.getFullYear()} às ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
         }
 
+        // ===== GERADOR DE NÚMEROS SEM SEQUÊNCIAS =====
+        function getRandomNumbersNoConsecutive(count, max) {
+            // Garante que não há números consecutivos
+            // Para 5 números de 1 a 50, precisamos de pelo menos 9 espaços entre eles (5 + 4 gaps)
+            // O algoritmo seleciona números com pelo menos 1 de diferença entre eles
+            
+            let attempts = 0;
+            const maxAttempts = 10000;
+            
+            while (attempts < maxAttempts) {
+                attempts++;
+                
+                // Gerar números aleatórios
+                const available = [];
+                for (let i = 1; i <= max; i++) available.push(i);
+                const selected = [];
+                
+                for (let i = 0; i < count; i++) {
+                    const idx = Math.floor(Math.random() * available.length);
+                    selected.push(available[idx]);
+                    available.splice(idx, 1);
+                }
+                
+                selected.sort((a, b) => a - b);
+                
+                // Verificar se há números consecutivos
+                let hasConsecutive = false;
+                for (let i = 1; i < selected.length; i++) {
+                    if (selected[i] - selected[i-1] === 1) {
+                        hasConsecutive = true;
+                        break;
+                    }
+                }
+                
+                if (!hasConsecutive) {
+                    return selected;
+                }
+            }
+            
+            // Fallback: algoritmo mais lento mas garantido
+            // Para 5 números de 1 a 50, sem consecutivos
+            const result = [];
+            const available = [];
+            for (let i = 1; i <= max; i++) available.push(i);
+            
+            // Embaralhar
+            for (let i = available.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [available[i], available[j]] = [available[j], available[i]];
+            }
+            
+            for (const num of available) {
+                // Verificar se este número é consecutivo a algum já selecionado
+                let isConsecutive = false;
+                for (const selected of result) {
+                    if (Math.abs(num - selected) === 1) {
+                        isConsecutive = true;
+                        break;
+                    }
+                }
+                if (!isConsecutive) {
+                    result.push(num);
+                    if (result.length === count) break;
+                }
+            }
+            
+            // Se ainda não tiver números suficientes, preencher com números aleatórios
+            while (result.length < count) {
+                const num = Math.floor(Math.random() * max) + 1;
+                let isConsecutive = false;
+                for (const selected of result) {
+                    if (Math.abs(num - selected) === 1) {
+                        isConsecutive = true;
+                        break;
+                    }
+                }
+                if (!isConsecutive && !result.includes(num)) {
+                    result.push(num);
+                }
+            }
+            
+            return result.sort((a, b) => a - b);
+        }
+
         // ===== FUNÇÕES DE UI =====
         function updateDateTime() {
             const now = new Date();
@@ -749,15 +843,7 @@
 
         // ===== GERADOR DE NÚMEROS =====
         function getRandomNumbers(count, max) {
-            const available = [];
-            for (let i = 1; i <= max; i++) available.push(i);
-            const selected = [];
-            for (let i = 0; i < count; i++) {
-                const idx = Math.floor(Math.random() * available.length);
-                selected.push(available[idx]);
-                available.splice(idx, 1);
-            }
-            return selected.sort((a, b) => a - b);
+            return getRandomNumbersNoConsecutive(count, max);
         }
 
         function generateNumbers() {
@@ -783,13 +869,13 @@
 
             const overlay = document.getElementById('loadingOverlay');
             overlay.classList.add('active');
-            document.getElementById('loadingStatus').textContent = 'A gerar combinações...';
+            document.getElementById('loadingStatus').textContent = 'A gerar combinações sem sequências...';
 
             setTimeout(() => {
                 const results = [];
                 for (let i = 0; i < how; i++) {
-                    const numbers = getRandomNumbers(nQty, r.maxNumbers);
-                    const stars = getRandomNumbers(sQty, r.maxStars);
+                    const numbers = getRandomNumbersNoConsecutive(nQty, r.maxNumbers);
+                    const stars = getRandomNumbersNoConsecutive(sQty, r.maxStars);
                     results.push({ set: i + 1, numbers, stars });
                 }
 
@@ -818,6 +904,15 @@
 
                 let html = '';
                 for (const combo of results) {
+                    // Verificar se tem sequências (nunca deve ter)
+                    let hasSeq = false;
+                    for (let i = 1; i < combo.numbers.length; i++) {
+                        if (combo.numbers[i] - combo.numbers[i-1] === 1) {
+                            hasSeq = true;
+                            break;
+                        }
+                    }
+                    
                     const nums = combo.numbers.map(n => `<span class="ball number">${String(n).padStart(2,'0')}</span>`).join(' ');
                     const stars = combo.stars.map(s => `<span class="ball star">${String(s).padStart(2,'0')}</span>`).join(' ');
                     const sum = combo.numbers.reduce((a,b) => a + b, 0);
@@ -830,7 +925,10 @@
                         <div class="result-card fade-in">
                             <div class="result-header">
                                 <span class="set-number">🎯 Conjunto ${combo.set}</span>
-                                <span style="font-size:0.7rem;color:#666;">${r.name}</span>
+                                <span style="display:flex;align-items:center;gap:8px;">
+                                    <span class="badge-no-consecutive">✓ Sem sequências</span>
+                                    <span style="font-size:0.7rem;color:#666;">${r.name}</span>
+                                </span>
                             </div>
                             <div class="numbers-row">${nums}</div>
                             <div class="stars-container">${stars}</div>
@@ -881,4 +979,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
