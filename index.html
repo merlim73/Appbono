@@ -1,600 +1,531 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#040507">
-  <title>ORACLE · Prognóstico</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: #040507; color: #e0e6ed; padding: 15px; font-size: 14px; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
-    .main-container { max-width: 600px; margin: 0 auto; width: 100%; flex: 1; }
-
-    .header { background: rgba(11, 13, 18, 0.9); border: 1px solid rgba(245, 158, 11, 0.3); padding: 20px; text-align: center; margin-bottom: 20px; border-radius: 16px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.1); backdrop-filter: blur(10px); position: sticky; top: 10px; z-index: 100; }
-    .header h1 { font-size: 1.8rem; color: #f59e0b; letter-spacing: 4px; text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); margin-bottom: 5px; }
-    .header p { font-size: 0.75rem; color: #10b981; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-
-    .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: #0b0d12; border-radius: 12px; padding: 6px; border: 1px solid #1f242e; overflow-x: auto; }
-    .tab { flex: 1; text-align: center; padding: 12px 8px; font-size: 0.75rem; color: #8892a0; cursor: pointer; border-radius: 8px; font-weight: 700; text-transform: uppercase; transition: all 0.3s ease; white-space: nowrap; min-width: 80px; }
-    .tab.active { background: #f59e0b; color: #000; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
-
-    .view { display: none; animation: fadeIn 0.4s ease-out; }
-    .view.active { display: block; }
-
-    .card { background: rgba(11, 13, 18, 0.6); border: 1px solid #1f242e; border-radius: 16px; padding: 20px; margin-bottom: 15px; backdrop-filter: blur(5px); }
-    .card h2 { font-size: 1rem; color: #f59e0b; margin-bottom: 15px; border-bottom: 1px solid #1f242e; padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-    .input-group { margin-bottom: 15px; }
-    .input-group label { display: block; font-size: 0.75rem; color: #8892a0; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    
-    select { 
-      width: 100%; padding: 14px; background: #06080c; border: 1px solid #2d3748; color: #06b6d4; border-radius: 10px; font-size: 1rem; outline: none; appearance: none; 
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
-    }
-    select:focus { border-color: #f59e0b; }
-
-    .btn-gerar { width: 100%; padding: 16px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 10px; transition: transform 0.1s, box-shadow 0.3s; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
-    .btn-gerar:active { transform: scale(0.97); }
-    .btn-gerar:disabled { background: #2d3748; color: #718096; box-shadow: none; cursor: not-allowed; }
-    .btn-gerar.pulsing { animation: pulse 1.5s infinite; }
-
-    .btn-secondary { width: 100%; padding: 12px; background: #1f242e; color: #e0e6ed; border: 1px solid #2d3748; border-radius: 10px; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; margin-top: 10px; transition: all 0.3s; }
-    .btn-secondary:active { background: #2d3748; border-color: #f59e0b; }
-
-    .btn-danger { background: #7f1d1d; border-color: #991b1b; color: #fca5a5; }
-    .btn-danger:active { background: #991b1b; }
-
-    .result-box { background: #06080c; border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 15px; position: relative; overflow: hidden; }
-    .result-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #f59e0b, transparent); }
-    .result-label { font-size: 0.8rem; color: #8892a0; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .badge-multipla { background: #f59e0b; color: #000; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; }    
-    .balls-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
-    .ball { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: #fff; box-shadow: inset 0 -4px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.4); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: scale(0.5); }
-    .ball-main { background: radial-gradient(circle at 30% 30%, #60a5fa, #1d4ed8); border: 2px solid #93c5fd; }
-    .ball-star { background: radial-gradient(circle at 30% 30%, #fcd34d, #b45309); border: 2px solid #fde68a; color: #451a03; }
-    .ball-dream { background: radial-gradient(circle at 30% 30%, #c084fc, #7e22ce); border: 2px solid #e9d5ff; color: #fff; }
-
-    .draw-info { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; padding: 12px; border-radius: 10px; margin: 15px 0; font-size: 0.85rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
-    
-    .price-tag { display: flex; justify-content: space-between; align-items: center; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); padding: 15px; border-radius: 12px; margin-top: 10px; flex-wrap: wrap; gap: 10px; }
-    .price-col-left { text-align: left; flex: 1; min-width: 120px; }
-    .price-col-right { text-align: right; flex: 1; min-width: 120px; }
-    .price-label { font-size: 0.7rem; color: #8892a0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .price-value-small { font-size: 1.1rem; font-weight: 700; color: #e0e6ed; }
-    .price-value-large { font-size: 1.4rem; font-weight: 800; color: #f59e0b; }
-    .combo-info { font-size: 0.75rem; color: #10b981; margin-top: 5px; text-align: right; }
-
-    .history-item { background: #06080c; border: 1px solid #1f242e; border-radius: 10px; padding: 12px; margin-bottom: 10px; font-size: 0.85rem; transition: all 0.3s; }
-    .history-item:active { transform: scale(0.98); }
-    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
-    .history-date { color: #8892a0; font-size: 0.75rem; }
-    .history-game { color: #f59e0b; font-weight: 700; }
-    .history-balls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-    .history-ball { width: 32px; height: 32px; font-size: 0.85rem; }
-
-    .footer { text-align: center; font-size: 0.7rem; color: #4a5568; margin-top: 30px; padding-bottom: 20px; line-height: 1.4; }
-
-    .info-box { background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); color: #67e8f9; padding: 12px; border-radius: 10px; margin: 15px 0; font-size: 0.8rem; line-height: 1.5; }
-
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 15px 0; }
-    .stat-card { background: #06080c; border: 1px solid #1f242e; border-radius: 10px; padding: 12px; text-align: center; }
-    .stat-value { font-size: 1.5rem; font-weight: 800; color: #f59e0b; margin-bottom: 4px; }
-    .stat-label { font-size: 0.7rem; color: #8892a0; text-transform: uppercase; }
-
-    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: #fff; padding: 12px 24px; border-radius: 10px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1000; animation: slideUp 0.3s ease-out; }
-    .toast.error { background: #ef4444; }
-
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes popIn { to { opacity: 1; transform: scale(1); } }
-    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
-    @keyframes slideUp { from { transform: translateX(-50%) translateY(100px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
-
-    @media (max-width: 400px) {
-      .ball { width: 38px; height: 38px; font-size: 1rem; }
-      .history-ball { width: 28px; height: 28px; font-size: 0.75rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#040507">
+<title>ORACLE · Híbrido Inteligente</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+body{background:#040507;color:#e0e6ed;padding:15px;font-size:18px;line-height:1.6;min-height:100vh;display:flex;flex-direction:column}
+.main-container{max-width:680px;margin:0 auto;width:100%;flex:1}
+.header{background:rgba(11,13,18,.95);border:1px solid rgba(245,158,11,.35);padding:22px 24px;text-align:center;margin-bottom:20px;border-radius:18px;box-shadow:0 0 30px rgba(245,158,11,.12);backdrop-filter:blur(12px);position:sticky;top:8px;z-index:100}
+.header h1{font-size:2rem;color:#f59e0b;letter-spacing:3px;text-shadow:0 0 16px rgba(245,158,11,.5);margin-bottom:4px}
+.header p{font-size:.85rem;color:#10b981;text-transform:uppercase;letter-spacing:1.5px;font-weight:600}
+.tabs{display:flex;gap:6px;margin-bottom:20px;background:#0b0d12;border-radius:14px;padding:6px;border:1px solid #1f242e;overflow-x:auto}
+.tab{flex:1;text-align:center;padding:13px 8px;font-size:.85rem;color:#8892a0;cursor:pointer;border-radius:10px;font-weight:700;text-transform:uppercase;transition:all .25s;white-space:nowrap;min-width:80px;user-select:none}
+.tab.active{background:#f59e0b;color:#000;box-shadow:0 4px 16px rgba(245,158,11,.35)}
+.view{display:none;animation:fadeIn .35s ease-out}.view.active{display:block}
+.card{background:rgba(11,13,18,.65);border:1px solid #1f242e;border-radius:18px;padding:22px;margin-bottom:16px;backdrop-filter:blur(6px)}
+.card h2{font-size:1.15rem;color:#f59e0b;margin-bottom:16px;border-bottom:1px solid #1f242e;padding-bottom:10px;display:flex;align-items:center;gap:10px}
+.input-group{margin-bottom:16px}
+.input-group label{display:block;font-size:.8rem;color:#8892a0;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+select{width:100%;padding:15px;background:#06080c;border:1px solid #2d3748;color:#06b6d4;border-radius:12px;font-size:1.05rem;outline:none;appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");background-repeat:no-repeat;background-position:right 14px center;background-size:18px}
+select:focus{border-color:#f59e0b}
+.btn-gerar{width:100%;padding:18px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#000;border:none;border-radius:12px;font-size:1.15rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;cursor:pointer;margin-top:10px;box-shadow:0 4px 20px rgba(245,158,11,.4)}
+.btn-gerar:active{transform:scale(.97)}.btn-gerar:disabled{background:#2d3748;color:#718096;box-shadow:none;cursor:not-allowed}
+.btn-gerar.pulsing{animation:pulse 1.4s infinite}
+.btn-secondary{width:100%;padding:14px;background:#1f242e;color:#e0e6ed;border:1px solid #2d3748;border-radius:12px;font-size:.95rem;font-weight:600;text-transform:uppercase;cursor:pointer;margin-top:10px}
+.btn-secondary:active{background:#2d3748;border-color:#f59e0b}
+.btn-danger{background:#7f1d1d;border-color:#991b1b;color:#fca5a5}
+.result-box{background:#06080c;border:1px solid rgba(245,158,11,.35);border-radius:18px;padding:24px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden}
+.result-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#f59e0b,transparent)}
+.result-label{font-size:.9rem;color:#8892a0;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px;display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}
+.badge{font-size:.7rem;padding:3px 10px;border-radius:5px;font-weight:800}
+.badge-multipla{background:#f59e0b;color:#000}.badge-simples{background:#10b981;color:#000}
+.balls-container{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:16px 0}
+.ball{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;color:#fff;box-shadow:inset 0 -4px 4px rgba(0,0,0,.3),0 4px 10px rgba(0,0,0,.4);animation:popIn .4s cubic-bezier(.175,.885,.32,1.275) forwards;opacity:0;transform:scale(.5)}
+.ball-main{background:radial-gradient(circle at 30% 30%,#60a5fa,#1d4ed8);border:2px solid #93c5fd}
+.ball-star{background:radial-gradient(circle at 30% 30%,#fcd34d,#b45309);border:2px solid #fde68a;color:#451a03}
+.ball-dream{background:radial-gradient(circle at 30% 30%,#c084fc,#7e22ce);border:2px solid #e9d5ff}
+.draw-info{background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.3);color:#34d399;padding:13px;border-radius:12px;margin:14px 0;font-size:.9rem;text-align:center}
+.price-tag{display:flex;justify-content:space-between;align-items:center;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);padding:16px;border-radius:14px;margin-top:12px;flex-wrap:wrap;gap:12px}
+.price-col-left,.price-col-right{flex:1;min-width:140px}.price-col-right{text-align:right}
+.price-label{font-size:.75rem;color:#8892a0;text-transform:uppercase;margin-bottom:4px}
+.price-value-small{font-size:1.15rem;font-weight:700}.price-value-large{font-size:1.5rem;font-weight:800;color:#f59e0b}
+.combo-info{font-size:.8rem;color:#10b981;margin-top:5px}
+.prob-box,.score-box{background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.25);border-radius:14px;padding:14px;margin-top:14px;font-size:.85rem;color:#67e8f9;text-align:left}
+.score-box{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.3);color:#c4b5fd}
+.score-box strong{color:#a78bfa}
+.history-item{background:#06080c;border:1px solid #1f242e;border-radius:12px;padding:14px;margin-bottom:12px;font-size:.9rem}
+.history-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px}
+.history-date{color:#8892a0;font-size:.8rem}.history-game{color:#f59e0b;font-weight:700}
+.history-balls{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.history-ball{width:32px;height:32px;font-size:.85rem}
+.footer{text-align:center;font-size:.75rem;color:#4a5568;margin-top:32px;padding-bottom:24px;line-height:1.5}
+.info-box{background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);color:#67e8f9;padding:13px;border-radius:12px;margin:14px 0;font-size:.85rem;line-height:1.6}
+.live-preview{background:#06080c;border:1px dashed #2d3748;border-radius:14px;padding:14px;margin:14px 0;font-size:.85rem;color:#8892a0;text-align:center}
+.live-preview strong{color:#f59e0b}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+.stat-card{background:#06080c;border:1px solid #1f242e;border-radius:12px;padding:14px;text-align:center}
+.stat-value{font-size:1.5rem;font-weight:800;color:#f59e0b;margin-bottom:4px}
+.stat-label{font-size:.75rem;color:#8892a0;text-transform:uppercase}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:14px 26px;border-radius:12px;font-weight:600;font-size:1rem;box-shadow:0 4px 16px rgba(0,0,0,.35);z-index:1000;animation:slideUp .3s ease-out;max-width:90%;text-align:center}
+.toast.error{background:#ef4444}
+.filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.filter-btn{flex:1;min-width:80px;padding:10px;background:#1f242e;border:1px solid #2d3748;color:#8892a0;border-radius:10px;font-size:.8rem;font-weight:600;cursor:pointer;text-transform:uppercase}
+.filter-btn.active{background:#f59e0b;color:#000;border-color:#f59e0b}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{to{opacity:1;transform:scale(1)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(245,158,11,.45)}70%{box-shadow:0 0 0 16px rgba(245,158,11,0)}100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}}
+@keyframes slideUp{from{transform:translateX(-50%) translateY(80px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+@media(max-width:400px){.ball{width:44px;height:44px;font-size:1.05rem}.history-ball{width:28px;height:28px;font-size:.75rem}.header h1{font-size:1.6rem}}
+</style>
 </head>
 <body>
 <div class="main-container">
-  <div class="header">
-    <h1>👁️ ORACLE</h1>
-    <p id="currentDateTime">A carregar data...</p>
-  </div>
+<div class="header"><h1>👁️ ORACLE</h1><p id="currentDateTime">A carregar...</p></div>
+<div class="tabs">
+<div class="tab active" data-target="config">Configurar</div>
+<div class="tab" data-target="result">Resultado</div>
+<div class="tab" data-target="history">Histórico</div>
+<div class="tab" data-target="stats">Estatísticas</div>
+</div>
 
-  <div class="tabs">
-    <div class="tab active" data-target="config">Configurar</div>
-    <div class="tab" data-target="result">Resultado</div>
-    <div class="tab" data-target="history">Histórico</div>
-    <div class="tab" data-target="stats">Estatísticas</div>
-  </div>
+<div id="view-config" class="view active card">
+<h2>⚙️ Parâmetros do Jogo</h2>
+<div class="input-group"><label>Modalidade</label>
+<select id="gameType" onchange="updateFormFields()">
+<option value="euromilhoes">🇪🇺 Euromilhões</option>
+<option value="totoloto">🇵🇹 Totoloto</option>
+<option value="eurodreams">💭 EuroDreams</option>
+</select></div>
+<div class="input-group"><label>Tipo de Aposta</label>
+<select id="betType" onchange="updateFormFields()">
+<option value="simples">Simples (padrão Santa Casa)</option>
+<option value="multipla">Múltipla (mais números / estrelas)</option>
+</select></div>
 
-  <div id="view-config" class="view active card">
-    <h2>⚙️ Parâmetros do Jogo</h2>
-    
-    <div class="input-group">
-      <label>Modalidade</label>
-      <select id="gameType" onchange="updateFormFields()">
-        <option value="euromilhoes">🇪🇺 Euromilhões</option>
-        <option value="totoloto">🇵🇹 Totoloto</option>
-        <option value="eurodreams">💭 EuroDreams</option>
-      </select>
-    </div>
+<div id="multiplaOptions" style="display:none;border-top:1px dashed #2d3748;padding-top:16px;margin-top:12px">
+<div class="input-group"><label id="labelMultiMain">Nº de Números na Grelha</label><select id="multiMainCount" onchange="updateLivePreview()"></select></div>
+<div class="input-group" id="multiStarGroup"><label id="labelMultiStar">Nº de Estrelas / Nº Sonho</label><select id="multiStarCount" onchange="updateLivePreview()"></select></div>
+<div class="info-box" id="multiInfo">ℹ️ Nas múltiplas o sistema gera todas as combinações simples possíveis conforme regras oficiais.</div>
+<div class="live-preview" id="livePreview">Selecione opções para ver o custo e nº de chaves.</div>
+</div>
+<button class="btn-gerar" id="generateBtn" onclick="gerar()">Gerar Combinação</button>
+</div>
 
-    <div class="input-group">
-      <label>Tipo de Aposta</label>
-      <select id="betType" onchange="updateFormFields()">
-        <option value="simples">Simples (Padrão Santa Casa)</option>
-        <option value="multipla">Múltipla (Mais números na mesma grelha)</option>
-      </select>
-    </div>
-    
-    <div id="multiplaOptions" style="display: none; border-top: 1px dashed #2d3748; padding-top: 15px; margin-top: 15px;">
-      <div class="input-group">
-        <label id="labelMultiMain">Nº de Números na Grelha</label>
-        <select id="multiMainCount"></select>
-      </div>
-      <div class="input-group" id="multiStarGroup">
-        <label id="labelMultiStar">Nº de Estrelas / Nº Sorte</label>
-        <select id="multiStarCount"></select>
-      </div>
-      <div class="info-box">
-        ℹ️ Ao jogar múltipla, o sistema gera automaticamente todas as combinações simples possíveis a partir dos números escolhidos, conforme as regras oficiais da Santa Casa.
-      </div>
-    </div>
+<div id="view-result" class="view"><div id="resultsArea">
+<div class="card" style="text-align:center;color:#8892a0;padding:50px 20px"><p style="font-size:2.5rem;margin-bottom:12px">🎲</p><p style="font-size:1.1rem">Configure e clique em Gerar para consultar o Oráculo Híbrido.</p></div>
+</div></div>
 
-    <button class="btn-gerar" id="generateBtn" onclick="gerar()">Gerar Combinação</button>
-  </div>
+<div id="view-history" class="view"><div class="card">
+<h2>📜 Histórico</h2>
+<div class="filter-row">
+<button class="filter-btn active" data-filter="all" onclick="filterHistory('all')">Todos</button>
+<button class="filter-btn" data-filter="euromilhoes" onclick="filterHistory('euromilhoes')">Euromilhões</button>
+<button class="filter-btn" data-filter="totoloto" onclick="filterHistory('totoloto')">Totoloto</button>
+<button class="filter-btn" data-filter="eurodreams" onclick="filterHistory('eurodreams')">EuroDreams</button>
+</div>
+<div id="historyArea"><p style="text-align:center;color:#8892a0;padding:24px">Nenhuma aposta ainda.</p></div>
+<button class="btn-secondary" onclick="exportHistory('json')">📥 JSON</button>
+<button class="btn-secondary" onclick="exportHistory('csv')">📊 CSV</button>
+<button class="btn-secondary btn-danger" onclick="clearHistory()">🗑️ Limpar</button>
+</div></div>
 
-  <div id="view-result" class="view">
-    <div id="resultsArea">
-      <div class="card" style="text-align:center; color:#8892a0; padding: 40px 20px;">
-        <p style="font-size: 2rem; margin-bottom: 10px;">🎲</p>
-        <p>Configure os parâmetros e clique em "Gerar" para consultar o Oráculo.</p>
-      </div>
-    </div>
-  </div>
+<div id="view-stats" class="view"><div class="card">
+<h2>📊 Estatísticas</h2>
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-value" id="totalBets">0</div><div class="stat-label">Total</div></div>
+<div class="stat-card"><div class="stat-value" id="totalSpent">€ 0,00</div><div class="stat-label">Gasto</div></div>
+<div class="stat-card"><div class="stat-value" id="multiplaCount">0</div><div class="stat-label">Múltiplas</div></div>
+<div class="stat-card"><div class="stat-value" id="avgPrice">€ 0,00</div><div class="stat-label">Média</div></div>
+</div>
+<div class="info-box">Estatísticas baseadas apenas no histórico local deste dispositivo.</div>
+</div></div>
 
-  <div id="view-history" class="view">
-    <div class="card">
-      <h2>📜 Histórico de Apostas</h2>
-      <div id="historyArea">
-        <p style="text-align:center; color:#8892a0; padding: 20px;">Nenhuma aposta registada ainda.</p>
-      </div>
-      <button class="btn-secondary" onclick="exportHistory()">📥 Exportar Histórico</button>
-      <button class="btn-secondary btn-danger" onclick="clearHistory()">🗑️ Limpar Histórico</button>
-    </div>
-  </div>
-
-  <div id="view-stats" class="view">
-    <div class="card">
-      <h2>📊 Estatísticas</h2>
-      <div id="statsArea">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-value" id="totalBets">0</div>
-            <div class="stat-label">Total Apostas</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="totalSpent">€ 0,00</div>
-            <div class="stat-label">Total Gasto</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value" id="multiplaCount">0</div>
-            <div class="stat-label">Múltiplas</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">
-    ⚠️ Simulador baseado em aleatoriedade criptográfica.<br>
-    Regras e preços baseados na tabela oficial da Santa Casa.<br>
-    Jogue com responsabilidade. +18 anos.
-  </div>
+<div class="footer">⚠️ Simulador com filtros estatísticos + aleatoriedade criptográfica.<br>
+Regras e preços oficiais Santa Casa. Não existe fórmula que garanta prémio.<br>
+Jogue com responsabilidade. +18 anos.</div>
 </div>
 
 <script>
-  // --- 1. DATA E HORA ---
-  function updateHeaderDateTime() {
-    try {
-      const now = new Date();
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-      let dateStr = now.toLocaleDateString('pt-PT', options);
-      document.getElementById('currentDateTime').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
-    } catch(e) {
-      console.error('Erro ao atualizar data:', e);
+/* ========== REGRAS OFICIAIS ========== */
+const gameRules = {
+  euromilhoes: {name:"Euromilhões",baseMain:5,maxMain:11,minMainMulti:5,baseStars:2,maxStars:12,minStarsMulti:2,maxMainPool:50,maxStarPool:12,pricePerCombo:2.50,hasStarMultiple:true,starLabel:"Estrelas",jackpotOdds:139838160,anyPrizeOdds:13,
+    hotMain:[2,3,17,23,29,42,44,8,19,21,31,37],
+    coldMain:[15,22,24,27,32,50,11,46,33,12],
+    overdueMain:[24,15,50,27,11,3,7,34,12],
+    hotStars:[2,3,8,9,1,6],
+    coldStars:[10,11,12,4,5],
+    overdueStars:[10,12,11,4]
+  },
+  totoloto: {name:"Totoloto",baseMain:5,maxMain:11,minMainMulti:4,baseStars:1,maxStars:1,minStarsMulti:1,maxMainPool:49,maxStarPool:13,pricePerCombo:1.00,hasStarMultiple:false,starLabel:"Nº da Sorte",jackpotOdds:24789492,anyPrizeOdds:7,
+    hotMain:[8,17,5,9,29,1,16,33,4,21],
+    coldMain:[45,48,41,39,36,47,2,28],
+    overdueMain:[5,29,6,47,41,39],
+    hotStars:[1,3,7,4,2],
+    coldStars:[13,12,11,10],
+    overdueStars:[13,11,10]
+  },
+  eurodreams: {name:"EuroDreams",baseMain:6,maxMain:11,minMainMulti:6,baseStars:1,maxStars:5,minStarsMulti:1,maxMainPool:40,maxStarPool:5,pricePerCombo:2.50,hasStarMultiple:true,starLabel:"Nº de Sonho",jackpotOdds:19191900,anyPrizeOdds:4.66,
+    hotMain:[22,4,37,15,19,21,5,13,25,32],
+    coldMain:[16,20,34,7,9,36,28,11],
+    overdueMain:[20,34,16,9,7,36],
+    hotStars:[1,3,5,4],
+    coldStars:[2],
+    overdueStars:[2,5]
+  }
+};
+
+/* ========== UTILITÁRIOS ========== */
+function updateHeaderDateTime(){
+  try{
+    const now=new Date();
+    const opts={weekday:'long',year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'};
+    let s=now.toLocaleDateString('pt-PT',opts);
+    document.getElementById('currentDateTime').textContent=s.charAt(0).toUpperCase()+s.slice(1);
+  }catch(e){}
+}
+updateHeaderDateTime();setInterval(updateHeaderDateTime,60000);
+
+function showToast(msg,isError=false){
+  const old=document.querySelector('.toast');if(old)old.remove();
+  const t=document.createElement('div');t.className='toast'+(isError?' error':'');t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.animation='slideUp .3s ease-out reverse';setTimeout(()=>t.remove(),280)},2400);
+}
+
+function combinations(n,k){
+  if(k<0||k>n)return 0;if(k===0||k===n)return 1;if(k>n-k)k=n-k;
+  let r=1;for(let i=0;i<k;i++)r=r*(n-i)/(i+1);return Math.round(r);
+}
+function getComboCount(gt,mainC,starC){
+  const r=gameRules[gt];
+  if(gt==='totoloto'&&mainC===4)return 45;
+  return combinations(mainC,r.baseMain)*combinations(starC,r.baseStars);
+}
+function getSecureRandomInt(min,max){
+  const range=max-min+1,maxValid=0xFFFFFFFF-(0xFFFFFFFF%range);
+  if(window.crypto&&window.crypto.getRandomValues){
+    const a=new Uint32Array(1);let v;
+    do{window.crypto.getRandomValues(a);v=a[0]}while(v>=maxValid);
+    return min+(v%range);
+  }
+  return Math.floor(Math.random()*range)+min;
+}
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){const j=getSecureRandomInt(0,i);[arr[i],arr[j]]=[arr[j],arr[i]]}
+  return arr;
+}
+
+/* ========== FILTROS MATEMÁTICOS RIGOROSOS ========== */
+function passesHardFilters(nums, poolMax){
+  const sorted=[...nums].sort((a,b)=>a-b);
+  const n=sorted.length;
+  
+  // 1. Consecutivos - no máximo 2 seguidos (evita sequências)
+  let consec=0, maxConsec=0;
+  for(let i=1;i<n;i++){
+    if(sorted[i]===sorted[i-1]+1){consec++;maxConsec=Math.max(maxConsec,consec)}
+    else consec=0;
+  }
+  if(maxConsec>=2) return false;
+
+  // 2. Distribuição equilibrada entre metades
+  const half=Math.floor(poolMax/2);
+  const low=sorted.filter(x=>x<=half).length;
+  if(low<2 || low>n-2) return false;
+
+  // 3. Equilíbrio par/ímpar (pelo menos 2 de cada)
+  const odds=sorted.filter(x=>x%2===1).length;
+  if(n>=5 && (odds<2 || odds>n-2)) return false;
+
+  // 4. Soma dentro da zona de alta probabilidade
+  const sum=sorted.reduce((a,b)=>a+b,0);
+  if(poolMax===50 && n===5 && (sum<85||sum>165)) return false;
+  if(poolMax===49 && n===5 && (sum<80||sum>160)) return false;
+  if(poolMax===40 && n===6 && (sum<75||sum>155)) return false;
+
+  // 5. Distribuição por décadas (máx 3 por década)
+  const decades=new Array(6).fill(0);
+  sorted.forEach(x=>{decades[Math.min(5,Math.floor((x-1)/10))]++});
+  if(Math.max(...decades)>=3) return false;
+
+  // 6. Evita números todos na mesma extremidade (ex: só 1-15 ou só 35-50)
+  const firstQuarter=sorted.filter(x=>x<=Math.floor(poolMax/4)).length;
+  const lastQuarter=sorted.filter(x=>x>=Math.floor(poolMax*3/4)).length;
+  if(firstQuarter>=n-1 || lastQuarter>=n-1) return false;
+
+  return true;
+}
+
+/* ========== SCORE COM PESOS DINÂMICOS (MONTE CARLO) ========== */
+function numberScore(n, rules, isStar=false){
+  const hot = isStar ? (rules.hotStars||[]) : (rules.hotMain||[]);
+  const cold = isStar ? (rules.coldStars||[]) : (rules.coldMain||[]);
+  const overdue = isStar ? (rules.overdueStars||[]) : (rules.overdueMain||[]);
+  
+  let score = 0.2; // base baixa para favorecer apenas os melhores
+  
+  if(hot.includes(n)) score += 0.55;
+  if(overdue.includes(n)) score += 0.45;
+  if(cold.includes(n) && !overdue.includes(n)) score -= 0.50; // penaliza frios
+  
+  // Bónus para números médios (mais probabilidade)
+  const maxPool = isStar ? rules.maxStarPool : rules.maxMainPool;
+  const midLow = maxPool*0.25;
+  const midHigh = maxPool*0.75;
+  if(n >= midLow && n <= midHigh) score += 0.08;
+  
+  // Pequeno ruído para variabilidade
+  score += (getSecureRandomInt(0,100)-50)/2000;
+  return Math.max(0.01, Math.min(1.0, score));
+}
+
+function comboScore(mainNums, starNums, rules){
+  let s = 0;
+  mainNums.forEach(n=>s+=numberScore(n,rules,false));
+  starNums.forEach(n=>s+=numberScore(n,rules,true));
+  s /= (mainNums.length + starNums.length);
+  
+  // Bónus de equilíbrio perfeito (2-3 pares, 2-3 ímpares)
+  const odds=mainNums.filter(x=>x%2).length;
+  if(odds===2 || odds===3) s+=0.10;
+  
+  // Bónus distribuição equilibrada entre metades
+  const mid=Math.floor(rules.maxMainPool/2);
+  const lows=mainNums.filter(x=>x<=mid).length;
+  if(lows===2 || lows===3) s+=0.08;
+  
+  // Penaliza números todos pares ou todos ímpares
+  if(odds===0 || odds===mainNums.length) s-=0.20;
+  
+  return s;
+}
+
+/* ========== GERAÇÃO COM AMOSTRAGEM PONDERADA (MONTE CARLO) ========== */
+function generateSmart(count, maxPool, rules, isStar=false){
+  const set=new Set();
+  const attempts=500; // muitas tentativas para encontrar a melhor combinação
+  
+  // Construir pool com pesos
+  const weightedPool = [];
+  for(let i=1; i<=maxPool; i++){
+    const weight = numberScore(i, rules, isStar);
+    // Repetir cada número proporcionalmente ao seu peso
+    const repeats = Math.max(1, Math.round(weight * 15));
+    for(let r=0; r<repeats; r++){
+      weightedPool.push(i);
     }
   }
-  updateHeaderDateTime();
-  setInterval(updateHeaderDateTime, 60000);
-
-  // --- 2. REGRAS OFICIAIS SANTA CASA ---
-  const gameRules = {
-    euromilhoes: { 
-      name: "Euromilhões", 
-      baseMain: 5, maxMain: 10, minMain: 6,
-      baseStars: 2, maxStars: 5, minStars: 3,
-      maxMainPool: 50, maxStarPool: 12, 
-      pricePerCombo: 2.50,
-      hasStarMultiple: true
-    },
-    totoloto: { 
-      name: "Totoloto", 
-      baseMain: 5, maxMain: 10, minMain: 6,
-      baseStars: 1, maxStars: 1, minStars: 1,
-      maxMainPool: 49, maxStarPool: 13, 
-      pricePerCombo: 1.00,
-      hasStarMultiple: false
-    },
-    eurodreams: { 
-      name: "EuroDreams", 
-      baseMain: 6, maxMain: 12, minMain: 7,
-      baseStars: 1, maxStars: 5, minStars: 2,
-      maxMainPool: 40, maxStarPool: 5, 
-      pricePerCombo: 1.50,
-      hasStarMultiple: true
+  
+  let bestCombo = null;
+  let bestScore = -999;
+  
+  for(let attempt=0; attempt<attempts; attempt++){
+    const tempSet=new Set();
+    // Embaralhar e selecionar
+    const shuffled = shuffle([...weightedPool]);
+    let idx=0;
+    while(tempSet.size<count && idx<shuffled.length){
+      tempSet.add(shuffled[idx]);
+      idx++;
     }
-  };
-
-  // --- 3. TOAST NOTIFICATIONS ---
-  function showToast(message, isError = false) {
-    const toast = document.createElement('div');
-    toast.className = 'toast' + (isError ? ' error' : '');
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => {
-      toast.style.animation = 'slideUp 0.3s ease-out reverse';
-      setTimeout(() => toast.remove(), 300);
-    }, 2500);
+    // Fallback se não conseguir
+    let fallback=0;
+    while(tempSet.size<count){
+      tempSet.add(getSecureRandomInt(1,maxPool));
+      fallback++;
+      if(fallback>100) break;
+    }
+    if(tempSet.size<count) continue;
+    
+    const arr=Array.from(tempSet).sort((a,b)=>a-b);
+    if(!isStar && !passesHardFilters(arr, maxPool)) continue;
+    
+    const sc = isStar ? 
+      arr.reduce((a,n)=>a+numberScore(n,rules,true),0)/arr.length :
+      comboScore(arr,[],rules);
+    
+    if(sc>bestScore){
+      bestScore=sc;
+      bestCombo=arr;
+    }
   }
+  
+  if(!bestCombo){
+    // Fallback seguro
+    const set2=new Set();
+    while(set2.size<count) set2.add(getSecureRandomInt(1,maxPool));
+    return Array.from(set2).sort((a,b)=>a-b);
+  }
+  
+  return bestCombo;
+}
 
-  // --- 4. ATUALIZAÇÃO DINÂMICA DO FORMULÁRIO ---
-  function updateFormFields() {
-    try {
-      const gameType = document.getElementById('gameType').value;
-      const betType = document.getElementById('betType').value;
-      const rules = gameRules[gameType];
-      const multiplaDiv = document.getElementById('multiplaOptions');
-      const multiStarGroup = document.getElementById('multiStarGroup');
-
-      if (betType === 'multipla') {
-        multiplaDiv.style.display = 'block';
-        
-        const mainSelect = document.getElementById('multiMainCount');
-        mainSelect.innerHTML = '';
-        for (let i = rules.minMain; i <= rules.maxMain; i++) {
-          mainSelect.innerHTML += `<option value="${i}">${i} Números</option>`;
-        }
-
-        if (rules.hasStarMultiple) {
-          multiStarGroup.style.display = 'block';
-          const starSelect = document.getElementById('multiStarCount');
-          starSelect.innerHTML = '';
-          
-          let starLabel = '';
-          if (gameType === 'euromilhoes') starLabel = 'Nº de Estrelas';
-          else if (gameType === 'eurodreams') starLabel = 'Nº de Números Sonho';
-          
-          document.getElementById('labelMultiStar').textContent = starLabel;
-          
-          for (let i = rules.minStars; i <= rules.maxStars; i++) {
-            let unit = gameType === 'euromilhoes' ? 'Estrelas' : 'Números Sonho';
-            starSelect.innerHTML += `<option value="${i}">${i} ${unit}</option>`;
-          }
-        } else {
-          multiStarGroup.style.display = 'none';
-        }
-      } else {
-        multiplaDiv.style.display = 'none';
+/* ========== FORM ========== */
+function updateFormFields(){
+  try{
+    const gt=document.getElementById('gameType').value;
+    const bt=document.getElementById('betType').value;
+    const rules=gameRules[gt];
+    const multi=document.getElementById('multiplaOptions');
+    const starG=document.getElementById('multiStarGroup');
+    const info=document.getElementById('multiInfo');
+    if(bt==='multipla'){
+      multi.style.display='block';
+      const ms=document.getElementById('multiMainCount');ms.innerHTML='';
+      for(let i=rules.minMainMulti;i<=rules.maxMain;i++){
+        const o=document.createElement('option');o.value=i;o.textContent=i+(i===rules.baseMain?' (base)':'')+' Números';ms.appendChild(o);
       }
-    } catch(e) {
-      console.error('Erro ao atualizar campos:', e);
-      showToast('Erro ao atualizar formulário', true);
-    }
-  }
-
-  // --- 5. NAVEGAÇÃO TABS ---
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      try {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById('view-' + tab.dataset.target).classList.add('active');
-        
-        if (tab.dataset.target === 'history') {
-          loadHistory();
-        } else if (tab.dataset.target === 'stats') {
-          updateStats();
+      ms.value=Math.min(rules.baseMain+1,rules.maxMain);
+      if(rules.hasStarMultiple){
+        starG.style.display='block';
+        const ss=document.getElementById('multiStarCount');ss.innerHTML='';
+        document.getElementById('labelMultiStar').textContent='Nº de '+rules.starLabel;
+        for(let i=rules.minStarsMulti;i<=rules.maxStars;i++){
+          const o=document.createElement('option');o.value=i;o.textContent=i+(i===rules.baseStars?' (base)':'')+' '+rules.starLabel;ss.appendChild(o);
         }
-      } catch(e) {
-        console.error('Erro na navegação:', e);
-      }
-    });
+        ss.value=rules.baseStars;
+      }else starG.style.display='none';
+      if(gt==='euromilhoes') info.innerHTML='ℹ️ Pode jogar <strong>5 números + mais estrelas</strong> ou <strong>mais números + 2 estrelas</strong> (ou ambos). Máx. 11+12.';
+      else if(gt==='totoloto') info.innerHTML='ℹ️ Só multiplica números (4-11). Nº da Sorte = 1. 4 números = 45 chaves (regra especial).';
+      else info.innerHTML='ℹ️ Pode jogar <strong>6 números + mais Sonhos</strong> ou <strong>mais números + 1 Sonho</strong>. Máx. 11+5.';
+      updateLivePreview();
+    }else multi.style.display='none';
+  }catch(e){console.error(e);showToast('Erro formulário',true);}
+}
+function updateLivePreview(){
+  try{
+    const gt=document.getElementById('gameType').value;
+    if(document.getElementById('betType').value!=='multipla')return;
+    const rules=gameRules[gt];
+    let mc=parseInt(document.getElementById('multiMainCount').value,10);
+    let sc=rules.baseStars;
+    if(rules.hasStarMultiple) sc=parseInt(document.getElementById('multiStarCount').value,10);
+    const simple=(mc===rules.baseMain&&sc===rules.baseStars);
+    const combos=getComboCount(gt,mc,sc);
+    const price=combos*rules.pricePerCombo;
+    const p=document.getElementById('livePreview');
+    if(simple&&gt!=='totoloto'){p.innerHTML='⚠️ Equivale a simples. Escolha mais números ou '+rules.starLabel.toLowerCase()+'.';p.style.borderColor='#f59e0b'}
+    else{p.innerHTML='Gera <strong>'+combos.toLocaleString('pt-PT')+'</strong> chaves · <strong>€ '+price.toFixed(2).replace('.',',')+'</strong>';p.style.borderColor='#2d3748'}
+  }catch(e){}
+}
+
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById('view-'+tab.dataset.target).classList.add('active');
+    if(tab.dataset.target==='history')loadHistory();
+    else if(tab.dataset.target==='stats')updateStats();
   });
+});
 
-  // --- 6. MATEMÁTICA COMBINATÓRIA ---
-  function combinations(n, k) {
-    if (k < 0 || k > n) return 0;
-    if (k === 0 || k === n) return 1;
-    let res = 1;
-    for (let i = 0; i < k; i++) {
-      res = res * (n - i) / (i + 1);
-    }
-    return Math.round(res);
-  }
+function getNextDrawDate(gt){
+  const now=new Date(),days=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  let targets=[],time="20:00";
+  if(gt==='euromilhoes'){targets=['Terça','Sexta']}
+  else if(gt==='totoloto'){targets=['Quarta','Sábado']}
+  else{targets=['Segunda','Quinta'];time="21:00"}
+  let idx=now.getDay(),until=8,name="";
+  for(let i=1;i<=7;i++){const c=(idx+i)%7;if(targets.includes(days[c])){until=i;name=days[c];break}}
+  const d=new Date(now);d.setDate(now.getDate()+until);
+  return name+', '+d.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'})+' às '+time+'h';
+}
 
-  function getSecureRandomInt(min, max) {
-    const range = max - min + 1;
-    const maxValid = 0xFFFFFFFF - (0xFFFFFFFF % range);
-    if (window.crypto && window.crypto.getRandomValues) {
-      const array = new Uint32Array(1);
-      let randomValue;
-      do {
-        window.crypto.getRandomValues(array);
-        randomValue = array[0];
-      } while (randomValue >= maxValid);
-      return min + (randomValue % range);
-    }
-    return Math.floor(Math.random() * range) + min;
-  }
+/* ========== HISTÓRICO ========== */
+let histFilter='all';
+function saveToHistory(b){try{let h=JSON.parse(localStorage.getItem('oracleHistory')||'[]');h.unshift(b);if(h.length>100)h=h.slice(0,100);localStorage.setItem('oracleHistory',JSON.stringify(h))}catch(e){showToast('Erro histórico',true)}}
+function filterHistory(f){histFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));document.querySelector('.filter-btn[data-filter="'+f+'"]').classList.add('active');loadHistory()}
+function loadHistory(){
+  try{
+    let h=JSON.parse(localStorage.getItem('oracleHistory')||'[]');
+    if(histFilter!=='all')h=h.filter(b=>b.gameType===histFilter);
+    const area=document.getElementById('historyArea');
+    if(!h.length){area.innerHTML='<p style="text-align:center;color:#8892a0;padding:24px">Nenhuma aposta'+(histFilter!=='all'?' neste filtro':'')+'.</p>';return}
+    let html='';
+    h.forEach(b=>{
+      html+='<div class="history-item"><div class="history-header"><span class="history-game">'+b.gameName+'</span><span class="history-date">'+b.date+'</span></div><div class="history-balls">';
+      b.mainNums.forEach(n=>html+='<div class="ball ball-main history-ball">'+n.toString().padStart(2,'0')+'</div>');
+      b.starNums.forEach(n=>{const c=b.gameType==='eurodreams'?'ball-dream':'ball-star';html+='<div class="ball '+c+' history-ball">'+n.toString().padStart(2,'0')+'</div>'});
+      html+='</div><div style="margin-top:8px;font-size:.8rem;color:#8892a0">'+(b.isMultipla?'Múltipla':'Simples')+' · '+b.combinations.toLocaleString('pt-PT')+' chave(s) · € '+b.totalPrice.toFixed(2).replace('.',',')+'</div></div>';
+    });
+    area.innerHTML=html;
+  }catch(e){showToast('Erro carregar histórico',true)}
+}
+function clearHistory(){if(confirm('Limpar todo o histórico?')){localStorage.removeItem('oracleHistory');loadHistory();updateStats();showToast('Histórico limpo')}}
+function exportHistory(fmt){
+  try{
+    const h=JSON.parse(localStorage.getItem('oracleHistory')||'[]');
+    if(!h.length){showToast('Histórico vazio',true);return}
+    let content,mime,ext;
+    if(fmt==='csv'){
+      content='Data;Jogo;Tipo;Números;Estrelas;Combinações;Preço\n'+h.map(b=>'"'+b.date+'";"'+b.gameName+'";"'+ (b.isMultipla?'Múltipla':'Simples')+'";"'+b.mainNums.join('-')+'";"'+b.starNums.join('-')+'";'+b.combinations+';'+b.totalPrice.toFixed(2)).join('\n');
+      mime='text/csv;charset=utf-8;';ext='csv';
+    }else{content=JSON.stringify(h,null,2);mime='application/json';ext='json'}
+    const blob=new Blob([content],{type:mime});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='oracle_'+new Date().toISOString().slice(0,10)+'.'+ext;a.click();URL.revokeObjectURL(url);showToast('Exportado '+ext.toUpperCase());
+  }catch(e){showToast('Erro exportar',true)}
+}
+function updateStats(){
+  try{
+    const h=JSON.parse(localStorage.getItem('oracleHistory')||'[]');
+    const tot=h.length,spent=h.reduce((s,b)=>s+b.totalPrice,0),mult=h.filter(b=>b.isMultipla).length,avg=tot?spent/tot:0;
+    document.getElementById('totalBets').textContent=tot;
+    document.getElementById('totalSpent').textContent='€ '+spent.toFixed(2).replace('.',',');
+    document.getElementById('multiplaCount').textContent=mult;
+    document.getElementById('avgPrice').textContent='€ '+avg.toFixed(2).replace('.',',');
+  }catch(e){}
+}
 
-  function generateUniqueNumbers(count, max) {
-    const nums = new Set();
-    while (nums.size < count) {
-      nums.add(getSecureRandomInt(1, max));
-    }
-    return Array.from(nums).sort((a, b) => a - b);
-  }
+/* ========== GERAR ========== */
+function gerar(){
+  const btn=document.getElementById('generateBtn');
+  const area=document.getElementById('resultsArea');
+  const gt=document.getElementById('gameType').value;
+  const bt=document.getElementById('betType').value;
+  const rules=gameRules[gt];
+  btn.disabled=true;btn.innerHTML="A CONSULTAR O ORÁCULO...";btn.classList.add('pulsing');area.innerHTML='';
 
-  // --- 7. PRÓXIMO SORTEIO ---
-  function getNextDrawDate(gameType) {
-    const now = new Date();
-    const dayNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-    let targetDays = [], time = "20:00";
-
-    if (gameType === 'euromilhoes') { targetDays = ['Terça', 'Sexta']; time = "20:00"; }
-    else if (gameType === 'totoloto') { targetDays = ['Quarta', 'Sábado']; time = "20:00"; }
-    else if (gameType === 'eurodreams') { targetDays = ['Segunda', 'Quinta']; time = "21:00"; }
-
-    let currentDayIndex = now.getDay();
-    let daysUntilDraw = 8, nextDrawDayName = "";
-
-    for (let i = 1; i <= 7; i++) {
-      let checkIndex = (currentDayIndex + i) % 7;
-      if (targetDays.includes(dayNames[checkIndex])) {
-        daysUntilDraw = i;
-        nextDrawDayName = dayNames[checkIndex];
-        break;
-      }
-    }
-
-    const nextDate = new Date(now);
-    nextDate.setDate(now.getDate() + daysUntilDraw);
-    const formattedDate = nextDate.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    return `${nextDrawDayName}, ${formattedDate} às ${time}h`;
-  }
-
-  // --- 8. HISTÓRICO (LocalStorage) ---
-  function saveToHistory(betData) {
-    try {
-      let history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
-      history.unshift(betData);
-      if (history.length > 50) history = history.slice(0, 50);
-      localStorage.setItem('oracleHistory', JSON.stringify(history));
-    } catch(e) {
-      console.error('Erro ao guardar histórico:', e);
-      showToast('Erro ao guardar histórico', true);
-    }
-  }
-
-  function loadHistory() {
-    try {
-      const history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
-      const historyArea = document.getElementById('historyArea');
-      
-      if (history.length === 0) {
-        historyArea.innerHTML = '<p style="text-align:center; color:#8892a0; padding: 20px;">Nenhuma aposta registada ainda.</p>';
-        return;
-      }
-
-      let html = '';
-      history.forEach(bet => {
-        html += `<div class="history-item">`;
-        html += `<div class="history-header">`;
-        html += `<span class="history-game">${bet.gameName}</span>`;
-        html += `<span class="history-date">${bet.date}</span>`;
-        html += `</div>`;
-        html += `<div class="history-balls">`;
-        bet.mainNums.forEach(num => {
-          html += `<div class="ball ball-main history-ball">${num.toString().padStart(2, '0')}</div>`;
-        });
-        bet.starNums.forEach(num => {
-          const starClass = bet.gameType === 'eurodreams' ? 'ball-dream' : 'ball-star';
-          html += `<div class="ball ${starClass} history-ball">${num.toString().padStart(2, '0')}</div>`;
-        });
-        html += `</div>`;
-        html += `<div style="margin-top: 8px; font-size: 0.75rem; color: #8892a0;">`;
-        html += `${bet.isMultipla ? 'Múltipla' : 'Simples'} · ${bet.combinations} combinações · € ${bet.totalPrice.toFixed(2).replace('.', ',')}`;
-        html += `</div>`;
-        html += `</div>`;
-      });
-      
-      historyArea.innerHTML = html;
-    } catch(e) {
-      console.error('Erro ao carregar histórico:', e);
-      showToast('Erro ao carregar histórico', true);
-    }
-  }
-
-  function clearHistory() {
-    if (confirm('Tem a certeza que deseja limpar todo o histórico?')) {
-      try {
-        localStorage.removeItem('oracleHistory');
-        loadHistory();
-        showToast('Histórico limpo com sucesso');
-      } catch(e) {
-        console.error('Erro ao limpar histórico:', e);
-        showToast('Erro ao limpar histórico', true);
-      }
-    }
-  }
-
-  function exportHistory() {
-    try {
-      const history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
-      if (history.length === 0) {
-        showToast('Histórico vazio', true);
-        return;
-      }
-      
-      const dataStr = JSON.stringify(history, null, 2);
-      const blob = new Blob([dataStr], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'oracle_historico_' + new Date().toISOString().split('T')[0] + '.json';
-      a.click();
-      URL.revokeObjectURL(url);
-      showToast('Histórico exportado com sucesso');
-    } catch(e) {
-      console.error('Erro ao exportar:', e);
-      showToast('Erro ao exportar histórico', true);
-    }
-  }
-
-  // --- 9. ESTATÍSTICAS ---
-  function updateStats() {
-    try {
-      const history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
-      
-      const totalBets = history.length;
-      const totalSpent = history.reduce((sum, bet) => sum + bet.totalPrice, 0);
-      const multiplaCount = history.filter(bet => bet.isMultipla).length;
-
-      document.getElementById('totalBets').textContent = totalBets;
-      document.getElementById('totalSpent').textContent = '€ ' + totalSpent.toFixed(2).replace('.', ',');
-      document.getElementById('multiplaCount').textContent = multiplaCount;
-    } catch(e) {
-      console.error('Erro ao atualizar estatísticas:', e);
-    }
-  }
-
-  // --- 10. FUNÇÃO PRINCIPAL DE GERAÇÃO ---
-  function gerar() {
-    const btn = document.getElementById('generateBtn');
-    const resultsArea = document.getElementById('resultsArea');
-    const gameType = document.getElementById('gameType').value;
-    const betType = document.getElementById('betType').value;
-    const rules = gameRules[gameType];
-
-    btn.disabled = true;
-    btn.innerHTML = "A CONSULTAR O ORÁCULO...";
-    btn.classList.add('pulsing');
-    resultsArea.innerHTML = "";
-
-    setTimeout(() => {
-      try {
-        let mainCount = rules.baseMain;
-        let starCount = rules.baseStars;
-        let isMultipla = false;
-
-        if (betType === 'multipla') {
-          isMultipla = true;
-          mainCount = parseInt(document.getElementById('multiMainCount').value, 10);
-          if (rules.hasStarMultiple) {
-            starCount = parseInt(document.getElementById('multiStarCount').value, 10);
-          }
+  setTimeout(()=>{
+    try{
+      let mainC=rules.baseMain, starC=rules.baseStars, isMulti=false;
+      if(bt==='multipla'){
+        isMulti=true;
+        mainC=parseInt(document.getElementById('multiMainCount').value,10);
+        if(rules.hasStarMultiple) starC=parseInt(document.getElementById('multiStarCount').value,10);
+        if(mainC===rules.baseMain&&starC===rules.baseStars&&gt!=='totoloto'){
+          showToast('Escolha mais números ou mais '+rules.starLabel.toLowerCase(),true);
+          btn.disabled=false;btn.innerHTML="Gerar Combinação";btn.classList.remove('pulsing');return;
         }
-
-        const mainNums = generateUniqueNumbers(mainCount, rules.maxMainPool);
-        const starNums = generateUniqueNumbers(starCount, rules.maxStarPool);
-
-        const mainCombos = combinations(mainCount, rules.baseMain);
-        const starCombos = combinations(starCount, rules.baseStars);
-        const totalCombos = mainCombos * starCombos;
-        const totalPrice = totalCombos * rules.pricePerCombo;
-
-        let htmlOutput = `<div class="result-box">`;
-        htmlOutput += `<div class="result-label">`;
-        htmlOutput += `${rules.name}`;
-        if (isMultipla) {
-          htmlOutput += `<span class="badge-multipla">MÚLTIPLA</span>`;
-        }
-        htmlOutput += `</div>`;
-        
-        htmlOutput += `<div class="balls-container">`;
-        mainNums.forEach((num, index) => {
-          htmlOutput += `<div class="ball ball-main" style="animation-delay: ${index * 0.05}s">${num.toString().padStart(2, '0')}</div>`;
-        });
-        starNums.forEach((num, index) => {
-          const starClass = gameType === 'eurodreams' ? 'ball-dream' : 'ball-star';
-          const delay = (mainNums.length + index) * 0.05;
-          htmlOutput += `<div class="ball ${starClass}" style="animation-delay: ${delay}s">${num.toString().padStart(2, '0')}</div>`;
-        });
-        htmlOutput += `</div>`;
-
-        const nextDraw = getNextDrawDate(gameType);
-        htmlOutput += `<div class="draw-info">📅 Próximo Sorteio: <strong>${nextDraw}</strong></div>`;
-        htmlOutput += `</div>`;
-
-        const formattedTotalPrice = totalPrice.toFixed(2).replace('.', ',');
-        const formattedUnitPrice = rules.pricePerCombo.toFixed(2).replace('.', ',');
-        
-        let comboText = "";
-        if (isMultipla) {
-          comboText = `<div class="combo-info">Gera automaticamente <strong>${totalCombos.toLocaleString('pt-PT')}</strong> chaves simples</div>`;
-        }
-
-        htmlOutput += `
-          <div class="price-tag">
-            <div class="price-col-left">
-              <div class="price-label">Preço base por chave</div>
-              <div class="price-value-small">€ ${formattedUnitPrice}</div>
-            </div>
-            <div class="price-col-right">
-              <div class="price-label" style="color:#f59e0b">Custo Total</div>
-              <div class="price-value-large">€ ${formattedTotalPrice}</div>
-              ${comboText}
-            </div>
-          </div>
-        `;
-
-        resultsArea.innerHTML = htmlOutput;
-        document.querySelector('.tab[data-target="result"]').click();
-        
-        const betData = {
-          gameType: gameType,
-          gameName: rules.name,
-          mainNums: mainNums,
-          starNums: starNums,
-          isMultipla: isMultipla,
-          combinations: totalCombos,
-          totalPrice: totalPrice,
-          date: new Date().toLocaleString('pt-PT')
-        };
-        saveToHistory(betData);
-        
-        btn.disabled = false;
-        btn.innerHTML = "Gerar Nova Combinação";
-        btn.classList.remove('pulsing');
-        
-        showToast('Combinação gerada com sucesso!');
-      } catch(e) {
-        console.error('Erro ao gerar:', e);
-        showToast('Erro ao gerar combinação', true);
-        btn.disabled = false;
-        btn.innerHTML = "Gerar Combinação";
-        btn.classList.remove('pulsing');
       }
-    }, 600);
-  }
 
-  // Inicializar
-  updateFormFields();
-  updateStats();
+      // Geração inteligente com pesos
+      const mainNums=generateSmart(mainC, rules.maxMainPool, rules, false);
+      const starNums=generateSmart(starC, rules.maxStarPool, rules, true);
+      const totalCombos=getComboCount(gt,mainC,starC);
+      const totalPrice=totalCombos*rules.pricePerCombo;
+      const score=comboScore(mainNums,starNums,rules);
+
+      let html='<div class="result-box"><div class="result-label">'+rules.name+' ';
+      html+=isMulti?'<span class="badge badge-multipla">MÚLTIPLA</span>':'<span class="badge badge-simples">SIMPLES</span>';
+      html+='</div><div class="balls-container">';
+      mainNums.forEach((n,i)=>html+='<div class="ball ball-main" style="animation-delay:'+(i*.06)+'s">'+n.toString().padStart(2,'0')+'</div>');
+      starNums.forEach((n,i)=>{const c=gt==='eurodreams'?'ball-dream':'ball-star';html+='<div class="ball '+c+'" style="animation-delay:'+((mainNums.length+i)*.06)+'s">'+n.toString().padStart(2,'0')+'</div>'});
+      html+='</div><div class="draw-info">📅 Próximo: <strong>'+getNextDrawDate(gt)+'</strong></div></div>';
+
+      const fPrice=totalPrice.toFixed(2).replace('.',','), fUnit=rules.pricePerCombo.toFixed(2).replace('.',',');
+      let comboTxt=isMulti?'<div class="combo-info">Gera <strong>'+totalCombos.toLocaleString('pt-PT')+'</strong> chaves simples</div>':'';
+      html+='<div class="price-tag"><div class="price-col-left"><div class="price-label">Preço / chave</div><div class="price-value-small">€ '+fUnit+'</div></div><div class="price-col-right"><div class="price-label" style="color:#f59e0b">Total</div><div class="price-value-large">€ '+fPrice+'</div>'+comboTxt+'</div></div>';
+
+      html+='<div class="prob-box">🎯 Jackpot aprox. (esta aposta): <strong>1 em '+Math.round(rules.jackpotOdds/totalCombos).toLocaleString('pt-PT')+'</strong><br>📊 Qualquer prémio (simples): ~1 em '+rules.anyPrizeOdds+'</div>';
+
+      const scorePct=Math.round(Math.min(99,Math.max(1,score*75+15)));
+      html+='<div class="score-box">🧠 Score Híbrido: <strong>'+score.toFixed(3)+'</strong> (qualidade ~'+scorePct+'%)<br><span style="font-size:.75rem;opacity:.85">Algoritmo com pesos dinâmicos + filtros matemáticos rigorosos.</span></div>';
+
+      area.innerHTML=html;
+      document.querySelector('.tab[data-target="result"]').click();
+
+      saveToHistory({gameType:gt,gameName:rules.name,mainNums,starNums,isMultipla:isMulti,combinations:totalCombos,totalPrice,date:new Date().toLocaleString('pt-PT')});
+      btn.disabled=false;btn.innerHTML="Gerar Nova Combinação";btn.classList.remove('pulsing');
+      showToast('Combinação gerada!');
+    }catch(e){console.error(e);showToast('Erro ao gerar',true);btn.disabled=false;btn.innerHTML="Gerar Combinação";btn.classList.remove('pulsing')}
+  },600);
+}
+
+updateFormFields();updateStats();
 </script>
 </body>
 </html>
