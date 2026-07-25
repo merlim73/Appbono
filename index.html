@@ -3,633 +3,598 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ORACLE · Gerador Estatístico SCML</title>
+  <meta name="theme-color" content="#040507">
+  <title>ORACLE · Prognóstico</title>
   <style>
-    :root {
-      --bg-dark: #040507;
-      --card-dark: #0b0d12;
-      --border-dark: #1f242e;
-      --text-main: #e0e6ed;
-      --text-muted: #8892a0;
-      --gold: #f59e0b;
-      --gold-dark: #b8860b;
-      --cyan: #06b6d4;
-      --blue: #3b82f6;
-      --emerald: #10b981;
-      --error: #ef4444;
-      --red-bright: #ff4444;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #040507; color: #e0e6ed; padding: 15px; font-size: 14px; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+    .main-container { max-width: 600px; margin: 0 auto; width: 100%; flex: 1; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
+    .header { background: rgba(11, 13, 18, 0.9); border: 1px solid rgba(245, 158, 11, 0.3); padding: 20px; text-align: center; margin-bottom: 20px; border-radius: 16px; box-shadow: 0 0 20px rgba(245, 158, 11, 0.1); backdrop-filter: blur(10px); position: sticky; top: 10px; z-index: 100; }
+    .header h1 { font-size: 1.8rem; color: #f59e0b; letter-spacing: 4px; text-shadow: 0 0 10px rgba(245, 158, 11, 0.5); margin-bottom: 5px; }
+    .header p { font-size: 0.75rem; color: #10b981; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
-    body { background: var(--bg-dark); color: var(--text-main); padding: 16px; overflow-x: hidden; line-height: 1.4; }
+    .tabs { display: flex; gap: 6px; margin-bottom: 20px; background: #0b0d12; border-radius: 12px; padding: 6px; border: 1px solid #1f242e; overflow-x: auto; }
+    .tab { flex: 1; text-align: center; padding: 12px 8px; font-size: 0.75rem; color: #8892a0; cursor: pointer; border-radius: 8px; font-weight: 700; text-transform: uppercase; transition: all 0.3s ease; white-space: nowrap; min-width: 80px; }
+    .tab.active { background: #f59e0b; color: #000; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
 
-    .container { max-width: 640px; margin: 0 auto; }
+    .view { display: none; animation: fadeIn 0.4s ease-out; }
+    .view.active { display: block; }
 
-    .header {
-      border: 2px solid var(--gold);
-      background: linear-gradient(135deg, #141a24 0%, #000000 100%);
-      padding: 24px 10px; text-align: center; margin-bottom: 20px;
-      box-shadow: 0 0 30px rgba(245, 158, 11, 0.1);
+    .card { background: rgba(11, 13, 18, 0.6); border: 1px solid #1f242e; border-radius: 16px; padding: 20px; margin-bottom: 15px; backdrop-filter: blur(5px); }
+    .card h2 { font-size: 1rem; color: #f59e0b; margin-bottom: 15px; border-bottom: 1px solid #1f242e; padding-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .input-group { margin-bottom: 15px; }
+    .input-group label { display: block; font-size: 0.75rem; color: #8892a0; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    select { 
+      width: 100%; padding: 14px; background: #06080c; border: 1px solid #2d3748; color: #06b6d4; border-radius: 10px; font-size: 1rem; outline: none; appearance: none; 
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2306b6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat; background-position: right 12px center; background-size: 16px;
     }
-    .header h1 { font-size: 1.8rem; letter-spacing: 6px; color: var(--gold); text-shadow: 0 0 15px var(--gold); }
-    .header .sub { font-size: 0.75rem; color: var(--emerald); margin-top: 10px; letter-spacing: 3px; text-transform: uppercase; }
-    .header .datetime { 
-      font-size: 1.1rem; 
-      color: var(--red-bright); 
-      margin-top: 12px; 
-      letter-spacing: 1px; 
-      border-top: 1px solid var(--border-dark); 
-      padding-top: 12px;
-      font-weight: bold;
-    }
-    .header .datetime .label { color: var(--text-muted); font-size: 0.8rem; }
+    select:focus { border-color: #f59e0b; }
 
-    .card { background: var(--card-dark); border: 1px solid var(--border-dark); border-radius: 8px; padding: 18px; margin-bottom: 16px; }
-    .card h2 { font-size: 0.9rem; color: var(--gold); text-transform: uppercase; border-left: 3px solid var(--gold); padding-left: 10px; margin-bottom: 16px; }
+    .btn-gerar { width: 100%; padding: 16px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; margin-top: 10px; transition: transform 0.1s, box-shadow 0.3s; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
+    .btn-gerar:active { transform: scale(0.97); }
+    .btn-gerar:disabled { background: #2d3748; color: #718096; box-shadow: none; cursor: not-allowed; }
+    .btn-gerar.pulsing { animation: pulse 1.5s infinite; }
 
-    .input-group { margin-bottom: 14px; }
-    .input-group label { display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+    .btn-secondary { width: 100%; padding: 12px; background: #1f242e; color: #e0e6ed; border: 1px solid #2d3748; border-radius: 10px; font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; margin-top: 10px; transition: all 0.3s; }
+    .btn-secondary:active { background: #2d3748; border-color: #f59e0b; }
 
-    select {
-      width: 100%; background: #06080c; border: 1px solid var(--border-dark);
-      color: var(--cyan); padding: 14px 10px; font-size: 1rem; border-radius: 6px;
-      outline: none; transition: 0.2s;
-    }
-    select:focus { border-color: var(--gold); box-shadow: 0 0 10px rgba(245,158,11,0.2); }
+    .btn-danger { background: #7f1d1d; border-color: #991b1b; color: #fca5a5; }
+    .btn-danger:active { background: #991b1b; }
 
-    .monitor {
-      background: #06080c; border: 1px solid var(--border-dark);
-      border-radius: 8px; padding: 20px; text-align: center; margin-bottom: 16px;
-    }
-    .monitor .label-main { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-    .monitor .odds-value { font-size: 1.7rem; font-weight: bold; color: var(--emerald); margin: 8px 0; text-shadow: 0 0 15px var(--emerald); }
-    .info-line { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--text-muted); border-bottom: 1px solid var(--border-dark); padding: 6px 0; }
-    .info-line .highlight { color: var(--gold); }
-    .price-value { font-size: 1.6rem; color: #fff; font-weight: bold; margin-top: 12px; }
-    .meta { font-size: 0.65rem; color: var(--text-muted); margin-top: 6px; }
+    .result-box { background: #06080c; border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 15px; position: relative; overflow: hidden; }
+    .result-box::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #f59e0b, transparent); }
+    .result-label { font-size: 0.8rem; color: #8892a0; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .badge-multipla { background: #f59e0b; color: #000; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 800; }    
+    .balls-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+    .ball { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: #fff; box-shadow: inset 0 -4px 4px rgba(0,0,0,0.3), 0 4px 8px rgba(0,0,0,0.4); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; transform: scale(0.5); }
+    .ball-main { background: radial-gradient(circle at 30% 30%, #60a5fa, #1d4ed8); border: 2px solid #93c5fd; }
+    .ball-star { background: radial-gradient(circle at 30% 30%, #fcd34d, #b45309); border: 2px solid #fde68a; color: #451a03; }
+    .ball-dream { background: radial-gradient(circle at 30% 30%, #c084fc, #7e22ce); border: 2px solid #e9d5ff; color: #fff; }
 
-    .btn-run {
-      width: 100%; padding: 20px; background: transparent;
-      border: 2px solid var(--gold); color: var(--gold); font-size: 1.1rem;
-      font-weight: bold; text-transform: uppercase; letter-spacing: 4px;
-      border-radius: 6px; cursor: pointer; transition: 0.25s; margin-bottom: 16px;
-    }
-    .btn-run:hover:not(:disabled) { background: var(--gold); color: var(--bg-dark); }
-    .btn-run:disabled { border-color: #5a5a5a; color: #5a5a5a; cursor: not-allowed; }
+    .draw-info { background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); color: #34d399; padding: 12px; border-radius: 10px; margin: 15px 0; font-size: 0.85rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    
+    .price-tag { display: flex; justify-content: space-between; align-items: center; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.3); padding: 15px; border-radius: 12px; margin-top: 10px; flex-wrap: wrap; gap: 10px; }
+    .price-col-left { text-align: left; flex: 1; min-width: 120px; }
+    .price-col-right { text-align: right; flex: 1; min-width: 120px; }
+    .price-label { font-size: 0.7rem; color: #8892a0; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .price-value-small { font-size: 1.1rem; font-weight: 700; color: #e0e6ed; }
+    .price-value-large { font-size: 1.4rem; font-weight: 800; color: #f59e0b; }
+    .combo-info { font-size: 0.75rem; color: #10b981; margin-top: 5px; text-align: right; }
 
-    .terminal {
-      background: #06080c; border: 1px solid var(--border-dark); border-radius: 6px;
-      height: 130px; overflow-y: auto; padding: 12px; font-size: 0.7rem;
-      color: var(--emerald); line-height: 1.6; margin-bottom: 16px; display: none;
-    }
-    .log-entry { margin-bottom: 2px; }
-    .log-err { color: var(--error); }
-    .log-success { color: var(--gold); }
+    .history-item { background: #06080c; border: 1px solid #1f242e; border-radius: 10px; padding: 12px; margin-bottom: 10px; font-size: 0.85rem; transition: all 0.3s; }
+    .history-item:active { transform: scale(0.98); }
+    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+    .history-date { color: #8892a0; font-size: 0.75rem; }
+    .history-game { color: #f59e0b; font-weight: 700; }
+    .history-balls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .history-ball { width: 32px; height: 32px; font-size: 0.85rem; }
 
-    .result-panel {
-      display: none; border: 2px solid var(--gold);
-      background: rgba(245, 158, 11, 0.03); border-radius: 10px;
-      padding: 20px 10px; text-align: center; margin-bottom: 20px;
-      animation: slideIn 0.4s ease-out;
-    }
-    @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .footer { text-align: center; font-size: 0.7rem; color: #4a5568; margin-top: 30px; padding-bottom: 20px; line-height: 1.4; }
 
-    .result-panel .result-price {
-      font-size: 1.4rem;
-      color: var(--gold);
-      font-weight: bold;
-      margin: 12px 0;
-      padding: 14px;
-      background: rgba(245, 158, 11, 0.12);
-      border-radius: 8px;
-      border: 1px solid var(--gold);
-    }
-    .result-panel .result-price .label { color: var(--text-muted); font-size: 0.9rem; }
+    .info-box { background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); color: #67e8f9; padding: 12px; border-radius: 10px; margin: 15px 0; font-size: 0.8rem; line-height: 1.5; }
 
-    .balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 16px 0; }
-    .ball {
-      width: 54px; height: 54px; border-radius: 50%; border: 3px solid #fff;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.25rem; font-weight: bold; background: #141a24;
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.2);
-    }
-    .ball.main {
-      border-color: var(--blue);
-      color: var(--blue);
-      text-shadow: 0 0 15px var(--blue);
-      background: linear-gradient(135deg, #0a1628, #141a24);
-    }
-    .ball.star {
-      border-color: var(--gold-dark);
-      color: var(--gold);
-      text-shadow: 0 0 15px var(--gold);
-      background: linear-gradient(135deg, #1a1500, #141a24);
-    }
-    .ball-label {
-      width: 100%;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin: 15px 0; }
+    .stat-card { background: #06080c; border: 1px solid #1f242e; border-radius: 10px; padding: 12px; text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 800; color: #f59e0b; margin-bottom: 4px; }
+    .stat-label { font-size: 0.7rem; color: #8892a0; text-transform: uppercase; }
 
-    .disclaimer {
-      font-size: 0.7rem;
-      color: var(--error);
-      margin-top: 16px;
-      padding: 10px;
-      border: 1px solid var(--error);
-      border-radius: 6px;
-      background: rgba(239, 68, 68, 0.08);
-      line-height: 1.5;
-    }
+    .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: #fff; padding: 12px 24px; border-radius: 10px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 1000; animation: slideUp 0.3s ease-out; }
+    .toast.error { background: #ef4444; }
 
-    .footer {
-      border-top: 1px solid var(--border-dark);
-      padding-top: 16px;
-      margin-top: 20px;
-      text-align: center;
-    }
-    .footer .draw-info {
-      font-size: 1.1rem;
-      color: var(--red-bright);
-      margin-bottom: 10px;
-      font-weight: bold;
-    }
-    .footer .draw-info .label { color: var(--text-muted); font-size: 0.85rem; }
-    .footer .price-info {
-      font-size: 1.05rem;
-      color: var(--emerald);
-      font-weight: bold;
-      margin-top: 8px;
-      padding: 10px;
-      background: rgba(16, 185, 129, 0.1);
-      border-radius: 8px;
-      border: 1px solid var(--emerald);
-    }
-    .footer .price-info .label { color: var(--text-muted); font-size: 0.85rem; }
-    .footer .price-info .value { color: var(--gold); font-size: 1.25rem; }
-    .footer .stats {
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      margin-top: 12px;
-    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
+    @keyframes slideUp { from { transform: translateX(-50%) translateY(100px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
 
-    @media (max-width: 380px) {
-      .header h1 { font-size: 1.4rem; letter-spacing: 3px; }
-      .ball { width: 46px; height: 46px; font-size: 1.1rem; }
+    @media (max-width: 400px) {
+      .ball { width: 38px; height: 38px; font-size: 1rem; }
+      .history-ball { width: 28px; height: 28px; font-size: 0.75rem; }
     }
   </style>
 </head>
 <body>
-
-<div class="container">
+<div class="main-container">
   <div class="header">
-    <h1>ORACLE</h1>
-    <div class="sub">⟡ GERADOR ESTATÍSTICO SCML ⟡</div>
-    <div class="datetime">
-      <span class="label">DATA E HORA: </span>
-      <span id="currentDateTime">--/--/---- --:--:--</span>
-    </div>
+    <h1>👁️ ORACLE</h1>
+    <p id="currentDateTime">A carregar data...</p>
   </div>
 
-  <div class="card">
-    <h2>CONFIGURAÇÃO DO JOGO</h2>
+  <div class="tabs">
+    <div class="tab active" data-target="config">Configurar</div>
+    <div class="tab" data-target="result">Resultado</div>
+    <div class="tab" data-target="history">Histórico</div>
+    <div class="tab" data-target="stats">Estatísticas</div>
+  </div>
+
+  <div id="view-config" class="view active card">
+    <h2>⚙️ Parâmetros do Jogo</h2>
+    
     <div class="input-group">
-      <label>Jogo</label>
-      <select id="gameType">
-        <option value="euromilhoes">EURO MILHÕES</option>
-        <option value="totoloto">TOTOLOTO</option>
-        <option value="eurodreams">EURO DREAMS</option>
+      <label>Modalidade</label>
+      <select id="gameType" onchange="updateFormFields()">
+        <option value="euromilhoes">🇪🇺 Euromilhões</option>
+        <option value="totoloto">🇵🇹 Totoloto</option>
+        <option value="eurodreams">💭 EuroDreams</option>
       </select>
     </div>
+
     <div class="input-group">
-      <label>Quantidade de Números Principais</label>
-      <select id="nQty"></select>
+      <label>Tipo de Aposta</label>
+      <select id="betType" onchange="updateFormFields()">
+        <option value="simples">Simples (Padrão Santa Casa)</option>
+        <option value="multipla">Múltipla (Mais números na mesma grelha)</option>
+      </select>
     </div>
-    <div class="input-group">
-      <label id="starLabel">Quantidade de Estrelas/Extras</label>
-      <select id="sQty"></select>
-    </div>
-  </div>
-
-  <div class="monitor">
-    <div class="label-main">Probabilidade Real do 1.º Prémio</div>
-    <div class="odds-value" id="oddsDisplay">--</div>
-    <div class="info-line">
-      <span>Preço unitário oficial:</span>
-      <span id="unitPriceDisplay" class="highlight">€ 0,00</span>
-    </div>
-    <div class="info-line">
-      <span>N.º de combinações (sistema):</span>
-      <span id="comboCountDisplay">0</span>
-    </div>
-    <div class="price-value" id="priceDisplay">€ 0,00</div>
-    <div class="meta">Preço total = unitário × número de combinações (tabelas oficiais Santa Casa)</div>
-  </div>
-
-  <button class="btn-run" id="runBtn">▶ GERAR APOSTA</button>
-
-  <div class="terminal" id="terminal"></div>
-
-  <div id="resultPanel" class="result-panel">
-    <h2 style="color:var(--gold);letter-spacing:2px;font-size:1rem;">APOSTA GERADA</h2>
     
-    <div class="result-price">
-      <span class="label">VALOR TOTAL DA APOSTA: </span>
-      <span id="resultPriceDisplay">€ 0,00</span>
+    <div id="multiplaOptions" style="display: none; border-top: 1px dashed #2d3748; padding-top: 15px; margin-top: 15px;">
+      <div class="input-group">
+        <label id="labelMultiMain">Nº de Números na Grelha</label>
+        <select id="multiMainCount"></select>
+      </div>
+      <div class="input-group" id="multiStarGroup">
+        <label id="labelMultiStar">Nº de Estrelas / Nº Sorte</label>
+        <select id="multiStarCount"></select>
+      </div>
+      <div class="info-box">
+        ℹ️ Ao jogar múltipla, o sistema gera automaticamente todas as combinações simples possíveis a partir dos números escolhidos, conforme as regras oficiais da Santa Casa.
+      </div>
     </div>
 
-    <div class="balls" id="ballOutput"></div>
+    <button class="btn-gerar" id="generateBtn" onclick="gerar()">Gerar Combinação</button>
+  </div>
 
-    <div class="disclaimer">
-      <strong>AVISO IMPORTANTE</strong><br>
-      Esta ferramenta gera números de forma aleatória com filtros estatísticos simples.<br>
-      <strong>Não aumenta</strong> a probabilidade real de ganhar o 1.º prémio.<br>
-      As odds oficiais mantêm-se inalteradas. Jogue com moderação. Proibido a menores de 18 anos.
+  <div id="view-result" class="view">
+    <div id="resultsArea">
+      <div class="card" style="text-align:center; color:#8892a0; padding: 40px 20px;">
+        <p style="font-size: 2rem; margin-bottom: 10px;">🎲</p>
+        <p>Configure os parâmetros e clique em "Gerar" para consultar o Oráculo.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="view-history" class="view">
+    <div class="card">
+      <h2>📜 Histórico de Apostas</h2>
+      <div id="historyArea">
+        <p style="text-align:center; color:#8892a0; padding: 20px;">Nenhuma aposta registada ainda.</p>
+      </div>
+      <button class="btn-secondary" onclick="exportHistory()">📥 Exportar Histórico</button>
+      <button class="btn-secondary btn-danger" onclick="clearHistory()">🗑️ Limpar Histórico</button>
+    </div>
+  </div>
+
+  <div id="view-stats" class="view">
+    <div class="card">
+      <h2>📊 Estatísticas</h2>
+      <div id="statsArea">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="totalBets">0</div>
+            <div class="stat-label">Total Apostas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="totalSpent">€ 0,00</div>
+            <div class="stat-label">Total Gasto</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="multiplaCount">0</div>
+            <div class="stat-label">Múltiplas</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <div class="footer">
-    <div class="draw-info">
-      <span class="label">PRÓXIMO SORTEIO: </span>
-      <span id="drawDateTime">--</span>
-    </div>
-    <div class="price-info">
-      <span class="label">PREÇO DA APOSTA SELECIONADA: </span>
-      <span class="value" id="drawPrice">€ 0,00</span>
-    </div>
-    <div class="stats">
-      Gerador estatístico · Preços oficiais Santa Casa · Sem garantias de prémio
-    </div>
+    ⚠️ Simulador baseado em aleatoriedade criptográfica.<br>
+    Regras e preços baseados na tabela oficial da Santa Casa.<br>
+    Jogue com responsabilidade. +18 anos.
   </div>
 </div>
 
 <script>
-// ============================================================
-//  REGRAS E PREÇOS OFICIAIS (Santa Casa - 2026)
-// ============================================================
-const GAMES = {
-  euromilhoes: {
-    n: 50, s: 12, bn: 5, bs: 2, precoUnitario: 2.50,
-    nMin: 5, nMax: 10, sMin: 2, sMax: 12, sNome: "Estrelas",
-    drawDay: "Terça e Sexta", drawTime: "21:00",
-    filters: {
-      paresIdeal: [2, 3],
-      somaMin: 80, somaMax: 180,
-      maxConsecutivos: 2,
-      maxPorDecada: 3
-    }
-  },
-  totoloto: {
-    n: 49, s: 13, bn: 5, bs: 1, precoUnitario: 1.00,   // €1,00 oficial
-    nMin: 5, nMax: 11, sMin: 1, sMax: 1, sNome: "Número da Sorte",
-    drawDay: "Quarta e Sábado", drawTime: "21:00",
-    filters: {
-      paresIdeal: [2, 3],
-      somaMin: 90, somaMax: 200,
-      maxConsecutivos: 2,
-      maxPorDecada: 3
-    }
-  },
-  eurodreams: {
-    n: 40, s: 5, bn: 6, bs: 1, precoUnitario: 2.50,
-    nMin: 6, nMax: 10, sMin: 1, sMax: 5, sNome: "Número de Sonho",
-    drawDay: "Segunda e Quinta", drawTime: "21:00",
-    filters: {
-      paresIdeal: [3],
-      somaMin: 100, somaMax: 170,
-      maxConsecutivos: 2,
-      maxPorDecada: 3
-    }
-  }
-};
-
-// ============================================================
-//  FUNÇÕES MATEMÁTICAS
-// ============================================================
-function combinacao(n, k) {
-  if (k < 0 || k > n) return 0;
-  if (k === 0 || k === n) return 1;
-  if (k > n / 2) k = n - k;
-  let r = 1;
-  for (let i = 1; i <= k; i++) {
-    r = r * (n - i + 1) / i;
-  }
-  return Math.round(r);
-}
-
-function formatarEuro(valor) {
-  return '€ ' + valor.toFixed(2).replace('.', ',');
-}
-
-function getRandomInt(min, max) {
-  const array = new Uint32Array(1);
-  window.crypto.getRandomValues(array);
-  return Math.floor((array[0] / (0xFFFFFFFF + 1)) * (max - min + 1)) + min;
-}
-
-// ============================================================
-//  FILTROS ESTATÍSTICOS (apenas cosméticos)
-// ============================================================
-function avaliarCombinacao(numbers, gameKey) {
-  const game = GAMES[gameKey];
-  const f = game.filters;
-
-  const pares = numbers.filter(n => n % 2 === 0).length;
-  const soma = numbers.reduce((a, b) => a + b, 0);
-
-  let consecutivos = 0;
-  for (let i = 1; i < numbers.length; i++) {
-    if (numbers[i] - numbers[i - 1] === 1) consecutivos++;
-  }
-
-  const decadas = [0, 0, 0, 0, 0];
-  numbers.forEach(n => {
-    const d = Math.floor((n - 1) / 10);
-    if (d < 5) decadas[d]++;
-  });
-
-  let score = 0;
-  if (f.paresIdeal.includes(pares)) score += 30;
-  if (soma >= f.somaMin && soma <= f.somaMax) score += 30;
-  if (consecutivos <= f.maxConsecutivos) score += 20;
-  if (decadas.every(d => d <= f.maxPorDecada)) score += 20;
-
-  return { score, aprovado: score >= 70 };
-}
-
-function generateNumbers(count, max, gameKey) {
-  let melhor = null;
-  let melhorScore = -1;
-
-  for (let tentativa = 0; tentativa < 200; tentativa++) {
-    const set = new Set();
-    while (set.size < count) {
-      set.add(getRandomInt(1, max));
-    }
-    const sorted = Array.from(set).sort((a, b) => a - b);
-    const avaliacao = avaliarCombinacao(sorted, gameKey);
-
-    if (avaliacao.score > melhorScore) {
-      melhorScore = avaliacao.score;
-      melhor = sorted;
-      if (avaliacao.aprovado && melhorScore >= 90) break;
-    }
-  }
-
-  return melhor || Array.from({ length: count }, (_, i) => i + 1);
-}
-
-function gerarAposta(gameKey) {
-  const game = GAMES[gameKey];
-  const n = parseInt(document.getElementById('nQty').value) || game.bn;
-  const s = parseInt(document.getElementById('sQty').value) || game.bs;
-
-  const principais = generateNumbers(n, game.n, gameKey);
-
-  const extras = new Set();
-  while (extras.size < s) {
-    extras.add(getRandomInt(1, game.s));
-  }
-  const extrasArray = Array.from(extras).sort((a, b) => a - b);
-
-  // Número de combinações do sistema
-  const numComb = combinacao(n, game.bn) * combinacao(s, game.bs);
-  const precoTotal = game.precoUnitario * numComb;
-
-  return {
-    principais,
-    extras: extrasArray,
-    numComb,
-    precoTotal
-  };
-}
-
-// ============================================================
-//  DATAS
-// ============================================================
-function getNextDrawDate(gameKey) {
-  const game = GAMES[gameKey];
-  const now = new Date();
-  const dayMap = { 'Segunda': 1, 'Terça': 2, 'Quarta': 3, 'Quinta': 4, 'Sexta': 5, 'Sábado': 6, 'Domingo': 0 };
-  const targetDays = game.drawDay.split(' e ').map(d => dayMap[d]);
-  const targetTime = parseInt(game.drawTime.split(':')[0]) * 60 + parseInt(game.drawTime.split(':')[1]);
-  const currentTime = now.getHours() * 60 + now.getMinutes();
-
-  for (let daysAhead = 0; daysAhead <= 7; daysAhead++) {
-    const check = new Date(now);
-    check.setDate(now.getDate() + daysAhead);
-    if (targetDays.includes(check.getDay())) {
-      if (daysAhead === 0 && currentTime >= targetTime) continue;
-      const dia = String(check.getDate()).padStart(2, '0');
-      const mes = String(check.getMonth() + 1).padStart(2, '0');
-      const ano = check.getFullYear();
-      const diaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][check.getDay()];
-      return `${diaSemana}, ${dia}/${mes}/${ano} às ${game.drawTime}`;
-    }
-  }
-  return 'Consultar site oficial';
-}
-
-function updateDateTime() {
-  const now = new Date();
-  const dia = String(now.getDate()).padStart(2, '0');
-  const mes = String(now.getMonth() + 1).padStart(2, '0');
-  const ano = now.getFullYear();
-  const h = String(now.getHours()).padStart(2, '0');
-  const m = String(now.getMinutes()).padStart(2, '0');
-  const s = String(now.getSeconds()).padStart(2, '0');
-  const diaSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][now.getDay()];
-  document.getElementById('currentDateTime').textContent = `${diaSemana}, ${dia}/${mes}/${ano} ${h}:${m}:${s}`;
-}
-
-function updateDrawInfo() {
-  const gameKey = document.getElementById('gameType').value;
-  document.getElementById('drawDateTime').textContent = getNextDrawDate(gameKey);
-  // O preço do rodapé é atualizado no updateMonitor
-}
-
-// ============================================================
-//  INTERFACE
-// ============================================================
-let gameKey = 'euromilhoes';
-let selectedN = 5;
-let selectedS = 2;
-
-function getGame() { return GAMES[gameKey]; }
-
-function populateSelects() {
-  const game = getGame();
-  const nSelect = document.getElementById('nQty');
-  const sSelect = document.getElementById('sQty');
-  const starLabel = document.getElementById('starLabel');
-
-  nSelect.innerHTML = '';
-  sSelect.innerHTML = '';
-
-  for (let i = game.nMin; i <= game.nMax; i++) {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.text = i + ' números';
-    if (i === game.bn) opt.selected = true;
-    nSelect.appendChild(opt);
-  }
-
-  for (let i = game.sMin; i <= game.sMax; i++) {
-    const opt = document.createElement('option');
-    opt.value = i;
-    opt.text = i + ' ' + game.sNome.toLowerCase();
-    if (i === game.bs) opt.selected = true;
-    sSelect.appendChild(opt);
-  }
-
-  starLabel.textContent = 'Quantidade de ' + game.sNome;
-  selectedN = parseInt(nSelect.value);
-  selectedS = parseInt(sSelect.value);
-  updateMonitor();
-  updateDrawInfo();
-}
-
-function updateMonitor() {
-  const game = getGame();
-  const n = selectedN;
-  const s = selectedS;
-
-  // Número de combinações do sistema
-  const numComb = combinacao(n, game.bn) * combinacao(s, game.bs);
-  const precoTotal = game.precoUnitario * numComb;
-
-  // Odds do 1.º prémio (sempre com base no jogo completo)
-  const oddsBase = combinacao(game.n, game.bn) * combinacao(game.s, game.bs);
-
-  document.getElementById('oddsDisplay').textContent = '1 em ' + oddsBase.toLocaleString('pt-PT');
-  document.getElementById('unitPriceDisplay').textContent = formatarEuro(game.precoUnitario);
-  document.getElementById('comboCountDisplay').textContent = numComb.toLocaleString('pt-PT');
-  document.getElementById('priceDisplay').textContent = formatarEuro(precoTotal);
-  document.getElementById('drawPrice').textContent = formatarEuro(precoTotal);
-}
-
-function mostrarResultado(result) {
-  const panel = document.getElementById('resultPanel');
-  const ballOutput = document.getElementById('ballOutput');
-  panel.style.display = 'block';
-  ballOutput.innerHTML = '';
-
-  // Valor total da aposta (correto)
-  document.getElementById('resultPriceDisplay').textContent = formatarEuro(result.precoTotal);
-
-  // Números principais
-  const mainLabel = document.createElement('div');
-  mainLabel.className = 'ball-label';
-  mainLabel.textContent = 'NÚMEROS PRINCIPAIS';
-  ballOutput.appendChild(mainLabel);
-
-  result.principais.forEach(num => {
-    const div = document.createElement('div');
-    div.className = 'ball main';
-    div.textContent = String(num).padStart(2, '0');
-    ballOutput.appendChild(div);
-  });
-
-  // Extras
-  if (result.extras.length > 0) {
-    const sep = document.createElement('div');
-    sep.style.cssText = 'width:100%;height:2px;background:var(--border-dark);margin:14px 0;';
-    ballOutput.appendChild(sep);
-
-    const starLabel = document.createElement('div');
-    starLabel.className = 'ball-label';
-    starLabel.style.color = 'var(--gold)';
-    starLabel.textContent = 'ESTRELAS / EXTRAS';
-    ballOutput.appendChild(starLabel);
-
-    result.extras.forEach(num => {
-      const div = document.createElement('div');
-      div.className = 'ball star';
-      div.textContent = String(num).padStart(2, '0');
-      ballOutput.appendChild(div);
-    });
-  }
-}
-
-function addLog(msg, type = 'info') {
-  const terminal = document.getElementById('terminal');
-  terminal.style.display = 'block';
-  const entry = document.createElement('div');
-  entry.className = 'log-entry' + (type === 'error' ? ' log-err' : type === 'success' ? ' log-success' : '');
-  entry.textContent = '> ' + new Date().toLocaleTimeString('pt-PT') + ' · ' + msg;
-  terminal.appendChild(entry);
-  terminal.scrollTop = terminal.scrollHeight;
-}
-
-function clearLog() {
-  document.getElementById('terminal').innerHTML = '';
-}
-
-// ============================================================
-//  EVENTOS
-// ============================================================
-document.getElementById('gameType').addEventListener('change', function () {
-  gameKey = this.value;
-  populateSelects();
-  document.getElementById('resultPanel').style.display = 'none';
-  clearLog();
-  addLog('Jogo alterado para ' + this.options[this.selectedIndex].text);
-  updateDrawInfo();
-});
-
-document.getElementById('nQty').addEventListener('change', function () {
-  selectedN = parseInt(this.value);
-  updateMonitor();
-  document.getElementById('resultPanel').style.display = 'none';
-});
-
-document.getElementById('sQty').addEventListener('change', function () {
-  selectedS = parseInt(this.value);
-  updateMonitor();
-  document.getElementById('resultPanel').style.display = 'none';
-});
-
-document.getElementById('runBtn').addEventListener('click', function () {
-  const btn = this;
-  btn.disabled = true;
-  btn.textContent = 'A GERAR...';
-
-  setTimeout(() => {
+  // --- 1. DATA E HORA ---
+  function updateHeaderDateTime() {
     try {
-      const result = gerarAposta(gameKey);
-      addLog('Números principais: ' + result.principais.join(', '));
-      if (result.extras.length > 0) {
-        addLog(getGame().sNome + ': ' + result.extras.join(', '));
-      }
-      addLog('Combinações do sistema: ' + result.numComb.toLocaleString('pt-PT'));
-      addLog('Valor total da aposta: ' + formatarEuro(result.precoTotal), 'success');
-      addLog('Aposta gerada (aleatória + filtros estatísticos)', 'success');
-
-      mostrarResultado(result);
-    } catch (e) {
-      addLog('Erro: ' + e.message, 'error');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '▶ GERAR APOSTA';
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+      let dateStr = now.toLocaleDateString('pt-PT', options);
+      document.getElementById('currentDateTime').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+    } catch(e) {
+      console.error('Erro ao atualizar data:', e);
     }
-  }, 600);
-});
+  }
+  updateHeaderDateTime();
+  setInterval(updateHeaderDateTime, 60000);
 
-// ============================================================
-//  INICIALIZAÇÃO
-// ============================================================
-updateDateTime();
-setInterval(updateDateTime, 1000);
-populateSelects();
-addLog('Sistema iniciado');
-addLog('Preços oficiais Santa Casa carregados');
-addLog('Totoloto: €1,00 | EuroMilhões/EuroDreams: €2,50');
-updateDrawInfo();
+  // --- 2. REGRAS OFICIAIS SANTA CASA ---
+  const gameRules = {
+    euromilhoes: { 
+      name: "Euromilhões", 
+      baseMain: 5, maxMain: 10, minMain: 6,
+      baseStars: 2, maxStars: 5, minStars: 3,
+      maxMainPool: 50, maxStarPool: 12, 
+      pricePerCombo: 2.50,
+      hasStarMultiple: true
+    },
+    totoloto: { 
+      name: "Totoloto", 
+      baseMain: 5, maxMain: 10, minMain: 6,
+      baseStars: 1, maxStars: 1, minStars: 1,
+      maxMainPool: 49, maxStarPool: 13, 
+      pricePerCombo: 1.00,
+      hasStarMultiple: false
+    },
+    eurodreams: { 
+      name: "EuroDreams", 
+      baseMain: 6, maxMain: 12, minMain: 7,
+      baseStars: 1, maxStars: 5, minStars: 2,
+      maxMainPool: 40, maxStarPool: 5, 
+      pricePerCombo: 1.50,
+      hasStarMultiple: true
+    }
+  };
+
+  // --- 3. TOAST NOTIFICATIONS ---
+  function showToast(message, isError = false) {
+    const toast = document.createElement('div');
+    toast.className = 'toast' + (isError ? ' error' : '');
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.animation = 'slideUp 0.3s ease-out reverse';
+      setTimeout(() => toast.remove(), 300);
+    }, 2500);
+  }
+
+  // --- 4. ATUALIZAÇÃO DINÂMICA DO FORMULÁRIO ---
+  function updateFormFields() {
+    try {
+      const gameType = document.getElementById('gameType').value;
+      const betType = document.getElementById('betType').value;
+      const rules = gameRules[gameType];
+      const multiplaDiv = document.getElementById('multiplaOptions');
+      const multiStarGroup = document.getElementById('multiStarGroup');
+
+      if (betType === 'multipla') {
+        multiplaDiv.style.display = 'block';
+        
+        const mainSelect = document.getElementById('multiMainCount');
+        mainSelect.innerHTML = '';
+        for (let i = rules.minMain; i <= rules.maxMain; i++) {
+          mainSelect.innerHTML += `<option value="${i}">${i} Números</option>`;
+        }
+
+        if (rules.hasStarMultiple) {
+          multiStarGroup.style.display = 'block';
+          const starSelect = document.getElementById('multiStarCount');
+          starSelect.innerHTML = '';
+          
+          let starLabel = '';
+          if (gameType === 'euromilhoes') starLabel = 'Nº de Estrelas';
+          else if (gameType === 'eurodreams') starLabel = 'Nº de Números Sonho';
+          
+          document.getElementById('labelMultiStar').textContent = starLabel;
+          
+          for (let i = rules.minStars; i <= rules.maxStars; i++) {
+            let unit = gameType === 'euromilhoes' ? 'Estrelas' : 'Números Sonho';
+            starSelect.innerHTML += `<option value="${i}">${i} ${unit}</option>`;
+          }
+        } else {
+          multiStarGroup.style.display = 'none';
+        }
+      } else {
+        multiplaDiv.style.display = 'none';
+      }
+    } catch(e) {
+      console.error('Erro ao atualizar campos:', e);
+      showToast('Erro ao atualizar formulário', true);
+    }
+  }
+
+  // --- 5. NAVEGAÇÃO TABS ---
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      try {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('view-' + tab.dataset.target).classList.add('active');
+        
+        if (tab.dataset.target === 'history') {
+          loadHistory();
+        } else if (tab.dataset.target === 'stats') {
+          updateStats();
+        }
+      } catch(e) {
+        console.error('Erro na navegação:', e);
+      }
+    });
+  });
+
+  // --- 6. MATEMÁTICA COMBINATÓRIA ---
+  function combinations(n, k) {
+    if (k < 0 || k > n) return 0;
+    if (k === 0 || k === n) return 1;
+    let res = 1;
+    for (let i = 0; i < k; i++) {
+      res = res * (n - i) / (i + 1);
+    }
+    return Math.round(res);
+  }
+
+  function getSecureRandomInt(min, max) {
+    const range = max - min + 1;
+    const maxValid = 0xFFFFFFFF - (0xFFFFFFFF % range);
+    if (window.crypto && window.crypto.getRandomValues) {
+      const array = new Uint32Array(1);
+      let randomValue;
+      do {
+        window.crypto.getRandomValues(array);
+        randomValue = array[0];
+      } while (randomValue >= maxValid);
+      return min + (randomValue % range);
+    }
+    return Math.floor(Math.random() * range) + min;
+  }
+
+  function generateUniqueNumbers(count, max) {
+    const nums = new Set();
+    while (nums.size < count) {
+      nums.add(getSecureRandomInt(1, max));
+    }
+    return Array.from(nums).sort((a, b) => a - b);
+  }
+
+  // --- 7. PRÓXIMO SORTEIO ---
+  function getNextDrawDate(gameType) {
+    const now = new Date();
+    const dayNames = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    let targetDays = [], time = "20:00";
+
+    if (gameType === 'euromilhoes') { targetDays = ['Terça', 'Sexta']; time = "20:00"; }
+    else if (gameType === 'totoloto') { targetDays = ['Quarta', 'Sábado']; time = "20:00"; }
+    else if (gameType === 'eurodreams') { targetDays = ['Segunda', 'Quinta']; time = "21:00"; }
+
+    let currentDayIndex = now.getDay();
+    let daysUntilDraw = 8, nextDrawDayName = "";
+
+    for (let i = 1; i <= 7; i++) {
+      let checkIndex = (currentDayIndex + i) % 7;
+      if (targetDays.includes(dayNames[checkIndex])) {
+        daysUntilDraw = i;
+        nextDrawDayName = dayNames[checkIndex];
+        break;
+      }
+    }
+
+    const nextDate = new Date(now);
+    nextDate.setDate(now.getDate() + daysUntilDraw);
+    const formattedDate = nextDate.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return `${nextDrawDayName}, ${formattedDate} às ${time}h`;
+  }
+
+  // --- 8. HISTÓRICO (LocalStorage) ---
+  function saveToHistory(betData) {
+    try {
+      let history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
+      history.unshift(betData);
+      if (history.length > 50) history = history.slice(0, 50);
+      localStorage.setItem('oracleHistory', JSON.stringify(history));
+    } catch(e) {
+      console.error('Erro ao guardar histórico:', e);
+      showToast('Erro ao guardar histórico', true);
+    }
+  }
+
+  function loadHistory() {
+    try {
+      const history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
+      const historyArea = document.getElementById('historyArea');
+      
+      if (history.length === 0) {
+        historyArea.innerHTML = '<p style="text-align:center; color:#8892a0; padding: 20px;">Nenhuma aposta registada ainda.</p>';
+        return;
+      }
+
+      let html = '';
+      history.forEach(bet => {
+        html += `<div class="history-item">`;
+        html += `<div class="history-header">`;
+        html += `<span class="history-game">${bet.gameName}</span>`;
+        html += `<span class="history-date">${bet.date}</span>`;
+        html += `</div>`;
+        html += `<div class="history-balls">`;
+        bet.mainNums.forEach(num => {
+          html += `<div class="ball ball-main history-ball">${num.toString().padStart(2, '0')}</div>`;
+        });
+        bet.starNums.forEach(num => {
+          const starClass = bet.gameType === 'eurodreams' ? 'ball-dream' : 'ball-star';
+          html += `<div class="ball ${starClass} history-ball">${num.toString().padStart(2, '0')}</div>`;
+        });
+        html += `</div>`;
+        html += `<div style="margin-top: 8px; font-size: 0.75rem; color: #8892a0;">`;
+        html += `${bet.isMultipla ? 'Múltipla' : 'Simples'} · ${bet.combinations} combinações · € ${bet.totalPrice.toFixed(2).replace('.', ',')}`;
+        html += `</div>`;
+        html += `</div>`;
+      });
+      
+      historyArea.innerHTML = html;
+    } catch(e) {
+      console.error('Erro ao carregar histórico:', e);
+      showToast('Erro ao carregar histórico', true);
+    }
+  }
+
+  function clearHistory() {
+    if (confirm('Tem a certeza que deseja limpar todo o histórico?')) {
+      try {
+        localStorage.removeItem('oracleHistory');
+        loadHistory();
+        showToast('Histórico limpo com sucesso');
+      } catch(e) {
+        console.error('Erro ao limpar histórico:', e);
+        showToast('Erro ao limpar histórico', true);
+      }
+    }
+  }
+
+  function exportHistory() {
+    try {
+      const history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
+      if (history.length === 0) {
+        showToast('Histórico vazio', true);
+        return;
+      }
+      
+      const dataStr = JSON.stringify(history, null, 2);
+      const blob = new Blob([dataStr], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'oracle_historico_' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Histórico exportado com sucesso');
+    } catch(e) {
+      console.error('Erro ao exportar:', e);
+      showToast('Erro ao exportar histórico', true);
+    }
+  }
+
+  // --- 9. ESTATÍSTICAS ---
+  function updateStats() {
+    try {
+      const history = JSON.parse(localStorage.getItem('oracleHistory') || '[]');
+      
+      const totalBets = history.length;
+      const totalSpent = history.reduce((sum, bet) => sum + bet.totalPrice, 0);
+      const multiplaCount = history.filter(bet => bet.isMultipla).length;
+
+      document.getElementById('totalBets').textContent = totalBets;
+      document.getElementById('totalSpent').textContent = '€ ' + totalSpent.toFixed(2).replace('.', ',');
+      document.getElementById('multiplaCount').textContent = multiplaCount;
+    } catch(e) {
+      console.error('Erro ao atualizar estatísticas:', e);
+    }
+  }
+
+  // --- 10. FUNÇÃO PRINCIPAL DE GERAÇÃO ---
+  function gerar() {
+    const btn = document.getElementById('generateBtn');
+    const resultsArea = document.getElementById('resultsArea');
+    const gameType = document.getElementById('gameType').value;
+    const betType = document.getElementById('betType').value;
+    const rules = gameRules[gameType];
+
+    btn.disabled = true;
+    btn.innerHTML = "A CONSULTAR O ORÁCULO...";
+    btn.classList.add('pulsing');
+    resultsArea.innerHTML = "";
+
+    setTimeout(() => {
+      try {
+        let mainCount = rules.baseMain;
+        let starCount = rules.baseStars;
+        let isMultipla = false;
+
+        if (betType === 'multipla') {
+          isMultipla = true;
+          mainCount = parseInt(document.getElementById('multiMainCount').value, 10);
+          if (rules.hasStarMultiple) {
+            starCount = parseInt(document.getElementById('multiStarCount').value, 10);
+          }
+        }
+
+        const mainNums = generateUniqueNumbers(mainCount, rules.maxMainPool);
+        const starNums = generateUniqueNumbers(starCount, rules.maxStarPool);
+
+        const mainCombos = combinations(mainCount, rules.baseMain);
+        const starCombos = combinations(starCount, rules.baseStars);
+        const totalCombos = mainCombos * starCombos;
+        const totalPrice = totalCombos * rules.pricePerCombo;
+
+        let htmlOutput = `<div class="result-box">`;
+        htmlOutput += `<div class="result-label">`;
+        htmlOutput += `${rules.name}`;
+        if (isMultipla) {
+          htmlOutput += `<span class="badge-multipla">MÚLTIPLA</span>`;
+        }
+        htmlOutput += `</div>`;
+        
+        htmlOutput += `<div class="balls-container">`;
+        mainNums.forEach((num, index) => {
+          htmlOutput += `<div class="ball ball-main" style="animation-delay: ${index * 0.05}s">${num.toString().padStart(2, '0')}</div>`;
+        });
+        starNums.forEach((num, index) => {
+          const starClass = gameType === 'eurodreams' ? 'ball-dream' : 'ball-star';
+          const delay = (mainNums.length + index) * 0.05;
+          htmlOutput += `<div class="ball ${starClass}" style="animation-delay: ${delay}s">${num.toString().padStart(2, '0')}</div>`;
+        });
+        htmlOutput += `</div>`;
+
+        const nextDraw = getNextDrawDate(gameType);
+        htmlOutput += `<div class="draw-info">📅 Próximo Sorteio: <strong>${nextDraw}</strong></div>`;
+        htmlOutput += `</div>`;
+
+        const formattedTotalPrice = totalPrice.toFixed(2).replace('.', ',');
+        const formattedUnitPrice = rules.pricePerCombo.toFixed(2).replace('.', ',');
+        
+        let comboText = "";
+        if (isMultipla) {
+          comboText = `<div class="combo-info">Gera automaticamente <strong>${totalCombos.toLocaleString('pt-PT')}</strong> chaves simples</div>`;
+        }
+
+        htmlOutput += `
+          <div class="price-tag">
+            <div class="price-col-left">
+              <div class="price-label">Preço base por chave</div>
+              <div class="price-value-small">€ ${formattedUnitPrice}</div>
+            </div>
+            <div class="price-col-right">
+              <div class="price-label" style="color:#f59e0b">Custo Total</div>
+              <div class="price-value-large">€ ${formattedTotalPrice}</div>
+              ${comboText}
+            </div>
+          </div>
+        `;
+
+        resultsArea.innerHTML = htmlOutput;
+        document.querySelector('.tab[data-target="result"]').click();
+        
+        const betData = {
+          gameType: gameType,
+          gameName: rules.name,
+          mainNums: mainNums,
+          starNums: starNums,
+          isMultipla: isMultipla,
+          combinations: totalCombos,
+          totalPrice: totalPrice,
+          date: new Date().toLocaleString('pt-PT')
+        };
+        saveToHistory(betData);
+        
+        btn.disabled = false;
+        btn.innerHTML = "Gerar Nova Combinação";
+        btn.classList.remove('pulsing');
+        
+        showToast('Combinação gerada com sucesso!');
+      } catch(e) {
+        console.error('Erro ao gerar:', e);
+        showToast('Erro ao gerar combinação', true);
+        btn.disabled = false;
+        btn.innerHTML = "Gerar Combinação";
+        btn.classList.remove('pulsing');
+      }
+    }, 600);
+  }
+
+  // Inicializar
+  updateFormFields();
+  updateStats();
 </script>
-
 </body>
 </html>
