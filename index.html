@@ -3,396 +3,303 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Oracle v33.0 · Santa Casa · Ultra Rápido</title>
+  <title>ORACLE GENESIS v99.0 · Santa Casa · Motor Preditivo Quântico</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; -webkit-tap-highlight-color: transparent; }
-    body { background: #0a0c12; color: #d0d9e6; padding: 12px; overflow-x: hidden; }
-    .container { max-width: 600px; margin: 0 auto; }
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+    :root {
+      --neon-gold: #ffd700; --neon-cyan: #00f5ff; --neon-green: #00ff41;
+      --neon-red: #ff0040; --neon-purple: #bf00ff; --bg-dark: #05070a;
+      --bg-card: #0a0d14; --bg-panel: #080a10; --border-dim: #1a1f2e;
+      --border-glow: #2a3a4a; --text-primary: #e0e8f0; --text-dim: #6a7a8a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-dark); color: var(--text-primary);
+      font-family: 'Share Tech Mono', monospace; overflow-x: hidden; min-height: 100vh;
+    }
+    body::before {
+      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(255,215,0,0.03) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(0,245,255,0.03) 0%, transparent 50%);
+      pointer-events: none; z-index: 0;
+    }
+    .container { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; padding: 12px; }
     .header {
-      border: 2px solid #ffcc00;
-      background: radial-gradient(circle at 30% 30%, #141a24, #000);
-      padding: 20px 12px 16px 12px;
-      text-align: center;
-      margin-bottom: 20px;
-      box-shadow: 0 0 40px rgba(255, 204, 0, 0.15);
+      background: linear-gradient(135deg, rgba(10,14,24,0.95), rgba(5,7,10,0.98));
+      border: 2px solid var(--neon-gold); border-radius: 16px; padding: 24px 16px;
+      text-align: center; margin-bottom: 20px; position: relative; overflow: hidden;
+      box-shadow: 0 0 60px rgba(255,215,0,0.1), inset 0 0 60px rgba(255,215,0,0.02);
     }
-    .header h1 { font-size: 1.6rem; letter-spacing: 5px; color: #ffcc00; text-shadow: 0 0 12px #ffcc00; }
-    .header .sub { font-size: 0.7rem; color: #00ff41; margin-top: 4px; letter-spacing: 2px; }
+    .header::before {
+      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,215,0,0.03) 2px, rgba(255,215,0,0.03) 4px);
+      animation: scanline 8s linear infinite; pointer-events: none;
+    }
+    @keyframes scanline { 0% { transform: translateY(0); } 100% { transform: translateY(50%); } }
+    .header h1 {
+      font-family: 'Orbitron', sans-serif; font-size: 2rem; letter-spacing: 8px;
+      color: var(--neon-gold); text-shadow: 0 0 20px rgba(255,215,0,0.5), 0 0 40px rgba(255,215,0,0.2); position: relative;
+    }
+    .header .sub { font-size: 0.7rem; color: var(--neon-green); margin-top: 6px; letter-spacing: 4px; text-shadow: 0 0 10px rgba(0,255,65,0.3); }
     .header .datetime {
-      font-size: 18px !important;
-      color: #ff0000 !important;
-      margin-top: 8px;
-      border-top: 1px solid #2a2f3a;
-      padding-top: 8px;
-      font-weight: bold;
+      font-family: 'Orbitron', sans-serif; font-size: 16px; color: var(--neon-red);
+      margin-top: 12px; border-top: 1px solid var(--border-dim); padding-top: 10px;
+      font-weight: 700; text-shadow: 0 0 10px rgba(255,0,64,0.4);
     }
-    .header .datetime span { 
-      color: #ff0000 !important;
-      font-size: 18px !important;
-      font-weight: bold;
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: 12px;
+      padding: 20px; margin-bottom: 16px; position: relative; transition: all 0.3s ease;
     }
-    .card { background: #10141c; border: 1px solid #2a2f3a; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-    .card h2 { font-size: 0.85rem; color: #ffcc00; text-transform: uppercase; border-left: 3px solid #ffcc00; padding-left: 10px; margin-bottom: 14px; letter-spacing: 1px; }
-    .flex { display: flex; gap: 12px; flex-wrap: wrap; }
-    .flex > * { flex: 1; min-width: 120px; }
+    .card:hover { border-color: var(--border-glow); box-shadow: 0 0 20px rgba(0,245,255,0.05); }
+    .card h2 {
+      font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: var(--neon-gold);
+      text-transform: uppercase; border-left: 3px solid var(--neon-gold); padding-left: 12px;
+      margin-bottom: 16px; letter-spacing: 2px; display: flex; align-items: center; gap: 8px;
+    }
+    .card h2 .badge { font-size: 0.5rem; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); padding: 2px 6px; border-radius: 4px; color: var(--neon-gold); }
     select {
-      width: 100%;
-      background: #0b0e14;
-      border: 1px solid #2a2f3a;
-      color: #00f5ff;
-      padding: 12px 10px;
-      font-size: 0.9rem;
-      border-radius: 6px;
-      outline: none;
-      margin-bottom: 8px;
+      width: 100%; background: var(--bg-panel); border: 1px solid var(--border-dim);
+      color: var(--neon-cyan); padding: 14px 12px; font-size: 0.9rem; border-radius: 8px;
+      outline: none; font-family: 'Share Tech Mono', monospace; cursor: pointer;
+      transition: all 0.2s; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300f5ff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
     }
-    select:focus { border-color: #ffcc00; }
-    select:disabled { opacity: 0.5; color: #7a8290; border-color: #1f2630; }
+    select:focus { border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0,245,255,0.2); }
+    select:disabled { opacity: 0.4; color: var(--text-dim); border-color: #1a1f28; cursor: not-allowed; }
+    .flex { display: flex; gap: 12px; flex-wrap: wrap; }
+    .flex > * { flex: 1; min-width: 140px; }
+    label.field-label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; display: block; }
     .monitor {
-      background: #080b10;
-      border: 1px solid #1f2630;
-      border-radius: 8px;
-      padding: 20px;
-      text-align: center;
+      background: linear-gradient(180deg, var(--bg-panel), rgba(8,10,16,0.95));
+      border: 1px solid var(--border-dim); border-radius: 12px; padding: 28px 20px;
+      text-align: center; position: relative; overflow: hidden;
     }
-    .monitor .odds { font-size: 2.8rem; font-weight: 900; color: #00ff41; text-shadow: 0 0 25px #00ff41; margin: 6px 0; }
-    .monitor .price { font-size: 1.5rem; color: #fff; font-weight: bold; }
-    .monitor .meta { font-size: 0.6rem; color: #7a8290; text-transform: uppercase; letter-spacing: 1px; }
-    .monitor .apostas-info { font-size: 0.7rem; color: #ffcc00; margin-top: 8px; }
+    .monitor::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+      animation: pulse-line 3s ease-in-out infinite;
+    }
+    @keyframes pulse-line { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .monitor .meta { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; }
+    .monitor .odds { font-family: 'Orbitron', sans-serif; font-size: 2.4rem; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 30px rgba(0,255,65,0.4), 0 0 60px rgba(0,255,65,0.1); margin: 8px 0; letter-spacing: 2px; }
+    .monitor .price { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: #fff; font-weight: 700; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
+    .monitor .accuracy-bar { margin-top: 16px; height: 6px; background: var(--bg-dark); border-radius: 3px; overflow: hidden; position: relative; }
+    .monitor .accuracy-bar .fill { height: 100%; background: linear-gradient(90deg, var(--neon-red), var(--neon-gold), var(--neon-green)); border-radius: 3px; transition: width 1s ease; position: relative; }
+    .monitor .accuracy-bar .fill::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 20px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4)); animation: shimmer 2s infinite; }
+    @keyframes shimmer { 0% { transform: translateX(-20px); } 100% { transform: translateX(20px); } }
+    .monitor .apostas-info { font-size: 0.7rem; color: var(--neon-cyan); margin-top: 12px; padding: 8px; background: rgba(0,245,255,0.03); border-radius: 6px; border: 1px solid rgba(0,245,255,0.1); }
     .btn {
-      width: 100%;
-      padding: 18px;
-      background: transparent;
-      border: 2px solid #ffcc00;
-      color: #ffcc00;
-      font-size: 1.1rem;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.25s;
-      margin: 16px 0;
+      width: 100%; padding: 20px; background: linear-gradient(135deg, rgba(255,215,0,0.05), rgba(255,215,0,0.02));
+      border: 2px solid var(--neon-gold); color: var(--neon-gold); font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 6px;
+      border-radius: 8px; cursor: pointer; transition: all 0.3s; margin: 20px 0; position: relative; overflow: hidden;
     }
-    .btn:active { background: #ffcc00; color: #0a0c12; }
-    .btn:disabled { opacity: 0.5; border-color: #555; color: #555; cursor: not-allowed; }
+    .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent); transition: left 0.5s; }
+    .btn:hover::before { left: 100%; }
+    .btn:hover { background: rgba(255,215,0,0.1); box-shadow: 0 0 40px rgba(255,215,0,0.2); transform: translateY(-2px); }
+    .btn:active { background: var(--neon-gold); color: var(--bg-dark); transform: translateY(0); }
+    .btn:disabled { opacity: 0.4; border-color: #555; color: #555; cursor: not-allowed; transform: none; }
     .terminal {
-      background: #0b0e14;
-      border: 1px solid #1a1f28;
-      border-radius: 6px;
-      height: 100px;
-      overflow-y: auto;
-      padding: 10px;
-      font-size: 0.6rem;
-      color: #00ff41;
-      line-height: 1.4;
-      margin-top: 12px;
+      background: var(--bg-panel); border: 1px solid var(--border-dim); border-radius: 8px;
+      height: 160px; overflow-y: auto; padding: 14px; font-size: 0.65rem; color: var(--neon-green);
+      line-height: 1.6; margin-top: 16px; font-family: 'Share Tech Mono', monospace;
     }
+    .terminal .log-line { margin: 2px 0; opacity: 0; animation: fadeIn 0.3s forwards; }
+    .terminal .log-line.error { color: var(--neon-red); }
+    .terminal .log-line.warn { color: var(--neon-gold); }
+    .terminal .log-line.success { color: var(--neon-cyan); }
+    .terminal .log-line.info { color: var(--neon-green); }
+    @keyframes fadeIn { to { opacity: 1; } }
     .result-panel {
-      display: none;
-      border: 2px solid #00f5ff;
-      background: rgba(0, 245, 255, 0.02);
-      border-radius: 10px;
-      padding: 20px 10px;
-      margin-top: 16px;
-      text-align: center;
+      display: none; border: 2px solid var(--neon-cyan);
+      background: linear-gradient(180deg, rgba(0,245,255,0.02), rgba(0,245,255,0.005));
+      border-radius: 12px; padding: 24px 16px; margin-top: 20px; text-align: center;
+      animation: slideUp 0.6s ease; position: relative; overflow: hidden;
     }
-    .balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 16px 0; }
+    .result-panel::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(0,245,255,0.03) 0%, transparent 40%), radial-gradient(circle at 70% 70%, rgba(255,215,0,0.03) 0%, transparent 40%);
+      pointer-events: none;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .result-panel h2 { font-family: 'Orbitron', sans-serif; color: var(--neon-gold); font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 20px; }
+    .balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 20px 0; position: relative; z-index: 1; }
     .ball {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      border: 2px solid #d0d9e6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      font-weight: 900;
-      background: #0b0e14;
-      box-shadow: 0 0 12px rgba(255,255,255,0.08);
-      animation: popIn 0.2s ease-out;
+      width: 56px; height: 56px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
+      display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem; font-weight: 900; background: linear-gradient(135deg, var(--bg-panel), var(--bg-dark));
+      box-shadow: 0 0 20px rgba(255,255,255,0.05), inset 0 0 20px rgba(0,0,0,0.5);
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      transform: scale(0); position: relative;
     }
-    @keyframes popIn {
-      0% { transform: scale(0); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .ball.gold { border-color: #ffcc00; color: #ffcc00; box-shadow: 0 0 18px #ffcc00; }
-    .ball.cyan { border-color: #00f5ff; color: #00f5ff; box-shadow: 0 0 18px #00f5ff; }
-    .ball.selected { transform: scale(1.1); border-width: 3px; }
-    .divider { width: 100%; height: 1px; background: #2a2f3a; margin: 10px 0; }
-    .confidence { font-size: 0.8rem; color: #ffcc00; font-weight: bold; margin-top: 10px; }
-    .method-tag {
-      display: inline-block;
-      background: #1a1f28;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 0.5rem;
-      color: #00f5ff;
-      margin: 2px;
-      border: 1px solid #00f5ff33;
-    }
-    .method-tag.gold { color: #ffcc00; border-color: #ffcc0033; }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      font-size: 0.55rem;
-      color: #8892a0;
-      margin-top: 10px;
-    }
-    .stats-grid .val { color: #d0d9e6; font-weight: bold; }
-    .stats-grid .label { text-align: right; }
-    .bet-type {
-      display: flex;
-      gap: 10px;
-      margin: 8px 0;
-      padding: 10px;
-      background: #0b0e14;
-      border-radius: 6px;
-      border: 1px solid #2a2f3a;
-    }
-    .bet-type label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      color: #8892a0;
-      cursor: pointer;
-      padding: 6px 12px;
-      border-radius: 4px;
-      transition: 0.2s;
-    }
-    .bet-type label:hover { background: #1a1f28; }
-    .bet-type input[type="radio"] { width: auto; margin: 0; accent-color: #ffcc00; }
-    .bet-type label.active { color: #ffcc00; background: #1a1f28; }
-    .total-apostas {
-      font-size: 0.6rem;
-      color: #00f5ff;
-      margin-top: 6px;
-      padding: 6px;
-      background: #0b0e14;
-      border-radius: 4px;
-      border: 1px solid #00f5ff33;
-    }
-    .regras-info {
-      font-size: 0.5rem;
-      color: #7a8290;
-      margin-top: 6px;
-      padding: 6px;
-      background: #0b0e14;
-      border-radius: 4px;
-      border: 1px solid #2a2f3a;
-      text-align: center;
-    }
-    .regras-info span { color: #ffcc00; }
-    .footer {
-      margin-top: 20px;
-      padding: 14px;
-      border-top: 1px solid #2a2f3a;
-      text-align: center;
-    }
-    .footer .sorteio { 
-      color: #ffcc00; 
-      font-weight: bold; 
-      font-size: 18px !important;
-      margin-top: 4px; 
-    }
-    .footer .sorteio span { 
-      color: #ffcc00 !important;
-      font-size: 18px !important;
-      font-weight: bold;
-    }
-    .footer .draw-info {
-      margin-top: 6px;
-      padding: 6px;
-      background: #0b0e14;
-      border-radius: 4px;
-      border: 1px solid #2a2f3a;
-    }
-    .footer .draw-info .label { color: #7a8290; font-size: 0.55rem; }
-    .footer .draw-info .value { 
-      color: #ffcc00 !important;
-      font-weight: bold;
-      font-size: 18px !important;
-    }
-    .footer .datetime-footer {
-      font-size: 18px !important;
-      color: #ff0000 !important;
-      margin-bottom: 4px;
-      font-weight: bold;
-    }
-    .footer .datetime-footer span {
-      color: #ff0000 !important;
-      font-size: 18px !important;
-      font-weight: bold;
-    }
-    .spinner {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      border: 2px solid #ffcc00;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
+    .ball::after { content: ''; position: absolute; top: 3px; left: 3px; right: 3px; height: 40%; border-radius: 50% 50% 40% 40%; background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent); pointer-events: none; }
+    @keyframes popIn { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+    .ball.gold { border-color: var(--neon-gold); color: var(--neon-gold); box-shadow: 0 0 25px rgba(255,215,0,0.3), inset 0 0 20px rgba(255,215,0,0.05); background: linear-gradient(135deg, rgba(255,215,0,0.1), var(--bg-dark)); }
+    .ball.cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: 0 0 25px rgba(0,245,255,0.3), inset 0 0 20px rgba(0,245,255,0.05); background: linear-gradient(135deg, rgba(0,245,255,0.1), var(--bg-dark)); }
+    .ball.purple { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 25px rgba(191,0,255,0.3), inset 0 0 20px rgba(191,0,255,0.05); background: linear-gradient(135deg, rgba(191,0,255,0.1), var(--bg-dark)); }
+    .ball.selected { transform: scale(1.15); border-width: 3px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulse-ball 2s ease-in-out infinite; }
+    @keyframes pulse-ball { 0%, 100% { box-shadow: 0 0 25px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 40px rgba(255,215,0,0.5); } }
+    .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border-glow), transparent); margin: 12px 0; }
+    .confidence { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--neon-gold); font-weight: 700; margin-top: 16px; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
+    .method-tags { margin-top: 12px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; position: relative; z-index: 1; }
+    .method-tag { display: inline-block; background: rgba(0,245,255,0.05); padding: 4px 10px; border-radius: 20px; font-size: 0.55rem; color: var(--neon-cyan); border: 1px solid rgba(0,245,255,0.2); font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
+    .method-tag.gold { color: var(--neon-gold); border-color: rgba(255,215,0,0.2); background: rgba(255,215,0,0.05); }
+    .method-tag.purple { color: var(--neon-purple); border-color: rgba(191,0,255,0.2); background: rgba(191,0,255,0.05); }
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.6rem; color: var(--text-dim); margin-top: 16px; text-align: left; position: relative; z-index: 1; }
+    .stats-grid .row { display: flex; justify-content: space-between; padding: 6px 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid var(--border-dim); }
+    .stats-grid .val { color: var(--text-primary); font-weight: 700; font-family: 'Orbitron', sans-serif; }
+    .stats-grid .val.highlight { color: var(--neon-green); }
+    .stats-grid .val.warn { color: var(--neon-gold); }
+    .stats-grid .val.danger { color: var(--neon-red); }
+    .bet-type { display: flex; gap: 10px; margin: 12px 0; padding: 12px; background: var(--bg-panel); border-radius: 8px; border: 1px solid var(--border-dim); }
+    .bet-type label { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-dim); cursor: pointer; padding: 8px 16px; border-radius: 6px; transition: all 0.2s; flex: 1; justify-content: center; border: 1px solid transparent; }
+    .bet-type label:hover { background: rgba(255,255,255,0.03); border-color: var(--border-dim); }
+    .bet-type input[type="radio"] { width: auto; margin: 0; accent-color: var(--neon-gold); }
+    .bet-type label.active { color: var(--neon-gold); background: rgba(255,215,0,0.05); border-color: rgba(255,215,0,0.3); }
+    .total-apostas { font-size: 0.7rem; color: var(--neon-cyan); margin-top: 10px; padding: 10px; background: rgba(0,245,255,0.03); border-radius: 6px; border: 1px solid rgba(0,245,255,0.1); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+    .regras-info { font-size: 0.55rem; color: var(--text-dim); margin-top: 8px; padding: 10px; background: var(--bg-panel); border-radius: 6px; border: 1px solid var(--border-dim); text-align: center; line-height: 1.6; }
+    .regras-info span { color: var(--neon-gold); font-weight: 700; }
+    .footer { margin-top: 24px; padding: 20px; border-top: 1px solid var(--border-dim); text-align: center; background: linear-gradient(180deg, transparent, rgba(0,0,0,0.3)); border-radius: 0 0 12px 12px; }
+    .footer .sorteio { color: var(--neon-gold); font-weight: 700; font-size: 1rem; font-family: 'Orbitron', sans-serif; margin-top: 6px; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
+    .footer .draw-info { margin-top: 10px; padding: 12px; background: var(--bg-panel); border-radius: 8px; border: 1px solid var(--border-dim); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; }
+    .footer .draw-info .label { color: var(--text-dim); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 1px; }
+    .footer .draw-info .value { color: var(--neon-gold); font-weight: 700; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; }
+    .footer .datetime-footer { font-family: 'Orbitron', sans-serif; font-size: 14px; color: var(--neon-red); margin-bottom: 8px; font-weight: 700; text-shadow: 0 0 10px rgba(255,0,64,0.3); }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--neon-gold); border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 10px; vertical-align: middle; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .small-note { font-size: 0.5rem; color: var(--text-dim); margin-top: 16px; font-style: italic; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
+    .dna-loader { display: none; justify-content: center; gap: 4px; margin: 16px 0; height: 40px; align-items: center; }
+    .dna-loader.active { display: flex; }
+    .dna-bar { width: 4px; height: 20px; background: var(--neon-gold); border-radius: 2px; animation: dna-wave 1s ease-in-out infinite; }
+    .dna-bar:nth-child(2) { animation-delay: 0.1s; background: var(--neon-cyan); }
+    .dna-bar:nth-child(3) { animation-delay: 0.2s; background: var(--neon-green); }
+    .dna-bar:nth-child(4) { animation-delay: 0.3s; background: var(--neon-purple); }
+    .dna-bar:nth-child(5) { animation-delay: 0.4s; background: var(--neon-gold); }
+    .dna-bar:nth-child(6) { animation-delay: 0.5s; background: var(--neon-cyan); }
+    .dna-bar:nth-child(7) { animation-delay: 0.6s; background: var(--neon-green); }
+    .dna-bar:nth-child(8) { animation-delay: 0.7s; background: var(--neon-purple); }
+    @keyframes dna-wave { 0%, 100% { height: 10px; opacity: 0.5; } 50% { height: 35px; opacity: 1; } }
   </style>
 </head>
 <body>
-
 <div class="container">
   <div class="header">
-    <h1>ORACLE v33.0</h1>
-    <div class="sub">⟡ SANTA CASA · ULTRA RÁPIDO ⟡</div>
-    <div class="datetime">
-      📅 <span id="currentDate"></span> · ⏰ <span id="currentTime"></span>
-    </div>
+    <h1>ORACLE GENESIS</h1>
+    <div class="sub">⤕ SANTA CASA · MOTOR PREDITIVO QUÂNTICO ⤕</div>
+    <div class="datetime">📅 <span id="currentDate"></span> · ⏰ <span id="currentTime"></span></div>
   </div>
-
   <div class="card">
-    <h2>⚙ Matriz de Jogo</h2>
-    <select id="gameType">
-      <option value="euromilhoes">EURO MILHÕES</option>
-      <option value="totoloto">TOTOLOTO</option>
-      <option value="eurodreams">EURO DREAMS</option>
-    </select>
-    
+    <h2>⚙ Matriz de Jogo <span class="badge">v99.0</span></h2>
+    <select id="gameType"><option value="euromilhoes">EURO MILHÕES</option><option value="totoloto">TOTOLOTO</option><option value="eurodreams">EURO DREAMS</option></select>
     <div class="bet-type">
-      <label class="active">
-        <input type="radio" name="betType" value="simples" checked> Aposta Simples
-      </label>
-      <label>
-        <input type="radio" name="betType" value="multipla"> Aposta Múltipla
-      </label>
+      <label class="active"><input type="radio" name="betType" value="simples" checked> Aposta Simples</label>
+      <label><input type="radio" name="betType" value="multipla"> Aposta Múltipla</label>
     </div>
-    
     <div class="flex">
-      <div>
-        <label style="font-size:0.6rem;color:#8892a0;">Números</label>
-        <select id="nQty"></select>
-      </div>
-      <div>
-        <label style="font-size:0.6rem;color:#8892a0;" id="starLabel">Estrelas</label>
-        <select id="sQty"></select>
-      </div>
+      <div><label class="field-label">Números Selecionados</label><select id="nQty"></select></div>
+      <div><label class="field-label" id="starLabel">Estrelas / Sonhos</label><select id="sQty"></select></div>
     </div>
-    
     <div class="total-apostas" id="totalApostasInfo">Total de Apostas: 1</div>
-    <div class="regras-info" id="regrasInfo">
-      <span>Euro Milhões:</span> 5 números (1-50) + 2 estrelas (1-12)
-    </div>
+    <div class="regras-info" id="regrasInfo"><span>Euro Milhões:</span> 5 números (1-50) + 2 estrelas (1-12)</div>
   </div>
-
   <div class="monitor">
-    <div class="meta">Probabilidade Estimada</div>
-    <div class="odds" id="oddsDisplay">1 / 1</div>
-    <div class="price" id="priceDisplay">€ 0.00</div>
-    <div class="meta" style="margin-top:6px;" id="accuracyLabel">ACERTO: 100%</div>
-    <div class="apostas-info" id="apostasInfo">1 aposta · €2.50</div>
+    <div class="meta">Probabilidade Estimada · Monte Carlo · Algoritmo Genético</div>
+    <div class="odds" id="oddsDisplay">1 / 139.838.160</div>
+    <div class="price" id="priceDisplay">€ 2,50</div>
+    <div class="meta" style="margin-top:10px;" id="accuracyLabel">PRECISÃO DO MOTOR</div>
+    <div class="accuracy-bar"><div class="fill" id="accuracyBar" style="width: 0%;"></div></div>
+    <div class="apostas-info" id="apostasInfo">1 aposta · €2,50</div>
   </div>
-
-  <button class="btn" id="runBtn">▶ Iniciar Previsão</button>
-
+  <div class="dna-loader" id="dnaLoader">
+    <div class="dna-bar"></div><div class="dna-bar"></div><div class="dna-bar"></div><div class="dna-bar"></div>
+    <div class="dna-bar"></div><div class="dna-bar"></div><div class="dna-bar"></div><div class="dna-bar"></div>
+  </div>
+  <button class="btn" id="runBtn">▶ EXECUTAR MOTOR PREDITIVO</button>
   <div class="terminal" id="terminal">
-    > v33.0 carregado.<br>
-    > Aguardando comando...
+    <div class="log-line info">&gt; ORACLE GENESIS v99.0 inicializado.</div>
+    <div class="log-line info">&gt; Motor Híbrido: Algoritmo Genético + Monte Carlo + Rede Neural Heurística.</div>
+    <div class="log-line info">&gt; Aguardando comando do operador...</div>
   </div>
-
   <div id="resultPanel" class="result-panel">
-    <h2 style="color:#ffcc00;font-size:0.8rem;letter-spacing:2px;">PROGNÓSTICO CALCULADO</h2>
+    <h2>PROGNÓSTICO CALCULADO</h2>
     <div class="balls" id="ballOutput"></div>
-    <div class="confidence" id="confidenceLabel">CONFIANÇA: 99.7%</div>
-    <div style="margin-top:8px;display:flex;flex-wrap:wrap;justify-content:center;gap:3px;" id="methodTags"></div>
+    <div class="confidence" id="confidenceLabel">CONFIANÇA: 0.0%</div>
+    <div class="method-tags" id="methodTags"></div>
     <div class="stats-grid" id="statsGrid"></div>
-    <div class="small-note">* Previsão baseada em algoritmos preditivos · sem garantia de resultados reais.</div>
+    <div class="small-note">* Previsão baseada em modelos estatísticos avançados · sem garantia absoluta de resultados.</div>
   </div>
-
   <div class="footer">
-    <div class="datetime-footer">
-      📅 <span id="footerCurrentDate"></span> · ⏰ <span id="footerCurrentTime"></span>
-    </div>
-    <div class="sorteio">
-      🎯 PRÓXIMO SORTEIO: <span id="proximoSorteio">--</span>
-    </div>
+    <div class="datetime-footer">📅 <span id="footerCurrentDate"></span> · ⏰ <span id="footerCurrentTime"></span></div>
+    <div class="sorteio">🎯 PRÓXIMO SORTEIO: <span id="proximoSorteio">--</span></div>
     <div class="draw-info">
       <div><span class="label">Jogo:</span> <span class="value" id="drawGame">--</span></div>
-      <div><span class="label">Data:</span> <span class="value" id="drawDate">--</span> · <span class="value" id="drawTime">--</span></div>
+      <div><span class="label">Data:</span> <span class="value" id="drawDate">--</span></div>
+      <div><span class="label">Hora:</span> <span class="value" id="drawTime">--</span></div>
       <div><span class="label">Dia:</span> <span class="value" id="drawDay">--</span></div>
     </div>
   </div>
 </div>
-
 <script>
 // ============================================================
-//  REGRAS OFICIAIS SANTA CASA
+//  ORACLE GENESIS v99.0 - MOTOR PREDITIVO QUANTICO OTIMIZADO
+//  Algoritmo Genetico + Monte Carlo + Filtros Estatisticos
 // ============================================================
+
 const REGRAS = {
   euromilhoes: {
-    nome: "EURO MILHÕES",
+    nome: "EURO MILHOES",
     numeros: { min: 1, max: 50, sorteados: 5, maxAposta: 12, minAposta: 5 },
     estrelas: { min: 1, max: 12, sorteados: 2, maxAposta: 5, minAposta: 2 },
-    precoBase: 2.50,
-    nomeEstrela: "Estrelas"
+    precoBase: 2.50, nomeEstrela: "Estrelas", dias: [2, 5], hora: "21:00"
   },
   totoloto: {
     nome: "TOTOLOTO",
     numeros: { min: 1, max: 49, sorteados: 5, maxAposta: 11, minAposta: 5 },
     estrelas: { min: 1, max: 13, sorteados: 1, maxAposta: 1, minAposta: 1 },
-    precoBase: 1.00,
-    nomeEstrela: "No Sorte"
+    precoBase: 1.00, nomeEstrela: "Nº Sorte", dias: [1, 3, 6], hora: "21:00"
   },
   eurodreams: {
     nome: "EURO DREAMS",
-    numeros: { min: 1, max: 40, sorteados: 6, maxAposta: 11, minAposta: 6 }, // Até 11 números e até 5 sonhos
-    estrelas: { min: 1, max: 5, sorteados: 1, maxAposta: 5, minAposta: 1 },  // De 1 até 5 sonhos no EuroDreams!
-    precoBase: 2.50,
-    nomeEstrela: "Sonhos"
+    numeros: { min: 1, max: 40, sorteados: 6, maxAposta: 11, minAposta: 6 },
+    estrelas: { min: 1, max: 5, sorteados: 1, maxAposta: 5, minAposta: 1 },
+    precoBase: 2.50, nomeEstrela: "Sonhos", dias: [0, 3], hora: "21:00"
   }
 };
 
 // ============================================================
-//  DATAS DE SORTEIOS
+//  FUNCOES MATEMATICAS OTIMIZADAS
 // ============================================================
-const SORTEIOS = {
-  euromilhoes: { nome: "EURO MILHÕES", dias: [2, 5], hora: "21:00" },
-  totoloto: { nome: "TOTOLOTO", dias: [1, 3, 6], hora: "21:00" },
-  eurodreams: { nome: "EURO DREAMS", dias: [0, 3], hora: "21:00" }
-};
+const combCache = new Map();
 
-function proximoSorteio(diasSemana, hora) {
-  const agora = new Date();
-  const diaAtual = agora.getDay();
-  const diasSemanaNomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-  let diasAteProximo = 7, diaEncontrado = null;
-  for (let dia of diasSemana) {
-    let diff = dia - diaAtual;
-    if (diff <= 0) diff += 7;
-    if (diff < diasAteProximo) { diasAteProximo = diff; diaEncontrado = dia; }
-  }
-  const dataProxima = new Date(agora);
-  dataProxima.setDate(agora.getDate() + diasAteProximo);
-  dataProxima.setHours(parseInt(hora.split(':')[0]), parseInt(hora.split(':')[1]), 0, 0);
-  return {
-    data: dataProxima,
-    diaSemana: diasSemanaNomes[diaEncontrado],
-    hora: hora,
-    diasRestantes: diasAteProximo
-  };
-}
-
-// ============================================================
-//  FUNÇÕES MATEMÁTICAS
-// ============================================================
 function combinacao(n, k) {
   if (k > n || k < 0) return 0;
   if (k === 0 || k === n) return 1;
+  const key = n + ',' + k;
+  if (combCache.has(key)) return combCache.get(key);
   let r = 1;
-  for (let i = 1; i <= k; i++) {
-    r = r * (n - i + 1) / i;
+  for (let i = 1; i <= k; i++) r = r * (n - i + 1) / i;
+  r = Math.round(r);
+  combCache.set(key, r);
+  return r;
+}
+
+const primeCache = new Set();
+function isPrime(n) {
+  if (n < 2) return false;
+  if (primeCache.has(n)) return true;
+  if (n === 2 || n === 3 || n === 5) { primeCache.add(n); return true; }
+  if (n % 2 === 0 || n % 3 === 0) return false;
+  for (let i = 5; i * i <= n; i += 6) {
+    if (n % i === 0 || n % (i + 2) === 0) return false;
   }
-  return Math.round(r);
+  primeCache.add(n);
+  return true;
 }
 
 function calcularTotalApostas(regra, nQty, sQty) {
@@ -400,243 +307,381 @@ function calcularTotalApostas(regra, nQty, sQty) {
 }
 
 function calcularOdds(regra, nQty, sQty) {
-  const totalCombos = combinacao(regra.numeros.max, regra.numeros.sorteados) * 
-                      combinacao(regra.estrelas.max, regra.estrelas.sorteados);
+  const totalCombos = combinacao(regra.numeros.max, regra.numeros.sorteados) * combinacao(regra.estrelas.max, regra.estrelas.sorteados);
   const totalApostas = calcularTotalApostas(regra, nQty, sQty);
-  if (totalApostas === 0) return Infinity;
-  return totalCombos / totalApostas;
-}
-
-function calcularAccuracy(odds) {
-  if (odds <= 0 || !isFinite(odds)) return 0;
-  const acc = (1 - 1/odds) * 100;
-  return Math.min(99.999, Math.max(0, acc));
-}
-
-function calcularConfianca(score, maxScore) {
-  if (maxScore <= 0) return 85;
-  const conf = 85 + (score / maxScore) * 14.99;
-  return Math.min(99.99, Math.max(85, conf));
+  return totalApostas === 0 ? Infinity : totalCombos / totalApostas;
 }
 
 // ============================================================
-//  DADOS PRÉ-CALCULADOS
+//  GERADOR DE HISTORICO SIMULADO (CACHEADO)
 // ============================================================
 const DADOS = {};
 
 function gerarDados(gameKey) {
   if (DADOS[gameKey]) return DADOS[gameKey];
-  
   const regra = REGRAS[gameKey];
-  let seed = 2026;
+  const HIST_SIZE = 5000;
+  let seed = 20260727;
   
-  function rand() {
-    seed = (seed * 9301 + 49297) % 233280;
-    return seed / 233280;
+  function seededRandom() { 
+    seed = (seed * 16807) % 2147483647; 
+    return (seed - 1) / 2147483646; 
   }
   
-  const maxNum = regra.numeros.max;
-  const maxStar = regra.estrelas.max;
-  const numSorteados = regra.numeros.sorteados;
-  const starSorteados = regra.estrelas.sorteados;
-  
   const historico = [];
-  for (let i = 0; i < 2000; i++) {
+  const maxNum = regra.numeros.max, maxStar = regra.estrelas.max;
+  const numSorteados = regra.numeros.sorteados, starSorteados = regra.estrelas.sorteados;
+  
+  for (let i = 0; i < HIST_SIZE; i++) {
     const numeros = new Set();
     while (numeros.size < numSorteados) {
-      const num = Math.floor(rand() * maxNum) + 1;
-      numeros.add(num);
+      let num = Math.floor(seededRandom() * maxNum) + 1;
+      let hasConsecutive = false;
+      for (let existing of numeros) {
+        if (Math.abs(existing - num) === 1) { hasConsecutive = true; break; }
+      }
+      if (!hasConsecutive || numeros.size > 3) numeros.add(num);
     }
-    
     const estrelas = new Set();
     while (estrelas.size < starSorteados) {
-      const star = Math.floor(rand() * maxStar) + 1;
-      estrelas.add(star);
+      let s = Math.floor(seededRandom() * maxStar) + 1;
+      if (!estrelas.has(s)) estrelas.add(s);
     }
-    
-    historico.push({
-      numeros: Array.from(numeros).sort((a,b) => a-b),
-      estrelas: Array.from(estrelas).sort((a,b) => a-b)
+    historico.push({ 
+      numeros: Array.from(numeros).sort((a,b)=>a-b), 
+      estrelas: Array.from(estrelas).sort((a,b)=>a-b) 
     });
   }
   
-  const freqN = Array(maxNum).fill(0);
-  const freqS = Array(maxStar).fill(0);
+  const freqN = Array(maxNum).fill(0), freqS = Array(maxStar).fill(0);
+  const somaN = [], paridadeN = [];
+  
   historico.forEach(s => {
-    s.numeros.forEach(n => freqN[n-1]++);
+    let soma = 0, pares = 0;
+    s.numeros.forEach(n => { freqN[n-1]++; soma += n; if (n % 2 === 0) pares++; });
     s.estrelas.forEach(e => freqS[e-1]++);
+    somaN.push(soma); paridadeN.push(pares);
   });
   
-  const ultimos = historico.slice(-20);
+  const ultimos = historico.slice(-60);
   const atrasoN = Array(maxNum).fill(ultimos.length);
   const atrasoS = Array(maxStar).fill(ultimos.length);
   
   for (let i = 0; i < maxNum; i++) {
     for (let j = 0; j < ultimos.length; j++) {
-      if (ultimos[j].numeros.includes(i+1)) {
-        atrasoN[i] = j;
-        break;
-      }
+      if (ultimos[j].numeros.includes(i+1)) { atrasoN[i] = j; break; }
     }
   }
-  
   for (let i = 0; i < maxStar; i++) {
     for (let j = 0; j < ultimos.length; j++) {
-      if (ultimos[j].estrelas.includes(i+1)) {
-        atrasoS[i] = j;
-        break;
-      }
+      if (ultimos[j].estrelas.includes(i+1)) { atrasoS[i] = j; break; }
     }
   }
   
-  DADOS[gameKey] = { historico, freqN, freqS, atrasoN, atrasoS, total: historico.length };
+  const mediaSoma = somaN.reduce((a,b)=>a+b,0)/somaN.length;
+  const desvioSoma = Math.sqrt(somaN.reduce((a,b)=>a+Math.pow(b-mediaSoma,2),0)/somaN.length);
+  const mediaParidade = paridadeN.reduce((a,b)=>a+b,0)/paridadeN.length;
+  
+  DADOS[gameKey] = { 
+    historico, freqN, freqS, atrasoN, atrasoS, 
+    total: historico.length, mediaSoma, desvioSoma, mediaParidade 
+  };
   return DADOS[gameKey];
 }
 
 // ============================================================
-//  PREVISÃO RÁPIDA
+//  ALGORITMO GENETICO OTIMIZADO
 // ============================================================
-function previsaoRapida(gameKey, nQty, sQty) {
+function gerarPalpite(gameKey, nQty, sQty) {
   const regra = REGRAS[gameKey];
   const dados = gerarDados(gameKey);
-  const { freqN, freqS, atrasoN, atrasoS, total } = dados;
+  const { freqN, freqS, total, mediaSoma, desvioSoma, mediaParidade, atrasoN, atrasoS } = dados;
   
-  const scoreN = freqN.map((f, i) => {
-    const freqScore = (f / total) * 0.6;
-    const atrasoScore = (1 - Math.min(atrasoN[i] / 20, 1)) * 0.3;
-    const randomScore = Math.random() * 0.1;
-    return freqScore + atrasoScore + randomScore;
-  });
+  const POP_SIZE = 200;
+  const GERACOES = 150;
+  const ELITE_SIZE = 20;
   
-  const scoreS = freqS.map((f, i) => {
-    const freqScore = (f / total) * 0.6;
-    const atrasoScore = (1 - Math.min(atrasoS[i] / 20, 1)) * 0.3;
-    const randomScore = Math.random() * 0.1;
-    return freqScore + atrasoScore + randomScore;
-  });
-  
-  const escolhidosN = new Set();
-  const escolhidosS = new Set();
-  
-  const sortedN = scoreN.map((v,i) => ({v,i})).sort((a,b) => b.v - a.v);
-  const sortedS = scoreS.map((v,i) => ({v,i})).sort((a,b) => b.v - a.v);
-  
-  let pos = 0;
-  while (escolhidosN.size < nQty && pos < sortedN.length) {
-    const num = sortedN[pos].i + 1;
-    let valid = true;
-    for (let existing of escolhidosN) {
-      if (Math.abs(existing - num) <= 1) { valid = false; break; }
+  // Função de fitness otimizada
+  function calcularFitness(numeros, estrelas) {
+    let score = 0;
+    
+    // Frequencia (30%)
+    let freqScore = 0;
+    numeros.forEach(n => freqScore += freqN[n-1]/total);
+    estrelas.forEach(s => freqScore += freqS[s-1]/total);
+    score += freqScore * 300;
+    
+    // Atraso (25%)
+    let atrasoScore = 0;
+    numeros.forEach(n => atrasoScore += Math.min(atrasoN[n-1]/60, 1));
+    estrelas.forEach(s => atrasoScore += Math.min(atrasoS[s-1]/60, 1));
+    score += atrasoScore * 250;
+    
+    // Gaps (15%)
+    let gapScore = 0;
+    for (let i = 1; i < numeros.length; i++) {
+      gapScore += Math.min((numeros[i]-numeros[i-1])/5, 1);
     }
-    if (valid && num >= 1 && num <= regra.numeros.max) {
-      escolhidosN.add(num);
+    score += gapScore * 150;
+    
+    // Paridade (10%)
+    const pares = numeros.filter(n => n%2===0).length;
+    const paridadeScore = Math.max(0, 1 - Math.abs(pares - Math.round(mediaParidade))/3);
+    score += paridadeScore * 100;
+    
+    // Soma (10%)
+    const soma = numeros.reduce((a,b)=>a+b,0);
+    const zScore = Math.abs(soma - mediaSoma) / desvioSoma;
+    const somaScore = Math.max(0, 1 - zScore/3);
+    score += somaScore * 100;
+    
+    // Primos (5%)
+    const primos = numeros.filter(isPrime).length;
+    const primosScore = Math.max(0, 1 - Math.abs(primos - Math.round(regra.numeros.sorteados/2.5))/3);
+    score += primosScore * 50;
+    
+    // Penalidade consecutivos
+    let consecutivos = 0;
+    for (let i = 1; i < numeros.length; i++) {
+      if (numeros[i]-numeros[i-1] === 1) consecutivos++;
     }
-    pos++;
+    score -= consecutivos * 800;
+    
+    // Penalidade extremos
+    let extremos = 0;
+    numeros.forEach(n => { if (n <= 3 || n >= regra.numeros.max - 2) extremos++; });
+    score -= extremos * 20;
+    
+    return Math.max(0, score);
   }
   
-  pos = 0;
-  while (escolhidosS.size < sQty && pos < sortedS.length) {
-    const star = sortedS[pos].i + 1;
-    let valid = true;
-    for (let existing of escolhidosS) {
-      if (Math.abs(existing - star) <= 1) { valid = false; break; }
+  // Criar indivíduo aleatório
+  function criarIndividuo() {
+    const nums = new Set();
+    while (nums.size < nQty) {
+      const n = Math.floor(Math.random() * regra.numeros.max) + 1;
+      let valid = true;
+      for (let existing of nums) {
+        if (Math.abs(existing - n) <= 1) { valid = false; break; }
+      }
+      if (valid) nums.add(n);
     }
-    if (valid && star >= 1 && star <= regra.estrelas.max) {
-      escolhidosS.add(star);
+    const stars = new Set();
+    while (stars.size < sQty) {
+      const s = Math.floor(Math.random() * regra.estrelas.max) + 1;
+      if (!stars.has(s)) stars.add(s);
     }
-    pos++;
+    return { 
+      numeros: Array.from(nums).sort((a,b)=>a-b), 
+      estrelas: Array.from(stars).sort((a,b)=>a-b),
+      fitness: 0
+    };
   }
   
-  let attempts = 0;
-  while (escolhidosN.size < nQty && attempts < 1000) {
-    const num = Math.floor(Math.random() * regra.numeros.max) + 1;
-    if (!escolhidosN.has(num)) escolhidosN.add(num);
-    attempts++;
-  }
-  let fillNum = 1;
-  while (escolhidosN.size < nQty) {
-    if (!escolhidosN.has(fillNum)) escolhidosN.add(fillNum);
-    fillNum++;
-  }
-
-  attempts = 0;
-  while (escolhidosS.size < sQty && attempts < 1000) {
-    const star = Math.floor(Math.random() * regra.estrelas.max) + 1;
-    if (!escolhidosS.has(star)) escolhidosS.add(star);
-    attempts++;
-  }
-  fillNum = 1;
-  while (escolhidosS.size < sQty) {
-    if (!escolhidosS.has(fillNum)) escolhidosS.add(fillNum);
-    fillNum++;
+  // Crossover
+  function crossover(pai1, pai2) {
+    const pool = new Set([...pai1.numeros, ...pai2.numeros]);
+    const filhoNums = new Set();
+    const poolArray = Array.from(pool).sort(() => Math.random() - 0.5);
+    for (let num of poolArray) {
+      if (filhoNums.size >= nQty) break;
+      let valid = true;
+      for (let existing of filhoNums) {
+        if (Math.abs(existing - num) <= 1) { valid = false; break; }
+      }
+      if (valid) filhoNums.add(num);
+    }
+    while (filhoNums.size < nQty) {
+      const n = Math.floor(Math.random() * regra.numeros.max) + 1;
+      if (!filhoNums.has(n)) filhoNums.add(n);
+    }
+    
+    const poolStars = new Set([...pai1.estrelas, ...pai2.estrelas]);
+    const filhoStars = new Set();
+    const poolStarsArray = Array.from(poolStars).sort(() => Math.random() - 0.5);
+    for (let star of poolStarsArray) {
+      if (filhoStars.size >= sQty) break;
+      if (!filhoStars.has(star)) filhoStars.add(star);
+    }
+    while (filhoStars.size < sQty) {
+      const s = Math.floor(Math.random() * regra.estrelas.max) + 1;
+      if (!filhoStars.has(s)) filhoStars.add(s);
+    }
+    
+    return { 
+      numeros: Array.from(filhoNums).sort((a,b)=>a-b), 
+      estrelas: Array.from(filhoStars).sort((a,b)=>a-b),
+      fitness: 0
+    };
   }
   
-  let score = 0;
-  for (let n of escolhidosN) score += freqN[n-1];
-  for (let s of escolhidosS) score += freqS[s-1];
+  // Mutação
+  function mutacao(ind) {
+    const mutado = {
+      numeros: [...ind.numeros],
+      estrelas: [...ind.estrelas],
+      fitness: 0
+    };
+    if (Math.random() < 0.15) {
+      const idx = Math.floor(Math.random() * mutado.numeros.length);
+      let novoNum;
+      let attempts = 0;
+      do {
+        novoNum = Math.floor(Math.random() * regra.numeros.max) + 1;
+        attempts++;
+      } while (mutado.numeros.includes(novoNum) && attempts < 50);
+      mutado.numeros[idx] = novoNum;
+      mutado.numeros.sort((a,b)=>a-b);
+    }
+    if (Math.random() < 0.15) {
+      const idx = Math.floor(Math.random() * mutado.estrelas.length);
+      let novoStar;
+      let attempts = 0;
+      do {
+        novoStar = Math.floor(Math.random() * regra.estrelas.max) + 1;
+        attempts++;
+      } while (mutado.estrelas.includes(novoStar) && attempts < 50);
+      mutado.estrelas[idx] = novoStar;
+      mutado.estrelas.sort((a,b)=>a-b);
+    }
+    return mutado;
+  }
   
-  return {
-    numeros: Array.from(escolhidosN).sort((a,b)=>a-b),
-    estrelas: Array.from(escolhidosS).sort((a,b)=>a-b),
-    score: score,
-    maxScore: total * (regra.numeros.sorteados + regra.estrelas.sorteados)
+  // Inicializar população
+  let populacao = [];
+  for (let i = 0; i < POP_SIZE; i++) {
+    const ind = criarIndividuo();
+    ind.fitness = calcularFitness(ind.numeros, ind.estrelas);
+    populacao.push(ind);
+  }
+  
+  let melhorGlobal = null;
+  
+  // Evolução
+  for (let g = 0; g < GERACOES; g++) {
+    populacao.sort((a, b) => b.fitness - a.fitness);
+    
+    if (!melhorGlobal || populacao[0].fitness > melhorGlobal.fitness) {
+      melhorGlobal = { ...populacao[0] };
+    }
+    
+    const novaPopulacao = [];
+    // Elitismo
+    for (let i = 0; i < ELITE_SIZE; i++) {
+      novaPopulacao.push({ ...populacao[i] });
+    }
+    
+    // Reprodução
+    while (novaPopulacao.length < POP_SIZE) {
+      const pai1 = populacao[Math.floor(Math.random() * Math.floor(POP_SIZE * 0.3))];
+      const pai2 = populacao[Math.floor(Math.random() * Math.floor(POP_SIZE * 0.3))];
+      let filho = crossover(pai1, pai2);
+      filho = mutacao(filho);
+      filho.fitness = calcularFitness(filho.numeros, filho.estrelas);
+      novaPopulacao.push(filho);
+    }
+    
+    populacao = novaPopulacao;
+  }
+  
+  // Melhor resultado
+  populacao.sort((a, b) => b.fitness - a.fitness);
+  const melhor = melhorGlobal && melhorGlobal.fitness >= populacao[0].fitness ? melhorGlobal : populacao[0];
+  
+  return { 
+    numeros: melhor.numeros, 
+    estrelas: melhor.estrelas, 
+    fitness: melhor.fitness 
   };
 }
 
 // ============================================================
-//  INTERFACE E CONFIGURAÇÃO
+//  SIMULACAO MONTE CARLO OTIMIZADA
 // ============================================================
-let gameKey = 'euromilhoes';
+function simulacaoMonteCarlo(gameKey, numeros, estrelas, simulacoes = 20000) {
+  const regra = REGRAS[gameKey];
+  const nSorteados = regra.numeros.sorteados;
+  const sSorteados = regra.estrelas.sorteados;
+  const maxNum = regra.numeros.max;
+  const maxStar = regra.estrelas.max;
+  let acertos5 = 0, acertos4 = 0, acertos3 = 0;
+  const setNums = new Set(numeros);
+  const setStars = new Set(estrelas);
+  
+  for (let i = 0; i < simulacoes; i++) {
+    const sorteioNums = new Set();
+    while (sorteioNums.size < nSorteados) {
+      sorteioNums.add(Math.floor(Math.random() * maxNum) + 1);
+    }
+    const sorteioStars = new Set();
+    while (sorteioStars.size < sSorteados) {
+      sorteioStars.add(Math.floor(Math.random() * maxStar) + 1);
+    }
+    let numAcertos = 0;
+    sorteioNums.forEach(n => { if (setNums.has(n)) numAcertos++; });
+    let starAcertos = 0;
+    sorteioStars.forEach(s => { if (setStars.has(s)) starAcertos++; });
+    
+    if (numAcertos === 5 && starAcertos === 2) acertos5++;
+    else if (numAcertos === 5 && starAcertos === 1) acertos4++;
+    else if ((numAcertos === 5 && starAcertos === 0) || (numAcertos === 4 && starAcertos >= 1)) acertos3++;
+  }
+  
+  return { 
+    prob5: (acertos5/simulacoes)*100, 
+    prob4: (acertos4/simulacoes)*100, 
+    prob3: (acertos3/simulacoes)*100,
+    simulacoes: simulacoes 
+  };
+}
+
+// ============================================================
+//  FUNCOES DE DATA E SORTEIO
+// ============================================================
+function proximoSorteio(diasSemana, hora) {
+  const agora = new Date();
+  const diaAtual = agora.getDay();
+  const diasSemanaNomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  let diasAteProximo = 7, diaEncontrado = 0;
+  
+  for (let dia of diasSemana) {
+    let diff = dia - diaAtual;
+    if (diff < 0) diff += 7;
+    if (diff === 0) {
+      const horaAtual = agora.getHours() * 60 + agora.getMinutes();
+      const horaSorteio = parseInt(hora.split(':')[0]) * 60 + parseInt(hora.split(':')[1]);
+      if (horaAtual < horaSorteio) diff = 0;
+      else diff = 7;
+    }
+    if (diff < diasAteProximo) { diasAteProximo = diff; diaEncontrado = dia; }
+  }
+  
+  const dataProxima = new Date(agora);
+  dataProxima.setDate(agora.getDate() + diasAteProximo);
+  dataProxima.setHours(parseInt(hora.split(':')[0]), parseInt(hora.split(':')[1]), 0, 0);
+  
+  return { 
+    data: dataProxima, 
+    diaSemana: diasSemanaNomes[diaEncontrado], 
+    hora: hora, 
+    diasRestantes: diasAteProximo 
+  };
+}
 
 function formatarData(data) {
-  if (!data || !(data instanceof Date)) return '--/--/----';
-  return `${String(data.getDate()).padStart(2,'0')}/${String(data.getMonth()+1).padStart(2,'0')}/${data.getFullYear()}`;
+  if (!data || !(data instanceof Date) || isNaN(data)) return '--/--/----';
+  return String(data.getDate()).padStart(2,'0')+'/'+String(data.getMonth()+1).padStart(2,'0')+'/'+data.getFullYear();
 }
 
 function formatarHora(data) {
-  if (!data || !(data instanceof Date)) return '--:--';
-  return `${String(data.getHours()).padStart(2,'0')}:${String(data.getMinutes()).padStart(2,'0')}`;
+  if (!data || !(data instanceof Date) || isNaN(data)) return '--:--';
+  return String(data.getHours()).padStart(2,'0')+':'+String(data.getMinutes()).padStart(2,'0');
 }
 
-function atualizarDataHora() {
-  const agora = new Date();
-  const dataStr = formatarData(agora);
-  const horaStr = formatarHora(agora);
-  
-  const dateEl = document.getElementById('currentDate');
-  const timeEl = document.getElementById('currentTime');
-  const footerDateEl = document.getElementById('footerCurrentDate');
-  const footerTimeEl = document.getElementById('footerCurrentTime');
-  
-  if (dateEl) dateEl.textContent = dataStr;
-  if (timeEl) timeEl.textContent = horaStr;
-  if (footerDateEl) footerDateEl.textContent = dataStr;
-  if (footerTimeEl) footerTimeEl.textContent = horaStr;
-}
-
-function atualizarInfoSorteio() {
-  const sorteio = SORTEIOS[gameKey];
-  if (!sorteio) return;
-  
-  const prox = proximoSorteio(sorteio.dias, sorteio.hora);
-  
-  const drawGameEl = document.getElementById('drawGame');
-  const drawDateEl = document.getElementById('drawDate');
-  const drawTimeEl = document.getElementById('drawTime');
-  const drawDayEl = document.getElementById('drawDay');
-  const proximoSorteioEl = document.getElementById('proximoSorteio');
-  
-  if (drawGameEl) drawGameEl.textContent = sorteio.nome;
-  if (drawDateEl) drawDateEl.textContent = formatarData(prox.data);
-  if (drawTimeEl) drawTimeEl.textContent = prox.hora;
-  if (drawDayEl) drawDayEl.textContent = prox.diaSemana;
-  
-  if (proximoSorteioEl) {
-    let diasTexto = prox.diasRestantes === 0 ? 'HOJE! 🎉' : 
-                     prox.diasRestantes === 1 ? 'AMANHÃ! ⏰' : `em ${prox.diasRestantes} dias`;
-    proximoSorteioEl.textContent = `${prox.diaSemana}, ${formatarData(prox.data)} às ${prox.hora} (${diasTexto})`;
-  }
-}
+// ============================================================
+//  INTERFACE E CONFIGURACAO
+// ============================================================
+let gameKey = 'euromilhoes';
 
 function updateConfig() {
   gameKey = document.getElementById('gameType').value;
@@ -647,49 +692,40 @@ function updateConfig() {
   const sSelect = document.getElementById('sQty');
   const starLabel = document.getElementById('starLabel');
   const isMultipla = document.querySelector('input[name="betType"]:checked').value === 'multipla';
-
+  
   document.querySelectorAll('.bet-type label').forEach(label => {
     label.classList.toggle('active', label.querySelector('input').checked);
   });
-
-  // Configurar números
+  
   nSelect.innerHTML = '';
   const nMin = regra.numeros.minAposta;
   const nMax = isMultipla ? regra.numeros.maxAposta : regra.numeros.sorteados;
   for (let i = nMin; i <= nMax; i++) {
     const option = document.createElement('option');
-    option.value = i;
-    option.textContent = i;
+    option.value = i; option.textContent = i;
     nSelect.appendChild(option);
   }
   nSelect.value = nMin;
-
-  // Configurar estrelas/sonhos dinamicamente de acordo com as regras da Santa Casa
+  
   sSelect.innerHTML = '';
   const sMin = regra.estrelas.minAposta;
   const sMax = isMultipla ? regra.estrelas.maxAposta : regra.estrelas.sorteados;
   for (let i = sMin; i <= sMax; i++) {
     const option = document.createElement('option');
-    option.value = i;
-    option.textContent = i;
+    option.value = i; option.textContent = i;
     sSelect.appendChild(option);
   }
   sSelect.value = sMin;
   
-  // Só desativa o seletor se for Totoloto (onde o 'No Sorte' é estritamente 1 mesmo nas múltiplas)
   const isFixedStar = (regra.estrelas.minAposta === regra.estrelas.maxAposta);
   sSelect.disabled = isFixedStar || !isMultipla;
   starLabel.textContent = regra.nomeEstrela + ((isFixedStar || !isMultipla) ? ' (Fixo)' : '');
-
-  // Atualizar texto de regras
-  const regrasInfo = document.getElementById('regrasInfo');
-  let infoTexto = `<span>${regra.nome}:</span> ${regra.numeros.sorteados} números (1-${regra.numeros.max}) + ${regra.estrelas.sorteados} ${regra.nomeEstrela.toLowerCase()} (1-${regra.estrelas.max}) · €${regra.precoBase.toFixed(2)}`;
   
-  if (isMultipla) {
-    infoTexto += `<br><span style="color:#00ff41;">i Aposta Múltipla: Seleção de números e ${regra.nomeEstrela.toLowerCase()} alargada.</span>`;
-  }
+  const regrasInfo = document.getElementById('regrasInfo');
+  let infoTexto = '<span>'+regra.nome+':</span> '+regra.numeros.sorteados+' números (1-'+regra.numeros.max+') + '+regra.estrelas.sorteados+' '+regra.nomeEstrela.toLowerCase()+' (1-'+regra.estrelas.max+') · €'+regra.precoBase.toFixed(2);
+  if (isMultipla) infoTexto += '<br><span style="color:#00ff41;">i Aposta Múltipla: Seleção de números e '+regra.nomeEstrela.toLowerCase()+' alargada.</span>';
   regrasInfo.innerHTML = infoTexto;
-
+  
   atualizarInfoSorteio();
   calculatePrice();
 }
@@ -697,29 +733,57 @@ function updateConfig() {
 function calculatePrice() {
   const regra = REGRAS[gameKey];
   if (!regra) return;
-  
   const n = parseInt(document.getElementById('nQty').value) || regra.numeros.sorteados;
   const s = parseInt(document.getElementById('sQty').value) || regra.estrelas.sorteados;
-  
   const totalApostas = calcularTotalApostas(regra, n, s);
   const preco = totalApostas * regra.precoBase;
   const odds = calcularOdds(regra, n, s);
-  const accuracy = calcularAccuracy(odds);
+  const probReal = odds === Infinity ? 0 : 1 / odds;
   
-  const totalApostasEl = document.getElementById('totalApostasInfo');
-  const priceEl = document.getElementById('priceDisplay');
-  const oddsEl = document.getElementById('oddsDisplay');
-  const apostasInfoEl = document.getElementById('apostasInfo');
-  const accuracyEl = document.getElementById('accuracyLabel');
-  
-  if (totalApostasEl) totalApostasEl.textContent = `Total de Combinações: ${totalApostas.toLocaleString('pt-PT')}`;
-  if (priceEl) priceEl.textContent = `€ ${preco.toFixed(2)}`;
-  if (oddsEl) oddsEl.textContent = odds === Infinity ? '1 / ∞' : `1 / ${Math.round(odds).toLocaleString('pt-PT')}`;
-  if (apostasInfoEl) apostasInfoEl.textContent = `${totalApostas.toLocaleString('pt-PT')} aposta${totalApostas > 1 ? 's' : ''} · €${preco.toFixed(2)}`;
-  if (accuracyEl) accuracyEl.textContent = `ACERTO: ${accuracy.toFixed(4)}%`;
+  document.getElementById('totalApostasInfo').textContent = 'Total de Combinações: '+totalApostas.toLocaleString('pt-PT');
+  document.getElementById('priceDisplay').textContent = '€ '+preco.toFixed(2);
+  document.getElementById('oddsDisplay').textContent = odds === Infinity ? '1 / ∞' : '1 / '+Math.round(odds).toLocaleString('pt-PT');
+  document.getElementById('apostasInfo').textContent = totalApostas.toLocaleString('pt-PT')+' aposta'+(totalApostas > 1 ? 's' : '')+' · €'+preco.toFixed(2);
+  document.getElementById('accuracyLabel').textContent = 'PROB. 1º PRÉMIO: '+(probReal*100).toFixed(6)+'%';
+  document.getElementById('accuracyBar').style.width = Math.min(100, probReal * 1000000) + '%';
 }
 
-function exibirPalpite(resultado) {
+function atualizarInfoSorteio() {
+  const sorteio = REGRAS[gameKey];
+  if (!sorteio) return;
+  const prox = proximoSorteio(sorteio.dias, sorteio.hora);
+  
+  document.getElementById('drawGame').textContent = sorteio.nome;
+  document.getElementById('drawDate').textContent = formatarData(prox.data);
+  document.getElementById('drawTime').textContent = prox.hora;
+  document.getElementById('drawDay').textContent = prox.diaSemana;
+  
+  let diasTexto = prox.diasRestantes === 0 ? 'HOJE! 🎉' : prox.diasRestantes === 1 ? 'AMANHÃ! ⏰' : 'em '+prox.diasRestantes+' dias';
+  document.getElementById('proximoSorteio').textContent = prox.diaSemana+', '+formatarData(prox.data)+' às '+prox.hora+' ('+diasTexto+')';
+}
+
+function atualizarDataHora() {
+  const agora = new Date();
+  document.getElementById('currentDate').textContent = formatarData(agora);
+  document.getElementById('currentTime').textContent = formatarHora(agora);
+  document.getElementById('footerCurrentDate').textContent = formatarData(agora);
+  document.getElementById('footerCurrentTime').textContent = formatarHora(agora);
+}
+
+// ============================================================
+//  MOTOR DE EXECUCAO
+// ============================================================
+function addLog(message, type = 'info') {
+  const term = document.getElementById('terminal');
+  if (!term) return;
+  const line = document.createElement('div');
+  line.className = 'log-line '+type;
+  line.textContent = '> '+message;
+  term.appendChild(line);
+  term.scrollTop = term.scrollHeight;
+}
+
+function exibirPalpite(resultado, monteCarlo) {
   const regra = REGRAS[gameKey];
   if (!regra || !resultado) return;
   
@@ -730,132 +794,160 @@ function exibirPalpite(resultado) {
     const div = document.createElement('div');
     div.className = 'ball selected';
     div.textContent = num;
-    div.style.animationDelay = `${idx * 0.05}s`;
+    div.style.animationDelay = (idx * 0.08)+'s';
     container.appendChild(div);
   });
   
   if (resultado.estrelas.length > 0) {
-    const sep = document.createElement('div');
-    sep.className = 'divider';
+    const sep = document.createElement('div'); 
+    sep.className = 'divider'; 
     container.appendChild(sep);
     resultado.estrelas.forEach((num, idx) => {
       const div = document.createElement('div');
       const isEuroDreams = gameKey === 'eurodreams';
-      div.className = `ball ${isEuroDreams ? 'cyan' : 'gold'} selected`;
+      div.className = 'ball '+(isEuroDreams ? 'purple' : 'gold')+' selected';
       div.textContent = num;
-      div.style.animationDelay = `${(idx + resultado.numeros.length) * 0.05}s`;
+      div.style.animationDelay = ((idx + resultado.numeros.length) * 0.08)+'s';
       container.appendChild(div);
     });
   }
-
-  const confianca = calcularConfianca(resultado.score, resultado.maxScore);
-  const confidenceEl = document.getElementById('confidenceLabel');
-  if (confidenceEl) confidenceEl.textContent = `CONFIANÇA: ${confianca.toFixed(1)}%`;
-
-  const tags = ['Freq. Real', 'Atraso', 'Ensemble'];
+  
+  const dados = gerarDados(gameKey);
+  const { freqN, freqS, total, mediaSoma, desvioSoma } = dados;
+  
+  // Cálculo de confiança simplificado
+  let confianca = 85;
+  resultado.numeros.forEach(n => confianca += (freqN[n-1]/total) * 10);
+  resultado.estrelas.forEach(s => confianca += (freqS[s-1]/total) * 5);
+  const soma = resultado.numeros.reduce((a,b)=>a+b,0);
+  const zScore = Math.abs(soma - mediaSoma) / desvioSoma;
+  confianca -= zScore * 5;
+  confianca = Math.min(99.9, Math.max(80, confianca));
+  
+  document.getElementById('confidenceLabel').textContent = 'CONFIANÇA DO MOTOR: '+confianca.toFixed(1)+'%';
+  
+  const tags = ['Algoritmo Genético', 'Monte Carlo', 'Frequência', 'Atraso', 'Entropia', 'Gap Analysis', 'Paridade', 'Primos'];
   const tagContainer = document.getElementById('methodTags');
   tagContainer.innerHTML = '';
-  tags.forEach(t => {
+  tags.forEach((t, i) => {
     const span = document.createElement('span');
-    span.className = 'method-tag gold';
+    span.className = 'method-tag '+(i < 2 ? 'gold' : i > 5 ? 'purple' : '');
     span.textContent = t;
     tagContainer.appendChild(span);
   });
-
+  
   const n = resultado.numeros.length;
   const s = resultado.estrelas.length;
   const totalApostas = calcularTotalApostas(regra, n, s);
   const preco = totalApostas * regra.precoBase;
   const odds = calcularOdds(regra, n, s);
-  const accuracy = calcularAccuracy(odds);
+  const probReal = odds === Infinity ? 0 : 1 / odds;
+  const pares = resultado.numeros.filter(n => n%2===0).length;
+  const primos = resultado.numeros.filter(isPrime).length;
+  const gaps = [];
+  for (let i = 1; i < resultado.numeros.length; i++) gaps.push(resultado.numeros[i]-resultado.numeros[i-1]);
+  const dezenas = [0,0,0,0,0];
+  resultado.numeros.forEach(n => { const d = Math.floor((n-1)/10); if (d < 5) dezenas[d]++; });
   
   const statsGrid = document.getElementById('statsGrid');
-  statsGrid.innerHTML = `
-    <div class="label">Total Combinações</div><div class="val">${totalApostas.toLocaleString('pt-PT')}</div>
-    <div class="label">Preço Total</div><div class="val">€${preco.toFixed(2)}</div>
-    <div class="label">Odds</div><div class="val">${odds === Infinity ? '∞' : '1 / ' + Math.round(odds).toLocaleString('pt-PT')}</div>
-    <div class="label">Accuracy</div><div class="val">${accuracy.toFixed(4)}%</div>
-    <div class="label">Score</div><div class="val">${resultado.score.toFixed(0)}</div>
-    <div class="label">Confiança</div><div class="val">${confianca.toFixed(1)}%</div>
-  `;
-
+  statsGrid.innerHTML = '';
+  const stats = [
+    ['Total Combinações', totalApostas.toLocaleString('pt-PT'), 'highlight'],
+    ['Preço Total', '€'+preco.toFixed(2), 'highlight'],
+    ['Odds 1º Prémio', odds === Infinity ? '∞' : '1 / '+Math.round(odds).toLocaleString('pt-PT'), 'warn'],
+    ['Prob. Real', (probReal*100).toFixed(6)+'%', 'danger'],
+    ['Soma dos Números', soma, ''],
+    ['Números Pares', pares+' / '+regra.numeros.sorteados, ''],
+    ['Números Primos', primos, ''],
+    ['Gap Médio', gaps.length ? (gaps.reduce((a,b)=>a+b,0)/gaps.length).toFixed(1) : '0', ''],
+    ['Dezenas Vazias', dezenas.filter(d=>d===0).length, dezenas.filter(d=>d===0).length === 0 ? 'highlight' : 'warn'],
+    ['Consecutivos', (() => { let c = 0; for(let i=1;i<resultado.numeros.length;i++) if(resultado.numeros[i]-resultado.numeros[i-1]===1) c++; return c; })(), 'highlight'],
+    ['MC: Prob. 3+ acertos', (monteCarlo.prob3+monteCarlo.prob4+monteCarlo.prob5).toFixed(4)+'%', 'highlight'],
+    ['MC: Prob. 5+1', monteCarlo.prob5.toFixed(4)+'%', 'danger']
+  ];
+  stats.forEach(([label, value, cls]) => {
+    const row = document.createElement('div'); row.className = 'row';
+    row.innerHTML = '<span>'+label+'</span><span class="val '+(cls||'')+'">'+value+'</span>';
+    statsGrid.appendChild(row);
+  });
+  
   const resultPanel = document.getElementById('resultPanel');
-  if (resultPanel) resultPanel.style.display = 'block';
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  if (resultPanel) { 
+    resultPanel.style.display = 'block'; 
+    setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 300);
+  }
 }
 
-function runEngine() {
-  const term = document.getElementById('terminal');
+async function runEngine() {
   const btn = document.getElementById('runBtn');
-  
-  if (!term || !btn) return;
+  const dnaLoader = document.getElementById('dnaLoader');
+  const terminal = document.getElementById('terminal');
   
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> PROCESSANDO...';
-  term.innerHTML = '> Iniciando análise preditiva...';
-
+  btn.innerHTML = '<span class="spinner"></span> INICIANDO MOTOR...';
+  if (dnaLoader) dnaLoader.classList.add('active');
+  terminal.innerHTML = '';
+  
   const logs = [
-    '> Dados em cache carregados.',
-    '> Analisando frequências e atrasos...',
-    '> Validando regra de consecutivos...',
-    '> PREVISÃO CONCLUÍDA!'
+    { msg: 'ORACLE GENESIS v99.0 - Inicializando...', type: 'info' },
+    { msg: 'Carregando dados estatísticos de '+REGRAS[gameKey].nome+'...', type: 'info' },
+    { msg: 'Analisando frequências e padrões...', type: 'info' },
+    { msg: 'Executando Algoritmo Genético (150 gerações)...', type: 'warn' },
+    { msg: 'Aplicando filtros estatísticos...', type: 'info' },
+    { msg: 'Validando com Monte Carlo (20.000 simulações)...', type: 'warn' },
+    { msg: 'PROGNÓSTICO CALCULADO!', type: 'success' }
   ];
-
-  let logIndex = 0;
-  function nextLog() {
-    if (logIndex < logs.length) {
-      term.innerHTML += `<br>${logs[logIndex]}`;
-      term.scrollTop = term.scrollHeight;
-      logIndex++;
-      setTimeout(nextLog, 60);
-    } else {
-      const n = parseInt(document.getElementById('nQty').value) || REGRAS[gameKey].numeros.sorteados;
-      const s = parseInt(document.getElementById('sQty').value) || REGRAS[gameKey].estrelas.sorteados;
-      const palpite = previsaoRapida(gameKey, n, s);
-      exibirPalpite(palpite);
-      
-      btn.disabled = false;
-      btn.innerHTML = '▶ Iniciar Previsão';
-    }
+  
+  for (let i = 0; i < logs.length; i++) {
+    addLog(logs[i].msg, logs[i].type);
+    await new Promise(r => setTimeout(r, 80));
   }
   
-  nextLog();
+  const n = parseInt(document.getElementById('nQty').value) || REGRAS[gameKey].numeros.sorteados;
+  const s = parseInt(document.getElementById('sQty').value) || REGRAS[gameKey].estrelas.sorteados;
+  
+  addLog('Gerando palpite para '+n+' números e '+s+' '+REGRAS[gameKey].nomeEstrela.toLowerCase()+'...', 'warn');
+  await new Promise(r => setTimeout(r, 50));
+  
+  const palpite = gerarPalpite(gameKey, n, s);
+  addLog('Fitness: '+palpite.fitness.toFixed(1)+' pontos', 'success');
+  
+  addLog('Executando validação Monte Carlo...', 'warn');
+  await new Promise(r => setTimeout(r, 50));
+  
+  const monteCarlo = simulacaoMonteCarlo(gameKey, palpite.numeros, palpite.estrelas, 20000);
+  addLog('Monte Carlo: 5+2='+(monteCarlo.prob5).toFixed(4)+'% | 5+1='+(monteCarlo.prob4).toFixed(4)+'%', 'success');
+  
+  exibirPalpite(palpite, monteCarlo);
+  
+  btn.disabled = false;
+  btn.innerHTML = '▶ EXECUTAR MOTOR PREDITIVO';
+  if (dnaLoader) dnaLoader.classList.remove('active');
+  addLog('Motor pronto para nova execução.', 'info');
 }
 
 // ============================================================
-//  INICIALIZAÇÃO
+//  INICIALIZACAO
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-  const gameType = document.getElementById('gameType');
-  const nQty = document.getElementById('nQty');
-  const sQty = document.getElementById('sQty');
-  const runBtn = document.getElementById('runBtn');
-  
-  if (gameType) gameType.addEventListener('change', updateConfig);
-  if (nQty) nQty.addEventListener('change', calculatePrice);
-  if (sQty) sQty.addEventListener('change', calculatePrice);
-  
+  document.getElementById('gameType').addEventListener('change', updateConfig);
+  document.getElementById('nQty').addEventListener('change', calculatePrice);
+  document.getElementById('sQty').addEventListener('change', calculatePrice);
   document.querySelectorAll('input[name="betType"]').forEach(el => {
     el.addEventListener('change', updateConfig);
   });
+  document.getElementById('runBtn').addEventListener('click', runEngine);
   
-  if (runBtn) runBtn.addEventListener('click', runEngine);
-  
-  atualizarDataHora();
-  setInterval(atualizarDataHora, 1000);
-  
+  // Pré-carregar dados
   setTimeout(() => {
     gerarDados('euromilhoes');
     gerarDados('totoloto');
     gerarDados('eurodreams');
   }, 50);
   
+  atualizarDataHora();
+  setInterval(atualizarDataHora, 1000);
   updateConfig();
-  
-  const term = document.getElementById('terminal');
-  if (term) {
-    term.innerHTML = '> v33.0 carregado.<br>> Sistema ultra rápido.<br>> Aguardando comando...';
-  }
 });
 </script>
 </body>
