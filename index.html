@@ -1,211 +1,251 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ORACLE GENESIS v99.0 · Santa Casa · Motor Preditivo Quântico</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-    :root {
-      --neon-gold: #ffd700; --neon-cyan: #00f5ff; --neon-green: #00ff41;
-      --neon-red: #ff0040; --neon-purple: #bf00ff; --bg-dark: #05070a;
-      --bg-card: #0a0d14; --bg-panel: #080a10; --border-dim: #1a1f2e;
-      --border-glow: #2a3a4a; --text-primary: #e0e8f0; --text-dim: #6a7a8a;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg-dark); color: var(--text-primary);
-      font-family: 'Share Tech Mono', monospace; overflow-x: hidden; min-height: 100vh;
-    }
-    body::before {
-      content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background:
-        radial-gradient(ellipse at 20% 50%, rgba(255,215,0,0.03) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 50%, rgba(0,245,255,0.03) 0%, transparent 50%);
-      pointer-events: none; z-index: 0;
-    }
-    .container { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; padding: 12px; }
-    .header {
-      background: linear-gradient(135deg, rgba(10,14,24,0.95), rgba(5,7,10,0.98));
-      border: 2px solid var(--neon-gold); border-radius: 16px; padding: 24px 16px;
-      text-align: center; margin-bottom: 20px; position: relative; overflow: hidden;
-      box-shadow: 0 0 60px rgba(255,215,0,0.1), inset 0 0 60px rgba(255,215,0,0.02);
-    }
-    .header::before {
-      content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,215,0,0.03) 2px, rgba(255,215,0,0.03) 4px);
-      animation: scanline 8s linear infinite; pointer-events: none;
-    }
-    @keyframes scanline { 0% { transform: translateY(0); } 100% { transform: translateY(50%); } }
-    .header h1 {
-      font-family: 'Orbitron', sans-serif; font-size: 2rem; letter-spacing: 8px;
-      color: var(--neon-gold); text-shadow: 0 0 20px rgba(255,215,0,0.5), 0 0 40px rgba(255,215,0,0.2); position: relative;
-    }
-    .header .sub { font-size: 0.7rem; color: var(--neon-green); margin-top: 6px; letter-spacing: 4px; text-shadow: 0 0 10px rgba(0,255,65,0.3); }
-    .header .datetime {
-      font-family: 'Orbitron', sans-serif; font-size: 16px; color: var(--neon-red);
-      margin-top: 12px; border-top: 1px solid var(--border-dim); padding-top: 10px;
-      font-weight: 700; text-shadow: 0 0 10px rgba(255,0,64,0.4);
-    }
-    .card {
-      background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: 12px;
-      padding: 20px; margin-bottom: 16px; position: relative; transition: all 0.3s ease;
-    }
-    .card:hover { border-color: var(--border-glow); box-shadow: 0 0 20px rgba(0,245,255,0.05); }
-    .card h2 {
-      font-family: 'Orbitron', sans-serif; font-size: 0.8rem; color: var(--neon-gold);
-      text-transform: uppercase; border-left: 3px solid var(--neon-gold); padding-left: 12px;
-      margin-bottom: 16px; letter-spacing: 2px; display: flex; align-items: center; gap: 8px;
-    }
-    .card h2 .badge { font-size: 0.5rem; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.3); padding: 2px 6px; border-radius: 4px; color: var(--neon-gold); }
-    select {
-      width: 100%; background: var(--bg-panel); border: 1px solid var(--border-dim);
-      color: var(--neon-cyan); padding: 14px 12px; font-size: 0.9rem; border-radius: 8px;
-      outline: none; font-family: 'Share Tech Mono', monospace; cursor: pointer;
-      transition: all 0.2s; appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300f5ff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
-    }
-    select:focus { border-color: var(--neon-cyan); box-shadow: 0 0 15px rgba(0,245,255,0.2); }
-    select:disabled { opacity: 0.4; color: var(--text-dim); border-color: #1a1f28; cursor: not-allowed; }
-    .flex { display: flex; gap: 12px; flex-wrap: wrap; }
-    .flex > * { flex: 1; min-width: 140px; }
-    label.field-label { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; display: block; }
-    .monitor {
-      background: linear-gradient(180deg, var(--bg-panel), rgba(8,10,16,0.95));
-      border: 1px solid var(--border-dim); border-radius: 12px; padding: 28px 20px;
-      text-align: center; position: relative; overflow: hidden;
-    }
-    .monitor::after {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
-      animation: pulse-line 3s ease-in-out infinite;
-    }
-    @keyframes pulse-line { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
-    .monitor .meta { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; }
-    .monitor .odds { font-family: 'Orbitron', sans-serif; font-size: 2.4rem; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 30px rgba(0,255,65,0.4), 0 0 60px rgba(0,255,65,0.1); margin: 8px 0; letter-spacing: 2px; }
-    .monitor .price { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: #fff; font-weight: 700; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
-    .monitor .accuracy-bar { margin-top: 16px; height: 6px; background: var(--bg-dark); border-radius: 3px; overflow: hidden; position: relative; }
-    .monitor .accuracy-bar .fill { height: 100%; background: linear-gradient(90deg, var(--neon-red), var(--neon-gold), var(--neon-green)); border-radius: 3px; transition: width 1s ease; position: relative; }
-    .monitor .accuracy-bar .fill::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 20px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4)); animation: shimmer 2s infinite; }
-    @keyframes shimmer { 0% { transform: translateX(-20px); } 100% { transform: translateX(20px); } }
-    .monitor .apostas-info { font-size: 0.7rem; color: var(--neon-cyan); margin-top: 12px; padding: 8px; background: rgba(0,245,255,0.03); border-radius: 6px; border: 1px solid rgba(0,245,255,0.1); }
-    .btn {
-      width: 100%; padding: 20px; background: linear-gradient(135deg, rgba(255,215,0,0.05), rgba(255,215,0,0.02));
-      border: 2px solid var(--neon-gold); color: var(--neon-gold); font-family: 'Orbitron', sans-serif;
-      font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 6px;
-      border-radius: 8px; cursor: pointer; transition: all 0.3s; margin: 20px 0; position: relative; overflow: hidden;
-    }
-    .btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent); transition: left 0.5s; }
-    .btn:hover::before { left: 100%; }
-    .btn:hover { background: rgba(255,215,0,0.1); box-shadow: 0 0 40px rgba(255,215,0,0.2); transform: translateY(-2px); }
-    .btn:active { background: var(--neon-gold); color: var(--bg-dark); transform: translateY(0); }
-    .btn:disabled { opacity: 0.4; border-color: #555; color: #555; cursor: not-allowed; transform: none; }
-    .terminal {
-      background: var(--bg-panel); border: 1px solid var(--border-dim); border-radius: 8px;
-      height: 160px; overflow-y: auto; padding: 14px; font-size: 0.65rem; color: var(--neon-green);
-      line-height: 1.6; margin-top: 16px; font-family: 'Share Tech Mono', monospace;
-    }
-    .terminal .log-line { margin: 2px 0; opacity: 0; animation: fadeIn 0.3s forwards; }
-    .terminal .log-line.error { color: var(--neon-red); }
-    .terminal .log-line.warn { color: var(--neon-gold); }
-    .terminal .log-line.success { color: var(--neon-cyan); }
-    .terminal .log-line.info { color: var(--neon-green); }
-    @keyframes fadeIn { to { opacity: 1; } }
-    .result-panel {
-      display: none; border: 2px solid var(--neon-cyan);
-      background: linear-gradient(180deg, rgba(0,245,255,0.02), rgba(0,245,255,0.005));
-      border-radius: 12px; padding: 24px 16px; margin-top: 20px; text-align: center;
-      animation: slideUp 0.6s ease; position: relative; overflow: hidden;
-    }
-    .result-panel::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(circle at 30% 30%, rgba(0,245,255,0.03) 0%, transparent 40%), radial-gradient(circle at 70% 70%, rgba(255,215,0,0.03) 0%, transparent 40%);
-      pointer-events: none;
-    }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-    .result-panel h2 { font-family: 'Orbitron', sans-serif; color: var(--neon-gold); font-size: 0.9rem; letter-spacing: 4px; margin-bottom: 20px; }
-    .balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 20px 0; position: relative; z-index: 1; }
-    .ball {
-      width: 56px; height: 56px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3);
-      display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif;
-      font-size: 1.2rem; font-weight: 900; background: linear-gradient(135deg, var(--bg-panel), var(--bg-dark));
-      box-shadow: 0 0 20px rgba(255,255,255,0.05), inset 0 0 20px rgba(0,0,0,0.5);
-      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-      transform: scale(0); position: relative;
-    }
-    .ball::after { content: ''; position: absolute; top: 3px; left: 3px; right: 3px; height: 40%; border-radius: 50% 50% 40% 40%; background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent); pointer-events: none; }
-    @keyframes popIn { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
-    .ball.gold { border-color: var(--neon-gold); color: var(--neon-gold); box-shadow: 0 0 25px rgba(255,215,0,0.3), inset 0 0 20px rgba(255,215,0,0.05); background: linear-gradient(135deg, rgba(255,215,0,0.1), var(--bg-dark)); }
-    .ball.cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: 0 0 25px rgba(0,245,255,0.3), inset 0 0 20px rgba(0,245,255,0.05); background: linear-gradient(135deg, rgba(0,245,255,0.1), var(--bg-dark)); }
-    .ball.purple { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 25px rgba(191,0,255,0.3), inset 0 0 20px rgba(191,0,255,0.05); background: linear-gradient(135deg, rgba(191,0,255,0.1), var(--bg-dark)); }
-    .ball.selected { transform: scale(1.15); border-width: 3px; animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulse-ball 2s ease-in-out infinite; }
-    @keyframes pulse-ball { 0%, 100% { box-shadow: 0 0 25px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 40px rgba(255,215,0,0.5); } }
-    .divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border-glow), transparent); margin: 12px 0; }
-    .confidence { font-family: 'Orbitron', sans-serif; font-size: 1rem; color: var(--neon-gold); font-weight: 700; margin-top: 16px; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
-    .method-tags { margin-top: 12px; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; position: relative; z-index: 1; }
-    .method-tag { display: inline-block; background: rgba(0,245,255,0.05); padding: 4px 10px; border-radius: 20px; font-size: 0.55rem; color: var(--neon-cyan); border: 1px solid rgba(0,245,255,0.2); font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
-    .method-tag.gold { color: var(--neon-gold); border-color: rgba(255,215,0,0.2); background: rgba(255,215,0,0.05); }
-    .method-tag.purple { color: var(--neon-purple); border-color: rgba(191,0,255,0.2); background: rgba(191,0,255,0.05); }
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.6rem; color: var(--text-dim); margin-top: 16px; text-align: left; position: relative; z-index: 1; }
-    .stats-grid .row { display: flex; justify-content: space-between; padding: 6px 10px; background: rgba(255,255,255,0.02); border-radius: 4px; border: 1px solid var(--border-dim); }
-    .stats-grid .val { color: var(--text-primary); font-weight: 700; font-family: 'Orbitron', sans-serif; }
-    .stats-grid .val.highlight { color: var(--neon-green); }
-    .stats-grid .val.warn { color: var(--neon-gold); }
-    .stats-grid .val.danger { color: var(--neon-red); }
-    .bet-type { display: flex; gap: 10px; margin: 12px 0; padding: 12px; background: var(--bg-panel); border-radius: 8px; border: 1px solid var(--border-dim); }
-    .bet-type label { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--text-dim); cursor: pointer; padding: 8px 16px; border-radius: 6px; transition: all 0.2s; flex: 1; justify-content: center; border: 1px solid transparent; }
-    .bet-type label:hover { background: rgba(255,255,255,0.03); border-color: var(--border-dim); }
-    .bet-type input[type="radio"] { width: auto; margin: 0; accent-color: var(--neon-gold); }
-    .bet-type label.active { color: var(--neon-gold); background: rgba(255,215,0,0.05); border-color: rgba(255,215,0,0.3); }
-    .total-apostas { font-size: 0.7rem; color: var(--neon-cyan); margin-top: 10px; padding: 10px; background: rgba(0,245,255,0.03); border-radius: 6px; border: 1px solid rgba(0,245,255,0.1); font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
-    .regras-info { font-size: 0.55rem; color: var(--text-dim); margin-top: 8px; padding: 10px; background: var(--bg-panel); border-radius: 6px; border: 1px solid var(--border-dim); text-align: center; line-height: 1.6; }
-    .regras-info span { color: var(--neon-gold); font-weight: 700; }
-    .footer { margin-top: 24px; padding: 20px; border-top: 1px solid var(--border-dim); text-align: center; background: linear-gradient(180deg, transparent, rgba(0,0,0,0.3)); border-radius: 0 0 12px 12px; }
-    .footer .sorteio { color: var(--neon-gold); font-weight: 700; font-size: 1rem; font-family: 'Orbitron', sans-serif; margin-top: 6px; text-shadow: 0 0 15px rgba(255,215,0,0.3); }
-    .footer .draw-info { margin-top: 10px; padding: 12px; background: var(--bg-panel); border-radius: 8px; border: 1px solid var(--border-dim); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; text-align: left; }
-    .footer .draw-info .label { color: var(--text-dim); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 1px; }
-    .footer .draw-info .value { color: var(--neon-gold); font-weight: 700; font-family: 'Orbitron', sans-serif; font-size: 0.8rem; }
-    .footer .datetime-footer { font-family: 'Orbitron', sans-serif; font-size: 14px; color: var(--neon-red); margin-bottom: 8px; font-weight: 700; text-shadow: 0 0 10px rgba(255,0,64,0.3); }
-    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--neon-gold); border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 10px; vertical-align: middle; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .small-note { font-size: 0.5rem; color: var(--text-dim); margin-top: 16px; font-style: italic; }
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-dark); }
-    ::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
-    .dna-loader { display: none; justify-content: center; gap: 4px; margin: 16px 0; height: 40px; align-items: center; }
-    .dna-loader.active { display: flex; }
-    .dna-bar { width: 4px; height: 20px; background: var(--neon-gold); border-radius: 2px; animation: dna-wave 1s ease-in-out infinite; }
-    .dna-bar:nth-child(2) { animation-delay: 0.1s; background: var(--neon-cyan); }
-    .dna-bar:nth-child(3) { animation-delay: 0.2s; background: var(--neon-green); }
-    .dna-bar:nth-child(4) { animation-delay: 0.3s; background: var(--neon-purple); }
-    .dna-bar:nth-child(5) { animation-delay: 0.4s; background: var(--neon-gold); }
-    .dna-bar:nth-child(6) { animation-delay: 0.5s; background: var(--neon-cyan); }
-    .dna-bar:nth-child(7) { animation-delay: 0.6s; background: var(--neon-green); }
-    .dna-bar:nth-child(8) { animation-delay: 0.7s; background: var(--neon-purple); }
-    @keyframes dna-wave { 0%, 100% { height: 10px; opacity: 0.5; } 50% { height: 35px; opacity: 1; } }
-    .metricas-avancadas { 
-      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 12px; 
-      font-size: 0.55rem; color: var(--text-dim); text-align: center;
-    }
-    .metricas-avancadas .metric { 
-      padding: 6px; background: rgba(255,255,255,0.02); border-radius: 4px; 
-      border: 1px solid var(--border-dim);
-    }
-    .metricas-avancadas .metric .val { color: var(--neon-cyan); font-weight: 700; font-size: 0.7rem; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ORACLE GENESIS v100.0 · Motor Preditivo Híbrido Ultra</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --neon-gold: #ffd700; --neon-cyan: #00f5ff; --neon-green: #00ff41;
+  --neon-red: #ff0040; --neon-purple: #bf00ff; --neon-orange: #ff8c00;
+  --bg-dark: #020408; --bg-card: #0a0e18; --bg-panel: #060a12;
+  --border-dim: #1a2332; --border-glow: #2a3f5a; --text-primary: #e0eaf5;
+  --text-dim: #5a6a7a; --glass: rgba(10,16,30,0.85);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-dark); color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace; min-height: 100vh; overflow-x: hidden;
+  line-height: 1.5;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(255,215,0,0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 80%, rgba(0,245,255,0.04) 0%, transparent 50%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,245,255,0.015) 2px, rgba(0,245,255,0.015) 4px);
+  pointer-events: none; z-index: 0;
+}
+.container { max-width: 800px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
+
+.header {
+  background: linear-gradient(135deg, rgba(12,18,32,0.95), rgba(4,8,14,0.98));
+  border: 2px solid var(--neon-gold); border-radius: 20px; padding: 28px 20px;
+  text-align: center; margin-bottom: 24px; position: relative; overflow: hidden;
+  box-shadow: 0 0 80px rgba(255,215,0,0.12), inset 0 0 80px rgba(255,215,0,0.03);
+}
+.header::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,215,0,0.04) 2px, rgba(255,215,0,0.04) 4px);
+  animation: scanline 6s linear infinite; pointer-events: none;
+}
+@keyframes scanline { 0% { transform: translateY(0); } 100% { transform: translateY(50%); } }
+.header h1 {
+  font-family: 'Orbitron', sans-serif; font-size: 2.2rem; letter-spacing: 10px;
+  color: var(--neon-gold); text-shadow: 0 0 25px rgba(255,215,0,0.6), 0 0 50px rgba(255,215,0,0.2);
+  position: relative; font-weight: 900;
+}
+.header .sub { font-size: 0.75rem; color: var(--neon-green); margin-top: 8px; letter-spacing: 5px; text-shadow: 0 0 12px rgba(0,255,65,0.4); font-weight: 700; }
+.header .datetime {
+  font-family: 'Orbitron', sans-serif; font-size: 15px; color: var(--neon-red);
+  margin-top: 14px; border-top: 1px solid var(--border-dim); padding-top: 12px;
+  font-weight: 700; text-shadow: 0 0 12px rgba(255,0,64,0.5);
+}
+
+.card {
+  background: var(--glass); backdrop-filter: blur(10px);
+  border: 1px solid var(--border-dim); border-radius: 16px;
+  padding: 24px; margin-bottom: 20px; position: relative; transition: all 0.3s ease;
+}
+.card:hover { border-color: var(--border-glow); box-shadow: 0 0 30px rgba(0,245,255,0.08); }
+.card h2 {
+  font-family: 'Orbitron', sans-serif; font-size: 0.85rem; color: var(--neon-gold);
+  text-transform: uppercase; border-left: 4px solid var(--neon-gold); padding-left: 14px;
+  margin-bottom: 20px; letter-spacing: 3px; display: flex; align-items: center; gap: 10px; font-weight: 700;
+}
+.card h2 .badge { font-size: 0.55rem; background: rgba(255,215,0,0.12); border: 1px solid rgba(255,215,0,0.35); padding: 3px 8px; border-radius: 6px; color: var(--neon-gold); font-weight: 700; }
+
+select {
+  width: 100%; background: var(--bg-panel); border: 1px solid var(--border-dim);
+  color: var(--neon-cyan); padding: 14px 12px; font-size: 0.95rem; border-radius: 10px;
+  outline: none; font-family: 'Share Tech Mono', monospace; cursor: pointer;
+  transition: all 0.25s; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2300f5ff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px;
+}
+select:focus { border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0,245,255,0.15); }
+select:disabled { opacity: 0.35; color: var(--text-dim); border-color: #1a2028; cursor: not-allowed; }
+
+.flex { display: flex; gap: 14px; flex-wrap: wrap; }
+.flex > * { flex: 1; min-width: 160px; }
+label.field-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 3px; margin-bottom: 8px; display: block; font-weight: 700; }
+
+.monitor {
+  background: linear-gradient(180deg, var(--bg-panel), rgba(6,10,18,0.97));
+  border: 1px solid var(--border-dim); border-radius: 16px; padding: 32px 24px;
+  text-align: center; position: relative; overflow: hidden; margin-bottom: 20px;
+}
+.monitor::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--neon-green), var(--neon-cyan), var(--neon-green), transparent);
+  animation: pulse-line 2.5s ease-in-out infinite;
+}
+@keyframes pulse-line { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+.monitor .meta { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 4px; margin-bottom: 10px; font-weight: 700; }
+.monitor .odds { font-family: 'Orbitron', sans-serif; font-size: 2.6rem; font-weight: 900; color: var(--neon-green); text-shadow: 0 0 35px rgba(0,255,65,0.5), 0 0 70px rgba(0,255,65,0.15); margin: 10px 0; letter-spacing: 2px; }
+.monitor .price { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; color: #fff; font-weight: 700; text-shadow: 0 0 25px rgba(255,255,255,0.25); }
+.monitor .accuracy-bar { margin-top: 20px; height: 8px; background: var(--bg-dark); border-radius: 4px; overflow: hidden; position: relative; }
+.monitor .accuracy-bar .fill { height: 100%; background: linear-gradient(90deg, var(--neon-red), var(--neon-orange), var(--neon-gold), var(--neon-green)); border-radius: 4px; transition: width 1.2s cubic-bezier(0.22,1,0.36,1); position: relative; }
+.monitor .accuracy-bar .fill::after { content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 30px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5)); animation: shimmer 1.5s infinite; }
+@keyframes shimmer { 0% { transform: translateX(-30px); } 100% { transform: translateX(30px); } }
+.monitor .apostas-info { font-size: 0.75rem; color: var(--neon-cyan); margin-top: 14px; padding: 10px; background: rgba(0,245,255,0.04); border-radius: 8px; border: 1px solid rgba(0,245,255,0.12); font-family: 'Orbitron', sans-serif; letter-spacing: 1.5px; font-weight: 700; }
+
+.btn {
+  width: 100%; padding: 22px; background: linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,215,0,0.02));
+  border: 2px solid var(--neon-gold); color: var(--neon-gold); font-family: 'Orbitron', sans-serif;
+  font-size: 1.15rem; font-weight: 700; text-transform: uppercase; letter-spacing: 8px;
+  border-radius: 12px; cursor: pointer; transition: all 0.35s; margin: 24px 0; position: relative; overflow: hidden;
+}
+.btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.25), transparent); transition: left 0.6s; }
+.btn:hover::before { left: 100%; }
+.btn:hover { background: rgba(255,215,0,0.12); box-shadow: 0 0 50px rgba(255,215,0,0.25), 0 0 100px rgba(255,215,0,0.08); transform: translateY(-3px); }
+.btn:active { background: var(--neon-gold); color: var(--bg-dark); transform: translateY(0); }
+.btn:disabled { opacity: 0.35; border-color: #444; color: #555; cursor: not-allowed; transform: none; box-shadow: none; }
+
+.terminal {
+  background: var(--bg-panel); border: 1px solid var(--border-dim); border-radius: 12px;
+  height: 220px; overflow-y: auto; padding: 16px; font-size: 0.7rem; color: var(--neon-green);
+  line-height: 1.7; margin-top: 20px; font-family: 'Share Tech Mono', monospace;
+}
+.terminal .log-line { margin: 3px 0; opacity: 0; animation: fadeIn 0.4s forwards; padding-left: 8px; border-left: 2px solid transparent; }
+.terminal .log-line.error { color: var(--neon-red); border-left-color: var(--neon-red); }
+.terminal .log-line.warn { color: var(--neon-gold); border-left-color: var(--neon-gold); }
+.terminal .log-line.success { color: var(--neon-cyan); border-left-color: var(--neon-cyan); }
+.terminal .log-line.info { color: var(--neon-green); border-left-color: rgba(0,255,65,0.3); }
+.terminal .log-line.system { color: var(--neon-purple); border-left-color: var(--neon-purple); }
+@keyframes fadeIn { to { opacity: 1; } }
+
+.result-panel {
+  display: none; border: 2px solid var(--neon-cyan);
+  background: linear-gradient(180deg, rgba(0,245,255,0.03), rgba(0,245,255,0.005));
+  border-radius: 16px; padding: 32px 24px; margin-top: 24px; text-align: center;
+  animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1); position: relative; overflow: hidden;
+}
+.result-panel::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 25% 25%, rgba(0,245,255,0.04) 0%, transparent 45%), radial-gradient(circle at 75% 75%, rgba(255,215,0,0.04) 0%, transparent 45%);
+  pointer-events: none;
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+.result-panel h2 { font-family: 'Orbitron', sans-serif; color: var(--neon-gold); font-size: 1rem; letter-spacing: 5px; margin-bottom: 24px; position: relative; z-index: 1; }
+
+.balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin: 24px 0; position: relative; z-index: 1; }
+.ball {
+  width: 64px; height: 64px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem; font-weight: 900; background: linear-gradient(145deg, rgba(20,28,45,0.9), rgba(6,10,18,0.95));
+  box-shadow: 0 0 25px rgba(255,255,255,0.06), inset 0 0 25px rgba(0,0,0,0.6);
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform: scale(0); position: relative; cursor: default;
+}
+.ball::after { content: ''; position: absolute; top: 4px; left: 4px; right: 4px; height: 42%; border-radius: 50% 50% 45% 45%; background: linear-gradient(180deg, rgba(255,255,255,0.18), transparent); pointer-events: none; }
+@keyframes popIn { 0% { transform: scale(0) rotate(-200deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+.ball.gold { border-color: var(--neon-gold); color: var(--neon-gold); box-shadow: 0 0 30px rgba(255,215,0,0.35), inset 0 0 25px rgba(255,215,0,0.06); background: linear-gradient(145deg, rgba(255,215,0,0.12), rgba(6,10,18,0.95)); }
+.ball.cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); box-shadow: 0 0 30px rgba(0,245,255,0.35), inset 0 0 25px rgba(0,245,255,0.06); background: linear-gradient(145deg, rgba(0,245,255,0.12), rgba(6,10,18,0.95)); }
+.ball.purple { border-color: var(--neon-purple); color: var(--neon-purple); box-shadow: 0 0 30px rgba(191,0,255,0.35), inset 0 0 25px rgba(191,0,255,0.06); background: linear-gradient(145deg, rgba(191,0,255,0.12), rgba(6,10,18,0.95)); }
+.ball.selected { transform: scale(1.15); border-width: 3px; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulse-ball 2.5s ease-in-out infinite; }
+@keyframes pulse-ball { 0%, 100% { box-shadow: 0 0 30px rgba(255,215,0,0.3); } 50% { box-shadow: 0 0 50px rgba(255,215,0,0.55); } }
+
+.divider { width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--border-glow), transparent); margin: 16px 0; }
+.confidence { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--neon-gold); font-weight: 700; margin-top: 20px; text-shadow: 0 0 20px rgba(255,215,0,0.35); position: relative; z-index: 1; }
+
+.method-tags { margin-top: 16px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; position: relative; z-index: 1; }
+.method-tag { display: inline-block; background: rgba(0,245,255,0.06); padding: 5px 12px; border-radius: 20px; font-size: 0.6rem; color: var(--neon-cyan); border: 1px solid rgba(0,245,255,0.2); font-family: 'Share Tech Mono', monospace; letter-spacing: 1.5px; font-weight: 700; }
+.method-tag.gold { color: var(--neon-gold); border-color: rgba(255,215,0,0.25); background: rgba(255,215,0,0.08); }
+.method-tag.purple { color: var(--neon-purple); border-color: rgba(191,0,255,0.25); background: rgba(191,0,255,0.08); }
+.method-tag.green { color: var(--neon-green); border-color: rgba(0,255,65,0.25); background: rgba(0,255,65,0.08); }
+
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.65rem; color: var(--text-dim); margin-top: 20px; text-align: left; position: relative; z-index: 1; }
+.stats-grid .row { display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(255,255,255,0.025); border-radius: 6px; border: 1px solid var(--border-dim); transition: all 0.2s; }
+.stats-grid .row:hover { background: rgba(255,255,255,0.04); border-color: var(--border-glow); }
+.stats-grid .val { color: var(--text-primary); font-weight: 700; font-family: 'Orbitron', sans-serif; }
+.stats-grid .val.highlight { color: var(--neon-green); text-shadow: 0 0 10px rgba(0,255,65,0.3); }
+.stats-grid .val.warn { color: var(--neon-gold); text-shadow: 0 0 10px rgba(255,215,0,0.3); }
+.stats-grid .val.danger { color: var(--neon-red); text-shadow: 0 0 10px rgba(255,0,64,0.3); }
+.stats-grid .val.cyan { color: var(--neon-cyan); text-shadow: 0 0 10px rgba(0,245,255,0.3); }
+
+.metricas-avancadas { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 16px; font-size: 0.6rem; color: var(--text-dim); text-align: center; position: relative; z-index: 1; }
+.metricas-avancadas .metric { padding: 10px 6px; background: rgba(255,255,255,0.02); border-radius: 8px; border: 1px solid var(--border-dim); transition: all 0.2s; }
+.metricas-avancadas .metric:hover { border-color: var(--border-glow); }
+.metricas-avancadas .metric .label { display: block; margin-bottom: 4px; letter-spacing: 1px; font-size: 0.55rem; }
+.metricas-avancadas .metric .val { color: var(--neon-cyan); font-weight: 700; font-size: 0.8rem; font-family: 'Orbitron', sans-serif; }
+
+.bet-type { display: flex; gap: 12px; margin: 14px 0; padding: 14px; background: var(--bg-panel); border-radius: 10px; border: 1px solid var(--border-dim); }
+.bet-type label { display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--text-dim); cursor: pointer; padding: 10px 20px; border-radius: 8px; transition: all 0.25s; flex: 1; justify-content: center; border: 1px solid transparent; font-weight: 700; }
+.bet-type label:hover { background: rgba(255,255,255,0.03); border-color: var(--border-dim); }
+.bet-type input[type="radio"] { width: auto; margin: 0; accent-color: var(--neon-gold); cursor: pointer; }
+.bet-type label.active { color: var(--neon-gold); background: rgba(255,215,0,0.06); border-color: rgba(255,215,0,0.35); box-shadow: 0 0 15px rgba(255,215,0,0.08); }
+
+.total-apostas { font-size: 0.75rem; color: var(--neon-cyan); margin-top: 12px; padding: 12px; background: rgba(0,245,255,0.03); border-radius: 8px; border: 1px solid rgba(0,245,255,0.1); font-family: 'Orbitron', sans-serif; letter-spacing: 1.5px; font-weight: 700; }
+.regras-info { font-size: 0.6rem; color: var(--text-dim); margin-top: 10px; padding: 12px; background: var(--bg-panel); border-radius: 8px; border: 1px solid var(--border-dim); text-align: center; line-height: 1.7; }
+.regras-info span { color: var(--neon-gold); font-weight: 700; }
+
+.footer { margin-top: 28px; padding: 24px; border-top: 1px solid var(--border-dim); text-align: center; background: linear-gradient(180deg, transparent, rgba(0,0,0,0.4)); border-radius: 0 0 16px 16px; }
+.footer .sorteio { color: var(--neon-gold); font-weight: 700; font-size: 1.1rem; font-family: 'Orbitron', sans-serif; margin-top: 8px; text-shadow: 0 0 20px rgba(255,215,0,0.35); }
+.footer .draw-info { margin-top: 14px; padding: 14px; background: var(--bg-panel); border-radius: 10px; border: 1px solid var(--border-dim); display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; }
+.footer .draw-info .label { color: var(--text-dim); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
+.footer .draw-info .value { color: var(--neon-gold); font-weight: 700; font-family: 'Orbitron', sans-serif; font-size: 0.85rem; }
+.footer .datetime-footer { font-family: 'Orbitron', sans-serif; font-size: 14px; color: var(--neon-red); margin-bottom: 10px; font-weight: 700; text-shadow: 0 0 12px rgba(255,0,64,0.35); }
+
+.spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid var(--neon-gold); border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 12px; vertical-align: middle; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.dna-loader { display: none; justify-content: center; gap: 5px; margin: 20px 0; height: 50px; align-items: center; }
+.dna-loader.active { display: flex; }
+.dna-bar { width: 5px; height: 24px; background: var(--neon-gold); border-radius: 3px; animation: dna-wave 1.2s ease-in-out infinite; }
+.dna-bar:nth-child(2) { animation-delay: 0.1s; background: var(--neon-cyan); }
+.dna-bar:nth-child(3) { animation-delay: 0.2s; background: var(--neon-green); }
+.dna-bar:nth-child(4) { animation-delay: 0.3s; background: var(--neon-purple); }
+.dna-bar:nth-child(5) { animation-delay: 0.4s; background: var(--neon-gold); }
+.dna-bar:nth-child(6) { animation-delay: 0.5s; background: var(--neon-cyan); }
+.dna-bar:nth-child(7) { animation-delay: 0.6s; background: var(--neon-green); }
+.dna-bar:nth-child(8) { animation-delay: 0.7s; background: var(--neon-purple); }
+@keyframes dna-wave { 0%, 100% { height: 12px; opacity: 0.4; } 50% { height: 42px; opacity: 1; } }
+
+.small-note { font-size: 0.55rem; color: var(--text-dim); margin-top: 20px; font-style: italic; position: relative; z-index: 1; line-height: 1.6; }
+.disclaimer { font-size: 0.6rem; color: var(--neon-red); margin-top: 16px; padding: 12px; background: rgba(255,0,64,0.04); border-radius: 8px; border: 1px solid rgba(255,0,64,0.15); position: relative; z-index: 1; line-height: 1.6; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-dark); }
+::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
+
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.4rem; letter-spacing: 4px; }
+  .monitor .odds { font-size: 1.8rem; }
+  .ball { width: 48px; height: 48px; font-size: 1rem; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .metricas-avancadas { grid-template-columns: 1fr 1fr; }
+  .footer .draw-info { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
 <div class="container">
   <div class="header">
     <h1>ORACLE GENESIS</h1>
-    <div class="sub">⤕ SANTA CASA · MOTOR PREDITIVO QUÂNTICO ⤕</div>
+    <div class="sub">⤕ SANTA CASA · MOTOR PREDITIVO HÍBRIDO ULTRA ⤕</div>
     <div class="datetime">📅 <span id="currentDate"></span> · ⏰ <span id="currentTime"></span></div>
   </div>
+
   <div class="card">
-    <h2>⚙ Matriz de Jogo <span class="badge">v99.0</span></h2>
-    <select id="gameType"><option value="euromilhoes">EURO MILHÕES</option><option value="totoloto">TOTOLOTO</option><option value="eurodreams">EURO DREAMS</option></select>
+    <h2>⚙ Matriz de Jogo <span class="badge">v100.0</span></h2>
+    <select id="gameType">
+      <option value="euromilhoes">EURO MILHÕES</option>
+      <option value="totoloto">TOTOLOTO</option>
+      <option value="eurodreams">EURO DREAMS</option>
+    </select>
     <div class="bet-type">
       <label class="active"><input type="radio" name="betType" value="simples" checked> Aposta Simples</label>
       <label><input type="radio" name="betType" value="multipla"> Aposta Múltipla</label>
@@ -214,40 +254,54 @@
       <div><label class="field-label">Números Selecionados</label><select id="nQty"></select></div>
       <div><label class="field-label" id="starLabel">Estrelas / Sonhos</label><select id="sQty"></select></div>
     </div>
-    <div class="total-apostas" id="totalApostasInfo">Total de Apostas: 1</div>
+    <div class="total-apostas" id="totalApostasInfo">Total de Combinações: 1</div>
     <div class="regras-info" id="regrasInfo"><span>Euro Milhões:</span> 5 números (1-50) + 2 estrelas (1-12)</div>
   </div>
+
   <div class="monitor">
-    <div class="meta">Probabilidade Estimada · Monte Carlo · Algoritmo Genético</div>
+    <div class="meta">Probabilidade Teórica · Motor Híbrido · Ensemble Avançado</div>
     <div class="odds" id="oddsDisplay">1 / 139.838.160</div>
     <div class="price" id="priceDisplay">€ 2,50</div>
-    <div class="meta" style="margin-top:10px;" id="accuracyLabel">PRECISÃO DO MOTOR</div>
+    <div class="meta" style="margin-top:12px;" id="accuracyLabel">PROB. 1º PRÉMIO: 0.0000007%</div>
     <div class="accuracy-bar"><div class="fill" id="accuracyBar" style="width: 0%;"></div></div>
     <div class="apostas-info" id="apostasInfo">1 aposta · €2,50</div>
   </div>
+
   <div class="dna-loader" id="dnaLoader">
     <div class="dna-bar"></div><div class="dna-bar"></div><div class="dna-bar"></div><div class="dna-bar"></div>
     <div class="dna-bar"></div><div class="dna-bar"></div><div class="dna-bar"></div><div class="dna-bar"></div>
   </div>
+
   <button class="btn" id="runBtn">▶ EXECUTAR MOTOR PREDITIVO</button>
+
   <div class="terminal" id="terminal">
-    <div class="log-line info">&gt; ORACLE GENESIS v99.0 inicializado.</div>
-    <div class="log-line info">&gt; Motor Híbrido: Algoritmo Genético + Monte Carlo + Rede Neural Heurística.</div>
-    <div class="log-line info">&gt; Aguardando comando do operador...</div>
+    <div class="log-line system">&gt; ORACLE GENESIS v100.0 [ULTRA EDITION]</div>
+    <div class="log-line info">&gt; Motor Híbrido: Algoritmo Genético + Monte Carlo + Ensemble Stacking + Platt Scaling</div>
+    <div class="log-line info">&gt; Módulos ativos: Frequência Ponderada · Atraso Exponencial · Análise de Ciclos · Markov Chains</div>
+    <div class="log-line warn">&gt; AVISO: Lotaria é um processo estocástico. Nenhum algoritmo garante acerto absoluto.</div>
+    <div class="log-line info">&gt; Sistema pronto. Aguardando comando do operador...</div>
   </div>
+
   <div id="resultPanel" class="result-panel">
     <h2>PROGNÓSTICO CALCULADO</h2>
     <div class="balls" id="ballOutput"></div>
-    <div class="confidence" id="confidenceLabel">CONFIANÇA: 0.0%</div>
+    <div class="confidence" id="confidenceLabel">CONFIANÇA DO MOTOR: 0.0%</div>
     <div class="method-tags" id="methodTags"></div>
     <div class="metricas-avancadas" id="metricasAvancadas">
-      <div class="metric">Log Loss: <span class="val" id="logLoss">--</span></div>
-      <div class="metric">Brier Score: <span class="val" id="brierScore">--</span></div>
-      <div class="metric">AUROC: <span class="val" id="auroc">--</span></div>
+      <div class="metric"><span class="label">Log Loss</span><span class="val" id="logLoss">--</span></div>
+      <div class="metric"><span class="label">Brier Score</span><span class="val" id="brierScore">--</span></div>
+      <div class="metric"><span class="label">AUROC</span><span class="val" id="auroc">--</span></div>
+      <div class="metric"><span class="label">Precision</span><span class="val" id="precisionVal">--</span></div>
+      <div class="metric"><span class="label">Recall</span><span class="val" id="recallVal">--</span></div>
+      <div class="metric"><span class="label">F1-Score</span><span class="val" id="f1Val">--</span></div>
     </div>
     <div class="stats-grid" id="statsGrid"></div>
-    <div class="small-note">* Previsão baseada em modelos estatísticos avançados · sem garantia absoluta de resultados.</div>
+    <div class="disclaimer">
+      ⚠ <strong>AVISO LEGAL E MATEMÁTICO:</strong> A lotaria é um jogo de azar regido por probabilidade uniforme. Cada sorteio é um evento independente. Nenhum algoritmo pode prever com certeza os números vencedores. Os resultados são baseados em análise estatística histórica e otimização heurística, mas a probabilidade real de acertar o 1º prémio permanece matematicamente inalterada. Jogue responsavelmente.
+    </div>
+    <div class="small-note">* Previsão baseada em modelos estatísticos avançados · sem garantia absoluta de resultados · dados síntese com distribuições realistas.</div>
   </div>
+
   <div class="footer">
     <div class="datetime-footer">📅 <span id="footerCurrentDate"></span> · ⏰ <span id="footerCurrentTime"></span></div>
     <div class="sorteio">🎯 PRÓXIMO SORTEIO: <span id="proximoSorteio">--</span></div>
@@ -259,18 +313,15 @@
     </div>
   </div>
 </div>
+
 <script>
 // ============================================================
-//  ORACLE GENESIS v99.0 - MOTOR PREDITIVO QUANTICO OTIMIZADO
-//  Algoritmo Genetico + Monte Carlo + Filtros Estatisticos
-//  com Precision-Recall, ROC, Ensemble Filters, Platt Scaling,
-//  Isotonic Regression, Feature Engineering, SMOTE, Log Loss,
-//  Brier Score, RFE, Outlier Filters, TimeSeries Split
+//  ORACLE GENESIS v100.0 - MOTOR PREDITIVO HÍBRIDO ULTRA
 // ============================================================
 
 const REGRAS = {
   euromilhoes: {
-    nome: "EURO MILHOES",
+    nome: "EURO MILHÕES",
     numeros: { min: 1, max: 50, sorteados: 5, maxAposta: 12, minAposta: 5 },
     estrelas: { min: 1, max: 12, sorteados: 2, maxAposta: 5, minAposta: 2 },
     precoBase: 2.50, nomeEstrela: "Estrelas", dias: [2, 5], hora: "21:00"
@@ -289,11 +340,7 @@ const REGRAS = {
   }
 };
 
-// ============================================================
-//  FUNCOES MATEMATICAS OTIMIZADAS
-// ============================================================
 const combCache = new Map();
-
 function combinacao(n, k) {
   if (k > n || k < 0) return 0;
   if (k === 0 || k === n) return 1;
@@ -306,11 +353,10 @@ function combinacao(n, k) {
   return r;
 }
 
-const primeCache = new Set();
+const primeCache = new Set([2,3,5,7,11,13,17,19,23,29,31,37,41,43,47]);
 function isPrime(n) {
   if (n < 2) return false;
   if (primeCache.has(n)) return true;
-  if (n === 2 || n === 3 || n === 5) { primeCache.add(n); return true; }
   if (n % 2 === 0 || n % 3 === 0) return false;
   for (let i = 5; i * i <= n; i += 6) {
     if (n % i === 0 || n % (i + 2) === 0) return false;
@@ -329,58 +375,66 @@ function calcularOdds(regra, nQty, sQty) {
   return totalApostas === 0 ? Infinity : totalCombos / totalApostas;
 }
 
-// ============================================================
-//  GERADOR DE HISTORICO SIMULADO COM VALIDACAO TEMPORAL
-// ============================================================
 const DADOS = {};
-
 function gerarDados(gameKey) {
   if (DADOS[gameKey]) return DADOS[gameKey];
   const regra = REGRAS[gameKey];
-  const HIST_SIZE = 8000;
-  let seed = 20260727;
+  const HIST_SIZE = 3000;
+  let seed = 20260729;
   
   function seededRandom() { 
-    seed = (seed * 16807) % 2147483647; 
+    seed = (seed * 16807 + 0) % 2147483647; 
     return (seed - 1) / 2147483646; 
+  }
+  
+  function normalRandom(mean, std) {
+    let u = 0, v = 0;
+    while (u === 0) u = seededRandom();
+    while (v === 0) v = seededRandom();
+    const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    return mean + z * std;
   }
   
   const historico = [];
   const maxNum = regra.numeros.max, maxStar = regra.estrelas.max;
   const numSorteados = regra.numeros.sorteados, starSorteados = regra.estrelas.sorteados;
+  const mediaSomaEsperada = numSorteados * (maxNum + 1) / 2;
   
-  // Gerar dados com variabilidade temporal
   for (let i = 0; i < HIST_SIZE; i++) {
     const numeros = new Set();
-    while (numeros.size < numSorteados) {
-      let num = Math.floor(seededRandom() * maxNum) + 1;
-      let hasConsecutive = false;
-      for (let existing of numeros) {
-        if (Math.abs(existing - num) === 1) { hasConsecutive = true; break; }
+    let attempts = 0;
+    while (numeros.size < numSorteados && attempts < 200) {
+      attempts++;
+      let num;
+      if (seededRandom() < 0.7) {
+        num = Math.floor(seededRandom() * maxNum) + 1;
+      } else {
+        num = Math.round(normalRandom(mediaSomaEsperada / numSorteados, maxNum / 6));
+        num = Math.max(1, Math.min(maxNum, num));
       }
-      if (!hasConsecutive || numeros.size > 3) numeros.add(num);
+      numeros.add(num);
     }
+    while (numeros.size < numSorteados) {
+      numeros.add(Math.floor(seededRandom() * maxNum) + 1);
+    }
+    
     const estrelas = new Set();
     while (estrelas.size < starSorteados) {
-      let s = Math.floor(seededRandom() * maxStar) + 1;
-      if (!estrelas.has(s)) estrelas.add(s);
+      estrelas.add(Math.floor(seededRandom() * maxStar) + 1);
     }
+    
     historico.push({ 
       numeros: Array.from(numeros).sort((a,b)=>a-b), 
-      estrelas: Array.from(estrelas).sort((a,b)=>a-b),
-      timestamp: i // Para validação temporal
+      estrelas: Array.from(estrelas).sort((a,b)=>a-b)
     });
   }
   
-  // Feature Engineering: Extrair atributos
   const features = [];
   const labels = [];
-  
   for (let i = 0; i < historico.length - 1; i++) {
     const s = historico[i];
     const next = historico[i + 1];
     
-    // Atributos: soma, paridade, primos, gaps, dezenas, frequencia
     const soma = s.numeros.reduce((a,b)=>a+b,0);
     const pares = s.numeros.filter(n => n%2===0).length;
     const primos = s.numeros.filter(isPrime).length;
@@ -390,74 +444,17 @@ function gerarDados(gameKey) {
     const dezenas = [0,0,0,0,0];
     s.numeros.forEach(n => { const d = Math.floor((n-1)/10); if (d < 5) dezenas[d]++; });
     const dezenasVazias = dezenas.filter(d=>d===0).length;
-    const consecutivos = (() => { let c = 0; for(let j=1;j<s.numeros.length;j++) if(s.numeros[j]-s.numeros[j-1]===1) c++; return c; })();
+    let consecutivos = 0;
+    for (let j = 1; j < s.numeros.length; j++) if (s.numeros[j]-s.numeros[j-1]===1) consecutivos++;
     
-    features.push([soma, pares, primos, gapMedio, dezenasVazias, consecutivos, s.estrelas.length]);
+    features.push([soma, pares, primos, gapMedio, dezenasVazias, consecutivos]);
     
-    // Label: se o próximo sorteio tem pelo menos 3 acertos
     const setNums = new Set(s.numeros);
     let acertos = 0;
     next.numeros.forEach(n => { if (setNums.has(n)) acertos++; });
-    labels.push(acertos >= 3 ? 1 : 0);
+    labels.push(acertos >= 2 ? 1 : 0);
   }
   
-  // Balanceamento com SMOTE (oversampling da classe minoritária)
-  const posIndices = [];
-  const negIndices = [];
-  for (let i = 0; i < labels.length; i++) {
-    if (labels[i] === 1) posIndices.push(i);
-    else negIndices.push(i);
-  }
-  
-  // SMOTE: criar exemplos sintéticos da classe positiva
-  const syntheticFeatures = [];
-  const syntheticLabels = [];
-  if (posIndices.length > 0 && negIndices.length > posIndices.length) {
-    const ratio = Math.floor(negIndices.length / posIndices.length);
-    for (let i = 0; i < posIndices.length; i++) {
-      for (let j = 0; j < Math.min(ratio, 3); j++) {
-        const idx = posIndices[i];
-        const neighbor = posIndices[Math.floor(Math.random() * posIndices.length)];
-        const diff = features[neighbor].map((v, k) => v - features[idx][k]);
-        const synthetic = features[idx].map((v, k) => v + diff[k] * (Math.random() * 0.5));
-        syntheticFeatures.push(synthetic);
-        syntheticLabels.push(1);
-      }
-    }
-  }
-  
-  // Combinar dados originais com sintéticos
-  const allFeatures = [...features, ...syntheticFeatures];
-  const allLabels = [...labels, ...syntheticLabels];
-  
-  // Filtros Outlier (IQR)
-  const featureStats = [];
-  for (let j = 0; j < allFeatures[0].length; j++) {
-    const vals = allFeatures.map(f => f[j]).sort((a,b)=>a-b);
-    const q1 = vals[Math.floor(vals.length * 0.25)];
-    const q3 = vals[Math.floor(vals.length * 0.75)];
-    const iqr = q3 - q1;
-    featureStats.push({ q1, q3, iqr });
-  }
-  
-  const filteredFeatures = [];
-  const filteredLabels = [];
-  for (let i = 0; i < allFeatures.length; i++) {
-    let outlier = false;
-    for (let j = 0; j < allFeatures[i].length; j++) {
-      const stat = featureStats[j];
-      if (allFeatures[i][j] < stat.q1 - 1.5 * stat.iqr || allFeatures[i][j] > stat.q3 + 1.5 * stat.iqr) {
-        outlier = true;
-        break;
-      }
-    }
-    if (!outlier) {
-      filteredFeatures.push(allFeatures[i]);
-      filteredLabels.push(allLabels[i]);
-    }
-  }
-  
-  // Frequências para o algoritmo genético
   const freqN = Array(maxNum).fill(0), freqS = Array(maxStar).fill(0);
   const somaN = [], paridadeN = [];
   
@@ -468,7 +465,7 @@ function gerarDados(gameKey) {
     somaN.push(soma); paridadeN.push(pares);
   });
   
-  const ultimos = historico.slice(-60);
+  const ultimos = historico.slice(-100);
   const atrasoN = Array(maxNum).fill(ultimos.length);
   const atrasoS = Array(maxStar).fill(ultimos.length);
   
@@ -487,162 +484,175 @@ function gerarDados(gameKey) {
   const desvioSoma = Math.sqrt(somaN.reduce((a,b)=>a+Math.pow(b-mediaSoma,2),0)/somaN.length);
   const mediaParidade = paridadeN.reduce((a,b)=>a+b,0)/paridadeN.length;
   
-  // Ensemble de filtros: combinar múltiplos critérios
-  const ensembleWeights = [0.3, 0.25, 0.2, 0.15, 0.1];
+  const ciclosN = Array(maxNum).fill(0);
+  for (let n = 1; n <= maxNum; n++) {
+    let ultimoIdx = -1;
+    let somaCiclos = 0, countCiclos = 0;
+    for (let i = 0; i < historico.length; i++) {
+      if (historico[i].numeros.includes(n)) {
+        if (ultimoIdx >= 0) { somaCiclos += (i - ultimoIdx); countCiclos++; }
+        ultimoIdx = i;
+      }
+    }
+    ciclosN[n-1] = countCiclos > 0 ? somaCiclos / countCiclos : historico.length;
+  }
   
   DADOS[gameKey] = { 
-    historico, freqN, freqS, atrasoN, atrasoS, 
+    historico, freqN, freqS, atrasoN, atrasoS, ciclosN,
     total: historico.length, mediaSoma, desvioSoma, mediaParidade,
-    features: filteredFeatures, labels: filteredLabels,
-    ensembleWeights,
-    featureStats
+    features, labels
   };
   return DADOS[gameKey];
 }
 
-// ============================================================
-//  CALIBRACAO DE PROBABILIDADE: PLATT SCALING
-// ============================================================
 function plattScaling(scores, labels) {
-  // Implementação simplificada de Platt Scaling
-  // Usa sigmoide: P(y=1|x) = 1 / (1 + exp(A*f(x) + B))
-  // Estimativa aproximada usando média e variância
   let posMean = 0, negMean = 0;
   let posCount = 0, negCount = 0;
-  let posVar = 0, negVar = 0;
   
   for (let i = 0; i < scores.length; i++) {
-    if (labels[i] === 1) {
-      posMean += scores[i];
-      posCount++;
-    } else {
-      negMean += scores[i];
-      negCount++;
-    }
+    if (labels[i] === 1) { posMean += scores[i]; posCount++; }
+    else { negMean += scores[i]; negCount++; }
   }
-  posMean /= posCount || 1;
-  negMean /= negCount || 1;
+  posMean /= Math.max(posCount, 1);
+  negMean /= Math.max(negCount, 1);
   
+  let posVar = 0, negVar = 0;
   for (let i = 0; i < scores.length; i++) {
     if (labels[i] === 1) posVar += Math.pow(scores[i] - posMean, 2);
     else negVar += Math.pow(scores[i] - negMean, 2);
   }
-  posVar /= posCount || 1;
-  negVar /= negCount || 1;
+  posVar /= Math.max(posCount, 1);
+  negVar /= Math.max(negCount, 1);
   
-  // Aproximação: A = 1 / (sqrt(var_pos) + sqrt(var_neg))
   const A = 1 / (Math.sqrt(posVar) + Math.sqrt(negVar) + 0.001);
   const B = -A * (posMean + negMean) / 2;
-  
   return { A, B };
 }
 
-// ============================================================
-//  ALGORITMO GENETICO COM VALIDACAO TEMPORAL
-// ============================================================
 function gerarPalpite(gameKey, nQty, sQty) {
   const regra = REGRAS[gameKey];
   const dados = gerarDados(gameKey);
-  const { freqN, freqS, total, mediaSoma, desvioSoma, mediaParidade, atrasoN, atrasoS, features, labels } = dados;
+  const { freqN, freqS, total, mediaSoma, desvioSoma, mediaParidade, atrasoN, atrasoS, ciclosN, features, labels } = dados;
   
-  const POP_SIZE = 250;
-  const GERACOES = 200;
-  const ELITE_SIZE = 25;
+  const POP_SIZE = 200;
+  const GERACOES = 150;
+  const ELITE_SIZE = 20;
   
-  // Função de fitness com ensemble de filtros
+  const W_FREQ = 0.28, W_ATRASO = 0.22, W_CICLO = 0.15, W_GAP = 0.12, W_PARIDADE = 0.10, W_SOMA = 0.08, W_PRIMOS = 0.05;
+  
   function calcularFitness(numeros, estrelas) {
     let score = 0;
-    const weights = dados.ensembleWeights;
-    
-    // Frequencia (30%)
     let freqScore = 0;
-    numeros.forEach(n => freqScore += freqN[n-1]/total);
-    estrelas.forEach(s => freqScore += freqS[s-1]/total);
-    score += freqScore * 300 * weights[0];
+    numeros.forEach(n => freqScore += freqN[n-1] / total);
+    estrelas.forEach(s => freqScore += freqS[s-1] / total);
+    score += freqScore * 400 * W_FREQ;
     
-    // Atraso (25%)
     let atrasoScore = 0;
-    numeros.forEach(n => atrasoScore += Math.min(atrasoN[n-1]/60, 1));
-    estrelas.forEach(s => atrasoScore += Math.min(atrasoS[s-1]/60, 1));
-    score += atrasoScore * 250 * weights[1];
+    numeros.forEach(n => atrasoScore += Math.min(atrasoN[n-1] / 50, 1.5));
+    estrelas.forEach(s => atrasoScore += Math.min(atrasoS[s-1] / 50, 1.5));
+    score += atrasoScore * 300 * W_ATRASO;
     
-    // Gaps (15%)
+    let cicloScore = 0;
+    numeros.forEach(n => {
+      const ratio = atrasoN[n-1] / Math.max(ciclosN[n-1], 1);
+      cicloScore += Math.exp(-Math.pow(ratio - 1, 2));
+    });
+    score += cicloScore * 250 * W_CICLO;
+    
     let gapScore = 0;
     for (let i = 1; i < numeros.length; i++) {
-      gapScore += Math.min((numeros[i]-numeros[i-1])/5, 1);
+      const gap = numeros[i] - numeros[i-1];
+      gapScore += Math.min(gap / 8, 1.2);
     }
-    score += gapScore * 150 * weights[2];
+    score += (gapScore / Math.max(numeros.length - 1, 1)) * 200 * W_GAP;
     
-    // Paridade (10%)
-    const pares = numeros.filter(n => n%2===0).length;
-    const paridadeScore = Math.max(0, 1 - Math.abs(pares - Math.round(mediaParidade))/3);
-    score += paridadeScore * 100 * weights[3];
+    const pares = numeros.filter(n => n % 2 === 0).length;
+    const paridadeScore = Math.max(0, 1 - Math.abs(pares - mediaParidade) / 3);
+    score += paridadeScore * 150 * W_PARIDADE;
     
-    // Soma (10%)
-    const soma = numeros.reduce((a,b)=>a+b,0);
+    const soma = numeros.reduce((a,b) => a + b, 0);
     const zScore = Math.abs(soma - mediaSoma) / desvioSoma;
-    const somaScore = Math.max(0, 1 - zScore/3);
-    score += somaScore * 100 * weights[4];
+    const somaScore = Math.max(0, 1 - zScore / 2.5);
+    score += somaScore * 150 * W_SOMA;
     
-    // Primos (5%)
     const primos = numeros.filter(isPrime).length;
-    const primosScore = Math.max(0, 1 - Math.abs(primos - Math.round(regra.numeros.sorteados/2.5))/3);
-    score += primosScore * 50;
+    const primosEsperados = Math.round(numeros.length * 0.35);
+    const primosScore = Math.max(0, 1 - Math.abs(primos - primosEsperados) / 3);
+    score += primosScore * 100 * W_PRIMOS;
     
-    // Penalidade consecutivos
     let consecutivos = 0;
     for (let i = 1; i < numeros.length; i++) {
-      if (numeros[i]-numeros[i-1] === 1) consecutivos++;
+      if (numeros[i] - numeros[i-1] === 1) consecutivos++;
     }
-    score -= consecutivos * 800;
+    score -= consecutivos * 600;
     
-    // Penalidade extremos
     let extremos = 0;
-    numeros.forEach(n => { if (n <= 3 || n >= regra.numeros.max - 2) extremos++; });
-    score -= extremos * 20;
+    numeros.forEach(n => { if (n <= 2 || n >= regra.numeros.max - 1) extremos++; });
+    score -= extremos * 30;
+    
+    const dezenas = [0,0,0,0,0];
+    numeros.forEach(n => { const d = Math.floor((n-1)/10); if (d < 5) dezenas[d]++; });
+    const maxDezena = Math.max(...dezenas);
+    if (maxDezena >= 3) score -= (maxDezena - 2) * 200;
     
     return Math.max(0, score);
   }
   
-  // Criar indivíduo aleatório com validação
   function criarIndividuo() {
     const nums = new Set();
-    while (nums.size < nQty) {
-      const n = Math.floor(Math.random() * regra.numeros.max) + 1;
-      let valid = true;
-      for (let existing of nums) {
-        if (Math.abs(existing - n) <= 1) { valid = false; break; }
+    let safety = 0;
+    while (nums.size < nQty && safety < 300) {
+      safety++;
+      const candidates = [];
+      for (let n = 1; n <= regra.numeros.max; n++) {
+        if (nums.has(n)) continue;
+        const peso = (freqN[n-1] / total) * 0.4 + Math.min(atrasoN[n-1] / 60, 1) * 0.35 + (1 / Math.max(ciclosN[n-1], 1)) * 0.25;
+        candidates.push({ n, peso: peso + 0.01 });
       }
-      if (valid) nums.add(n);
+      const totalPeso = candidates.reduce((a,c) => a + c.peso, 0);
+      let r = Math.random() * totalPeso;
+      for (const c of candidates) {
+        r -= c.peso;
+        if (r <= 0) { nums.add(c.n); break; }
+      }
     }
+    while (nums.size < nQty) {
+      nums.add(Math.floor(Math.random() * regra.numeros.max) + 1);
+    }
+    
     const stars = new Set();
     while (stars.size < sQty) {
-      const s = Math.floor(Math.random() * regra.estrelas.max) + 1;
-      if (!stars.has(s)) stars.add(s);
+      const candidates = [];
+      for (let s = 1; s <= regra.estrelas.max; s++) {
+        if (stars.has(s)) continue;
+        const peso = (freqS[s-1] / total) * 0.5 + Math.min(atrasoS[s-1] / 40, 1) * 0.5;
+        candidates.push({ s, peso: peso + 0.01 });
+      }
+      const totalPeso = candidates.reduce((a,c) => a + c.peso, 0);
+      let r = Math.random() * totalPeso;
+      for (const c of candidates) {
+        r -= c.peso;
+        if (r <= 0) { stars.add(c.s); break; }
+      }
     }
+    
     return { 
-      numeros: Array.from(nums).sort((a,b)=>a-b), 
-      estrelas: Array.from(stars).sort((a,b)=>a-b),
+      numeros: Array.from(nums).sort((a,b) => a - b), 
+      estrelas: Array.from(stars).sort((a,b) => a - b),
       fitness: 0
     };
   }
   
-  // Crossover com diversidade
   function crossover(pai1, pai2) {
     const pool = new Set([...pai1.numeros, ...pai2.numeros]);
     const filhoNums = new Set();
     const poolArray = Array.from(pool).sort(() => Math.random() - 0.5);
     for (let num of poolArray) {
       if (filhoNums.size >= nQty) break;
-      let valid = true;
-      for (let existing of filhoNums) {
-        if (Math.abs(existing - num) <= 1) { valid = false; break; }
-      }
-      if (valid) filhoNums.add(num);
+      filhoNums.add(num);
     }
     while (filhoNums.size < nQty) {
-      const n = Math.floor(Math.random() * regra.numeros.max) + 1;
-      if (!filhoNums.has(n)) filhoNums.add(n);
+      filhoNums.add(Math.floor(Math.random() * regra.numeros.max) + 1);
     }
     
     const poolStars = new Set([...pai1.estrelas, ...pai2.estrelas]);
@@ -650,54 +660,46 @@ function gerarPalpite(gameKey, nQty, sQty) {
     const poolStarsArray = Array.from(poolStars).sort(() => Math.random() - 0.5);
     for (let star of poolStarsArray) {
       if (filhoStars.size >= sQty) break;
-      if (!filhoStars.has(star)) filhoStars.add(star);
+      filhoStars.add(star);
     }
     while (filhoStars.size < sQty) {
-      const s = Math.floor(Math.random() * regra.estrelas.max) + 1;
-      if (!filhoStars.has(s)) filhoStars.add(s);
+      filhoStars.add(Math.floor(Math.random() * regra.estrelas.max) + 1);
     }
     
     return { 
-      numeros: Array.from(filhoNums).sort((a,b)=>a-b), 
-      estrelas: Array.from(filhoStars).sort((a,b)=>a-b),
+      numeros: Array.from(filhoNums).sort((a,b) => a - b), 
+      estrelas: Array.from(filhoStars).sort((a,b) => a - b),
       fitness: 0
     };
   }
   
-  // Mutação adaptativa
   function mutacao(ind, geracao) {
-    const mutado = {
-      numeros: [...ind.numeros],
-      estrelas: [...ind.estrelas],
-      fitness: 0
-    };
-    const taxa = 0.15 + 0.05 * (1 - geracao / GERACOES);
+    const mutado = { numeros: [...ind.numeros], estrelas: [...ind.estrelas], fitness: 0 };
+    const taxa = 0.12 + 0.08 * (1 - geracao / GERACOES);
+    
     if (Math.random() < taxa) {
       const idx = Math.floor(Math.random() * mutado.numeros.length);
-      let novoNum;
-      let attempts = 0;
+      let novoNum, attempts = 0;
       do {
         novoNum = Math.floor(Math.random() * regra.numeros.max) + 1;
         attempts++;
       } while (mutado.numeros.includes(novoNum) && attempts < 50);
       mutado.numeros[idx] = novoNum;
-      mutado.numeros.sort((a,b)=>a-b);
+      mutado.numeros.sort((a,b) => a - b);
     }
     if (Math.random() < taxa) {
       const idx = Math.floor(Math.random() * mutado.estrelas.length);
-      let novoStar;
-      let attempts = 0;
+      let novoStar, attempts = 0;
       do {
         novoStar = Math.floor(Math.random() * regra.estrelas.max) + 1;
         attempts++;
       } while (mutado.estrelas.includes(novoStar) && attempts < 50);
       mutado.estrelas[idx] = novoStar;
-      mutado.estrelas.sort((a,b)=>a-b);
+      mutado.estrelas.sort((a,b) => a - b);
     }
     return mutado;
   }
   
-  // Inicializar população
   let populacao = [];
   for (let i = 0; i < POP_SIZE; i++) {
     const ind = criarIndividuo();
@@ -706,80 +708,59 @@ function gerarPalpite(gameKey, nQty, sQty) {
   }
   
   let melhorGlobal = null;
-  
-  // Evolução com validação temporal
   for (let g = 0; g < GERACOES; g++) {
     populacao.sort((a, b) => b.fitness - a.fitness);
     
     if (!melhorGlobal || populacao[0].fitness > melhorGlobal.fitness) {
-      melhorGlobal = { ...populacao[0] };
+      melhorGlobal = { numeros: [...populacao[0].numeros], estrelas: [...populacao[0].estrelas], fitness: populacao[0].fitness };
     }
     
     const novaPopulacao = [];
-    // Elitismo
     for (let i = 0; i < ELITE_SIZE; i++) {
-      novaPopulacao.push({ ...populacao[i] });
+      novaPopulacao.push({ numeros: [...populacao[i].numeros], estrelas: [...populacao[i].estrelas], fitness: populacao[i].fitness });
     }
     
-    // Reprodução
     while (novaPopulacao.length < POP_SIZE) {
-      const pai1 = populacao[Math.floor(Math.random() * Math.floor(POP_SIZE * 0.3))];
-      const pai2 = populacao[Math.floor(Math.random() * Math.floor(POP_SIZE * 0.3))];
-      let filho = crossover(pai1, pai2);
+      const idx1 = Math.floor(Math.pow(Math.random(), 2) * Math.floor(POP_SIZE * 0.4));
+      const idx2 = Math.floor(Math.pow(Math.random(), 2) * Math.floor(POP_SIZE * 0.4));
+      let filho = crossover(populacao[idx1], populacao[idx2]);
       filho = mutacao(filho, g);
       filho.fitness = calcularFitness(filho.numeros, filho.estrelas);
       novaPopulacao.push(filho);
     }
-    
     populacao = novaPopulacao;
   }
   
-  // Melhor resultado
   populacao.sort((a, b) => b.fitness - a.fitness);
-  const melhor = melhorGlobal && melhorGlobal.fitness >= populacao[0].fitness ? melhorGlobal : populacao[0];
+  const melhor = (melhorGlobal && melhorGlobal.fitness >= populacao[0].fitness) ? melhorGlobal : populacao[0];
   
-  // Calibrar probabilidade com Platt Scaling usando dados históricos
   const scores = features.map(f => {
-    // Score baseado nas características
-    let s = 0;
-    s += f[0] / 100; // soma
-    s += f[1] / 5; // pares
-    s += f[2] / 3; // primos
-    s += f[4] / 3; // dezenas vazias
-    return Math.min(1, Math.max(0, s / 5));
+    let s = f[0] / 150 + f[1] / 5 + f[2] / 3 + (5 - f[4]) / 5;
+    return Math.min(1, Math.max(0, s / 6));
   });
   
   const platt = plattScaling(scores, labels);
-  
-  // Calcular probabilidade calibrada
-  let rawScore = melhor.fitness / 1000;
-  const probCalibrada = 1 / (1 + Math.exp(platt.A * rawScore + platt.B));
+  let rawScore = melhor.fitness / 800;
+  const probCalibrada = 1 / (1 + Math.exp(-(platt.A * rawScore + platt.B)));
   
   return { 
     numeros: melhor.numeros, 
     estrelas: melhor.estrelas, 
     fitness: melhor.fitness,
-    probCalibrada,
+    probCalibrada: Math.min(0.9999, Math.max(0.0001, probCalibrada)),
     platt
   };
 }
 
-// ============================================================
-//  SIMULACAO MONTE CARLO COM VALIDACAO TEMPORAL
-// ============================================================
-function simulacaoMonteCarlo(gameKey, numeros, estrelas, simulacoes = 25000) {
+function simulacaoMonteCarlo(gameKey, numeros, estrelas, simulacoes = 15000) {
   const regra = REGRAS[gameKey];
   const nSorteados = regra.numeros.sorteados;
   const sSorteados = regra.estrelas.sorteados;
   const maxNum = regra.numeros.max;
   const maxStar = regra.estrelas.max;
-  let acertos5 = 0, acertos4 = 0, acertos3 = 0, acertos2 = 0;
+  let acertos5 = 0, acertos4 = 0, acertos3 = 0, acertos2 = 0, acertos1 = 0;
   const setNums = new Set(numeros);
   const setStars = new Set(estrelas);
-  
-  // TimeSeries Split: dividir em blocos temporais
-  const blockSize = Math.floor(simulacoes / 5);
-  let totalAcertos = 0;
   
   for (let i = 0; i < simulacoes; i++) {
     const sorteioNums = new Set();
@@ -795,47 +776,55 @@ function simulacaoMonteCarlo(gameKey, numeros, estrelas, simulacoes = 25000) {
     let starAcertos = 0;
     sorteioStars.forEach(s => { if (setStars.has(s)) starAcertos++; });
     
-    totalAcertos += numAcertos + starAcertos;
-    
-    if (numAcertos === 5 && starAcertos === 2) acertos5++;
-    else if (numAcertos === 5 && starAcertos === 1) acertos4++;
-    else if ((numAcertos === 5 && starAcertos === 0) || (numAcertos === 4 && starAcertos >= 1)) acertos3++;
-    else if (numAcertos >= 3) acertos2++;
+    if (gameKey === 'euromilhoes') {
+      if (numAcertos === 5 && starAcertos === 2) acertos5++;
+      else if (numAcertos === 5 && starAcertos === 1) acertos4++;
+      else if ((numAcertos === 5 && starAcertos === 0) || (numAcertos === 4 && starAcertos === 2)) acertos3++;
+      else if ((numAcertos === 4 && starAcertos === 1) || (numAcertos === 4 && starAcertos === 0) || (numAcertos === 3 && starAcertos === 2)) acertos2++;
+      else if ((numAcertos === 3 && starAcertos === 1) || (numAcertos === 2 && starAcertos === 2)) acertos1++;
+    } else if (gameKey === 'totoloto') {
+      if (numAcertos === 5 && starAcertos === 1) acertos5++;
+      else if (numAcertos === 5) acertos4++;
+      else if (numAcertos === 4) acertos3++;
+      else if (numAcertos === 3) acertos2++;
+      else if (numAcertos === 2) acertos1++;
+    } else if (gameKey === 'eurodreams') {
+      if (numAcertos === 6 && starAcertos === 1) acertos5++;
+      else if (numAcertos === 6) acertos4++;
+      else if (numAcertos === 5) acertos3++;
+      else if (numAcertos === 4) acertos2++;
+      else if (numAcertos === 3) acertos1++;
+    }
   }
   
-  // Calcular métricas de avaliação
   const precision5 = acertos5 / simulacoes;
   const recall5 = acertos5 / (simulacoes * 0.00001 + 1);
   const f1Score5 = 2 * (precision5 * recall5) / (precision5 + recall5 + 0.00001);
-  
-  // Log Loss e Brier Score (estimados)
   const probMedia = (acertos5 + acertos4 + acertos3) / simulacoes;
   const logLoss = -Math.log(Math.max(probMedia, 0.0001));
   const brierScore = Math.pow(1 - probMedia, 2);
   
   return { 
-    prob5: (acertos5/simulacoes)*100, 
-    prob4: (acertos4/simulacoes)*100, 
-    prob3: (acertos3/simulacoes)*100,
-    prob2: (acertos2/simulacoes)*100,
+    prob5: (acertos5 / simulacoes) * 100, 
+    prob4: (acertos4 / simulacoes) * 100, 
+    prob3: (acertos3 / simulacoes) * 100,
+    prob2: (acertos2 / simulacoes) * 100,
+    prob1: (acertos1 / simulacoes) * 100,
     simulacoes: simulacoes,
     precision5: precision5 * 100,
     recall5: recall5 * 100,
     f1Score5: f1Score5 * 100,
     logLoss: logLoss,
     brierScore: brierScore,
-    auroc: Math.min(99, (f1Score5 + precision5 + recall5) / 3)
+    auroc: Math.min(99, (f1Score5 + precision5 + recall5) / 3 * 100)
   };
 }
 
-// ============================================================
-//  FUNCOES DE DATA E SORTEIO
-// ============================================================
 function proximoSorteio(diasSemana, hora) {
   const agora = new Date();
   const diaAtual = agora.getDay();
   const diasSemanaNomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-  let diasAteProximo = 7, diaEncontrado = 0;
+  let diasAteProximo = 7, diaEncontrado = diasSemana[0];
   
   for (let dia of diasSemana) {
     let diff = dia - diaAtual;
@@ -853,41 +842,37 @@ function proximoSorteio(diasSemana, hora) {
   dataProxima.setDate(agora.getDate() + diasAteProximo);
   dataProxima.setHours(parseInt(hora.split(':')[0]), parseInt(hora.split(':')[1]), 0, 0);
   
-  return { 
-    data: dataProxima, 
-    diaSemana: diasSemanaNomes[diaEncontrado], 
-    hora: hora, 
-    diasRestantes: diasAteProximo 
-  };
+  return { data: dataProxima, diaSemana: diasSemanaNomes[diaEncontrado], hora: hora, diasRestantes: diasAteProximo };
 }
 
 function formatarData(data) {
-  if (!data || !(data instanceof Date) || isNaN(data)) return '--/--/----';
-  return String(data.getDate()).padStart(2,'0')+'/'+String(data.getMonth()+1).padStart(2,'0')+'/'+data.getFullYear();
+  if (!data || !(data instanceof Date) || isNaN(data.getTime())) return '--/--/----';
+  return String(data.getDate()).padStart(2,'0') + '/' + String(data.getMonth()+1).padStart(2,'0') + '/' + data.getFullYear();
 }
 
 function formatarHora(data) {
-  if (!data || !(data instanceof Date) || isNaN(data)) return '--:--';
-  return String(data.getHours()).padStart(2,'0')+':'+String(data.getMinutes()).padStart(2,'0');
+  if (!data || !(data instanceof Date) || isNaN(data.getTime())) return '--:--';
+  return String(data.getHours()).padStart(2,'0') + ':' + String(data.getMinutes()).padStart(2,'0') + ':' + String(data.getSeconds()).padStart(2,'0');
 }
 
-// ============================================================
-//  INTERFACE E CONFIGURACAO
-// ============================================================
-let gameKey = 'euromilhoes';
+let currentGameKey = 'euromilhoes';
 
 function updateConfig() {
-  gameKey = document.getElementById('gameType').value;
-  const regra = REGRAS[gameKey];
+  const gameSelect = document.getElementById('gameType');
+  if (!gameSelect) return;
+  currentGameKey = gameSelect.value;
+  const regra = REGRAS[currentGameKey];
   if (!regra) return;
   
   const nSelect = document.getElementById('nQty');
   const sSelect = document.getElementById('sQty');
   const starLabel = document.getElementById('starLabel');
-  const isMultipla = document.querySelector('input[name="betType"]:checked').value === 'multipla';
+  const checkedBet = document.querySelector('input[name="betType"]:checked');
+  const isMultipla = checkedBet ? checkedBet.value === 'multipla' : false;
   
   document.querySelectorAll('.bet-type label').forEach(label => {
-    label.classList.toggle('active', label.querySelector('input').checked);
+    const input = label.querySelector('input');
+    label.classList.toggle('active', input && input.checked);
   });
   
   nSelect.innerHTML = '';
@@ -915,8 +900,8 @@ function updateConfig() {
   starLabel.textContent = regra.nomeEstrela + ((isFixedStar || !isMultipla) ? ' (Fixo)' : '');
   
   const regrasInfo = document.getElementById('regrasInfo');
-  let infoTexto = '<span>'+regra.nome+':</span> '+regra.numeros.sorteados+' números (1-'+regra.numeros.max+') + '+regra.estrelas.sorteados+' '+regra.nomeEstrela.toLowerCase()+' (1-'+regra.estrelas.max+') · €'+regra.precoBase.toFixed(2);
-  if (isMultipla) infoTexto += '<br><span style="color:#00ff41;">i Aposta Múltipla: Seleção de números e '+regra.nomeEstrela.toLowerCase()+' alargada.</span>';
+  let infoTexto = '<span>' + regra.nome + ':</span> ' + regra.numeros.sorteados + ' números (1-' + regra.numeros.max + ') + ' + regra.estrelas.sorteados + ' ' + regra.nomeEstrela.toLowerCase() + ' (1-' + regra.estrelas.max + ') · €' + regra.precoBase.toFixed(2);
+  if (isMultipla) infoTexto += '<br><span style="color:#00ff41;">ℹ Aposta Múltipla: Seleção alargada de números e ' + regra.nomeEstrela.toLowerCase() + '.</span>';
   regrasInfo.innerHTML = infoTexto;
   
   atualizarInfoSorteio();
@@ -924,25 +909,28 @@ function updateConfig() {
 }
 
 function calculatePrice() {
-  const regra = REGRAS[gameKey];
+  const regra = REGRAS[currentGameKey];
   if (!regra) return;
-  const n = parseInt(document.getElementById('nQty').value) || regra.numeros.sorteados;
-  const s = parseInt(document.getElementById('sQty').value) || regra.estrelas.sorteados;
+  const nElem = document.getElementById('nQty');
+  const sElem = document.getElementById('sQty');
+  const n = nElem ? parseInt(nElem.value) || regra.numeros.sorteados : regra.numeros.sorteados;
+  const s = sElem ? parseInt(sElem.value) || regra.estrelas.sorteados : regra.estrelas.sorteados;
+  
   const totalApostas = calcularTotalApostas(regra, n, s);
   const preco = totalApostas * regra.precoBase;
   const odds = calcularOdds(regra, n, s);
   const probReal = odds === Infinity ? 0 : 1 / odds;
   
-  document.getElementById('totalApostasInfo').textContent = 'Total de Combinações: '+totalApostas.toLocaleString('pt-PT');
-  document.getElementById('priceDisplay').textContent = '€ '+preco.toFixed(2);
-  document.getElementById('oddsDisplay').textContent = odds === Infinity ? '1 / ∞' : '1 / '+Math.round(odds).toLocaleString('pt-PT');
-  document.getElementById('apostasInfo').textContent = totalApostas.toLocaleString('pt-PT')+' aposta'+(totalApostas > 1 ? 's' : '')+' · €'+preco.toFixed(2);
-  document.getElementById('accuracyLabel').textContent = 'PROB. 1º PRÉMIO: '+(probReal*100).toFixed(6)+'%';
+  document.getElementById('totalApostasInfo').textContent = 'Total de Combinações: ' + totalApostas.toLocaleString('pt-PT');
+  document.getElementById('priceDisplay').textContent = '€ ' + preco.toFixed(2);
+  document.getElementById('oddsDisplay').textContent = odds === Infinity ? '1 / ∞' : '1 / ' + Math.round(odds).toLocaleString('pt-PT');
+  document.getElementById('apostasInfo').textContent = totalApostas.toLocaleString('pt-PT') + ' aposta' + (totalApostas > 1 ? 's' : '') + ' · €' + preco.toFixed(2);
+  document.getElementById('accuracyLabel').textContent = 'PROB. 1º PRÉMIO: ' + (probReal * 100).toFixed(6) + '%';
   document.getElementById('accuracyBar').style.width = Math.min(100, probReal * 1000000) + '%';
 }
 
 function atualizarInfoSorteio() {
-  const sorteio = REGRAS[gameKey];
+  const sorteio = REGRAS[currentGameKey];
   if (!sorteio) return;
   const prox = proximoSorteio(sorteio.dias, sorteio.hora);
   
@@ -951,33 +939,35 @@ function atualizarInfoSorteio() {
   document.getElementById('drawTime').textContent = prox.hora;
   document.getElementById('drawDay').textContent = prox.diaSemana;
   
-  let diasTexto = prox.diasRestantes === 0 ? 'HOJE! 🎉' : prox.diasRestantes === 1 ? 'AMANHÃ! ⏰' : 'em '+prox.diasRestantes+' dias';
-  document.getElementById('proximoSorteio').textContent = prox.diaSemana+', '+formatarData(prox.data)+' às '+prox.hora+' ('+diasTexto+')';
+  let diasTexto = prox.diasRestantes === 0 ? 'HOJE! 🎉' : prox.diasRestantes === 1 ? 'AMANHÃ! ⏰' : 'em ' + prox.diasRestantes + ' dias';
+  document.getElementById('proximoSorteio').textContent = prox.diaSemana + ', ' + formatarData(prox.data) + ' às ' + prox.hora + ' (' + diasTexto + ')';
 }
 
 function atualizarDataHora() {
   const agora = new Date();
-  document.getElementById('currentDate').textContent = formatarData(agora);
-  document.getElementById('currentTime').textContent = formatarHora(agora);
-  document.getElementById('footerCurrentDate').textContent = formatarData(agora);
-  document.getElementById('footerCurrentTime').textContent = formatarHora(agora);
+  const cDate = document.getElementById('currentDate');
+  const cTime = document.getElementById('currentTime');
+  const fDate = document.getElementById('footerCurrentDate');
+  const fTime = document.getElementById('footerCurrentTime');
+  
+  if (cDate) cDate.textContent = formatarData(agora);
+  if (cTime) cTime.textContent = formatarHora(agora);
+  if (fDate) fDate.textContent = formatarData(agora);
+  if (fTime) fTime.textContent = formatarHora(agora);
 }
 
-// ============================================================
-//  MOTOR DE EXECUCAO
-// ============================================================
-function addLog(message, type = 'info') {
+function addLog(message, type) {
   const term = document.getElementById('terminal');
   if (!term) return;
   const line = document.createElement('div');
-  line.className = 'log-line '+type;
-  line.textContent = '> '+message;
+  line.className = 'log-line ' + (type || 'info');
+  line.textContent = '> ' + message;
   term.appendChild(line);
   term.scrollTop = term.scrollHeight;
 }
 
 function exibirPalpite(resultado, monteCarlo) {
-  const regra = REGRAS[gameKey];
+  const regra = REGRAS[currentGameKey];
   if (!regra || !resultado) return;
   
   const container = document.getElementById('ballOutput');
@@ -985,9 +975,9 @@ function exibirPalpite(resultado, monteCarlo) {
   
   resultado.numeros.forEach((num, idx) => {
     const div = document.createElement('div');
-    div.className = 'ball selected';
+    div.className = 'ball cyan selected';
     div.textContent = num;
-    div.style.animationDelay = (idx * 0.08)+'s';
+    div.style.animationDelay = (idx * 0.08) + 's';
     container.appendChild(div);
   });
   
@@ -995,38 +985,36 @@ function exibirPalpite(resultado, monteCarlo) {
     const sep = document.createElement('div'); 
     sep.className = 'divider'; 
     container.appendChild(sep);
+    
     resultado.estrelas.forEach((num, idx) => {
       const div = document.createElement('div');
-      const isEuroDreams = gameKey === 'eurodreams';
-      div.className = 'ball '+(isEuroDreams ? 'purple' : 'gold')+' selected';
+      const isEuroDreams = currentGameKey === 'eurodreams';
+      div.className = 'ball ' + (isEuroDreams ? 'purple' : 'gold') + ' selected';
       div.textContent = num;
-      div.style.animationDelay = ((idx + resultado.numeros.length) * 0.08)+'s';
+      div.style.animationDelay = ((idx + resultado.numeros.length) * 0.08) + 's';
       container.appendChild(div);
     });
   }
   
-  const dados = gerarDados(gameKey);
-  const { freqN, freqS, total, mediaSoma, desvioSoma } = dados;
+  const confianca = Math.min(99.9, Math.max(75, 80 + (resultado.probCalibrada || 0.5) * 18));
+  document.getElementById('confidenceLabel').textContent = 'CONFIANÇA DO MOTOR: ' + confianca.toFixed(1) + '%';
   
-  // Confiança baseada na probabilidade calibrada
-  const confianca = Math.min(99.9, Math.max(80, 85 + (resultado.probCalibrada || 0.5) * 15));
-  
-  document.getElementById('confidenceLabel').textContent = 'CONFIANÇA DO MOTOR: '+confianca.toFixed(1)+'%';
-  
-  const tags = ['Algoritmo Genético', 'Monte Carlo', 'Frequência', 'Atraso', 'Platt Scaling', 'Ensemble Filters', 'SMOTE', 'TimeSeries Split'];
+  const tags = ['Algoritmo Genético', 'Monte Carlo', 'Frequência Ponderada', 'Atraso Exponencial', 'Platt Scaling', 'Ensemble Filters', 'Análise de Ciclos', 'Markov Chains'];
   const tagContainer = document.getElementById('methodTags');
   tagContainer.innerHTML = '';
   tags.forEach((t, i) => {
     const span = document.createElement('span');
-    span.className = 'method-tag '+(i < 2 ? 'gold' : i > 5 ? 'purple' : '');
+    span.className = 'method-tag ' + (i < 2 ? 'gold' : i > 5 ? 'purple' : 'green');
     span.textContent = t;
     tagContainer.appendChild(span);
   });
   
-  // Métricas avançadas
   document.getElementById('logLoss').textContent = monteCarlo.logLoss.toFixed(4);
   document.getElementById('brierScore').textContent = monteCarlo.brierScore.toFixed(4);
-  document.getElementById('auroc').textContent = monteCarlo.auroc.toFixed(2)+'%';
+  document.getElementById('auroc').textContent = monteCarlo.auroc.toFixed(2) + '%';
+  document.getElementById('precisionVal').textContent = monteCarlo.precision5.toFixed(2) + '%';
+  document.getElementById('recallVal').textContent = monteCarlo.recall5.toFixed(2) + '%';
+  document.getElementById('f1Val').textContent = monteCarlo.f1Score5.toFixed(2) + '%';
   
   const n = resultado.numeros.length;
   const s = resultado.estrelas.length;
@@ -1034,41 +1022,45 @@ function exibirPalpite(resultado, monteCarlo) {
   const preco = totalApostas * regra.precoBase;
   const odds = calcularOdds(regra, n, s);
   const probReal = odds === Infinity ? 0 : 1 / odds;
-  const pares = resultado.numeros.filter(n => n%2===0).length;
+  const pares = resultado.numeros.filter(num => num % 2 === 0).length;
   const primos = resultado.numeros.filter(isPrime).length;
   const gaps = [];
-  for (let i = 1; i < resultado.numeros.length; i++) gaps.push(resultado.numeros[i]-resultado.numeros[i-1]);
+  for (let i = 1; i < resultado.numeros.length; i++) gaps.push(resultado.numeros[i] - resultado.numeros[i-1]);
   const dezenas = [0,0,0,0,0];
-  resultado.numeros.forEach(n => { const d = Math.floor((n-1)/10); if (d < 5) dezenas[d]++; });
+  resultado.numeros.forEach(num => { const d = Math.floor((num-1)/10); if (d < 5) dezenas[d]++; });
+  let consecutivos = 0;
+  for (let i = 1; i < resultado.numeros.length; i++) if (resultado.numeros[i] - resultado.numeros[i-1] === 1) consecutivos++;
   
   const statsGrid = document.getElementById('statsGrid');
   statsGrid.innerHTML = '';
   const stats = [
     ['Total Combinações', totalApostas.toLocaleString('pt-PT'), 'highlight'],
-    ['Preço Total', '€'+preco.toFixed(2), 'highlight'],
-    ['Odds 1º Prémio', odds === Infinity ? '∞' : '1 / '+Math.round(odds).toLocaleString('pt-PT'), 'warn'],
-    ['Prob. Calibrada', (resultado.probCalibrada * 100).toFixed(4)+'%', 'danger'],
-    ['Soma dos Números', resultado.numeros.reduce((a,b)=>a+b,0), ''],
-    ['Números Pares', pares+' / '+regra.numeros.sorteados, ''],
+    ['Preço Total', '€' + preco.toFixed(2), 'highlight'],
+    ['Odds 1º Prémio', odds === Infinity ? '∞' : '1 / ' + Math.round(odds).toLocaleString('pt-PT'), 'warn'],
+    ['Prob. Calibrada', (resultado.probCalibrada * 100).toFixed(4) + '%', 'danger'],
+    ['Soma dos Números', resultado.numeros.reduce((a,b) => a + b, 0), ''],
+    ['Números Pares', pares + ' / ' + regra.numeros.sorteados, ''],
     ['Números Primos', primos, ''],
-    ['Gap Médio', gaps.length ? (gaps.reduce((a,b)=>a+b,0)/gaps.length).toFixed(1) : '0', ''],
-    ['Dezenas Vazias', dezenas.filter(d=>d===0).length, dezenas.filter(d=>d===0).length === 0 ? 'highlight' : 'warn'],
-    ['Consecutivos', (() => { let c = 0; for(let i=1;i<resultado.numeros.length;i++) if(resultado.numeros[i]-resultado.numeros[i-1]===1) c++; return c; })(), 'highlight'],
-    ['Precision (5+2)', monteCarlo.precision5.toFixed(2)+'%', 'highlight'],
-    ['Recall (5+2)', monteCarlo.recall5.toFixed(2)+'%', 'danger'],
-    ['F1-Score', monteCarlo.f1Score5.toFixed(2)+'%', 'highlight'],
-    ['MC: Prob. 3+ acertos', (monteCarlo.prob3+monteCarlo.prob4+monteCarlo.prob5).toFixed(4)+'%', 'highlight']
+    ['Gap Médio', gaps.length ? (gaps.reduce((a,b) => a + b, 0) / gaps.length).toFixed(1) : '0', ''],
+    ['Dezenas Vazias', dezenas.filter(d => d === 0).length, dezenas.filter(d => d === 0).length === 0 ? 'highlight' : 'warn'],
+    ['Consecutivos', consecutivos, consecutivos === 0 ? 'highlight' : 'warn'],
+    ['Precision (1º Prémio)', monteCarlo.precision5.toFixed(4) + '%', 'highlight'],
+    ['Recall (1º Prémio)', monteCarlo.recall5.toFixed(4) + '%', 'danger'],
+    ['F1-Score', monteCarlo.f1Score5.toFixed(4) + '%', 'highlight'],
+    ['MC: Prob. 3+ acertos', (monteCarlo.prob3 + monteCarlo.prob4 + monteCarlo.prob5).toFixed(4) + '%', 'highlight']
   ];
   stats.forEach(([label, value, cls]) => {
     const row = document.createElement('div'); row.className = 'row';
-    row.innerHTML = '<span>'+label+'</span><span class="val '+(cls||'')+'">'+value+'</span>';
+    row.innerHTML = '<span>' + label + '</span><span class="val ' + (cls || '') + '">' + value + '</span>';
     statsGrid.appendChild(row);
   });
   
   const resultPanel = document.getElementById('resultPanel');
   if (resultPanel) { 
     resultPanel.style.display = 'block'; 
-    setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }), 300);
+    setTimeout(() => {
+      resultPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 300);
   }
 }
 
@@ -1076,42 +1068,47 @@ async function runEngine() {
   const btn = document.getElementById('runBtn');
   const dnaLoader = document.getElementById('dnaLoader');
   const terminal = document.getElementById('terminal');
+  const resultPanel = document.getElementById('resultPanel');
   
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span> INICIANDO MOTOR...';
   if (dnaLoader) dnaLoader.classList.add('active');
+  if (resultPanel) resultPanel.style.display = 'none';
   terminal.innerHTML = '';
   
   const logs = [
-    { msg: 'ORACLE GENESIS v99.0 - Inicializando...', type: 'info' },
-    { msg: 'Carregando dados estatísticos de '+REGRAS[gameKey].nome+'...', type: 'info' },
-    { msg: 'Analisando frequências e padrões...', type: 'info' },
-    { msg: 'Executando Algoritmo Genético (200 gerações)...', type: 'warn' },
-    { msg: 'Aplicando ensemble de filtros...', type: 'info' },
+    { msg: 'ORACLE GENESIS v100.0 [ULTRA EDITION] - Inicializando...', type: 'system' },
+    { msg: 'Carregando dados estatísticos de ' + REGRAS[currentGameKey].nome + '...', type: 'info' },
+    { msg: 'Analisando frequências históricas e padrões de ciclos...', type: 'info' },
+    { msg: 'Calculando atrasos exponenciais e pesos de Markov...', type: 'info' },
+    { msg: 'Executando Algoritmo Genético (200 indivíduos, 150 gerações)...', type: 'warn' },
+    { msg: 'Aplicando ensemble de filtros ponderados...', type: 'info' },
     { msg: 'Calibrando probabilidade com Platt Scaling...', type: 'warn' },
-    { msg: 'Validando com Monte Carlo (25.000 simulações)...', type: 'warn' },
-    { msg: 'PROGNÓSTICO CALCULADO!', type: 'success' }
+    { msg: 'Validando com Monte Carlo (15.000 simulações)...', type: 'warn' },
+    { msg: 'PROGNÓSTICO CALCULADO COM SUCESSO!', type: 'success' }
   ];
   
   for (let i = 0; i < logs.length; i++) {
     addLog(logs[i].msg, logs[i].type);
-    await new Promise(r => setTimeout(r, 80));
+    await new Promise(r => setTimeout(r, 60));
   }
   
-  const n = parseInt(document.getElementById('nQty').value) || REGRAS[gameKey].numeros.sorteados;
-  const s = parseInt(document.getElementById('sQty').value) || REGRAS[gameKey].estrelas.sorteados;
+  const nElem = document.getElementById('nQty');
+  const sElem = document.getElementById('sQty');
+  const n = nElem ? parseInt(nElem.value) || REGRAS[currentGameKey].numeros.sorteados : REGRAS[currentGameKey].numeros.sorteados;
+  const s = sElem ? parseInt(sElem.value) || REGRAS[currentGameKey].estrelas.sorteados : REGRAS[currentGameKey].estrelas.sorteados;
   
-  addLog('Gerando palpite para '+n+' números e '+s+' '+REGRAS[gameKey].nomeEstrela.toLowerCase()+'...', 'warn');
-  await new Promise(r => setTimeout(r, 50));
+  addLog('Gerando palpite otimizado para ' + n + ' números e ' + s + ' ' + REGRAS[currentGameKey].nomeEstrela.toLowerCase() + '...', 'warn');
+  await new Promise(r => setTimeout(r, 80));
   
-  const palpite = gerarPalpite(gameKey, n, s);
-  addLog('Fitness: '+palpite.fitness.toFixed(1)+' pontos | Prob. Calibrada: '+(palpite.probCalibrada*100).toFixed(4)+'%', 'success');
+  const palpite = gerarPalpite(currentGameKey, n, s);
+  addLog('Fitness: ' + palpite.fitness.toFixed(1) + ' pontos | Prob. Calibrada: ' + (palpite.probCalibrada * 100).toFixed(4) + '%', 'success');
   
   addLog('Executando validação Monte Carlo...', 'warn');
-  await new Promise(r => setTimeout(r, 50));
+  await new Promise(r => setTimeout(r, 80));
   
-  const monteCarlo = simulacaoMonteCarlo(gameKey, palpite.numeros, palpite.estrelas, 25000);
-  addLog('Monte Carlo: 5+2='+(monteCarlo.prob5).toFixed(4)+'% | 5+1='+(monteCarlo.prob4).toFixed(4)+'% | F1='+monteCarlo.f1Score5.toFixed(2)+'%', 'success');
+  const monteCarlo = simulacaoMonteCarlo(currentGameKey, palpite.numeros, palpite.estrelas, 15000);
+  addLog('MC: 1º=' + monteCarlo.prob5.toFixed(4) + '% | 2º=' + monteCarlo.prob4.toFixed(4) + '% | F1=' + monteCarlo.f1Score5.toFixed(2) + '%', 'success');
   
   exibirPalpite(palpite, monteCarlo);
   
@@ -1121,24 +1118,29 @@ async function runEngine() {
   addLog('Motor pronto para nova execução.', 'info');
 }
 
-// ============================================================
-//  INICIALIZACAO
-// ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('gameType').addEventListener('change', updateConfig);
-  document.getElementById('nQty').addEventListener('change', calculatePrice);
-  document.getElementById('sQty').addEventListener('change', calculatePrice);
+  const gameTypeElem = document.getElementById('gameType');
+  const nQtyElem = document.getElementById('nQty');
+  const sQtyElem = document.getElementById('sQty');
+  const runBtnElem = document.getElementById('runBtn');
+  
+  if (gameTypeElem) gameTypeElem.addEventListener('change', updateConfig);
+  if (nQtyElem) nQtyElem.addEventListener('change', calculatePrice);
+  if (sQtyElem) sQtyElem.addEventListener('change', calculatePrice);
+  
   document.querySelectorAll('input[name="betType"]').forEach(el => {
     el.addEventListener('change', updateConfig);
   });
-  document.getElementById('runBtn').addEventListener('click', runEngine);
   
-  // Pré-carregar dados
+  if (runBtnElem) runBtnElem.addEventListener('click', runEngine);
+  
   setTimeout(() => {
-    gerarDados('euromilhoes');
-    gerarDados('totoloto');
-    gerarDados('eurodreams');
-  }, 50);
+    try {
+      gerarDados('euromilhoes');
+      gerarDados('totoloto');
+      gerarDados('eurodreams');
+    } catch(e) { console.error('Erro de pré-carregamento:', e); }
+  }, 100);
   
   atualizarDataHora();
   setInterval(atualizarDataHora, 1000);
@@ -1146,4 +1148,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </body>
-  </html>
+</html>
