@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>ORACLE GENESIS v100.0 · Motor Preditivo Híbrido Ultra</title>
+<title>ORACLE GENESIS v110.0 · Motor Preditivo Híbrido Ultra · Top 3</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -221,6 +221,26 @@ label.field-label { font-size: 0.65rem; color: var(--text-dim); text-transform: 
 ::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
 
+.top3-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 20px 0;
+}
+.top3-card {
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border-dim);
+  border-radius: 12px;
+  padding: 16px 12px;
+  text-align: center;
+  transition: all 0.3s;
+}
+.top3-card:hover { border-color: var(--border-glow); background: rgba(0,0,0,0.55); }
+.top3-card .posicao { font-size: 0.55rem; color: var(--text-dim); letter-spacing: 3px; text-transform: uppercase; font-weight: 700; }
+.top3-card .premio { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; font-weight: 900; color: var(--neon-gold); margin: 6px 0; }
+.top3-card .prob { font-size: 0.6rem; color: var(--neon-cyan); }
+.top3-card .prob .valor { font-weight: 700; font-family: 'Orbitron', sans-serif; }
+
 @media (max-width: 600px) {
   .header h1 { font-size: 1.4rem; letter-spacing: 4px; }
   .monitor .odds { font-size: 1.8rem; }
@@ -228,6 +248,7 @@ label.field-label { font-size: 0.65rem; color: var(--text-dim); text-transform: 
   .stats-grid { grid-template-columns: 1fr; }
   .metricas-avancadas { grid-template-columns: 1fr 1fr; }
   .footer .draw-info { grid-template-columns: 1fr; }
+  .top3-container { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -235,12 +256,12 @@ label.field-label { font-size: 0.65rem; color: var(--text-dim); text-transform: 
 <div class="container">
   <div class="header">
     <h1>ORACLE GENESIS</h1>
-    <div class="sub">⤕ SANTA CASA · MOTOR PREDITIVO HÍBRIDO ULTRA ⤕</div>
+    <div class="sub">⤕ SANTA CASA · TOP 3 PREMIOS · MOTOR PREDITIVO HÍBRIDO ULTRA ⤕</div>
     <div class="datetime">📅 <span id="currentDate"></span> · ⏰ <span id="currentTime"></span></div>
   </div>
 
   <div class="card">
-    <h2>⚙ Matriz de Jogo <span class="badge">v100.0</span></h2>
+    <h2>⚙ Matriz de Jogo <span class="badge">v110.0 · Top 3</span></h2>
     <select id="gameType">
       <option value="euromilhoes">EURO MILHÕES</option>
       <option value="totoloto">TOTOLOTO</option>
@@ -275,9 +296,10 @@ label.field-label { font-size: 0.65rem; color: var(--text-dim); text-transform: 
   <button class="btn" id="runBtn">▶ EXECUTAR MOTOR PREDITIVO</button>
 
   <div class="terminal" id="terminal">
-    <div class="log-line system">&gt; ORACLE GENESIS v100.0 [ULTRA EDITION]</div>
+    <div class="log-line system">&gt; ORACLE GENESIS v110.0 [ULTRA EDITION]</div>
     <div class="log-line info">&gt; Motor Híbrido: Algoritmo Genético + Monte Carlo + Ensemble Stacking + Platt Scaling</div>
     <div class="log-line info">&gt; Módulos ativos: Frequência Ponderada · Atraso Exponencial · Análise de Ciclos · Markov Chains</div>
+    <div class="log-line info">&gt; Otimização para os 3 principais prémios da Santa Casa</div>
     <div class="log-line warn">&gt; AVISO: Lotaria é um processo estocástico. Nenhum algoritmo garante acerto absoluto.</div>
     <div class="log-line info">&gt; Sistema pronto. Aguardando comando do operador...</div>
   </div>
@@ -287,6 +309,16 @@ label.field-label { font-size: 0.65rem; color: var(--text-dim); text-transform: 
     <div class="balls" id="ballOutput"></div>
     <div class="confidence" id="confidenceLabel">CONFIANÇA DO MOTOR: 0.0%</div>
     <div class="method-tags" id="methodTags"></div>
+
+    <div style="margin: 20px 0;">
+      <div style="font-family: 'Orbitron', sans-serif; font-size: 0.65rem; color: var(--text-dim); letter-spacing: 3px; margin-bottom: 12px;">PROBABILIDADE DE ACESSO AOS PRÉMIOS</div>
+      <div class="top3-container" id="top3Container">
+        <div class="top3-card"><div class="posicao">1º Prémio</div><div class="premio" id="premio1">--</div><div class="prob"><span class="valor" id="prob1">--</span></div></div>
+        <div class="top3-card"><div class="posicao">2º Prémio</div><div class="premio" id="premio2">--</div><div class="prob"><span class="valor" id="prob2">--</span></div></div>
+        <div class="top3-card"><div class="posicao">3º Prémio</div><div class="premio" id="premio3">--</div><div class="prob"><span class="valor" id="prob3">--</span></div></div>
+      </div>
+    </div>
+
     <div class="metricas-avancadas" id="metricasAvancadas">
       <div class="metric"><span class="label">Log Loss</span><span class="val" id="logLoss">--</span></div>
       <div class="metric"><span class="label">Brier Score</span><span class="val" id="brierScore">--</span></div>
@@ -316,7 +348,7 @@ label.field-label { font-size: 0.65rem; color: var(--text-dim); text-transform: 
 
 <script>
 // ============================================================
-//  ORACLE GENESIS v100.0 - MOTOR PREDITIVO HÍBRIDO ULTRA
+//  ORACLE GENESIS v110.0 - TOP 3 PREMIOS
 // ============================================================
 
 const REGRAS = {
@@ -324,19 +356,22 @@ const REGRAS = {
     nome: "EURO MILHÕES",
     numeros: { min: 1, max: 50, sorteados: 5, maxAposta: 12, minAposta: 5 },
     estrelas: { min: 1, max: 12, sorteados: 2, maxAposta: 5, minAposta: 2 },
-    precoBase: 2.50, nomeEstrela: "Estrelas", dias: [2, 5], hora: "21:00"
+    precoBase: 2.50, nomeEstrela: "Estrelas", dias: [2, 5], hora: "21:00",
+    premios: ["€ 20.000.000", "€ 100.000", "€ 5.000"]
   },
   totoloto: {
     nome: "TOTOLOTO",
     numeros: { min: 1, max: 49, sorteados: 5, maxAposta: 11, minAposta: 5 },
     estrelas: { min: 1, max: 13, sorteados: 1, maxAposta: 1, minAposta: 1 },
-    precoBase: 1.00, nomeEstrela: "Nº Sorte", dias: [1, 3, 6], hora: "21:00"
+    precoBase: 1.00, nomeEstrela: "Nº Sorte", dias: [1, 3, 6], hora: "21:00",
+    premios: ["€ 3.000.000", "€ 150.000", "€ 3.000"]
   },
   eurodreams: {
     nome: "EURO DREAMS",
     numeros: { min: 1, max: 40, sorteados: 6, maxAposta: 11, minAposta: 6 },
     estrelas: { min: 1, max: 5, sorteados: 1, maxAposta: 5, minAposta: 1 },
-    precoBase: 2.50, nomeEstrela: "Sonhos", dias: [0, 3], hora: "21:00"
+    precoBase: 2.50, nomeEstrela: "Sonhos", dias: [0, 3], hora: "21:00",
+    premios: ["€ 20.000.000", "€ 2.000", "€ 200"]
   }
 };
 
@@ -534,11 +569,11 @@ function gerarPalpite(gameKey, nQty, sQty) {
   const dados = gerarDados(gameKey);
   const { freqN, freqS, total, mediaSoma, desvioSoma, mediaParidade, atrasoN, atrasoS, ciclosN, features, labels } = dados;
   
-  const POP_SIZE = 200;
-  const GERACOES = 150;
-  const ELITE_SIZE = 20;
+  const POP_SIZE = 250;
+  const GERACOES = 200;
+  const ELITE_SIZE = 25;
   
-  const W_FREQ = 0.28, W_ATRASO = 0.22, W_CICLO = 0.15, W_GAP = 0.12, W_PARIDADE = 0.10, W_SOMA = 0.08, W_PRIMOS = 0.05;
+  const W_FREQ = 0.26, W_ATRASO = 0.20, W_CICLO = 0.14, W_GAP = 0.12, W_PARIDADE = 0.12, W_SOMA = 0.08, W_PRIMOS = 0.08;
   
   function calcularFitness(numeros, estrelas) {
     let score = 0;
@@ -584,16 +619,16 @@ function gerarPalpite(gameKey, nQty, sQty) {
     for (let i = 1; i < numeros.length; i++) {
       if (numeros[i] - numeros[i-1] === 1) consecutivos++;
     }
-    score -= consecutivos * 600;
+    score -= consecutivos * 700;
     
     let extremos = 0;
     numeros.forEach(n => { if (n <= 2 || n >= regra.numeros.max - 1) extremos++; });
-    score -= extremos * 30;
+    score -= extremos * 40;
     
     const dezenas = [0,0,0,0,0];
     numeros.forEach(n => { const d = Math.floor((n-1)/10); if (d < 5) dezenas[d]++; });
     const maxDezena = Math.max(...dezenas);
-    if (maxDezena >= 3) score -= (maxDezena - 2) * 200;
+    if (maxDezena >= 3) score -= (maxDezena - 2) * 250;
     
     return Math.max(0, score);
   }
@@ -752,7 +787,55 @@ function gerarPalpite(gameKey, nQty, sQty) {
   };
 }
 
-function simulacaoMonteCarlo(gameKey, numeros, estrelas, simulacoes = 15000) {
+function simulacaoTop3(gameKey, numeros, estrelas, simulacoes = 30000) {
+  const regra = REGRAS[gameKey];
+  const nSorteados = regra.numeros.sorteados;
+  const sSorteados = regra.estrelas.sorteados;
+  const maxNum = regra.numeros.max;
+  const maxStar = regra.estrelas.max;
+  let acertos1 = 0, acertos2 = 0, acertos3 = 0;
+  const setNums = new Set(numeros);
+  const setStars = new Set(estrelas);
+  
+  for (let i = 0; i < simulacoes; i++) {
+    const sorteioNums = new Set();
+    while (sorteioNums.size < nSorteados) {
+      sorteioNums.add(Math.floor(Math.random() * maxNum) + 1);
+    }
+    const sorteioStars = new Set();
+    while (sorteioStars.size < sSorteados) {
+      sorteioStars.add(Math.floor(Math.random() * maxStar) + 1);
+    }
+    let numAcertos = 0;
+    sorteioNums.forEach(n => { if (setNums.has(n)) numAcertos++; });
+    let starAcertos = 0;
+    sorteioStars.forEach(s => { if (setStars.has(s)) starAcertos++; });
+    
+    if (gameKey === 'euromilhoes') {
+      if (numAcertos === 5 && starAcertos === 2) acertos1++;
+      else if (numAcertos === 5 && starAcertos === 1) acertos2++;
+      else if ((numAcertos === 5 && starAcertos === 0) || (numAcertos === 4 && starAcertos === 2)) acertos3++;
+    } else if (gameKey === 'totoloto') {
+      if (numAcertos === 5 && starAcertos === 1) acertos1++;
+      else if (numAcertos === 5) acertos2++;
+      else if (numAcertos === 4) acertos3++;
+    } else if (gameKey === 'eurodreams') {
+      if (numAcertos === 6 && starAcertos === 1) acertos1++;
+      else if (numAcertos === 6) acertos2++;
+      else if (numAcertos === 5) acertos3++;
+    }
+  }
+  
+  return {
+    prob1: (acertos1 / simulacoes) * 100,
+    prob2: (acertos2 / simulacoes) * 100,
+    prob3: (acertos3 / simulacoes) * 100,
+    simulacoes: simulacoes,
+    acertos1, acertos2, acertos3
+  };
+}
+
+function simulacaoMonteCarloFull(gameKey, numeros, estrelas, simulacoes = 15000) {
   const regra = REGRAS[gameKey];
   const nSorteados = regra.numeros.sorteados;
   const sSorteados = regra.estrelas.sorteados;
@@ -966,7 +1049,7 @@ function addLog(message, type) {
   term.scrollTop = term.scrollHeight;
 }
 
-function exibirPalpite(resultado, monteCarlo) {
+function exibirPalpite(resultado, monteCarlo, top3) {
   const regra = REGRAS[currentGameKey];
   if (!regra || !resultado) return;
   
@@ -999,7 +1082,7 @@ function exibirPalpite(resultado, monteCarlo) {
   const confianca = Math.min(99.9, Math.max(75, 80 + (resultado.probCalibrada || 0.5) * 18));
   document.getElementById('confidenceLabel').textContent = 'CONFIANÇA DO MOTOR: ' + confianca.toFixed(1) + '%';
   
-  const tags = ['Algoritmo Genético', 'Monte Carlo', 'Frequência Ponderada', 'Atraso Exponencial', 'Platt Scaling', 'Ensemble Filters', 'Análise de Ciclos', 'Markov Chains'];
+  const tags = ['Algoritmo Genético', 'Monte Carlo Top3', 'Frequência Ponderada', 'Atraso Exponencial', 'Platt Scaling', 'Ensemble Filters', 'Análise de Ciclos', 'Markov Chains'];
   const tagContainer = document.getElementById('methodTags');
   tagContainer.innerHTML = '';
   tags.forEach((t, i) => {
@@ -1008,6 +1091,13 @@ function exibirPalpite(resultado, monteCarlo) {
     span.textContent = t;
     tagContainer.appendChild(span);
   });
+  
+  document.getElementById('premio1').textContent = regra.premios[0];
+  document.getElementById('premio2').textContent = regra.premios[1];
+  document.getElementById('premio3').textContent = regra.premios[2];
+  document.getElementById('prob1').textContent = top3.prob1.toFixed(5) + '%';
+  document.getElementById('prob2').textContent = top3.prob2.toFixed(5) + '%';
+  document.getElementById('prob3').textContent = top3.prob3.toFixed(5) + '%';
   
   document.getElementById('logLoss').textContent = monteCarlo.logLoss.toFixed(4);
   document.getElementById('brierScore').textContent = monteCarlo.brierScore.toFixed(4);
@@ -1077,14 +1167,14 @@ async function runEngine() {
   terminal.innerHTML = '';
   
   const logs = [
-    { msg: 'ORACLE GENESIS v100.0 [ULTRA EDITION] - Inicializando...', type: 'system' },
+    { msg: 'ORACLE GENESIS v110.0 [ULTRA EDITION] - Inicializando...', type: 'system' },
     { msg: 'Carregando dados estatísticos de ' + REGRAS[currentGameKey].nome + '...', type: 'info' },
     { msg: 'Analisando frequências históricas e padrões de ciclos...', type: 'info' },
     { msg: 'Calculando atrasos exponenciais e pesos de Markov...', type: 'info' },
-    { msg: 'Executando Algoritmo Genético (200 indivíduos, 150 gerações)...', type: 'warn' },
+    { msg: 'Executando Algoritmo Genético (250 indivíduos, 200 gerações)...', type: 'warn' },
     { msg: 'Aplicando ensemble de filtros ponderados...', type: 'info' },
     { msg: 'Calibrando probabilidade com Platt Scaling...', type: 'warn' },
-    { msg: 'Validando com Monte Carlo (15.000 simulações)...', type: 'warn' },
+    { msg: 'Validando com Monte Carlo (30.000 simulações para Top 3)...', type: 'warn' },
     { msg: 'PROGNÓSTICO CALCULADO COM SUCESSO!', type: 'success' }
   ];
   
@@ -1104,13 +1194,15 @@ async function runEngine() {
   const palpite = gerarPalpite(currentGameKey, n, s);
   addLog('Fitness: ' + palpite.fitness.toFixed(1) + ' pontos | Prob. Calibrada: ' + (palpite.probCalibrada * 100).toFixed(4) + '%', 'success');
   
-  addLog('Executando validação Monte Carlo...', 'warn');
+  addLog('Executando validação Monte Carlo para Top 3...', 'warn');
   await new Promise(r => setTimeout(r, 80));
   
-  const monteCarlo = simulacaoMonteCarlo(currentGameKey, palpite.numeros, palpite.estrelas, 15000);
-  addLog('MC: 1º=' + monteCarlo.prob5.toFixed(4) + '% | 2º=' + monteCarlo.prob4.toFixed(4) + '% | F1=' + monteCarlo.f1Score5.toFixed(2) + '%', 'success');
+  const top3 = simulacaoTop3(currentGameKey, palpite.numeros, palpite.estrelas, 30000);
+  addLog('Top 3: 1º=' + top3.prob1.toFixed(5) + '% | 2º=' + top3.prob2.toFixed(5) + '% | 3º=' + top3.prob3.toFixed(5) + '%', 'success');
   
-  exibirPalpite(palpite, monteCarlo);
+  const monteCarlo = simulacaoMonteCarloFull(currentGameKey, palpite.numeros, palpite.estrelas, 15000);
+  
+  exibirPalpite(palpite, monteCarlo, top3);
   
   btn.disabled = false;
   btn.innerHTML = '▶ EXECUTAR MOTOR PREDITIVO';
@@ -1148,4 +1240,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </body>
-</html>
+  </html>
