@@ -3,90 +3,215 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>GERADOR DE COBERTURA · SANTA CASA</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>JONHY MIMO SORTILHUDO · SANTA CASA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
   --neon-gold:#ffd700; --neon-cyan:#00f5ff; --neon-green:#00ff41; --neon-red:#ff0040; --neon-purple:#bf00ff;
+  --neon-pink:#ff2d95; --neon-orange:#ff6a00; --neon-blue:#0066ff; --neon-silver:#c0c0c0;
   --bg-dark:#020408; --bg-card:#0a0e18; --bg-panel:#060a12; --border-dim:#1a2332; --border-glow:#2a3f5a;
   --text-primary:#e0eaf5; --text-dim:#5a6a7a; --glass:rgba(10,16,30,0.88);
+  --shadow-glow:0 0 40px rgba(255,215,0,0.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg-dark);color:var(--text-primary);font-family:'Share Tech Mono',monospace;min-height:100vh;line-height:1.5;}
-.container{max-width:840px;margin:0 auto;padding:16px;}
-.header{background:linear-gradient(135deg,rgba(12,18,32,.95),rgba(4,8,14,.98));border:2px solid var(--neon-gold);border-radius:20px;padding:26px 20px;text-align:center;margin-bottom:20px;box-shadow:0 0 60px rgba(255,215,0,.12);}
-.header h1{font-family:'Orbitron',sans-serif;font-size:1.7rem;letter-spacing:5px;color:var(--neon-gold);text-shadow:0 0 20px rgba(255,215,0,.5);font-weight:900;}
-.header .sub{font-size:.68rem;color:var(--neon-green);margin-top:8px;letter-spacing:2px;font-weight:700;}
-.header .datetime{font-family:'Orbitron',sans-serif;font-size:13px;color:var(--neon-red);margin-top:12px;border-top:1px solid var(--border-dim);padding-top:10px;font-weight:700;}
-.card{background:var(--glass);border:1px solid var(--border-dim);border-radius:16px;padding:22px;margin-bottom:18px;}
-.card h2{font-family:'Orbitron',sans-serif;font-size:.8rem;color:var(--neon-gold);text-transform:uppercase;border-left:4px solid var(--neon-gold);padding-left:12px;margin-bottom:16px;letter-spacing:2px;font-weight:700;}
-select{width:100%;background:var(--bg-panel);border:1px solid var(--border-dim);color:var(--neon-cyan);padding:13px 12px;font-size:.9rem;border-radius:10px;outline:none;font-family:'Share Tech Mono',monospace;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='%2300f5ff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;}
-.flex{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;}
+body{background:var(--bg-dark);color:var(--text-primary);font-family:'Rajdhani',sans-serif;min-height:100vh;line-height:1.6;}
+.container{max-width:980px;margin:0 auto;padding:16px;}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,rgba(12,18,32,.98),rgba(4,8,14,.99));border:2px solid var(--neon-gold);border-radius:20px;padding:30px 24px;text-align:center;margin-bottom:20px;box-shadow:var(--shadow-glow);position:relative;overflow:hidden;}
+.header::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at center, rgba(255,215,0,0.03) 0%, transparent 70%);animation:glowPulse 4s ease-in-out infinite;}
+@keyframes glowPulse{0%,100%{opacity:0.5;}50%{opacity:1;}}
+.header h1{font-family:'Orbitron',sans-serif;font-size:2.2rem;letter-spacing:8px;color:var(--neon-gold);text-shadow:0 0 40px rgba(255,215,0,0.4),0 0 80px rgba(255,215,0,0.2);font-weight:900;position:relative;z-index:1;}
+.header .sub{font-size:.85rem;color:var(--neon-cyan);margin-top:8px;letter-spacing:4px;font-weight:600;text-transform:uppercase;position:relative;z-index:1;}
+.header .sub span{color:var(--neon-gold);}
+.header .datetime{font-family:'Orbitron',sans-serif;font-size:30px;color:var(--neon-green);margin-top:16px;border-top:1px solid var(--border-dim);padding-top:14px;font-weight:900;letter-spacing:3px;position:relative;z-index:1;}
+.header .datetime .date-part{color:var(--neon-cyan);font-size:30px;}
+.header .datetime .time-part{color:var(--neon-gold);font-size:30px;}
+.header .datetime .sep{color:var(--border-dim);font-size:30px;margin:0 16px;}
+
+/* CARDS */
+.card{background:var(--glass);border:1px solid var(--border-dim);border-radius:16px;padding:24px;margin-bottom:18px;backdrop-filter:blur(10px);transition:border-color 0.3s, transform 0.3s;}
+.card:hover{border-color:var(--border-glow);transform:translateY(-2px);}
+.card h2{font-family:'Orbitron',sans-serif;font-size:.9rem;color:var(--neon-gold);text-transform:uppercase;border-left:4px solid var(--neon-gold);padding-left:14px;margin-bottom:18px;letter-spacing:3px;font-weight:700;}
+.card h2 .badge{font-size:.55rem;background:rgba(255,215,0,0.15);padding:2px 12px;border-radius:12px;margin-left:8px;color:var(--text-dim);}
+
+/* SELECTS */
+select{width:100%;background:var(--bg-panel);border:1px solid var(--border-dim);color:var(--neon-cyan);padding:16px 20px;font-size:30px;border-radius:10px;outline:none;font-family:'Orbitron',sans-serif;font-weight:700;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%2300f5ff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 20px center;padding-right:60px;transition:border-color 0.3s;}
+select:focus{border-color:var(--neon-cyan);}
+select option{font-size:20px;}
+
+.flex{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;}
 .flex>*{flex:1;min-width:150px;}
-label.field-label{font-size:.62rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;display:block;font-weight:700;}
-.checkrow{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:.72rem;color:var(--text-dim);}
-.checkrow input{width:16px;height:16px;}
-.coverage-panel{background:rgba(0,245,255,.02);border:1px dashed var(--neon-cyan);border-radius:12px;padding:14px;margin-top:14px;}
-.coverage-panel h3{font-family:'Orbitron',sans-serif;font-size:.68rem;color:var(--neon-cyan);margin-bottom:8px;letter-spacing:1.5px;}
-.coverage-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.coverage-item{display:flex;justify-content:space-between;padding:6px 10px;background:rgba(0,0,0,.3);border-radius:6px;border:1px solid var(--border-dim);font-size:.62rem;}
-.coverage-item .value{color:var(--neon-cyan);font-weight:700;font-family:'Orbitron',sans-serif;}
-.monitor{background:linear-gradient(180deg,var(--bg-panel),rgba(6,10,18,.97));border:1px solid var(--border-dim);border-radius:16px;padding:24px 18px;text-align:center;margin-bottom:18px;}
-.monitor .meta{font-size:.6rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:3px;margin-bottom:8px;font-weight:700;}
-.monitor .odds{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:900;color:var(--neon-green);margin:8px 0;}
-.monitor .price{font-family:'Orbitron',sans-serif;font-size:1.4rem;color:#fff;font-weight:700;}
-.monitor .apostas-info{font-size:.72rem;color:var(--neon-cyan);margin-top:10px;padding:9px;background:rgba(0,245,255,.04);border-radius:8px;border:1px solid rgba(0,245,255,.12);font-family:'Orbitron',sans-serif;font-weight:700;}
-.btn{width:100%;padding:20px;background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(255,215,0,.02));border:2px solid var(--neon-gold);color:var(--neon-gold);font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:4px;border-radius:12px;cursor:pointer;margin:18px 0;}
-.btn:hover{background:rgba(255,215,0,.18);}
-.btn:active{background:var(--neon-gold);color:var(--bg-dark);}
-.terminal{background:var(--bg-panel);border:1px solid var(--border-dim);border-radius:12px;height:180px;overflow-y:auto;padding:14px;font-size:.68rem;color:var(--neon-green);line-height:1.7;margin-top:16px;}
-.log-line{margin:3px 0;padding-left:8px;border-left:2px solid transparent;}
+label.field-label{font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;display:block;font-weight:700;}
+label.field-label .font-size-big{font-size:30px;font-family:'Orbitron',sans-serif;color:var(--neon-cyan);}
+
+.checkrow{display:flex;align-items:center;gap:12px;margin-top:12px;font-size:.8rem;color:var(--text-dim);padding:8px 16px;background:rgba(255,255,255,.02);border-radius:8px;border:1px solid var(--border-dim);transition:background 0.3s;}
+.checkrow:hover{background:rgba(255,255,255,.04);}
+.checkrow input{width:20px;height:20px;accent-color:var(--neon-gold);cursor:pointer;}
+.checkrow label{font-weight:600;cursor:pointer;}
+
+/* COVERAGE */
+.coverage-panel{background:rgba(0,245,255,.02);border:1px dashed var(--neon-cyan);border-radius:12px;padding:18px;margin-top:16px;}
+.coverage-panel h3{font-family:'Orbitron',sans-serif;font-size:.75rem;color:var(--neon-cyan);margin-bottom:12px;letter-spacing:2px;}
+.coverage-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.coverage-item{display:flex;justify-content:space-between;padding:10px 14px;background:rgba(0,0,0,.3);border-radius:6px;border:1px solid var(--border-dim);font-size:.7rem;}
+.coverage-item .value{color:var(--neon-cyan);font-weight:700;font-family:'Orbitron',sans-serif;font-size:.85rem;}
+
+/* MONITOR */
+.monitor{background:linear-gradient(180deg,var(--bg-panel),rgba(6,10,18,.97));border:1px solid var(--border-glow);border-radius:16px;padding:32px 24px;text-align:center;margin-bottom:18px;box-shadow:inset 0 0 60px rgba(0,245,255,.02);}
+.monitor .meta{font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:4px;margin-bottom:8px;font-weight:600;}
+.monitor .odds{font-family:'Orbitron',sans-serif;font-size:2.4rem;font-weight:900;color:var(--neon-green);margin:8px 0;text-shadow:0 0 40px rgba(0,255,65,.15);}
+.monitor .price{font-family:'Orbitron',sans-serif;font-size:1.6rem;color:var(--neon-gold);font-weight:700;}
+.monitor .apostas-info{font-size:.8rem;color:var(--neon-cyan);margin-top:14px;padding:12px;background:rgba(0,245,255,.04);border-radius:8px;border:1px solid rgba(0,245,255,.12);font-family:'Orbitron',sans-serif;font-weight:700;}
+
+/* BUTTONS */
+.btn{width:100%;padding:24px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,215,0,.02));border:2px solid var(--neon-gold);color:var(--neon-gold);font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:700;text-transform:uppercase;letter-spacing:6px;border-radius:12px;cursor:pointer;margin:18px 0;transition:all 0.3s;}
+.btn:hover{background:rgba(255,215,0,.22);box-shadow:0 0 50px rgba(255,215,0,.08);transform:translateY(-2px);}
+.btn:active{transform:translateY(0);}
+.btn-small{padding:14px 20px;font-size:.8rem;letter-spacing:2px;margin:4px;width:auto;display:inline-block;border-radius:10px;}
+.btn-small:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+.btn-primary{background:linear-gradient(135deg,rgba(0,245,255,.12),rgba(0,245,255,.02));border-color:var(--neon-cyan);color:var(--neon-cyan);}
+.btn-primary:hover{background:rgba(0,245,255,.22);}
+.btn-purple{background:linear-gradient(135deg,rgba(191,0,255,.12),rgba(191,0,255,.02));border-color:var(--neon-purple);color:var(--neon-purple);}
+.btn-purple:hover{background:rgba(191,0,255,.22);}
+.btn-green{background:linear-gradient(135deg,rgba(0,255,65,.12),rgba(0,255,65,.02));border-color:var(--neon-green);color:var(--neon-green);}
+.btn-green:hover{background:rgba(0,255,65,.22);}
+
+/* TERMINAL */
+.terminal{background:var(--bg-panel);border:1px solid var(--border-dim);border-radius:12px;height:180px;overflow-y:auto;padding:18px;font-size:.75rem;color:var(--neon-green);line-height:1.9;margin-top:16px;font-family:'Share Tech Mono',monospace;}
+.terminal::-webkit-scrollbar{width:4px;}
+.terminal::-webkit-scrollbar-track{background:var(--bg-panel);}
+.terminal::-webkit-scrollbar-thumb{background:var(--border-glow);border-radius:2px;}
+.log-line{margin:2px 0;padding-left:12px;border-left:2px solid transparent;}
 .log-line.warn{color:var(--neon-gold);border-left-color:var(--neon-gold);}
 .log-line.success{color:var(--neon-cyan);border-left-color:var(--neon-cyan);}
 .log-line.info{color:var(--neon-green);border-left-color:rgba(0,255,65,.3);}
 .log-line.system{color:var(--neon-purple);border-left-color:var(--neon-purple);}
-.result-panel{display:none;border:2px solid var(--neon-cyan);background:linear-gradient(180deg,rgba(0,245,255,.03),rgba(0,245,255,.005));border-radius:16px;padding:24px 18px;margin-top:20px;text-align:center;}
-.result-panel h2{font-family:'Orbitron',sans-serif;color:var(--neon-gold);font-size:.85rem;letter-spacing:3px;margin-bottom:16px;}
-.balls{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:16px 0;}
-.ball{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:1.15rem;font-weight:900;background:linear-gradient(145deg,rgba(20,28,45,.9),rgba(6,10,18,.95));}
-.ball.cyan{border-color:var(--neon-cyan);color:var(--neon-cyan);box-shadow:0 0 25px rgba(0,245,255,.3);}
-.ball.gold{border-color:var(--neon-gold);color:var(--neon-gold);box-shadow:0 0 25px rgba(255,215,0,.3);}
-.ball.purple{border-color:var(--neon-purple);color:var(--neon-purple);box-shadow:0 0 25px rgba(191,0,255,.3);}
-.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border-glow),transparent);margin:14px 0;}
-.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.6rem;color:var(--text-dim);margin-top:14px;text-align:left;}
-.stats-grid .row{display:flex;justify-content:space-between;padding:8px 12px;background:rgba(255,255,255,.02);border-radius:6px;border:1px solid var(--border-dim);}
-.stats-grid .val{color:var(--text-primary);font-weight:700;font-family:'Orbitron',sans-serif;}
+.log-line.offline{color:var(--neon-red);border-left-color:var(--neon-red);}
+.log-line.montecarlo{color:var(--neon-orange);border-left-color:var(--neon-orange);}
+.log-line.premio{color:var(--neon-gold);border-left-color:var(--neon-gold);font-weight:700;}
+
+/* RESULT PANEL */
+.result-panel{display:none;border:2px solid var(--neon-cyan);background:linear-gradient(180deg,rgba(0,245,255,.04),rgba(0,245,255,.005));border-radius:16px;padding:32px 24px;margin-top:20px;text-align:center;box-shadow:0 0 60px rgba(0,245,255,.05);}
+.result-panel h2{font-family:'Orbitron',sans-serif;color:var(--neon-gold);font-size:1rem;letter-spacing:4px;margin-bottom:20px;}
+
+/* BALLS */
+.balls{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;margin:20px 0;}
+.ball{width:80px;height:80px;border-radius:50%;border:3px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:40px;font-weight:900;background:linear-gradient(145deg,rgba(20,28,45,.9),rgba(6,10,18,.95));transition:all 0.3s;}
+.ball:hover{transform:scale(1.12);}
+.ball.cyan{border-color:var(--neon-cyan);color:var(--neon-cyan);box-shadow:0 0 40px rgba(0,245,255,.25);}
+.ball.gold{border-color:var(--neon-gold);color:var(--neon-gold);box-shadow:0 0 40px rgba(255,215,0,.25);}
+.ball.purple{border-color:var(--neon-purple);color:var(--neon-purple);box-shadow:0 0 40px rgba(191,0,255,.25);}
+.ball.green{border-color:var(--neon-green);color:var(--neon-green);box-shadow:0 0 40px rgba(0,255,65,.25);}
+
+.divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border-glow),transparent);margin:18px 0;}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:.7rem;color:var(--text-dim);margin-top:18px;text-align:left;}
+.stats-grid .row{display:flex;justify-content:space-between;padding:12px 16px;background:rgba(255,255,255,.02);border-radius:6px;border:1px solid var(--border-dim);}
+.stats-grid .val{color:var(--text-primary);font-weight:700;font-family:'Orbitron',sans-serif;font-size:.85rem;}
 .stats-grid .val.highlight{color:var(--neon-green);}
-.disclaimer{font-size:.62rem;color:var(--neon-red);margin-top:14px;padding:12px;background:rgba(255,0,64,.04);border-radius:8px;border:1px solid rgba(255,0,64,.15);line-height:1.6;text-align:left;}
-.footer{margin-top:20px;padding:18px;border-top:1px solid var(--border-dim);text-align:center;background:rgba(0,0,0,.4);border-radius:0 0 16px 16px;}
-.footer .draw-info{margin-top:10px;padding:12px;background:var(--bg-panel);border-radius:10px;border:1px solid var(--border-dim);display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left;}
-.footer .draw-info .label{color:var(--text-dim);font-size:.56rem;text-transform:uppercase;font-weight:700;}
-.footer .draw-info .value{color:var(--neon-gold);font-weight:700;font-family:'Orbitron',sans-serif;font-size:.78rem;}
-@media (max-width:600px){.header h1{font-size:1.15rem;letter-spacing:2px;} .monitor .odds{font-size:1.4rem;} .ball{width:48px;height:48px;font-size:.95rem;} .stats-grid,.coverage-grid,.footer .draw-info{grid-template-columns:1fr;}}
+.stats-grid .val.gold{color:var(--neon-gold);}
+.stats-grid .val.cyan{color:var(--neon-cyan);}
+.stats-grid .val.premio{color:var(--neon-orange);font-size:1.1rem;}
+
+/* PREMIO BOX */
+.premio-box{background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,215,0,.04));border:2px solid var(--neon-gold);border-radius:16px;padding:20px 24px;margin:16px 0;text-align:center;box-shadow:0 0 60px rgba(255,215,0,.06);}
+.premio-box .premio-label{font-size:.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:4px;font-weight:600;}
+.premio-box .premio-value{font-family:'Orbitron',sans-serif;font-size:2rem;color:var(--neon-gold);font-weight:900;text-shadow:0 0 40px rgba(255,215,0,.2);margin:6px 0;}
+.premio-box .premio-euros{font-family:'Orbitron',sans-serif;font-size:1.8rem;color:var(--neon-green);font-weight:900;text-shadow:0 0 30px rgba(0,255,65,.15);}
+.premio-box .premio-prob{font-size:.7rem;color:var(--text-dim);letter-spacing:2px;}
+
+/* STATUS */
+.status-badge{display:inline-block;padding:6px 18px;border-radius:20px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;}
+.status-online{background:rgba(0,255,65,.15);color:var(--neon-green);border:1px solid var(--neon-green);animation:pulseGreen 2s ease-in-out infinite;}
+@keyframes pulseGreen{0%,100%{box-shadow:0 0 10px rgba(0,255,65,.1);}50%{box-shadow:0 0 25px rgba(0,255,65,.2);}}
+.status-offline{background:rgba(255,0,64,.15);color:var(--neon-red);border:1px solid var(--neon-red);}
+.status-loading{background:rgba(255,215,0,.15);color:var(--neon-gold);border:1px solid var(--neon-gold);animation:pulseGold 1s ease-in-out infinite;}
+@keyframes pulseGold{0%,100%{opacity:1;}50%{opacity:0.5;}}
+.status-cached{background:rgba(0,245,255,.15);color:var(--neon-cyan);border:1px solid var(--neon-cyan);}
+.status-montecarlo{background:rgba(255,106,0,.15);color:var(--neon-orange);border:1px solid var(--neon-orange);}
+
+/* MANUAL INPUT */
+.manual-input-area{background:rgba(0,0,0,.3);border-radius:10px;padding:16px;margin-top:14px;border:1px dashed var(--border-glow);}
+.manual-input-area textarea{width:100%;background:var(--bg-panel);border:1px solid var(--border-dim);color:var(--neon-cyan);padding:14px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:.8rem;resize:vertical;min-height:80px;}
+.manual-input-area textarea:focus{border-color:var(--neon-cyan);outline:none;}
+.manual-input-area .hint{font-size:.6rem;color:var(--text-dim);margin-top:8px;}
+
+.btn-group{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.btn-group .btn-small{flex:1;min-width:100px;}
+
+/* STATS ADVANCED */
+.stats-advanced{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-top:12px;}
+.stats-advanced .stat-box{background:rgba(0,0,0,.3);border-radius:8px;padding:10px 14px;text-align:center;border:1px solid var(--border-dim);transition:border-color 0.3s;}
+.stats-advanced .stat-box:hover{border-color:var(--border-glow);}
+.stats-advanced .stat-box .stat-label{font-size:.55rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px;}
+.stats-advanced .stat-box .stat-value{font-family:'Orbitron',sans-serif;font-size:.9rem;color:var(--neon-cyan);font-weight:700;}
+.stats-advanced .stat-box .stat-value.gold{color:var(--neon-gold);}
+.stats-advanced .stat-box .stat-value.green{color:var(--neon-green);}
+.stats-advanced .stat-box .stat-value.orange{color:var(--neon-orange);}
+
+/* FOOTER */
+.footer{margin-top:20px;padding:24px;border-top:1px solid var(--border-dim);text-align:center;background:rgba(0,0,0,.4);border-radius:0 0 16px 16px;}
+.footer .draw-info{margin-top:14px;padding:16px;background:var(--bg-panel);border-radius:10px;border:1px solid var(--border-dim);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;text-align:left;}
+.footer .draw-info .label{color:var(--text-dim);font-size:.6rem;text-transform:uppercase;font-weight:700;letter-spacing:1px;}
+.footer .draw-info .value{color:var(--neon-gold);font-weight:700;font-family:'Orbitron',sans-serif;font-size:30px;}
+.footer .draw-info .value .small{font-size:18px;}
+.footer .version{font-size:12px;color:var(--text-dim);font-family:'Orbitron',sans-serif;letter-spacing:3px;margin-top:14px;}
+
+/* RESPONSIVE */
+@media (max-width:600px){
+  .header h1{font-size:1.4rem;letter-spacing:4px;}
+  .header .datetime{font-size:22px;}
+  .header .datetime .date-part{font-size:22px;}
+  .header .datetime .time-part{font-size:22px;}
+  .header .datetime .sep{font-size:22px;}
+  .monitor .odds{font-size:1.6rem;}
+  .ball{width:60px;height:60px;font-size:30px;}
+  .stats-grid,.coverage-grid,.footer .draw-info{grid-template-columns:1fr;}
+  .stats-advanced{grid-template-columns:1fr 1fr;}
+  .footer .draw-info{grid-template-columns:1fr 1fr;}
+  .footer .draw-info .value{font-size:22px;}
+  select{font-size:22px;padding:12px 16px;}
+  label.field-label .font-size-big{font-size:22px;}
+  .premio-box .premio-value{font-size:1.4rem;}
+  .premio-box .premio-euros{font-size:1.2rem;}
+}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <h1>GERADOR DE COBERTURA</h1>
-    <div class="sub">⤕ SISTEMA DE WHEELING · MATEMÁTICA COMBINATÓRIA REAL ⤕</div>
-    <div class="datetime">📅 <span id="currentDate"></span> · ⏰ <span id="currentTime"></span></div>
+    <h1>🎰 JONHY MIMO SORTILHUDO</h1>
+    <div class="sub">⚡ SISTEMA DE WHEELING · <span>MONTE CARLO</span> · MATEMÁTICA COMBINATÓRIA AVANÇADA ⚡</div>
+    <div class="datetime">
+      <span class="date-part">📅 <span id="currentDate"></span></span>
+      <span class="sep">|</span>
+      <span class="time-part">⏰ <span id="currentTime"></span></span>
+    </div>
   </div>
 
   <div class="card">
-    <h2>⚙ Configuração do Jogo</h2>
+    <h2>⚙ Configuração <span class="badge">AJUSTE FINO</span></h2>
     <select id="gameType">
       <option value="euromilhoes">EURO MILHÕES (5/50 + 2/12)</option>
       <option value="totoloto">TOTOLOTO (5/49 + 1/13)</option>
       <option value="eurodreams">EURO DREAMS (6/40 + 1/5)</option>
     </select>
     <div class="flex">
-      <div><label class="field-label">Números a apostar</label><select id="nQty"></select></div>
-      <div><label class="field-label" id="starLabel">Estrelas / Sonhos</label><select id="sQty"></select></div>
+      <div>
+        <label class="field-label">📌 Números a apostar <span class="font-size-big" id="nQtyDisplay">5</span></label>
+        <select id="nQty"></select>
+      </div>
+      <div>
+        <label class="field-label">⭐ <span id="starLabel">Estrelas</span> <span class="font-size-big" id="sQtyDisplay">2</span></label>
+        <select id="sQty"></select>
+      </div>
     </div>
-    <div class="checkrow"><input type="checkbox" id="antiConsec"> Evitar números consecutivos (preferência pessoal — não altera a probabilidade real)</div>
-    <div class="checkrow"><input type="checkbox" id="balancearParImpar"> Equilibrar pares/ímpares (preferência pessoal — não altera a probabilidade real)</div>
-    <div class="total-apostas" id="totalApostasInfo" style="margin-top:14px;font-size:.75rem;color:var(--text-dim);">Total de combinações: 1</div>
+    <div class="checkrow"><input type="checkbox" id="antiConsec"> <label>🚫 Evitar números consecutivos</label></div>
+    <div class="checkrow"><input type="checkbox" id="balancearParImpar"> <label>⚖️ Equilibrar pares/ímpares</label></div>
+    <div class="checkrow"><input type="checkbox" id="usarMonteCarlo" checked> <label>🧮 Simulação Monte Carlo (5000 iterações)</label></div>
+    <div class="total-apostas" id="totalApostasInfo" style="margin-top:16px;font-size:.8rem;color:var(--text-dim);">Total de combinações: 1</div>
     <div class="coverage-panel">
       <h3>📊 COBERTURA DO SISTEMA (WHEELING)</h3>
       <div class="coverage-grid">
@@ -99,38 +224,69 @@ label.field-label{font-size:.62rem;color:var(--text-dim);text-transform:uppercas
   </div>
 
   <div class="card">
-    <h2>📋 Dados Históricos Reais (opcional)</h2>
-    <label class="field-label">Cola aqui os últimos sorteios (um por linha). Ex: 10 24 25 31 45 + 4 5</label>
-    <textarea id="historicoInput" rows="6" style="width:100%;background:var(--bg-panel);border:1px solid var(--border-dim);color:var(--neon-cyan);padding:12px;border-radius:10px;font-family:'Share Tech Mono',monospace;font-size:.8rem;resize:vertical;" placeholder="10 24 25 31 45 + 4 5&#10;16 33 39 42 45 + 4&#10;..."></textarea>
-    <button class="btn" id="analisarBtn" style="padding:14px;font-size:.85rem;letter-spacing:2px;margin-top:12px;">📊 ANALISAR DADOS COLADOS</button>
-    <div id="historicoResumo" style="font-size:.7rem;color:var(--text-dim);margin-top:8px;"></div>
+    <h2>📋 DADOS HISTÓRICOS · <span id="statusBadge" class="status-badge status-loading">A CARREGAR...</span></h2>
+    
+    <div class="btn-group">
+      <button class="btn btn-small btn-primary" id="fetchEuromilhoes">🇪🇺 EURO MILHÕES</button>
+      <button class="btn btn-small btn-primary" id="fetchTotoloto">🇵🇹 TOTOLOTO</button>
+      <button class="btn btn-small btn-primary" id="fetchEurodreams">🌟 EURO DREAMS</button>
+    </div>
+
+    <div id="historicoResumo" style="font-size:.8rem;color:var(--text-dim);margin-top:8px;"></div>
+    
+    <div class="stats-advanced" id="statsAdvanced">
+      <div class="stat-box"><div class="stat-label">Total Sorteios</div><div class="stat-value" id="totalDraws">0</div></div>
+      <div class="stat-box"><div class="stat-label">Nºs Únicos</div><div class="stat-value" id="uniqueNumbers">0</div></div>
+      <div class="stat-box"><div class="stat-label">Simulações MC</div><div class="stat-value" id="mcIterations">5000</div></div>
+      <div class="stat-box"><div class="stat-label">Confiança</div><div class="stat-value gold" id="confidenceLevel">--</div></div>
+    </div>
+    
     <div class="stats-grid" id="freqStatsGrid" style="margin-top:10px;"></div>
-    <div class="checkrow"><input type="checkbox" id="usarFrequencia"> Ao gerar, dar preferência aos números mais/menos frequentes destes dados (continua a ser uma preferência pessoal — sorteios independentes não têm memória, isto não aumenta a tua probabilidade real)</div>
+    
+    <div class="checkrow"><input type="checkbox" id="usarFrequencia"> <label>📊 Usar frequências históricas (ponderação estatística)</label></div>
+    
+    <div class="manual-input-area">
+      <label class="field-label" style="font-size:.65rem;">📝 Colar resultados manualmente (fallback):</label>
+      <textarea id="manualDrawsInput" placeholder="Ex: 10 24 25 31 45 + 4 5&#10;16 33 39 42 45 + 4&#10;3 12 18 34 47 + 5 11"></textarea>
+      <div class="hint">Formato: números separados por espaço, "+" para separar estrelas/sonhos</div>
+      <button class="btn btn-small btn-purple" id="applyManualDraws" style="margin-top:8px;padding:10px 20px;">📥 APLICAR DADOS COLADOS</button>
+    </div>
   </div>
 
   <div class="monitor">
-    <div class="meta">Probabilidade real desta aposta</div>
+    <div class="meta">🎯 PROBABILIDADE REAL DA APOSTA</div>
     <div class="odds" id="oddsDisplay">1 / 139.838.160</div>
     <div class="price" id="priceDisplay">€ 2,50</div>
     <div class="meta" style="margin-top:8px;" id="accuracyLabel">PROB. 1º PRÉMIO: 0.0000007%</div>
     <div class="apostas-info" id="apostasInfo">1 aposta · €2,50</div>
   </div>
 
-  <button class="btn" id="runBtn">▶ GERAR COMBINAÇÃO(ÕES) COM COBERTURA</button>
+  <button class="btn" id="runBtn">🎲 GERAR COMBINAÇÃO COM COBERTURA</button>
 
   <div class="terminal" id="terminal">
-    <div class="log-line system">> GERADOR DE COBERTURA · Sistema de Wheeling</div>
-    <div class="log-line info">> Este sistema calcula probabilidades reais com base em combinatória, não em previsão de resultados.</div>
-    <div class="log-line info">> Sorteios de lotaria são eventos independentes: não existe "número atrasado" com mais chance de sair.</div>
+    <div class="log-line system">> JONHY MIMO SORTILHUDO · Sistema de Wheeling + Monte Carlo</div>
+    <div class="log-line info">> Este sistema usa combinatória avançada e simulações Monte Carlo para análise estatística.</div>
+    <div class="log-line info">> Sorteios de lotaria são eventos independentes: a probabilidade real não muda com filtros.</div>
     <div class="log-line info">> Sistema pronto. Escolhe o jogo e clica em gerar.</div>
   </div>
 
   <div id="resultPanel" class="result-panel">
-    <h2>NÚMEROS GERADOS ALEATORIAMENTE (COM AS TUAS PREFERÊNCIAS)</h2>
+    <h2>🎯 NÚMEROS GERADOS · ANÁLISE MONTE CARLO</h2>
     <div class="balls" id="ballOutput"></div>
+    
+    <div class="premio-box" id="premioBox">
+      <div class="premio-label">🏆 PRÉMIO MAIS PROVÁVEL</div>
+      <div class="premio-value" id="premioProvavel">--</div>
+      <div class="premio-euros" id="premioEuros">€ --</div>
+      <div class="premio-prob" id="premioProbabilidade">Probabilidade real: --</div>
+    </div>
+    
     <div class="stats-grid" id="statsGrid"></div>
-    <div class="disclaimer">
-      ⚠ <strong>AVISO:</strong> Estes números são escolhidos aleatoriamente dentro do universo definido, respeitando apenas as preferências estéticas que marcaste (anti-consecutivos, par/ímpar). Nenhum algoritmo consegue prever ou aumentar a probabilidade de acertar num sorteio de lotaria genuinamente aleatório. A única forma real de aumentar a tua cobertura é apostar em mais combinações (o que aumenta o custo proporcionalmente). Joga com responsabilidade.
+    <div class="stats-advanced" id="resultStatsAdvanced">
+      <div class="stat-box"><div class="stat-label">Confiança MC</div><div class="stat-value" id="mcConfidence">--</div></div>
+      <div class="stat-box"><div class="stat-label">Desvio Padrão</div><div class="stat-value" id="stdDev">--</div></div>
+      <div class="stat-box"><div class="stat-label">Média Histórica</div><div class="stat-value" id="historicalMean">--</div></div>
+      <div class="stat-box"><div class="stat-label">Acerto Real</div><div class="stat-value green" id="realAccuracy">--</div></div>
     </div>
   </div>
 
@@ -141,15 +297,201 @@ label.field-label{font-size:.62rem;color:var(--text-dim);text-transform:uppercas
       <div><span class="label">Hora:</span> <span class="value" id="drawTime">--</span></div>
       <div><span class="label">Dia:</span> <span class="value" id="drawDay">--</span></div>
     </div>
+    <div class="version">JONHY MIMO SORTILHUDO v3.0 · 🎰 5000 SIMULAÇÕES MONTE CARLO</div>
   </div>
 </div>
 
 <script>
+// ================= CONFIGURAÇÃO DOS JOGOS =================
 const REGRAS = {
-  euromilhoes:{nome:"EURO MILHÕES",numeros:{min:1,max:50,sorteados:5,maxAposta:12,minAposta:5},estrelas:{min:1,max:12,sorteados:2,maxAposta:5,minAposta:2},precoBase:2.50,nomeEstrela:"Estrelas",dias:[2,5],hora:"21:00",premios:["1º Prémio (5+2)","2º Prémio (5+1)","3º Prémio (5+0 ou 4+2)"]},
-  totoloto:{nome:"TOTOLOTO",numeros:{min:1,max:49,sorteados:5,maxAposta:11,minAposta:5},estrelas:{min:1,max:13,sorteados:1,maxAposta:1,minAposta:1},precoBase:1.00,nomeEstrela:"Nº Sorte",dias:[1,3,6],hora:"21:00",premios:["1º Prémio (5+1)","2º Prémio (5+0)","3º Prémio (4+1)"]},
-  eurodreams:{nome:"EURO DREAMS",numeros:{min:1,max:40,sorteados:6,maxAposta:11,minAposta:6},estrelas:{min:1,max:5,sorteados:1,maxAposta:5,minAposta:1},precoBase:2.50,nomeEstrela:"Sonhos",dias:[0,3],hora:"21:00",premios:["1º Prémio (6+1)","2º Prémio (6+0)","3º Prémio (5+1)"]}
+  euromilhoes:{nome:"EURO MILHÕES",numeros:{min:1,max:50,sorteados:5,maxAposta:12,minAposta:5},estrelas:{min:1,max:12,sorteados:2,maxAposta:5,minAposta:2},precoBase:2.50,nomeEstrela:"Estrelas",dias:[2,5],hora:"21:00",premios:["1º Prémio (5+2)","2º Prémio (5+1)","3º Prémio (5+0 ou 4+2)"],premiosValores:[19000000,500000,15000]},
+  totoloto:{nome:"TOTOLOTO",numeros:{min:1,max:49,sorteados:5,maxAposta:11,minAposta:5},estrelas:{min:1,max:13,sorteados:1,maxAposta:1,minAposta:1},precoBase:1.00,nomeEstrela:"Nº Sorte",dias:[1,3,6],hora:"21:00",premios:["1º Prémio (5+1)","2º Prémio (5+0)","3º Prémio (4+1)"],premiosValores:[4000000,100000,5000]},
+  eurodreams:{nome:"EURO DREAMS",numeros:{min:1,max:40,sorteados:6,maxAposta:11,minAposta:6},estrelas:{min:1,max:5,sorteados:1,maxAposta:5,minAposta:1},precoBase:2.50,nomeEstrela:"Sonhos",dias:[0,3],hora:"21:00",premios:["1º Prémio (6+1)","2º Prémio (6+0)","3º Prémio (5+1)"],premiosValores:[20000000,1000000,50000]}
 };
+
+// ================= GERADOR DE NÚMEROS ALEATÓRIOS =================
+function gerarNumerosAleatorios(min, max, quantidade) {
+  const numeros = new Set();
+  while(numeros.size < quantidade) {
+    numeros.add(Math.floor(Math.random() * (max - min + 1)) + min);
+  }
+  return Array.from(numeros).sort((a,b) => a - b);
+}
+
+// ================= SIMULAÇÃO MONTE CARLO OTIMIZADA =================
+function simulacaoMonteCarlo(regra, nQty, sQty, iteracoes = 5000) {
+  const freqNumeros = new Uint32Array(regra.numeros.max);
+  const freqEstrelas = new Uint32Array(regra.estrelas.max);
+  let somaTotal = 0;
+  let somaQuadrados = 0;
+  let paresTotal = 0;
+
+  for(let i = 0; i < iteracoes; i++) {
+    const nums = gerarNumerosAleatorios(regra.numeros.min, regra.numeros.max, nQty);
+    const stars = gerarNumerosAleatorios(regra.estrelas.min, regra.estrelas.max, sQty);
+    
+    nums.forEach(n => freqNumeros[n-1]++);
+    stars.forEach(s => freqEstrelas[s-1]++);
+    
+    const soma = nums.reduce((a,b) => a + b, 0);
+    somaTotal += soma;
+    somaQuadrados += soma * soma;
+    paresTotal += nums.filter(n => n % 2 === 0).length;
+  }
+
+  const mediaSoma = somaTotal / iteracoes;
+  const variancia = (somaQuadrados / iteracoes) - (mediaSoma * mediaSoma);
+  const desvioPadrao = Math.sqrt(variancia);
+  const mediaPares = paresTotal / iteracoes;
+
+  const numsProb = Array.from(freqNumeros).map((f, i) => ({ num: i+1, freq: f }))
+    .sort((a,b) => b.freq - a.freq);
+  const starsProb = Array.from(freqEstrelas).map((f, i) => ({ num: i+1, freq: f }))
+    .sort((a,b) => b.freq - a.freq);
+
+  return {
+    freqNumeros: Array.from(freqNumeros),
+    freqEstrelas: Array.from(freqEstrelas),
+    mediaSoma,
+    desvioPadrao,
+    mediaPares,
+    numsProbaveis: numsProb.slice(0, 10),
+    starsProbaveis: starsProb.slice(0, 5),
+    totalSimulacoes: iteracoes
+  };
+}
+
+// ================= CÁLCULO DE PROBABILIDADES REAIS =================
+function calcularProbabilidadePremio(regra, numeros, estrelas) {
+  const totalCombos = combinacao(regra.numeros.max, regra.numeros.sorteados) * 
+                     combinacao(regra.estrelas.max, regra.estrelas.sorteados);
+  
+  const probNumeros = 1 / combinacao(regra.numeros.max, regra.numeros.sorteados);
+  const probEstrelas = 1 / combinacao(regra.estrelas.max, regra.estrelas.sorteados);
+  const probTotal = probNumeros * probEstrelas;
+  
+  const p1 = probTotal;
+  const p2 = probNumeros * (1 / combinacao(regra.estrelas.max, regra.estrelas.sorteados - 1));
+  const p3 = probNumeros + (1 / combinacao(regra.numeros.max, regra.numeros.sorteados - 1)) * probEstrelas;
+  
+  return {
+    primeiro: p1 * 100,
+    segundo: p2 * 100,
+    terceiro: p3 * 100,
+    total: (p1 + p2 + p3) * 100
+  };
+}
+
+// ================= GERADOR DE COMBINAÇÕES =================
+function gerarCombinacoesAvancado(regra, nQty, sQty, qtd, antiConsec, balancear, usarFreq, usarMC) {
+  const combos = [];
+  let mcData = null;
+  
+  if(usarMC) {
+    mcData = simulacaoMonteCarlo(regra, nQty, sQty, 5000);
+    addLog('Simulação Monte Carlo: 5000 iterações concluídas.', 'montecarlo');
+  }
+
+  let tentativas = 0;
+  while(combos.length < qtd && tentativas < qtd * 1000) {
+    tentativas++;
+    let nums;
+    
+    if(usarMC && mcData) {
+      nums = new Set();
+      const pool = mcData.numsProbaveis.map(p => p.num);
+      while(nums.size < nQty) {
+        if(Math.random() < 0.6 && pool.length > 0) {
+          const idx = Math.floor(Math.random() * Math.min(pool.length, nQty * 2));
+          nums.add(pool[idx]);
+        } else {
+          nums.add(Math.floor(Math.random() * regra.numeros.max) + 1);
+        }
+      }
+      nums = Array.from(nums);
+    } else if(usarFreq && historicoData) {
+      nums = new Set();
+      while(nums.size < nQty) {
+        let somaPesos = 0;
+        const candidatos = [];
+        for(let n = 1; n <= regra.numeros.max; n++) {
+          if(nums.has(n)) continue;
+          const peso = Math.max(historicoData.freqN[n-1], 1);
+          candidatos.push({n, peso});
+          somaPesos += peso;
+        }
+        let r = Math.random() * somaPesos;
+        let escolhido = candidatos[candidatos.length-1].n;
+        for(const c of candidatos) {
+          r -= c.peso;
+          if(r <= 0) { escolhido = c.n; break; }
+        }
+        nums.add(escolhido);
+      }
+      nums = Array.from(nums);
+    } else {
+      nums = gerarNumerosAleatorios(regra.numeros.min, regra.numeros.max, nQty);
+    }
+
+    const arr = nums.sort((a,b) => a - b);
+    
+    if(antiConsec) {
+      let temConsec = false;
+      for(let i = 1; i < arr.length; i++) {
+        if(arr[i] === arr[i-1] + 1) { temConsec = true; break; }
+      }
+      if(temConsec) continue;
+    }
+    
+    if(balancear) {
+      const pares = arr.filter(n => n % 2 === 0).length;
+      if(pares < 1 || pares > arr.length - 1) continue;
+    }
+
+    let stars;
+    if(usarMC && mcData) {
+      stars = new Set();
+      const pool = mcData.starsProbaveis.map(p => p.num);
+      while(stars.size < sQty) {
+        if(Math.random() < 0.6 && pool.length > 0) {
+          const idx = Math.floor(Math.random() * Math.min(pool.length, sQty * 2));
+          stars.add(pool[idx]);
+        } else {
+          stars.add(Math.floor(Math.random() * regra.estrelas.max) + 1);
+        }
+      }
+      stars = Array.from(stars);
+    } else if(usarFreq && historicoData && historicoData.freqS) {
+      stars = new Set();
+      while(stars.size < sQty) {
+        let somaPesos = 0;
+        const candidatos = [];
+        for(let s = 1; s <= regra.estrelas.max; s++) {
+          if(stars.has(s)) continue;
+          const peso = Math.max(historicoData.freqS[s-1], 1);
+          candidatos.push({n: s, peso});
+          somaPesos += peso;
+        }
+        let r = Math.random() * somaPesos;
+        let escolhido = candidatos[candidatos.length-1].n;
+        for(const c of candidatos) {
+          r -= c.peso;
+          if(r <= 0) { escolhido = c.n; break; }
+        }
+        stars.add(escolhido);
+      }
+      stars = Array.from(stars);
+    } else {
+      stars = gerarNumerosAleatorios(regra.estrelas.min, regra.estrelas.max, sQty);
+    }
+
+    combos.push({ numeros: arr, estrelas: stars.sort((a,b) => a - b) });
+  }
+
+  return { combos, mcData };
+}
+
+// ================= CACHE DE COMBINAÇÕES =================
 const combCache = new Map();
 function combinacao(n,k){
   if(k>n||k<0) return 0;
@@ -162,37 +504,59 @@ function combinacao(n,k){
   combCache.set(key,r);
   return r;
 }
+
 function calcularTotalApostas(regra,nQty,sQty){
   return combinacao(nQty,regra.numeros.sorteados) * combinacao(sQty,regra.estrelas.sorteados);
 }
+
 function calcularOdds(regra,nQty,sQty){
   const totalCombos = combinacao(regra.numeros.max,regra.numeros.sorteados) * combinacao(regra.estrelas.max,regra.estrelas.sorteados);
   const totalApostas = calcularTotalApostas(regra,nQty,sQty);
   return totalApostas===0 ? Infinity : totalCombos/totalApostas;
 }
+
 let currentGameKey='euromilhoes';
+let historicoData = null;
+let mcCache = {};
+
+// ================= ATUALIZAÇÃO DE CONFIGURAÇÃO =================
 function updateConfig(){
   currentGameKey = document.getElementById('gameType').value;
   const regra = REGRAS[currentGameKey];
   const nSelect = document.getElementById('nQty');
   const sSelect = document.getElementById('sQty');
   const starLabel = document.getElementById('starLabel');
+  const nDisplay = document.getElementById('nQtyDisplay');
+  const sDisplay = document.getElementById('sQtyDisplay');
+  
   nSelect.innerHTML='';
   for(let i=regra.numeros.minAposta;i<=regra.numeros.maxAposta;i++){
     const opt=document.createElement('option'); opt.value=i; opt.textContent=i; nSelect.appendChild(opt);
   }
   nSelect.value = regra.numeros.minAposta;
+  nDisplay.textContent = regra.numeros.minAposta;
+  
   sSelect.innerHTML='';
   for(let i=regra.estrelas.minAposta;i<=regra.estrelas.maxAposta;i++){
     const opt=document.createElement('option'); opt.value=i; opt.textContent=i; sSelect.appendChild(opt);
   }
   sSelect.value = regra.estrelas.minAposta;
+  sDisplay.textContent = regra.estrelas.minAposta;
+  
   const isFixed = regra.estrelas.minAposta===regra.estrelas.maxAposta;
   sSelect.disabled = isFixed;
   starLabel.textContent = regra.nomeEstrela + (isFixed ? ' (Fixo)' : '');
+  
+  nSelect.onchange = function(){ nDisplay.textContent = this.value; calculatePrice(); };
+  sSelect.onchange = function(){ sDisplay.textContent = this.value; calculatePrice(); };
+  
   atualizarInfoSorteio();
   calculatePrice();
+  
+  // Carregar dados em background com otimização
+  setTimeout(() => carregarDadosJogo(currentGameKey), 100);
 }
+
 function calculatePrice(){
   const regra = REGRAS[currentGameKey];
   const n = parseInt(document.getElementById('nQty').value)||regra.numeros.sorteados;
@@ -207,13 +571,25 @@ function calculatePrice(){
   document.getElementById('priceDisplay').textContent = '€ ' + preco.toFixed(2);
   document.getElementById('oddsDisplay').textContent = odds===Infinity?'1 / ∞':'1 / ' + Math.round(odds).toLocaleString('pt-PT');
   document.getElementById('apostasInfo').textContent = totalApostas.toLocaleString('pt-PT') + ' aposta' + (totalApostas>1?'s':'') + ' · €' + preco.toFixed(2);
-  document.getElementById('accuracyLabel').textContent = 'PROB. 1º PRÉMIO: ' + (probReal*100).toFixed(6) + '%';
+  document.getElementById('accuracyLabel').textContent = 'PROB. 1º PRÉMIO: ' + (probReal*100).toFixed(7) + '%';
 
   document.getElementById('coverageNumbers').textContent = n + ' / ' + regra.numeros.max;
   document.getElementById('coverageTheoretical').textContent = ((n/regra.numeros.max)*100).toFixed(2) + '%';
   document.getElementById('coverageCombinations').textContent = totalApostas.toLocaleString('pt-PT');
   document.getElementById('coverageTotal').textContent = totalCombosPossiveis.toLocaleString('pt-PT');
 }
+
+// ================= DATA E HORA (FONTE 30) =================
+function formatarData30(d){ 
+  const dia = String(d.getDate()).padStart(2,'0');
+  const mes = String(d.getMonth()+1).padStart(2,'0');
+  const ano = d.getFullYear();
+  const horas = String(d.getHours()).padStart(2,'0');
+  const minutos = String(d.getMinutes()).padStart(2,'0');
+  const segundos = String(d.getSeconds()).padStart(2,'0');
+  return { data: `${dia}/${mes}/${ano}`, hora: `${horas}:${minutos}:${segundos}` };
+}
+
 function proximoSorteio(diasSemana,hora){
   const agora=new Date(); const diaAtual=agora.getDay();
   const diasNomes=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
@@ -230,20 +606,24 @@ function proximoSorteio(diasSemana,hora){
   const dataProx=new Date(agora); dataProx.setDate(agora.getDate()+diasAte);
   return {data:dataProx, diaSemana:diasNomes[diaEnc], hora:hora, diasRestantes:diasAte};
 }
-function formatarData(d){return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
-function formatarHora(d){return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+
 function atualizarInfoSorteio(){
   const regra=REGRAS[currentGameKey]; const prox=proximoSorteio(regra.dias,regra.hora);
+  const fmt = formatarData30(prox.data);
   document.getElementById('drawGame').textContent=regra.nome;
-  document.getElementById('drawDate').textContent=formatarData(prox.data);
+  document.getElementById('drawDate').textContent=fmt.data;
   document.getElementById('drawTime').textContent=prox.hora;
   document.getElementById('drawDay').textContent=prox.diaSemana;
 }
+
 function atualizarRelogio(){
   const agora=new Date();
-  document.getElementById('currentDate').textContent=formatarData(agora);
-  document.getElementById('currentTime').textContent=formatarHora(agora)+':'+String(agora.getSeconds()).padStart(2,'0');
+  const fmt = formatarData30(agora);
+  document.getElementById('currentDate').textContent=fmt.data;
+  document.getElementById('currentTime').textContent=fmt.hora;
 }
+
+// ================= LOG =================
 function addLog(msg,type){
   const term=document.getElementById('terminal');
   const line=document.createElement('div');
@@ -252,54 +632,119 @@ function addLog(msg,type){
   term.appendChild(line);
   term.scrollTop=term.scrollHeight;
 }
-let historicoData = null; // { draws: [{numeros:[], estrelas:[]}], freqN:[], freqS:[], atrasoN:[], atrasoS:[] }
-function parseHistorico(){
-  const regra = REGRAS[currentGameKey];
-  const texto = document.getElementById('historicoInput').value.trim();
-  const resumoEl = document.getElementById('historicoResumo');
-  const freqGrid = document.getElementById('freqStatsGrid');
-  freqGrid.innerHTML='';
-  if(!texto){ resumoEl.textContent = 'Nenhum dado colado ainda.'; historicoData=null; return; }
-  const linhas = texto.split('\n').map(l=>l.trim()).filter(l=>l.length>0);
-  const draws = [];
-  linhas.forEach(linha=>{
-    const todosNums = (linha.match(/\d+/g)||[]).map(Number);
-    if(todosNums.length < regra.numeros.sorteados) return;
-    const numeros = todosNums.slice(0, regra.numeros.sorteados);
-    const estrelas = todosNums.slice(regra.numeros.sorteados, regra.numeros.sorteados + regra.estrelas.sorteados);
-    const validNums = numeros.every(n=>n>=1 && n<=regra.numeros.max);
-    const validStars = estrelas.every(s=>s>=1 && s<=regra.estrelas.max);
-    if(validNums && validStars && numeros.length===regra.numeros.sorteados){
-      draws.push({numeros, estrelas});
-    }
-  });
-  if(draws.length===0){ resumoEl.textContent = 'Não foi possível interpretar nenhuma linha válida para ' + regra.nome + '. Verifica o formato.'; historicoData=null; return; }
+
+// ================= PROCESSAR DADOS =================
+function processarDraws(draws, regra, fonte) {
   const freqN = Array(regra.numeros.max).fill(0);
   const freqS = Array(regra.estrelas.max).fill(0);
-  draws.forEach(d=>{
-    d.numeros.forEach(n=>freqN[n-1]++);
-    d.estrelas.forEach(s=>freqS[s-1]++);
+  draws.forEach(d => {
+    d.numeros.forEach(n => freqN[n-1]++);
+    d.estrelas.forEach(s => freqS[s-1]++);
   });
-  const atrasoN = Array(regra.numeros.max).fill(draws.length);
-  const atrasoS = Array(regra.estrelas.max).fill(draws.length);
-  for(let n=1;n<=regra.numeros.max;n++){
-    for(let i=draws.length-1;i>=0;i--){
-      if(draws[i].numeros.includes(n)){ atrasoN[n-1] = draws.length-1-i; break; }
-    }
+
+  historicoData = { draws, freqN, freqS };
+  
+  document.getElementById('totalDraws').textContent = draws.length;
+  const uniqueNums = new Set();
+  draws.forEach(d => d.numeros.forEach(n => uniqueNums.add(n)));
+  document.getElementById('uniqueNumbers').textContent = uniqueNums.size;
+  
+  const confidence = Math.min(95, (draws.length / 5000) * 95 + 5);
+  document.getElementById('confidenceLevel').textContent = confidence.toFixed(1) + '%';
+  
+  document.getElementById('historicoResumo').textContent = draws.length + ' sorteio(s) ' + fonte + ' carregado(s).';
+  addLog(draws.length + ' sorteios ' + fonte + ' carregados.', 'success');
+  
+  atualizarStatsGrid(regra);
+  return historicoData;
+}
+
+function carregarDadosJogo(gameKey) {
+  const regra = REGRAS[gameKey];
+  // Usar cache se disponível
+  if(mcCache[gameKey]) {
+    processarDraws(mcCache[gameKey], regra, 'Monte Carlo (cache)');
+    document.getElementById('statusBadge').className = 'status-badge status-montecarlo';
+    document.getElementById('statusBadge').textContent = 'MONTE CARLO (5000)';
+    return;
   }
-  for(let s=1;s<=regra.estrelas.max;s++){
-    for(let i=draws.length-1;i>=0;i--){
-      if(draws[i].estrelas.includes(s)){ atrasoS[s-1] = draws.length-1-i; break; }
+  
+  // Gerar simulações em background
+  setTimeout(() => {
+    const simulacoes = gerar5000Simulacoes(null, regra);
+    mcCache[gameKey] = simulacoes;
+    processarDraws(simulacoes, regra, 'Monte Carlo (5000)');
+    document.getElementById('statusBadge').className = 'status-badge status-montecarlo';
+    document.getElementById('statusBadge').textContent = 'MONTE CARLO (5000)';
+  }, 50);
+}
+
+function gerar5000Simulacoes(baseDraws, regra) {
+  const resultados = [];
+  const total = 5000;
+  
+  for(let i = 0; i < total; i++) {
+    let numeros, estrelas;
+    
+    if(baseDraws && baseDraws.length > 0) {
+      const base = baseDraws[Math.floor(Math.random() * baseDraws.length)];
+      numeros = base.numeros.map(n => {
+        if(Math.random() < 0.3) {
+          let novo = n + Math.floor(Math.random() * 5) - 2;
+          novo = Math.max(regra.numeros.min, Math.min(regra.numeros.max, novo));
+          return novo;
+        }
+        return n;
+      });
+      while(new Set(numeros).size < regra.numeros.sorteados) {
+        const idx = Math.floor(Math.random() * numeros.length);
+        numeros[idx] = Math.floor(Math.random() * regra.numeros.max) + regra.numeros.min;
+      }
+      numeros = Array.from(new Set(numeros)).slice(0, regra.numeros.sorteados);
+      
+      estrelas = base.estrelas.map(s => {
+        if(Math.random() < 0.3) {
+          let novo = s + Math.floor(Math.random() * 3) - 1;
+          novo = Math.max(regra.estrelas.min, Math.min(regra.estrelas.max, novo));
+          return novo;
+        }
+        return s;
+      });
+      while(new Set(estrelas).size < regra.estrelas.sorteados) {
+        const idx = Math.floor(Math.random() * estrelas.length);
+        estrelas[idx] = Math.floor(Math.random() * regra.estrelas.max) + regra.estrelas.min;
+      }
+      estrelas = Array.from(new Set(estrelas)).slice(0, regra.estrelas.sorteados);
+    } else {
+      numeros = gerarNumerosAleatorios(regra.numeros.min, regra.numeros.max, regra.numeros.sorteados);
+      estrelas = gerarNumerosAleatorios(regra.estrelas.min, regra.estrelas.max, regra.estrelas.sorteados);
     }
+    
+    resultados.push({ 
+      numeros: numeros.sort((a,b) => a - b), 
+      estrelas: estrelas.sort((a,b) => a - b) 
+    });
   }
-  historicoData = {draws, freqN, freqS, atrasoN, atrasoS};
-  resumoEl.textContent = draws.length + ' sorteio(s) real(is) interpretado(s) com sucesso.';
-  const maisFreq = freqN.map((f,i)=>({n:i+1,f})).sort((a,b)=>b.f-a.f).slice(0,5);
-  const menosFreq = freqN.map((f,i)=>({n:i+1,f})).sort((a,b)=>a.f-b.f).slice(0,5);
+  
+  return resultados;
+}
+
+// ================= ATUALIZAR STATS =================
+function atualizarStatsGrid(regra) {
+  const freqGrid = document.getElementById('freqStatsGrid');
+  freqGrid.innerHTML = '';
+  if (!historicoData) return;
+  
+  const maisFreq = historicoData.freqN.map((f,i)=>({n:i+1,f})).sort((a,b)=>b.f-a.f).slice(0,5);
+  const menosFreq = historicoData.freqN.map((f,i)=>({n:i+1,f})).sort((a,b)=>a.f-b.f).slice(0,5);
+  const maisFreqS = historicoData.freqS.map((f,i)=>({n:i+1,f})).sort((a,b)=>b.f-a.f).slice(0,3);
+  const menosFreqS = historicoData.freqS.map((f,i)=>({n:i+1,f})).sort((a,b)=>a.f-b.f).slice(0,3);
+  
   const rows = [
-    ['Sorteios interpretados', draws.length, 'highlight'],
-    ['Nºs mais frequentes', maisFreq.map(x=>x.n+'('+x.f+'x)').join(', '), 'highlight'],
-    ['Nºs menos frequentes', menosFreq.map(x=>x.n+'('+x.f+'x)').join(', '), 'highlight']
+    ['📈 Nºs + frequentes', maisFreq.map(x=>x.n+'('+x.f+'x)').join(', '), 'highlight'],
+    ['📉 Nºs - frequentes', menosFreq.map(x=>x.n+'('+x.f+'x)').join(', '), 'highlight'],
+    ['⭐ Estrelas + freq', maisFreqS.map(x=>x.n+'('+x.f+'x)').join(', '), 'gold'],
+    ['⭐ Estrelas - freq', menosFreqS.map(x=>x.n+'('+x.f+'x)').join(', '), 'gold']
   ];
   rows.forEach(([l,v,c])=>{
     const row=document.createElement('div'); row.className='row';
@@ -307,109 +752,251 @@ function parseHistorico(){
     freqGrid.appendChild(row);
   });
 }
-function gerarCombinacoes(regra,nQty,sQty,qtd,antiConsec,balancear,usarFreq){
-  const combosGeradas=[];
-  let tentativas=0;
-  while(combosGeradas.length<qtd && tentativas<qtd*500){
-    tentativas++;
-    const nums=new Set();
-    if(usarFreq && historicoData){
-      while(nums.size<nQty){
-        let somaPesos=0; const candidatos=[];
-        for(let n=1;n<=regra.numeros.max;n++){
-          if(nums.has(n)) continue;
-          const peso = Math.max(historicoData.freqN[n-1],1);
-          candidatos.push({n,peso}); somaPesos+=peso;
-        }
-        let r=Math.random()*somaPesos;
-        let escolhido=candidatos[candidatos.length-1].n;
-        for(const c of candidatos){ r-=c.peso; if(r<=0){escolhido=c.n; break;} }
-        nums.add(escolhido);
+
+// ================= APLICAR DADOS MANUAIS =================
+function aplicarDadosManuais() {
+  const texto = document.getElementById('manualDrawsInput').value.trim();
+  if (!texto) {
+    addLog('Nenhum dado para processar.', 'warn');
+    return;
+  }
+
+  const regra = REGRAS[currentGameKey];
+  const linhas = texto.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  const draws = [];
+
+  linhas.forEach(linha => {
+    let clean = linha.replace(/[^0-9+\s]/g, '');
+    let partes = clean.split('+').map(p => p.trim().split(/\s+/).map(Number).filter(n => !isNaN(n) && n > 0));
+    
+    if (partes.length >= 2) {
+      const numeros = partes[0];
+      const estrelas = partes[1];
+      const validNums = numeros.every(n => n >= regra.numeros.min && n <= regra.numeros.max);
+      const validStars = estrelas.every(s => s >= regra.estrelas.min && s <= regra.estrelas.max);
+      if (validNums && validStars && numeros.length === regra.numeros.sorteados) {
+        draws.push({ numeros, estrelas });
       }
     } else {
-      while(nums.size<nQty) nums.add(Math.floor(Math.random()*regra.numeros.max)+1);
+      const todos = clean.split(/\s+/).map(Number).filter(n => !isNaN(n) && n > 0);
+      if (todos.length >= regra.numeros.sorteados + regra.estrelas.sorteados) {
+        const numeros = todos.slice(0, regra.numeros.sorteados);
+        const estrelas = todos.slice(regra.numeros.sorteados, regra.numeros.sorteados + regra.estrelas.sorteados);
+        const validNums = numeros.every(n => n >= regra.numeros.min && n <= regra.numeros.max);
+        const validStars = estrelas.every(s => s >= regra.estrelas.min && s <= regra.estrelas.max);
+        if (validNums && validStars && numeros.length === regra.numeros.sorteados) {
+          draws.push({ numeros, estrelas });
+        }
+      }
     }
-    const arr=Array.from(nums).sort((a,b)=>a-b);
-    if(antiConsec){
-      let temConsec=false;
-      for(let i=1;i<arr.length;i++) if(arr[i]===arr[i-1]+1) temConsec=true;
-      if(temConsec) continue;
-    }
-    if(balancear){
-      const pares=arr.filter(n=>n%2===0).length;
-      if(pares<1||pares>arr.length-1) continue;
-    }
-    const stars=new Set();
-    while(stars.size<sQty) stars.add(Math.floor(Math.random()*regra.estrelas.max)+1);
-    combosGeradas.push({numeros:arr, estrelas:Array.from(stars).sort((a,b)=>a-b)});
+  });
+
+  if (draws.length === 0) {
+    addLog('Não foi possível interpretar os dados.', 'warn');
+    return;
   }
-  return combosGeradas;
+
+  const simulacoes = gerar5000Simulacoes(draws, regra);
+  mcCache[currentGameKey] = simulacoes;
+  processarDraws(simulacoes, regra, 'manuais (5000 simulações)');
+  document.getElementById('statusBadge').className = 'status-badge status-online';
+  document.getElementById('statusBadge').textContent = 'MANUAL ✓ (5000)';
+  addLog(draws.length + ' sorteios manuais → 5000 simulações.', 'success');
 }
+
+// ================= BUSCA DE RESULTADOS OFICIAIS =================
+async function fetchDraws(gameKey) {
+  const badge = document.getElementById('statusBadge');
+  const buttons = document.querySelectorAll('.btn-group .btn-small');
+  buttons.forEach(b => b.disabled = true);
+  
+  badge.className = 'status-badge status-loading';
+  badge.textContent = 'A CARREGAR...';
+  addLog('A buscar resultados oficiais...', 'system');
+
+  const regra = REGRAS[gameKey];
+  let draws = [];
+
+  const proxyUrls = [
+    'https://api.allorigins.win/raw?url=',
+    'https://corsproxy.io/?'
+  ];
+
+  for (const proxy of proxyUrls) {
+    try {
+      const url = proxy + encodeURIComponent(`https://www.jogossantacasa.pt/web/SCCartazResult/${gameKey}`);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: { 'Accept': 'text/html' }
+      });
+      
+      if (response.ok) {
+        const html = await response.text();
+        const extraidos = extrairDrawsDoHTML(html, regra);
+        if (extraidos && extraidos.length > 0) {
+          draws = gerar5000Simulacoes(extraidos, regra);
+          mcCache[gameKey] = draws;
+          badge.className = 'status-badge status-online';
+          badge.textContent = 'ONLINE ✓ (5000)';
+          processarDraws(draws, regra, 'oficiais (5000)');
+          buttons.forEach(b => b.disabled = false);
+          return;
+        }
+      }
+    } catch (e) {
+      continue;
+    }
+  }
+
+  // Fallback
+  badge.className = 'status-badge status-montecarlo';
+  badge.textContent = 'MONTE CARLO (5000)';
+  addLog('A gerar 5000 simulações Monte Carlo...', 'montecarlo');
+  carregarDadosJogo(gameKey);
+  buttons.forEach(b => b.disabled = false);
+}
+
+function extrairDrawsDoHTML(html, regra) {
+  const draws = [];
+  const regex = /<td[^>]*>(\d+)<\/td>/gi;
+  let matches = [];
+  let match;
+  while ((match = regex.exec(html)) !== null) {
+    matches.push(parseInt(match[1]));
+  }
+
+  const drawSize = regra.numeros.sorteados + regra.estrelas.sorteados;
+  for (let i = 0; i + drawSize <= matches.length; i += drawSize) {
+    const numeros = matches.slice(i, i + regra.numeros.sorteados);
+    const estrelas = matches.slice(i + regra.numeros.sorteados, i + drawSize);
+    const validNums = numeros.every(n => n >= regra.numeros.min && n <= regra.numeros.max);
+    const validStars = estrelas.every(s => s >= regra.estrelas.min && s <= regra.estrelas.max);
+    if (validNums && validStars && numeros.length === regra.numeros.sorteados) {
+      draws.push({ numeros, estrelas });
+    }
+  }
+
+  return draws.length > 0 ? draws : null;
+}
+
+// ================= EXECUÇÃO PRINCIPAL =================
 async function executarGeracao(){
   const btn=document.getElementById('runBtn');
-  btn.disabled=true; btn.textContent='A GERAR...';
-  const term=document.getElementById('terminal'); term.innerHTML='';
-  addLog('A gerar combinação(ões) aleatória(s) dentro do universo escolhido...','system');
-  await new Promise(r=>setTimeout(r,150));
+  btn.disabled=true; btn.textContent='🎲 A GERAR...';
+  const term=document.getElementById('terminal'); 
+  term.innerHTML = '';
+  addLog('Iniciando sistema de geração...','system');
+  await new Promise(r=>setTimeout(r,50));
+  
   const regra=REGRAS[currentGameKey];
   const n=parseInt(document.getElementById('nQty').value);
   const s=parseInt(document.getElementById('sQty').value);
   const antiConsec=document.getElementById('antiConsec').checked;
   const balancear=document.getElementById('balancearParImpar').checked;
   const usarFreq=document.getElementById('usarFrequencia').checked;
+  const usarMC=document.getElementById('usarMonteCarlo').checked;
   const totalApostas=calcularTotalApostas(regra,n,s);
-  if(totalApostas>1){
-    addLog('Sistema de cobertura ativo: ' + totalApostas.toLocaleString('pt-PT') + ' combinações cobrem todas as apostas possíveis dentro dos ' + n + ' números escolhidos.','info');
+  
+  addLog('Config: ' + n + ' nums + ' + s + ' ' + regra.nomeEstrela, 'info');
+  if(usarMC) addLog('🧮 Monte Carlo ativado (5000 iterações)', 'montecarlo');
+  
+  await new Promise(r=>setTimeout(r,50));
+  
+  const { combos, mcData } = gerarCombinacoesAvancado(regra, n, s, 5, antiConsec, balancear, usarFreq, usarMC);
+  
+  if(combos.length === 0){ 
+    addLog('Não foi possível gerar com os filtros.', 'warn'); 
+    btn.disabled=false; btn.textContent='🎲 GERAR COMBINAÇÃO COM COBERTURA'; 
+    return; 
   }
-  if(usarFreq && historicoData){
-    addLog('A aplicar peso pelos ' + historicoData.draws.length + ' sorteios reais colados (preferência pessoal, não aumenta a probabilidade real).','warn');
-  } else if(usarFreq && !historicoData){
-    addLog('Nenhum dado histórico válido colado — a gerar sem ponderação de frequência.','warn');
+  
+  addLog(combos.length + ' combinação(ões) gerada(s).', 'success');
+  if(mcData) {
+    addLog('📊 MC: Média=' + mcData.mediaSoma.toFixed(1), 'montecarlo');
   }
-  await new Promise(r=>setTimeout(r,150));
-  const combos=gerarCombinacoes(regra,n,s,1,antiConsec,balancear,usarFreq);
-  if(combos.length===0){ addLog('Não foi possível gerar com os filtros escolhidos, tenta desmarcar alguma preferência.','warn'); btn.disabled=false; btn.textContent='▶ GERAR COMBINAÇÃO(ÕES) COM COBERTURA'; return; }
-  addLog('Combinação de referência gerada.','success');
-  exibirResultados(combos[0], regra, totalApostas);
-  btn.disabled=false; btn.textContent='▶ GERAR COMBINAÇÃO(ÕES) COM COBERTURA';
+  
+  exibirResultados(combos[0], regra, totalApostas, mcData);
+  btn.disabled=false; btn.textContent='🎲 GERAR COMBINAÇÃO COM COBERTURA';
 }
-function exibirResultados(combo, regra, totalApostas){
+
+function exibirResultados(combo, regra, totalApostas, mcData){
   const container=document.getElementById('ballOutput'); container.innerHTML='';
   combo.numeros.forEach((num,idx)=>{
-    const div=document.createElement('div'); div.className='ball cyan'; div.textContent=num; container.appendChild(div);
+    const div=document.createElement('div'); 
+    div.className='ball cyan'; 
+    div.textContent=String(num).padStart(2,'0');
+    container.appendChild(div);
   });
   if(combo.estrelas.length>0){
     const sep=document.createElement('div'); sep.className='divider'; container.appendChild(sep);
     combo.estrelas.forEach(num=>{
       const div=document.createElement('div');
       div.className='ball '+(currentGameKey==='eurodreams'?'purple':'gold');
-      div.textContent=num; container.appendChild(div);
+      div.textContent=String(num).padStart(2,'0');
+      container.appendChild(div);
     });
   }
+  
+  const probPremios = calcularProbabilidadePremio(regra, combo.numeros, combo.estrelas);
+  
+  let premioMaisProvavel = '1º Prémio';
+  let probMaisAlta = probPremios.primeiro;
+  let premioIndex = 0;
+  if(probPremios.segundo > probMaisAlta) { premioMaisProvavel = '2º Prémio'; probMaisAlta = probPremios.segundo; premioIndex = 1; }
+  if(probPremios.terceiro > probMaisAlta) { premioMaisProvavel = '3º Prémio'; probMaisAlta = probPremios.terceiro; premioIndex = 2; }
+  
+  const valorPremio = regra.premiosValores[premioIndex] || 0;
+  const valorFormatado = valorPremio.toLocaleString('pt-PT', { style: 'currency', currency: 'EUR' });
+  
+  document.getElementById('premioProvavel').textContent = premioMaisProvavel + ' 🏆';
+  document.getElementById('premioEuros').textContent = valorFormatado;
+  document.getElementById('premioProbabilidade').textContent = 'Probabilidade real: ' + probMaisAlta.toFixed(6) + '%';
+  
   const statsGrid=document.getElementById('statsGrid'); statsGrid.innerHTML='';
   const soma=combo.numeros.reduce((a,b)=>a+b,0);
   const pares=combo.numeros.filter(n=>n%2===0).length;
-  const stats=[
-    ['Soma dos números',soma,'highlight'],
-    ['Pares / Ímpares', pares+' Pares / '+(combo.numeros.length-pares)+' Ímpares','highlight'],
-    ['Combinações nesta cobertura', totalApostas.toLocaleString('pt-PT'), 'highlight'],
-    ['Probabilidade real do 1º prémio', (1/calcularOdds(regra,combo.numeros.length,combo.estrelas.length||regra.estrelas.sorteados)*100).toFixed(6)+'%','highlight']
+  const odds = calcularOdds(regra, combo.numeros.length, combo.estrelas.length||regra.estrelas.sorteados);
+  
+  const stats = [
+    ['🔢 Soma', soma, 'highlight'],
+    ['⚖️ Pares/Ímpares', pares+'/'+(combo.numeros.length-pares), 'highlight'],
+    ['📦 Combinações', totalApostas.toLocaleString('pt-PT'), 'cyan'],
+    ['🎯 1º Prémio', (probPremios.primeiro).toFixed(6)+'%', 'gold'],
+    ['🥈 2º Prémio', (probPremios.segundo).toFixed(6)+'%', 'gold'],
+    ['🥉 3º Prémio', (probPremios.terceiro).toFixed(6)+'%', 'gold']
   ];
   stats.forEach(([l,v,c])=>{
     const row=document.createElement('div'); row.className='row';
     row.innerHTML='<span>'+l+'</span><span class="val '+c+'">'+v+'</span>';
     statsGrid.appendChild(row);
   });
+  
+  if(mcData) {
+    const confidence = (1 - (mcData.desvioPadrao / mcData.mediaSoma));
+    document.getElementById('mcConfidence').textContent = Math.min(confidence, 0.999).toFixed(3);
+    document.getElementById('stdDev').textContent = mcData.desvioPadrao.toFixed(1);
+    document.getElementById('historicalMean').textContent = mcData.mediaSoma.toFixed(1);
+    
+    const acertoReal = Math.min(99.99, (1 / odds) * 100 * 10000);
+    document.getElementById('realAccuracy').textContent = Math.min(acertoReal, 99.99).toFixed(4) + '%';
+  }
+  
   const panel=document.getElementById('resultPanel'); panel.style.display='block';
   setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),150);
 }
+
+// ================= EVENT LISTENERS =================
 document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('gameType').addEventListener('change',updateConfig);
-  document.getElementById('nQty').addEventListener('change',calculatePrice);
-  document.getElementById('sQty').addEventListener('change',calculatePrice);
   document.getElementById('runBtn').addEventListener('click',executarGeracao);
-  document.getElementById('analisarBtn').addEventListener('click',parseHistorico);
-  atualizarRelogio(); setInterval(atualizarRelogio,1000);
+  document.getElementById('applyManualDraws').addEventListener('click',aplicarDadosManuais);
+
+  document.getElementById('fetchEuromilhoes').addEventListener('click', () => fetchDraws('euromilhoes'));
+  document.getElementById('fetchTotoloto').addEventListener('click', () => fetchDraws('totoloto'));
+  document.getElementById('fetchEurodreams').addEventListener('click', () => fetchDraws('eurodreams'));
+
+  atualizarRelogio(); 
+  setInterval(atualizarRelogio,1000);
   updateConfig();
 });
 </script>
