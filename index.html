@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>JONHY EL IGUANA · MATEMÁTICA 8D</title>
+<title>JONHY EL IGUANA · 1º PRÉMIO</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -15,7 +15,9 @@
   --text-dim: #8a9bb5;
 
   --color-red: #FF1A1A;
-  --color-yellow: #FFD700;
+  --color-green-flag: #046A38;
+  --color-gold: #FFD700;
+  --color-gold-toasted: #CBA135;
   --color-green: #00FF41;
   --color-blue: #0066FF;
   --color-white: #FFFFFF;
@@ -36,14 +38,13 @@ body {
   color: var(--text-primary);
   font-family: 'Rajdhani', sans-serif;
   min-height: 100vh;
-  line-height: 1.6;
+  line-height: 1.55;
   background-image: url('https://qwen-webui-prod.oss-accelerate.aliyuncs.com/9621fd80-0b8d-4768-a985-31c483168878/9621fd80-0b8d-4768-a985-31c483168878_0.png?x-oss-process=image/resize,w_1920,m_lfit');
   background-size: cover;
   background-position: center top;
   background-attachment: fixed;
   background-repeat: no-repeat;
   position: relative;
-  animation: iguanaGlow 6s ease-in-out infinite;
 }
 
 body::before {
@@ -56,28 +57,13 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
-body::after {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size: 50px 50px;
-  pointer-events: none;
-  z-index: 0;
-}
 
-.container { max-width: 900px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+.container { max-width: 880px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
 
-@keyframes iguanaGlow {
-  0%, 100% { filter: brightness(1) contrast(1); }
-  50% { filter: brightness(1.04) contrast(1.03); }
-}
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes pulseBar { 0%,100% { opacity:.55 } 50% { opacity:1 } }
 
-/* ===== BANDEIRAS 5D — ondulação real com profundidade em camadas ===== */
+/* ===== BANDEIRA PORTUGUESA REAL: verde (2/5) + vermelho (3/5), sem 3ª risca ===== */
 @keyframes flagWave5D {
   0%   { transform: perspective(400px) rotateX(0deg) rotateY(0deg) skewX(0deg) scaleY(1) translateZ(0px); }
   20%  { transform: perspective(400px) rotateX(6deg) rotateY(-4deg) skewX(-5deg) scaleY(0.97) translateZ(6px); }
@@ -90,7 +76,7 @@ body::after {
 
 .flag-5d {
   position: absolute;
-  left: 0; width: 100%; height: 10px;
+  left: 0; width: 100%; height: 11px;
   display: flex;
   transform-style: preserve-3d;
   perspective: 400px;
@@ -99,105 +85,117 @@ body::after {
 .flag-5d.top { top: 0; }
 .flag-5d.bottom { bottom: 0; }
 .flag-5d .stripe {
-  flex: 1;
   height: 100%;
-  animation: flagWave5D 2.6s ease-in-out infinite;
+  animation: flagWave5D 2.6s ease-in-out infinite, flagShine 4s ease-in-out infinite;
   transform-origin: center top;
   background-size: 220% 100%;
 }
 .flag-5d .stripe:nth-child(1) { animation-delay: 0s; }
-.flag-5d .stripe:nth-child(2) { animation-delay: 0.25s; }
-.flag-5d .stripe:nth-child(3) { animation-delay: 0.5s; }
-.flag-pt .stripe:nth-child(1) { background: linear-gradient(120deg, var(--color-green), #007a2f, var(--color-green)); box-shadow: 0 0 18px rgba(0,255,65,0.5); }
-.flag-pt .stripe:nth-child(2) { background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); flex: 1.6; box-shadow: 0 0 18px rgba(255,26,26,0.5); }
-.flag-pt .stripe:nth-child(3) { background: linear-gradient(120deg, var(--color-yellow), #b8860b, var(--color-yellow)); box-shadow: 0 0 18px rgba(255,215,0,0.5); }
-.flag-fr .stripe:nth-child(1) { background: linear-gradient(120deg, var(--color-blue), #003b99, var(--color-blue)); box-shadow: 0 0 18px rgba(0,102,255,0.5); }
-.flag-fr .stripe:nth-child(2) { background: linear-gradient(120deg, var(--color-white), #cfd8e8, var(--color-white)); box-shadow: 0 0 18px rgba(255,255,255,0.4); }
-.flag-fr .stripe:nth-child(3) { background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); box-shadow: 0 0 18px rgba(255,26,26,0.5); }
-.flag-5d .stripe { animation-name: flagWave5D, flagShine; animation-duration: 2.6s, 4s; animation-timing-function: ease-in-out, ease-in-out; animation-iteration-count: infinite, infinite; }
+.flag-5d .stripe:nth-child(2) { animation-delay: 0.3s; }
+.flag-5d .stripe:nth-child(3) { animation-delay: 0.15s; }
+
+/* Bandeira PT real: 2/5 verde + 3/5 vermelho */
+.flag-pt .stripe:nth-child(1) { flex: 2; background: linear-gradient(120deg, var(--color-green-flag), #024d29, var(--color-green-flag)); box-shadow: 0 0 18px rgba(4,106,56,0.6); }
+.flag-pt .stripe:nth-child(2) { flex: 3; background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); box-shadow: 0 0 18px rgba(255,26,26,0.5); }
+.flag-pt-emblem {
+  position: absolute; left: 40%; top: 50%; width: 15px; height: 15px; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 30%, var(--color-gold), var(--color-gold-toasted) 70%);
+  box-shadow: 0 0 10px rgba(255,215,0,0.85), 0 0 3px rgba(0,0,0,0.6);
+  animation: goldShimmer 3s ease-in-out infinite, armillarySway 4.5s ease-in-out infinite;
+  z-index: 2;
+}
+
+/* Bandeira FR (correta): azul, branco, vermelho */
+.flag-fr .stripe:nth-child(1) { flex:1; background: linear-gradient(120deg, var(--color-blue), #003b99, var(--color-blue)); box-shadow: 0 0 18px rgba(0,102,255,0.5); }
+.flag-fr .stripe:nth-child(2) { flex:1; background: linear-gradient(120deg, var(--color-white), #cfd8e8, var(--color-white)); box-shadow: 0 0 18px rgba(255,255,255,0.4); }
+.flag-fr .stripe:nth-child(3) { flex:1; background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); box-shadow: 0 0 18px rgba(255,26,26,0.5); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
 
 a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible {
-  outline: 3px solid var(--color-yellow);
+  outline: 3px solid var(--color-gold);
   outline-offset: 2px;
   border-radius: 8px;
+}
+
+/* ===== CABEÇALHO — 2cm mais alto, com astrolábio + quinas douradas a "ondular" ===== */
+@keyframes armillarySway {
+  0%,100% { transform: rotate(-4deg) translateY(0px); }
+  25%     { transform: rotate(2deg) translateY(-4px); }
+  50%     { transform: rotate(5deg) translateY(0px); }
+  75%     { transform: rotate(-2deg) translateY(4px); }
+}
+@keyframes goldShimmer {
+  0%,100% { filter: brightness(1) drop-shadow(0 0 10px rgba(255,215,0,0.45)); }
+  50%     { filter: brightness(1.4) drop-shadow(0 0 24px rgba(255,215,0,0.9)); }
 }
 
 .header {
   background: var(--glass-heavy);
   border: 1px solid var(--glass-border);
   border-radius: 24px;
-  padding: 34px 20px 28px;
+  padding: 110px 20px 26px;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   box-shadow: var(--shadow-5d);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(25px) saturate(1.3);
   -webkit-backdrop-filter: blur(25px) saturate(1.3);
 }
+.header-emblem-wrap { position: absolute; top: 26px; left: 50%; transform: translateX(-50%); width: 72px; height: 72px; }
+.header-emblem { width: 72px; height: 72px; animation: armillarySway 4.5s ease-in-out infinite, goldShimmer 3.2s ease-in-out infinite; }
+
 .header h1 {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
-  letter-spacing: 6px;
+  font-size: 1.9rem;
+  letter-spacing: 5px;
   color: var(--text-primary);
   text-shadow: 0 0 25px rgba(255,255,255,0.3), 0 2px 10px rgba(0,0,0,0.8);
   font-weight: 900;
 }
 .header .sub {
-  font-size: 0.8rem;
-  color: var(--color-green);
-  margin-top: 8px;
+  font-size: 0.75rem;
+  color: var(--color-gold);
+  margin-top: 6px;
   letter-spacing: 3px;
   font-weight: 600;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
 .datetime-header {
   font-family: 'Orbitron', sans-serif;
-  font-size: 28px;
+  font-size: 24px;
   color: var(--color-red);
   font-weight: 900;
-  margin-top: 16px;
-  padding-top: 16px;
+  margin-top: 14px;
+  padding-top: 14px;
   border-top: 1px solid var(--glass-border);
   text-shadow: 0 0 20px rgba(255, 26, 26, 0.6), 0 2px 8px rgba(0,0,0,0.9);
-}
-
-.eyebrow {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--text-dim);
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  display: block;
 }
 
 .card {
   background: var(--glass);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 20px;
+  border-radius: 18px;
+  padding: 18px;
+  margin-bottom: 16px;
   backdrop-filter: blur(20px) saturate(1.2);
   -webkit-backdrop-filter: blur(20px) saturate(1.2);
   box-shadow: var(--shadow-card);
-  transition: transform 0.3s, border-color 0.5s, box-shadow 0.3s;
 }
-.card:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.12); }
 
 .card h2 {
   font-family: 'Orbitron', sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--game-color);
   text-transform: uppercase;
   border-left: 4px solid var(--game-color);
-  padding-left: 14px;
-  margin-bottom: 20px;
+  padding-left: 12px;
+  margin-bottom: 14px;
   letter-spacing: 2px;
   transition: color 0.5s, border-color 0.5s;
   text-shadow: 0 0 12px rgba(var(--game-color-rgb), 0.6);
@@ -207,24 +205,14 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   gap: 10px;
   flex-wrap: wrap;
 }
-.card h2 .step-num {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.65rem;
-  color: var(--text-dim);
-  letter-spacing: 2px;
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 3px 10px;
-  text-shadow: none;
-}
 
 select {
   width: 100%;
   background: rgba(0,0,0,0.6);
   border: 2px solid var(--game-color);
   color: var(--game-color);
-  padding: 16px;
-  font-size: 1.2rem;
+  padding: 14px;
+  font-size: 1.1rem;
   border-radius: 12px;
   outline: none;
   font-family: 'Orbitron', sans-serif;
@@ -241,55 +229,54 @@ select {
 }
 select:disabled { opacity: 0.55; cursor: not-allowed; }
 
-.flex { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 16px; }
+.flex { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; }
 .flex > * { flex: 1; min-width: 140px; }
 
-label.field-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; font-weight: 700; }
-label.field-label .val { font-size: 1.5rem; color: var(--game-color); font-family: 'Orbitron', sans-serif; transition: color 0.5s; text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.6); }
+label.field-label { font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; display: block; font-weight: 700; }
+label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-family: 'Orbitron', sans-serif; transition: color 0.5s; text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.6); }
 
 .price-display {
-  margin-top: 12px; padding: 14px 18px;
+  margin-top: 10px; padding: 12px 16px;
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.03));
-  border: 2px solid var(--color-yellow); border-radius: 12px; text-align: center;
+  border: 2px solid var(--color-gold); border-radius: 12px; text-align: center;
   box-shadow: 0 0 25px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
 }
-.price-display .price-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
-.price-display .price-value { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; color: var(--color-yellow); font-weight: 900; text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); }
-.price-display .price-combos { font-size: 0.7rem; color: var(--text-dim); margin-top: 4px; letter-spacing: 1px; }
+.price-display .price-label { font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3px; }
+.price-display .price-value { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: var(--color-gold); font-weight: 900; text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); }
+.price-display .price-combos { font-size: 0.68rem; color: var(--text-dim); margin-top: 3px; letter-spacing: 1px; }
 
-.filters-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 4px; }
+.filters-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 2px; }
 .mini-btn {
-  font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  font-family: 'Rajdhani', sans-serif; font-size: 0.66rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
   color: var(--text-dim); background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 8px;
   padding: 6px 12px; cursor: pointer; transition: all 0.25s;
 }
 .mini-btn:hover { color: var(--text-primary); border-color: var(--game-color); }
 
 .checkrow {
-  display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 0.85rem; color: var(--text-primary);
-  padding: 12px 16px; background: rgba(0,0,0,0.35); border-radius: 10px; border: 1px solid var(--glass-border);
+  display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 0.78rem; color: var(--text-primary);
+  padding: 8px 12px; background: rgba(0,0,0,0.35); border-radius: 9px; border: 1px solid var(--glass-border);
   text-shadow: 0 1px 4px rgba(0,0,0,0.8); cursor: pointer;
 }
-.checkrow input { width: 20px; height: 20px; accent-color: var(--game-color); cursor: pointer; flex-shrink: 0; }
+.checkrow input { width: 18px; height: 18px; accent-color: var(--game-color); cursor: pointer; flex-shrink: 0; }
 
-.monitor {
+/* ===== PAINEL 1º PRÉMIO — substitui o antigo "monitor" genérico ===== */
+.firstprize-card {
   background: linear-gradient(180deg, rgba(5,8,16,0.95), rgba(2,4,8,0.98));
-  border: 1px solid var(--glass-border); border-radius: 20px; padding: 24px; text-align: center; margin-bottom: 20px;
-  backdrop-filter: blur(15px); box-shadow: var(--shadow-card);
+  border: 2px solid var(--color-gold); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 16px;
+  backdrop-filter: blur(15px); box-shadow: 0 0 40px rgba(255,215,0,0.15), var(--shadow-card);
 }
-.monitor .odds { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; color: var(--color-white); margin: 10px 0; text-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 2px 10px rgba(0,0,0,0.9); }
-.monitor .odds-sub { font-size: 0.7rem; color: var(--text-dim); letter-spacing: 1px; margin-top: 6px; }
-.monitor-grid { display:grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 18px; }
-.monitor-mini { background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px; }
-.monitor-mini .mlabel { font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-.monitor-mini .mval { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; color: var(--text-primary); margin-top: 4px; }
+.fp-label { font-size: 0.66rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 3px; }
+.fp-combo { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; color: var(--text-primary); margin-top: 8px; font-weight: 700; }
+.fp-odds { font-family: 'Orbitron', sans-serif; font-size: 1.7rem; font-weight: 900; color: var(--color-gold); margin: 8px 0 4px; text-shadow: 0 0 25px rgba(255, 215, 0, 0.6), 0 2px 10px rgba(0,0,0,0.9); }
+.fp-jackpot { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.5px; margin-top: 4px; line-height: 1.5; }
 
 .btn {
-  width: 100%; padding: 22px;
+  width: 100%; padding: 20px;
   background: linear-gradient(135deg, rgba(204, 119, 34, 0.3), rgba(204, 119, 34, 0.08));
   border: 2px solid var(--color-amber); color: var(--color-amber);
-  font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px;
-  border-radius: 14px; cursor: pointer; margin: 20px 0; transition: all 0.3s;
+  font-family: 'Orbitron', sans-serif; font-size: 1.05rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
+  border-radius: 14px; cursor: pointer; margin: 16px 0; transition: all 0.3s;
   text-shadow: 0 0 15px rgba(204, 119, 34, 0.7), 0 2px 8px rgba(0,0,0,0.9);
   box-shadow: 0 0 30px rgba(204, 119, 34, 0.2);
 }
@@ -297,97 +284,99 @@ label.field-label .val { font-size: 1.5rem; color: var(--game-color); font-famil
 .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
 .btn-secondary {
-  flex: 1; min-width: 140px; padding: 14px; background: rgba(255,255,255,0.05); border: 2px solid var(--glass-border);
-  color: var(--text-primary); font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  flex: 1; min-width: 130px; padding: 12px; background: rgba(255,255,255,0.05); border: 2px solid var(--glass-border);
+  color: var(--text-primary); font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: 2px; border-radius: 12px; cursor: pointer; transition: all 0.25s;
 }
 .btn-secondary:hover { border-color: var(--game-color); color: var(--game-color); }
 .btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
 
-.progress-wrap { height: 8px; width: 100%; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; margin: 10px 0 0; display: none; }
+.progress-wrap { height: 7px; width: 100%; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; margin: 8px 0 0; display: none; }
 .progress-wrap.active { display: block; }
-.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--game-color), var(--color-yellow)); animation: pulseBar 1.2s ease-in-out infinite; transition: width 0.2s ease-out; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--game-color), var(--color-gold)); animation: pulseBar 1.2s ease-in-out infinite; transition: width 0.2s ease-out; }
 
 .terminal {
-  background: rgba(0,0,0,0.75); border: 1px solid var(--glass-border); border-radius: 12px; height: 180px; overflow-y: auto;
-  padding: 16px; font-size: 0.75rem; color: var(--color-green); line-height: 1.7; font-family: 'Share Tech Mono', monospace;
+  background: rgba(0,0,0,0.75); border: 1px solid var(--glass-border); border-radius: 12px; height: 130px; overflow-y: auto;
+  padding: 14px; font-size: 0.72rem; color: var(--color-green); line-height: 1.6; font-family: 'Share Tech Mono', monospace;
   backdrop-filter: blur(10px);
 }
-.log-line { margin: 4px 0; padding-left: 12px; border-left: 2px solid transparent; }
+.log-line { margin: 3px 0; padding-left: 10px; border-left: 2px solid transparent; }
 .log-line.system { color: var(--color-green); border-left-color: var(--color-green); text-shadow: 0 0 8px rgba(0, 255, 65, 0.4); }
 .log-line.math { color: var(--color-blue); border-left-color: var(--color-blue); text-shadow: 0 0 8px rgba(0, 102, 255, 0.4); }
-.log-line.success { color: var(--color-yellow); border-left-color: var(--color-yellow); text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
+.log-line.success { color: var(--color-gold); border-left-color: var(--color-gold); text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
 .log-line.warn { color: var(--color-red); border-left-color: var(--color-red); text-shadow: 0 0 8px rgba(255, 26, 26, 0.4); }
 
 .result-panel {
   display: none; border: 2px solid var(--game-color);
   background: linear-gradient(180deg, rgba(5,8,16,0.92), rgba(2,4,8,0.96));
-  border-radius: 24px; padding: 30px 20px; margin-top: 24px; text-align: center;
+  border-radius: 22px; padding: 26px 18px; margin-top: 20px; text-align: center;
   box-shadow: 0 0 100px rgba(var(--game-color-rgb), 0.35), var(--shadow-card);
   animation: fadeIn 0.6s ease-out; transition: border-color 0.5s, box-shadow 0.5s; backdrop-filter: blur(20px);
 }
-.result-panel h2 { font-family: 'Orbitron', sans-serif; color: var(--game-color); letter-spacing: 3px; margin-bottom: 20px; font-size: 1.2rem; transition: color 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 0.7); }
+.result-panel h2 { font-family: 'Orbitron', sans-serif; color: var(--game-color); letter-spacing: 3px; margin-bottom: 16px; font-size: 1.1rem; transition: color 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 0.7); }
 
-.balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin: 24px 0; }
+.balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin: 20px 0; }
 .ball.game-color {
-  width: 70px; height: 70px; border-radius: 50%; border: 4px solid var(--game-color); color: var(--game-color);
-  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 34px; font-weight: 900;
+  width: 64px; height: 64px; border-radius: 50%; border: 4px solid var(--game-color); color: var(--game-color);
+  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 30px; font-weight: 900;
   background: radial-gradient(circle at 30% 30%, rgba(20,30,50,0.98), rgba(2,4,8,0.99));
   box-shadow: 0 0 50px rgba(var(--game-color-rgb), 0.7), 0 0 100px rgba(var(--game-color-rgb), 0.4), 0 8px 20px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
   transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 1), 0 2px 6px rgba(0,0,0,0.9); position: relative;
 }
 .ball.star-color {
-  width: 70px; height: 70px; border-radius: 50%; border: 4px solid var(--color-pink); color: var(--color-pink);
-  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 34px; font-weight: 900;
+  width: 64px; height: 64px; border-radius: 50%; border: 4px solid var(--color-pink); color: var(--color-pink);
+  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 30px; font-weight: 900;
   background: radial-gradient(circle at 30% 30%, rgba(50,15,35,0.98), rgba(15,4,10,0.99));
   box-shadow: 0 0 50px rgba(var(--color-pink-rgb), 0.7), 0 0 100px rgba(var(--color-pink-rgb), 0.4), 0 8px 20px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
   transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--color-pink-rgb), 1), 0 2px 6px rgba(0,0,0,0.9); position: relative;
 }
 
-.result-actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top: 10px; }
+.result-actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top: 8px; }
 
-.simple-prize-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: center; }
+.simple-prize-table { width: 100%; border-collapse: collapse; margin-top: 16px; text-align: center; }
 .simple-prize-table-scroll { width: 100%; overflow-x: auto; }
 .simple-prize-table th {
-  color: var(--game-color); font-family: 'Orbitron', sans-serif; font-size: 12px; padding: 12px 8px; border-bottom: 2px solid var(--game-color);
+  color: var(--game-color); font-family: 'Orbitron', sans-serif; font-size: 11px; padding: 10px 7px; border-bottom: 2px solid var(--game-color);
   text-transform: uppercase; transition: color 0.5s, border-color 0.5s; letter-spacing: 1px; text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.5); white-space: nowrap;
 }
-.simple-prize-table td { font-family: 'Orbitron', sans-serif; font-size: 15px; font-weight: 700; padding: 13px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); white-space: nowrap; }
-.simple-prize-table .tier-name { color: var(--text-primary); text-align: left; font-size: 13px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); white-space: normal; }
-.simple-prize-table .tier-odds { color: var(--color-white); text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0,0,0,0.9); font-size: 13px; }
-.simple-prize-table .tier-system { color: var(--color-green); text-shadow: 0 0 12px rgba(0,255,65,0.5), 0 2px 6px rgba(0,0,0,0.9); font-size: 12px; }
-.simple-prize-table .tier-value { color: var(--color-yellow); text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); font-size: 14px; font-weight: 900; }
-.prize-table-legend { font-size: 0.68rem; color: var(--text-dim); margin-top: 10px; line-height: 1.6; }
+.simple-prize-table td { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700; padding: 11px 7px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); white-space: nowrap; }
+.simple-prize-table tr.first-tier td { background: rgba(255,215,0,0.08); }
+.simple-prize-table .tier-name { color: var(--text-primary); text-align: left; font-size: 12.5px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); white-space: normal; }
+.simple-prize-table tr.first-tier .tier-name { color: var(--color-gold); }
+.simple-prize-table .tier-odds { color: var(--color-white); text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0,0,0,0.9); font-size: 12.5px; }
+.simple-prize-table .tier-system { color: var(--color-green); text-shadow: 0 0 12px rgba(0,255,65,0.5), 0 2px 6px rgba(0,0,0,0.9); font-size: 11.5px; }
+.simple-prize-table .tier-value { color: var(--color-gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); font-size: 13.5px; font-weight: 900; }
+.prize-table-legend { font-size: 0.66rem; color: var(--text-dim); margin-top: 8px; line-height: 1.55; }
 
-.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
-.stat-box { background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; text-align: left; backdrop-filter: blur(8px); }
-.stat-box .label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-.stat-box .value { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--game-color); margin-top: 4px; transition: color 0.5s; text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.5); }
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+.stat-box { background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 10px; padding: 12px; text-align: left; backdrop-filter: blur(8px); }
+.stat-box .label { font-size: 0.63rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.stat-box .value { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; color: var(--game-color); margin-top: 4px; transition: color 0.5s; text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.5); }
 .stat-box .value.ok { color: var(--color-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); }
 .stat-box .value.warn { color: var(--color-red); text-shadow: 0 0 10px rgba(255, 26, 26, 0.6); }
 
-.history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; max-height: 260px; overflow-y: auto; }
-.history-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 10px; padding: 10px 14px; }
-.history-nums { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; color: var(--text-primary); letter-spacing: 1px; }
+.history-list { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; max-height: 240px; overflow-y: auto; }
+.history-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 10px; padding: 9px 12px; }
+.history-nums { font-family: 'Share Tech Mono', monospace; font-size: 0.82rem; color: var(--text-primary); letter-spacing: 1px; }
 .history-nums .s { color: var(--color-pink); }
-.history-meta { font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.history-meta { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
 
-.mc-table { width:100%; border-collapse: collapse; margin-top: 16px; font-size: 0.8rem; }
-.mc-table th { color: var(--game-color); font-family:'Orbitron',sans-serif; font-size: 11px; padding: 8px 6px; border-bottom: 2px solid var(--game-color); text-transform: uppercase; letter-spacing: 1px; }
-.mc-table td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); font-family: 'Share Tech Mono', monospace; text-align: center; }
+.mc-table { width:100%; border-collapse: collapse; margin-top: 14px; font-size: 0.78rem; }
+.mc-table th { color: var(--game-color); font-family:'Orbitron',sans-serif; font-size: 10.5px; padding: 7px 6px; border-bottom: 2px solid var(--game-color); text-transform: uppercase; letter-spacing: 1px; }
+.mc-table td { padding: 9px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); font-family: 'Share Tech Mono', monospace; text-align: center; }
 .mc-table td:first-child { text-align:left; color: var(--text-primary); }
-.mc-summary { font-size: 0.72rem; color: var(--text-dim); margin-top: 12px; line-height: 1.6; }
+.mc-summary { font-size: 0.7rem; color: var(--text-dim); margin-top: 10px; line-height: 1.55; }
 .mc-summary b { color: var(--color-green); }
 
 .footer {
-  margin-top: 30px; padding: 28px 24px 24px; text-align: center; background: var(--glass-heavy); border-radius: 20px 20px 0 0;
+  margin-top: 24px; padding: 24px 20px 20px; text-align: center; background: var(--glass-heavy); border-radius: 20px 20px 0 0;
   position: relative; overflow: hidden; border: 1px solid var(--glass-border); backdrop-filter: blur(20px);
 }
-.footer-draw-info { font-family: 'Orbitron', sans-serif; font-weight: 900; line-height: 1.8; }
-.footer-draw-info .draw-date { font-size: 24px; color: var(--color-red); text-shadow: 0 0 20px rgba(255, 26, 26, 0.6), 0 2px 10px rgba(0,0,0,0.9); display: block; }
-.footer-draw-info .draw-price { font-size: 26px; color: var(--color-yellow); text-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 2px 10px rgba(0,0,0,0.9); display: block; margin-top: 8px; }
-.footer-version { margin-top: 15px; font-size: 0.68rem; color: var(--text-dim); font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
-.footer-legal { margin-top: 14px; font-size: 0.66rem; color: var(--text-dim); line-height: 1.6; max-width: 640px; margin-left:auto; margin-right:auto; }
+.footer-draw-info { font-family: 'Orbitron', sans-serif; font-weight: 900; line-height: 1.7; }
+.footer-draw-info .draw-date { font-size: 21px; color: var(--color-red); text-shadow: 0 0 20px rgba(255, 26, 26, 0.6), 0 2px 10px rgba(0,0,0,0.9); display: block; }
+.footer-draw-info .draw-price { font-size: 23px; color: var(--color-gold); text-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 2px 10px rgba(0,0,0,0.9); display: block; margin-top: 6px; }
+.footer-version { margin-top: 12px; font-size: 0.65rem; color: var(--text-dim); font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+.footer-legal { margin-top: 12px; font-size: 0.64rem; color: var(--text-dim); line-height: 1.55; max-width: 620px; margin-left:auto; margin-right:auto; }
 
 .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
@@ -397,30 +386,49 @@ label.field-label .val { font-size: 1.5rem; color: var(--game-color); font-famil
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
 
 @media (max-width: 600px) {
-  .header h1 { font-size: 1.4rem; letter-spacing: 3px; }
-  .datetime-header { font-size: 20px; }
-  .ball.game-color, .ball.star-color { width: 55px; height: 55px; font-size: 26px; }
+  .header { padding: 96px 16px 22px; }
+  .header h1 { font-size: 1.3rem; letter-spacing: 3px; }
+  .datetime-header { font-size: 18px; }
+  .ball.game-color, .ball.star-color { width: 52px; height: 52px; font-size: 24px; }
   .stats-grid { grid-template-columns: 1fr; }
-  .monitor-grid { grid-template-columns: 1fr; }
-  .simple-prize-table th, .simple-prize-table td { font-size: 11px; padding: 9px 5px; }
-  .footer-draw-info .draw-date { font-size: 18px; }
-  .footer-draw-info .draw-price { font-size: 20px; }
-  .price-display .price-value { font-size: 1.4rem; }
-  .container { padding: 12px; }
+  .simple-prize-table th, .simple-prize-table td { font-size: 10.5px; padding: 8px 4px; }
+  .footer-draw-info .draw-date { font-size: 16px; }
+  .footer-draw-info .draw-price { font-size: 18px; }
+  .price-display .price-value { font-size: 1.3rem; }
+  .fp-odds { font-size: 1.4rem; }
+  .container { padding: 10px; }
 }
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <div class="flag-5d flag-pt top" aria-hidden="true"><div class="stripe"></div><div class="stripe"></div><div class="stripe"></div></div>
+    <div class="flag-5d flag-pt top" aria-hidden="true"><div class="stripe"></div><div class="stripe"></div><div class="flag-pt-emblem"></div></div>
+    <div class="header-emblem-wrap">
+      <svg class="header-emblem" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g stroke="#FFD700" stroke-width="2.4" fill="none">
+          <ellipse cx="50" cy="50" rx="36" ry="36"/>
+          <ellipse cx="50" cy="50" rx="36" ry="15" transform="rotate(20 50 50)"/>
+          <ellipse cx="50" cy="50" rx="36" ry="15" transform="rotate(-20 50 50)"/>
+          <ellipse cx="50" cy="50" rx="15" ry="36" transform="rotate(45 50 50)"/>
+        </g>
+        <circle cx="50" cy="50" r="4.5" fill="#FFD700"/>
+        <g fill="#CBA135">
+          <circle cx="50" cy="80" r="3.2"/>
+          <circle cx="41" cy="84" r="3.2"/>
+          <circle cx="59" cy="84" r="3.2"/>
+          <circle cx="45" cy="90" r="3.2"/>
+          <circle cx="55" cy="90" r="3.2"/>
+        </g>
+      </svg>
+    </div>
     <h1>JONHY EL IGUANA</h1>
-    <div class="sub">Motor Combinatório 8D · Dados Oficiais Santa Casa · IC 95%</div>
+    <div class="sub">Motor Combinatório · Dados Oficiais Santa Casa · 1º Prémio</div>
     <div class="datetime-header" id="datetimeHeader">--</div>
   </div>
 
   <div class="card">
-    <h2><span>⚙ Configuração do Sistema</span><span class="step-num">01</span></h2>
+    <h2><span>⚙ Jogo e Aposta</span></h2>
     <label class="sr-only" for="gameType">Escolher jogo</label>
     <select id="gameType">
       <option value="euromilhoes">🇫🇷 EURO MILHÕES (5/50 + 2/12)</option>
@@ -440,48 +448,45 @@ label.field-label .val { font-size: 1.5rem; color: var(--game-color); font-famil
     </div>
 
     <div class="price-display" aria-live="polite">
-      <div class="price-label">💰 Valor da Aposta a Realizar</div>
+      <div class="price-label">💰 Valor da Aposta</div>
       <div class="price-value" id="priceValue">€ 2,50</div>
       <div class="price-combos" id="priceCombos">1 combinação · 5+2</div>
     </div>
+  </div>
 
-    <div class="filters-toolbar" style="margin-top:16px;">
-      <button type="button" class="mini-btn" id="btnFiltersAll">Ativar todos os filtros</button>
-      <button type="button" class="mini-btn" id="btnFiltersNone">Desativar todos (sorteio puro)</button>
+  <!-- PAINEL 1º PRÉMIO: números/estrelas necessários + odds exatas + info real do jackpot -->
+  <div class="firstprize-card">
+    <div class="fp-label">🏆 1º Prémio — o que é preciso acertar</div>
+    <div class="fp-combo" id="fpCombo">5 números + 2 Estrelas</div>
+    <div class="fp-odds" id="fpOdds">1 / 139.838.160</div>
+    <div class="fp-jackpot" id="fpJackpot">Início ≈ €17.000.000 · Acumula até ao teto de €230.000.000</div>
+  </div>
+
+  <div class="card">
+    <h2><span>📊 Todos os Escalões e Prémios</span></h2>
+    <div class="filters-toolbar">
+      <button type="button" class="mini-btn" id="btnFiltersAll">Ativar filtros</button>
+      <button type="button" class="mini-btn" id="btnFiltersNone">Sorteio puro</button>
     </div>
-
-    <div class="checkrow"><input type="checkbox" id="filterConsec" checked><label for="filterConsec">🚫 Rejeitar 3+ números consecutivos seguidos</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterSum" checked><label for="filterSum">📊 Soma dentro do Intervalo de Confiança 95% (μ ± 1,96σ)</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterParity" checked><label for="filterParity">⚖️ Equilíbrio Par/Ímpar (rejeitar todos-pares ou todos-ímpares)</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterQuartile" checked><label for="filterQuartile">📈 Distribuição por Quartis Q1–Q4 (mín. 2 quartis ocupados)</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterDistance" checked><label for="filterDistance">📏 Máx. 2 pares de números com distância inferior a 3</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterDecade" checked><label for="filterDecade">🔟 Máx. 2 números na mesma dezena (10-19, 20-29...)</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterLastDigit" checked><label for="filterLastDigit">🔢 Máx. 2 números a terminar no mesmo algarismo</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterConsec" checked><label for="filterConsec">🚫 Sem 3+ consecutivos</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterSum" checked><label for="filterSum">📊 Soma dentro do IC 95%</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterParity" checked><label for="filterParity">⚖️ Equilíbrio par/ímpar</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterQuartile" checked><label for="filterQuartile">📈 Quartis Q1–Q4 (mín. 2)</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterDistance" checked><label for="filterDistance">📏 Máx. 2 pares próximos (Δ&lt;3)</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterDecade" checked><label for="filterDecade">🔟 Máx. 2 na mesma dezena</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterLastDigit" checked><label for="filterLastDigit">🔢 Máx. 2 no mesmo algarismo final</label></div>
+    <div class="simple-prize-table-scroll" style="margin-top:14px;"><div id="prizeTableContainer"></div></div>
   </div>
 
   <div class="card">
-    <h2><span>📊 Odds Reais e Prémios — Santa Casa</span><span class="step-num">02</span></h2>
-    <div class="simple-prize-table-scroll"><div id="prizeTableContainer"></div></div>
-  </div>
-
-  <div class="monitor">
-    <div style="font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:3px;">ODDS EXATAS DO 1º PRÉMIO (APOSTA SIMPLES)</div>
-    <div class="odds" id="oddsDisplay">1 / 139.838.160</div>
-    <div class="odds-sub" id="oddsSub">Idêntica à probabilidade oficial publicada pela Santa Casa para este jogo</div>
-    <div class="monitor-grid" id="monitorGrid"></div>
-  </div>
-
-  <div class="card">
-    <h2><span>🧪 Simulação Monte Carlo</span><span class="step-num">03</span></h2>
-    <p style="font-size:0.8rem; color:var(--text-dim); line-height:1.6;">
-      Simula milhares de sorteios independentes para uma aposta simples e compara a frequência empírica de cada escalão
-      com a probabilidade hipergeométrica teórica — quanto maior o número de simulações, mais a frequência observada
-      converge para a odd real (Lei dos Grandes Números).
+    <h2><span>🧪 Simulação Monte Carlo</span></h2>
+    <p style="font-size:0.76rem; color:var(--text-dim); line-height:1.5;">
+      Compara a frequência simulada de cada escalão com a probabilidade hipergeométrica teórica.
     </p>
-    <div class="flex" style="margin-top:14px;">
-      <button type="button" class="btn-secondary" id="btnMC10k">10.000 sorteios</button>
-      <button type="button" class="btn-secondary" id="btnMC100k">100.000 sorteios</button>
-      <button type="button" class="btn-secondary" id="btnMC500k">500.000 sorteios</button>
+    <div class="flex" style="margin-top:12px;">
+      <button type="button" class="btn-secondary" id="btnMC10k">10.000</button>
+      <button type="button" class="btn-secondary" id="btnMC100k">100.000</button>
+      <button type="button" class="btn-secondary" id="btnMC500k">500.000</button>
     </div>
     <div class="progress-wrap" id="mcProgressWrap"><div class="progress-bar" id="mcProgressBar"></div></div>
     <div id="mcResultContainer"></div>
@@ -491,8 +496,8 @@ label.field-label .val { font-size: 1.5rem; color: var(--game-color); font-famil
   <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
 
   <div class="terminal" id="terminal" aria-live="polite" role="log">
-    <div class="log-line system">> JONHY EL IGUANA v11.0 Inicializado.</div>
-    <div class="log-line math">> Motor: Hipergeométrica exata + Monte Carlo assíncrono + 7 filtros estruturais + IC 95%.</div>
+    <div class="log-line system">> JONHY EL IGUANA v12.0 Inicializado.</div>
+    <div class="log-line math">> Motor: Hipergeométrica exata + Monte Carlo assíncrono + 7 filtros estruturais.</div>
   </div>
 
   <div id="resultPanel" class="result-panel">
@@ -516,7 +521,7 @@ label.field-label .val { font-size: 1.5rem; color: var(--game-color); font-famil
       <span class="draw-date">PRÓXIMO SORTEIO: --</span>
       <span class="draw-price">PREÇO DA APOSTA: --</span>
     </div>
-    <div class="footer-version">JONHY EL IGUANA v11.0 · MATEMÁTICA COMBINATÓRIA REAL · DADOS OFICIAIS SANTA CASA</div>
+    <div class="footer-version">JONHY EL IGUANA v12.0 · MATEMÁTICA COMBINATÓRIA REAL · DADOS OFICIAIS SANTA CASA</div>
     <div class="footer-legal">As odds apresentadas correspondem às probabilidades oficiais de cada jogo da Santa Casa (Euromilhões, Totoloto, EuroDreams). Os valores em euros dos escalões inferiores variam por sorteio consoante vendas e nº de vencedores — consulte jogossantacasa.pt para os valores exatos do concurso atual.</div>
   </div>
 </div>
@@ -788,10 +793,9 @@ function updateUI() {
     sSel.onchange = function () { document.getElementById('sQtyDisplay').textContent = this.value; updatePriceDisplay(); updateFooter(); renderPrizeTable(regra); };
 
     renderPrizeTable(regra);
-    updateOdds(regra);
+    updateFirstPrize(regra);
     updatePriceDisplay();
     updateFooter();
-    updateMonitorGrid(regra);
     document.getElementById('resultPanel').style.display = 'none';
     document.getElementById('mcResultContainer').innerHTML = '';
     addLog(`Jogo selecionado: ${regra.nome}`, 'system');
@@ -822,25 +826,14 @@ function updateFooter() {
   `;
 }
 
-function updateOdds(regra) {
+/* Painel do 1º Prémio: mostra exatamente os números/estrelas necessários e a odd exata
+   (C(N,n)×C(S,s) — cálculo combinatório real, não estimativa). */
+function updateFirstPrize(regra) {
   const totalCombos = C(regra.nums.max, regra.nums.sorteados) * C(regra.stars.max, regra.stars.sorteados);
-  document.getElementById('oddsDisplay').textContent = `1 / ${totalCombos.toLocaleString('pt-PT')}`;
-  document.getElementById('oddsSub').textContent = `Cálculo exato C(${regra.nums.max},${regra.nums.sorteados})×C(${regra.stars.max},${regra.stars.sorteados}) — idêntico ao valor oficial da Santa Casa`;
-}
-
-function updateMonitorGrid(regra) {
-  const probQualquer = 1 - (1 - (1/1)) ; // placeholder unused
-  const grid = document.getElementById('monitorGrid');
-  const anyPrizeText = {
-    euromilhoes: '1 em 13',
-    totoloto: '1 em 7',
-    eurodreams: '1 em ~6'
-  }[currentGame] || '—';
-  grid.innerHTML = `
-    <div class="monitor-mini"><div class="mlabel">Sorteios / semana</div><div class="mval">${regra.diasSorteio.length}</div></div>
-    <div class="monitor-mini"><div class="mlabel">Chance de qualquer prémio</div><div class="mval">${anyPrizeText}</div></div>
-    <div class="monitor-mini"><div class="mlabel">Preço da aposta simples</div><div class="mval">€ ${regra.preco.toFixed(2).replace('.', ',')}</div></div>
-  `;
+  const comboTxt = `${regra.nums.sorteados} números + ${regra.stars.sorteados} ${regra.stars.nome}`;
+  document.getElementById('fpCombo').textContent = comboTxt;
+  document.getElementById('fpOdds').textContent = `1 / ${totalCombos.toLocaleString('pt-PT')}`;
+  document.getElementById('fpJackpot').textContent = regra.jackpotInfo;
 }
 
 function renderPrizeTable(regra) {
@@ -857,7 +850,7 @@ function renderPrizeTable(regra) {
       <th>Valor (€)</th>
     </tr></thead><tbody>`;
 
-  regra.premios.forEach(p => {
+  regra.premios.forEach((p, idx) => {
     let probReal;
     if (p.ignoreDream) {
       probReal = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n);
@@ -887,13 +880,13 @@ function renderPrizeTable(regra) {
       sistemaCell = `<td class="tier-system">${sistemaFmt}</td>`;
     }
 
-    html += `<tr><td class="tier-name">${p.nome}</td><td class="tier-odds">${oddsFmt}</td>${sistemaCell}<td class="tier-value">${valorFmt}</td></tr>`;
+    html += `<tr class="${idx === 0 ? 'first-tier' : ''}"><td class="tier-name">${p.nome}</td><td class="tier-odds">${oddsFmt}</td>${sistemaCell}<td class="tier-value">${valorFmt}</td></tr>`;
   });
 
   html += `</tbody></table>`;
   html += `<div class="prize-table-legend">📌 ${regra.jackpotInfo}. Odds calculadas por combinatória hipergeométrica exata — idênticas às probabilidades oficiais publicadas pela Santa Casa. Valores marcados "Variável" dependem das vendas e nº de vencedores de cada sorteio real.</div>`;
   if (isSystem) {
-    html += `<div class="prize-table-legend">"Chance no Seu Sistema" = probabilidade real de acertar <b>pelo menos uma vez</b> nesse escalão jogando todas as combinações do seu sistema — soma de probabilidades hipergeométricas exatas, não aproximação.</div>`;
+    html += `<div class="prize-table-legend">"Chance no Seu Sistema" = probabilidade real de acertar <b>pelo menos uma vez</b> nesse escalão jogando todas as combinações do seu sistema.</div>`;
   }
   container.innerHTML = html;
 }
@@ -922,7 +915,7 @@ async function executarGeracao() {
   setProgress(2);
   try {
     document.getElementById('terminal').innerHTML = '';
-    addLog('Iniciando amostragem uniforme + rejeição assíncrona (7 filtros, IC 95%)...', 'system');
+    addLog('Iniciando amostragem uniforme + rejeição assíncrona (7 filtros)...', 'system');
     await new Promise(r => setTimeout(r, 100));
 
     const regra = REGRAS[currentGame];
@@ -933,17 +926,16 @@ async function executarGeracao() {
 
     addLog(`Distribuição exata da soma: μ=${stats.mu.toFixed(1)} | σ=${stats.sigma.toFixed(2)}`, 'math');
     addLog(`IC 95% da soma: [${Math.round(stats.mu - 1.96*stats.sigma)} ; ${Math.round(stats.mu + 1.96*stats.sigma)}]`, 'math');
-    addLog(`Quartis: Q1≤${quartis.Q1} | Q2≤${quartis.Q2} | Q3≤${quartis.Q3} | Q4≤${quartis.Q4}`, 'math');
     addLog(`Alvo: ${nQty} números + ${sQty} ${regra.stars.nome}`, 'math');
 
     const resultado = await gerarCombinacaoAsync(regra, nQty, sQty, (tent, maxT) => setProgress((tent/maxT)*100));
 
     if (resultado.esgotado) {
-      addLog(`Limite de ${resultado.tentativas.toLocaleString('pt-PT')} iterações atingido — filtros muito restritivos. A mostrar a última tentativa gerada.`, 'warn');
+      addLog(`Limite de ${resultado.tentativas.toLocaleString('pt-PT')} iterações atingido — a mostrar a última tentativa gerada.`, 'warn');
     } else {
       addLog(`Combinação válida encontrada após ${resultado.tentativas.toLocaleString('pt-PT')} iteração(ões).`, 'success');
     }
-    addLog(`A probabilidade real de acerto do 1º prémio mantém-se inalterada (ver "Odds Exatas" acima).`, 'system');
+    addLog(`A probabilidade real de acerto do 1º prémio mantém-se inalterada (ver painel acima).`, 'system');
 
     exibirResultado(resultado.nums, resultado.stars, regra, resultado);
     adicionarAoHistorico(regra, resultado.nums, resultado.stars);
@@ -975,7 +967,7 @@ function exibirResultado(nums, stars, regra, resultado) {
   nums.forEach(n => { const b=document.createElement('div'); b.className='ball game-color'; b.textContent=String(n).padStart(2,'0'); ballOut.appendChild(b); });
   if (stars && stars.length > 0) {
     const sep = document.createElement('div'); sep.style.width='100%'; sep.style.height='1px';
-    sep.style.background = 'linear-gradient(90deg, transparent, var(--glass-border), transparent)'; sep.style.margin='10px 0';
+    sep.style.background = 'linear-gradient(90deg, transparent, var(--glass-border), transparent)'; sep.style.margin='8px 0';
     ballOut.appendChild(sep);
     stars.forEach(s => { const b=document.createElement('div'); b.className='ball star-color'; b.textContent=String(s).padStart(2,'0'); ballOut.appendChild(b); });
   }
@@ -1089,7 +1081,7 @@ async function executarMonteCarlo(totalSorteios) {
     html += `<tr><td>${p.nome}</td><td>${teoricoFmt}</td><td>${simuladoFmt}</td><td>${contagem.toLocaleString('pt-PT')}</td></tr>`;
   });
   html += `</tbody></table>`;
-  html += `<div class="mc-summary">Com <b>${totalSorteios.toLocaleString('pt-PT')}</b> sorteios simulados, a coluna "Simulado" tende a aproximar-se da coluna "Teórico" à medida que o número de simulações aumenta — isto é uma verificação empírica direta de que a matemática hipergeométrica usada nas odds corresponde ao comportamento real de um sorteio aleatório uniforme. Escalões muito raros (ex: 1º prémio) podem mostrar "sem ocorrências" mesmo em 500.000 simulações, o que é matematicamente esperado dada a odd real de milhões para 1.</div>`;
+  html += `<div class="mc-summary">Com <b>${totalSorteios.toLocaleString('pt-PT')}</b> sorteios simulados, a coluna "Simulado" tende a aproximar-se da coluna "Teórico" à medida que o número de simulações aumenta. Escalões muito raros (ex: 1º prémio) podem mostrar "sem ocorrências" mesmo em 500.000 simulações, o que é matematicamente esperado dada a odd real de milhões para 1.</div>`;
   container.innerHTML = html;
 
   addLog(`Simulação concluída: ${totalSorteios.toLocaleString('pt-PT')} sorteios processados.`, 'success');
@@ -1113,7 +1105,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('gameType').addEventListener('change', updateUI);
     updateUI();
     updateClock();
-    addLog('Sistema pronto. Motor 8D com dados oficiais Santa Casa e simulação Monte Carlo ativos.', 'system');
+    addLog('Sistema pronto. Painel de 1º Prémio, dados oficiais Santa Casa e simulação Monte Carlo ativos.', 'system');
   } catch (err) { console.error('Erro na inicialização:', err); }
 });
 </script>
