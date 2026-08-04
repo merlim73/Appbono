@@ -37,7 +37,6 @@ body {
   font-family: 'Rajdhani', sans-serif;
   min-height: 100vh;
   line-height: 1.6;
-  /* IMAGEM DE FUNDO: IGUANA 5D */
   background-image: url('https://qwen-webui-prod.oss-accelerate.aliyuncs.com/9621fd80-0b8d-4768-a985-31c483168878/9621fd80-0b8d-4768-a985-31c483168878_0.png?x-oss-process=image/resize,w_1920,m_lfit');
   background-size: cover;
   background-position: center top;
@@ -47,7 +46,6 @@ body {
   animation: iguanaGlow 6s ease-in-out infinite;
 }
 
-/* OVERLAY ESCURO REFORÇADO PARA MÁXIMA LEGIBILIDADE (números, texto, cartas) */
 body::before {
   content: '';
   position: fixed;
@@ -58,8 +56,6 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
-
-/* GRELHA SUBTIL POR CIMA */
 body::after {
   content: '';
   position: fixed;
@@ -72,45 +68,69 @@ body::after {
   z-index: 0;
 }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-  perspective: 1000px;
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes flagWavePT {
-  0%, 100% { transform: skewX(0deg) scaleY(1); }
-  20% { transform: skewX(-4deg) scaleY(0.98); }
-  40% { transform: skewX(3deg) scaleY(1.02); }
-  60% { transform: skewX(-2deg) scaleY(0.99); }
-  80% { transform: skewX(4deg) scaleY(1.01); }
-}
-
-@keyframes flagWaveFR {
-  0%, 100% { transform: skewX(0deg) scaleY(1); }
-  25% { transform: skewX(4deg) scaleY(1.02); }
-  50% { transform: skewX(-3deg) scaleY(0.98); }
-  75% { transform: skewX(2deg) scaleY(1.01); }
-}
-
-@keyframes flagRipple {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
+.container { max-width: 900px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
 
 @keyframes iguanaGlow {
   0%, 100% { filter: brightness(1) contrast(1); }
   50% { filter: brightness(1.04) contrast(1.03); }
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulseBar { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+
+/* ===== BANDEIRAS 5D — ondulação real com profundidade em camadas ===== */
+@keyframes flagWave5D {
+  0%   { transform: perspective(400px) rotateX(0deg) rotateY(0deg) skewX(0deg) scaleY(1) translateZ(0px); }
+  20%  { transform: perspective(400px) rotateX(6deg) rotateY(-4deg) skewX(-5deg) scaleY(0.97) translateZ(6px); }
+  40%  { transform: perspective(400px) rotateX(-4deg) rotateY(3deg) skewX(4deg) scaleY(1.03) translateZ(-4px); }
+  60%  { transform: perspective(400px) rotateX(5deg) rotateY(-2deg) skewX(-3deg) scaleY(0.98) translateZ(5px); }
+  80%  { transform: perspective(400px) rotateX(-3deg) rotateY(4deg) skewX(5deg) scaleY(1.02) translateZ(-3px); }
+  100% { transform: perspective(400px) rotateX(0deg) rotateY(0deg) skewX(0deg) scaleY(1) translateZ(0px); }
+}
+@keyframes flagShine { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+.flag-5d {
+  position: absolute;
+  left: 0; width: 100%; height: 10px;
+  display: flex;
+  transform-style: preserve-3d;
+  perspective: 400px;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+}
+.flag-5d.top { top: 0; }
+.flag-5d.bottom { bottom: 0; }
+.flag-5d .stripe {
+  flex: 1;
+  height: 100%;
+  animation: flagWave5D 2.6s ease-in-out infinite;
+  transform-origin: center top;
+  background-size: 220% 100%;
+}
+.flag-5d .stripe:nth-child(1) { animation-delay: 0s; }
+.flag-5d .stripe:nth-child(2) { animation-delay: 0.25s; }
+.flag-5d .stripe:nth-child(3) { animation-delay: 0.5s; }
+.flag-pt .stripe:nth-child(1) { background: linear-gradient(120deg, var(--color-green), #007a2f, var(--color-green)); box-shadow: 0 0 18px rgba(0,255,65,0.5); }
+.flag-pt .stripe:nth-child(2) { background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); flex: 1.6; box-shadow: 0 0 18px rgba(255,26,26,0.5); }
+.flag-pt .stripe:nth-child(3) { background: linear-gradient(120deg, var(--color-yellow), #b8860b, var(--color-yellow)); box-shadow: 0 0 18px rgba(255,215,0,0.5); }
+.flag-fr .stripe:nth-child(1) { background: linear-gradient(120deg, var(--color-blue), #003b99, var(--color-blue)); box-shadow: 0 0 18px rgba(0,102,255,0.5); }
+.flag-fr .stripe:nth-child(2) { background: linear-gradient(120deg, var(--color-white), #cfd8e8, var(--color-white)); box-shadow: 0 0 18px rgba(255,255,255,0.4); }
+.flag-fr .stripe:nth-child(3) { background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); box-shadow: 0 0 18px rgba(255,26,26,0.5); }
+.flag-5d .stripe { animation-name: flagWave5D, flagShine; animation-duration: 2.6s, 4s; animation-timing-function: ease-in-out, ease-in-out; animation-iteration-count: infinite, infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--color-yellow);
+  outline-offset: 2px;
+  border-radius: 8px;
 }
 
 .header {
   background: var(--glass-heavy);
   border: 1px solid var(--glass-border);
   border-radius: 24px;
-  padding: 30px 20px;
+  padding: 34px 20px 28px;
   text-align: center;
   margin-bottom: 24px;
   box-shadow: var(--shadow-5d);
@@ -119,22 +139,6 @@ body::after {
   backdrop-filter: blur(25px) saturate(1.3);
   -webkit-backdrop-filter: blur(25px) saturate(1.3);
 }
-
-.header::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; width: 100%; height: 6px;
-  background: linear-gradient(90deg,
-    var(--color-red) 0%, var(--color-red) 33%,
-    var(--color-yellow) 33%, var(--color-yellow) 66%,
-    var(--color-green) 66%, var(--color-green) 100%
-  );
-  background-size: 200% 100%;
-  animation: flagWavePT 3s ease-in-out infinite, flagRipple 4s ease-in-out infinite;
-  transform-origin: left center;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
-}
-
 .header h1 {
   font-family: 'Orbitron', sans-serif;
   font-size: 2rem;
@@ -143,7 +147,6 @@ body::after {
   text-shadow: 0 0 25px rgba(255,255,255,0.3), 0 2px 10px rgba(0,0,0,0.8);
   font-weight: 900;
 }
-
 .header .sub {
   font-size: 0.8rem;
   color: var(--color-green);
@@ -153,16 +156,25 @@ body::after {
   text-transform: uppercase;
   text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
 }
-
 .datetime-header {
   font-family: 'Orbitron', sans-serif;
-  font-size: 30px;
+  font-size: 28px;
   color: var(--color-red);
   font-weight: 900;
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid var(--glass-border);
   text-shadow: 0 0 20px rgba(255, 26, 26, 0.6), 0 2px 8px rgba(0,0,0,0.9);
+}
+
+.eyebrow {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: block;
 }
 
 .card {
@@ -176,10 +188,7 @@ body::after {
   box-shadow: var(--shadow-card);
   transition: transform 0.3s, border-color 0.5s, box-shadow 0.3s;
 }
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.12);
-}
+.card:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.12); }
 
 .card h2 {
   font-family: 'Orbitron', sans-serif;
@@ -192,20 +201,22 @@ body::after {
   letter-spacing: 2px;
   transition: color 0.5s, border-color 0.5s;
   text-shadow: 0 0 12px rgba(var(--game-color-rgb), 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
 }
-
-.disclaimer {
-  font-size: 0.78rem;
+.card h2 .step-num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
   color: var(--text-dim);
-  background: rgba(0,0,0,0.4);
+  letter-spacing: 2px;
   border: 1px solid var(--glass-border);
-  border-left: 4px solid var(--color-red);
-  border-radius: 10px;
-  padding: 14px 16px;
-  line-height: 1.6;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  border-radius: 20px;
+  padding: 3px 10px;
+  text-shadow: none;
 }
-.disclaimer b { color: var(--color-red); }
 
 select {
   width: 100%;
@@ -228,136 +239,78 @@ select {
   transition: border-color 0.5s, color 0.5s;
   text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.5);
 }
-
-select:focus { outline: none; }
 select:disabled { opacity: 0.55; cursor: not-allowed; }
 
 .flex { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 16px; }
 .flex > * { flex: 1; min-width: 140px; }
 
-label.field-label {
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 8px;
-  display: block;
-  font-weight: 700;
-}
-label.field-label .val {
-  font-size: 1.5rem;
-  color: var(--game-color);
-  font-family: 'Orbitron', sans-serif;
-  transition: color 0.5s;
-  text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.6);
-}
+label.field-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; display: block; font-weight: 700; }
+label.field-label .val { font-size: 1.5rem; color: var(--game-color); font-family: 'Orbitron', sans-serif; transition: color 0.5s; text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.6); }
 
 .price-display {
-  margin-top: 12px;
-  padding: 14px 18px;
+  margin-top: 12px; padding: 14px 18px;
   background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.03));
-  border: 2px solid var(--color-yellow);
-  border-radius: 12px;
-  text-align: center;
+  border: 2px solid var(--color-yellow); border-radius: 12px; text-align: center;
   box-shadow: 0 0 25px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
 }
-.price-display .price-label {
-  font-size: 0.65rem;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 4px;
+.price-display .price-label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
+.price-display .price-value { font-family: 'Orbitron', sans-serif; font-size: 1.8rem; color: var(--color-yellow); font-weight: 900; text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); }
+.price-display .price-combos { font-size: 0.7rem; color: var(--text-dim); margin-top: 4px; letter-spacing: 1px; }
+
+.filters-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 4px; }
+.mini-btn {
+  font-family: 'Rajdhani', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--text-dim); background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 8px;
+  padding: 6px 12px; cursor: pointer; transition: all 0.25s;
 }
-.price-display .price-value {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.8rem;
-  color: var(--color-yellow);
-  font-weight: 900;
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9);
-}
-.price-display .price-combos {
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  margin-top: 4px;
-  letter-spacing: 1px;
-}
+.mini-btn:hover { color: var(--text-primary); border-color: var(--game-color); }
 
 .checkrow {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-  font-size: 0.85rem;
-  color: var(--text-primary);
-  padding: 12px 16px;
-  background: rgba(0,0,0,0.35);
-  border-radius: 10px;
-  border: 1px solid var(--glass-border);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 0.85rem; color: var(--text-primary);
+  padding: 12px 16px; background: rgba(0,0,0,0.35); border-radius: 10px; border: 1px solid var(--glass-border);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8); cursor: pointer;
 }
 .checkrow input { width: 20px; height: 20px; accent-color: var(--game-color); cursor: pointer; flex-shrink: 0; }
 
 .monitor {
   background: linear-gradient(180deg, rgba(5,8,16,0.95), rgba(2,4,8,0.98));
-  border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  padding: 24px;
-  text-align: center;
-  margin-bottom: 20px;
-  backdrop-filter: blur(15px);
-  box-shadow: var(--shadow-card);
+  border: 1px solid var(--glass-border); border-radius: 20px; padding: 24px; text-align: center; margin-bottom: 20px;
+  backdrop-filter: blur(15px); box-shadow: var(--shadow-card);
 }
-.monitor .odds {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--color-white);
-  margin: 10px 0;
-  text-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 2px 10px rgba(0,0,0,0.9);
-}
-.monitor .odds-sub {
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  letter-spacing: 1px;
-  margin-top: 6px;
-}
+.monitor .odds { font-family: 'Orbitron', sans-serif; font-size: 2rem; font-weight: 900; color: var(--color-white); margin: 10px 0; text-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 2px 10px rgba(0,0,0,0.9); }
+.monitor .odds-sub { font-size: 0.7rem; color: var(--text-dim); letter-spacing: 1px; margin-top: 6px; }
+.monitor-grid { display:grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 18px; }
+.monitor-mini { background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 12px; padding: 10px; }
+.monitor-mini .mlabel { font-size: 0.58rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+.monitor-mini .mval { font-family: 'Orbitron', sans-serif; font-size: 0.95rem; color: var(--text-primary); margin-top: 4px; }
 
 .btn {
-  width: 100%;
-  padding: 22px;
+  width: 100%; padding: 22px;
   background: linear-gradient(135deg, rgba(204, 119, 34, 0.3), rgba(204, 119, 34, 0.08));
-  border: 2px solid var(--color-amber);
-  color: var(--color-amber);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  border-radius: 14px;
-  cursor: pointer;
-  margin: 20px 0;
-  transition: all 0.3s;
+  border: 2px solid var(--color-amber); color: var(--color-amber);
+  font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px;
+  border-radius: 14px; cursor: pointer; margin: 20px 0; transition: all 0.3s;
   text-shadow: 0 0 15px rgba(204, 119, 34, 0.7), 0 2px 8px rgba(0,0,0,0.9);
   box-shadow: 0 0 30px rgba(204, 119, 34, 0.2);
 }
-.btn:hover {
-  background: rgba(204, 119, 34, 0.4);
-  box-shadow: 0 0 70px rgba(204, 119, 34, 0.4);
-  transform: translateY(-2px);
-}
+.btn:hover:not(:disabled) { background: rgba(204, 119, 34, 0.4); box-shadow: 0 0 70px rgba(204, 119, 34, 0.4); transform: translateY(-2px); }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+.btn-secondary {
+  flex: 1; min-width: 140px; padding: 14px; background: rgba(255,255,255,0.05); border: 2px solid var(--glass-border);
+  color: var(--text-primary); font-family: 'Orbitron', sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; border-radius: 12px; cursor: pointer; transition: all 0.25s;
+}
+.btn-secondary:hover { border-color: var(--game-color); color: var(--game-color); }
+.btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.progress-wrap { height: 8px; width: 100%; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; margin: 10px 0 0; display: none; }
+.progress-wrap.active { display: block; }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--game-color), var(--color-yellow)); animation: pulseBar 1.2s ease-in-out infinite; transition: width 0.2s ease-out; }
+
 .terminal {
-  background: rgba(0,0,0,0.75);
-  border: 1px solid var(--glass-border);
-  border-radius: 12px;
-  height: 180px;
-  overflow-y: auto;
-  padding: 16px;
-  font-size: 0.75rem;
-  color: var(--color-green);
-  line-height: 1.7;
-  font-family: 'Share Tech Mono', monospace;
+  background: rgba(0,0,0,0.75); border: 1px solid var(--glass-border); border-radius: 12px; height: 180px; overflow-y: auto;
+  padding: 16px; font-size: 0.75rem; color: var(--color-green); line-height: 1.7; font-family: 'Share Tech Mono', monospace;
   backdrop-filter: blur(10px);
 }
 .log-line { margin: 4px 0; padding-left: 12px; border-left: 2px solid transparent; }
@@ -367,197 +320,77 @@ label.field-label .val {
 .log-line.warn { color: var(--color-red); border-left-color: var(--color-red); text-shadow: 0 0 8px rgba(255, 26, 26, 0.4); }
 
 .result-panel {
-  display: none;
-  border: 2px solid var(--game-color);
+  display: none; border: 2px solid var(--game-color);
   background: linear-gradient(180deg, rgba(5,8,16,0.92), rgba(2,4,8,0.96));
-  border-radius: 24px;
-  padding: 30px 20px;
-  margin-top: 24px;
-  text-align: center;
+  border-radius: 24px; padding: 30px 20px; margin-top: 24px; text-align: center;
   box-shadow: 0 0 100px rgba(var(--game-color-rgb), 0.35), var(--shadow-card);
-  animation: fadeIn 0.6s ease-out;
-  transition: border-color 0.5s, box-shadow 0.5s;
-  backdrop-filter: blur(20px);
+  animation: fadeIn 0.6s ease-out; transition: border-color 0.5s, box-shadow 0.5s; backdrop-filter: blur(20px);
 }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-.result-panel h2 {
-  font-family: 'Orbitron', sans-serif;
-  color: var(--game-color);
-  letter-spacing: 3px;
-  margin-bottom: 20px;
-  font-size: 1.2rem;
-  transition: color 0.5s;
-  text-shadow: 0 0 20px rgba(var(--game-color-rgb), 0.7);
-}
+.result-panel h2 { font-family: 'Orbitron', sans-serif; color: var(--game-color); letter-spacing: 3px; margin-bottom: 20px; font-size: 1.2rem; transition: color 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 0.7); }
 
 .balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin: 24px 0; }
-
-/* NÚMEROS - COR DO JOGO COM ALTA LEGIBILIDADE */
 .ball.game-color {
-  width: 70px; height: 70px;
-  border-radius: 50%;
-  border: 4px solid var(--game-color);
-  color: var(--game-color);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 34px; font-weight: 900;
+  width: 70px; height: 70px; border-radius: 50%; border: 4px solid var(--game-color); color: var(--game-color);
+  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 34px; font-weight: 900;
   background: radial-gradient(circle at 30% 30%, rgba(20,30,50,0.98), rgba(2,4,8,0.99));
-  box-shadow:
-    0 0 50px rgba(var(--game-color-rgb), 0.7),
-    0 0 100px rgba(var(--game-color-rgb), 0.4),
-    0 8px 20px rgba(0,0,0,0.9),
-    inset 0 2px 8px rgba(255,255,255,0.2),
-    inset 0 -4px 10px rgba(0,0,0,0.6);
-  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s;
-  text-shadow: 0 0 20px rgba(var(--game-color-rgb), 1), 0 2px 6px rgba(0,0,0,0.9);
-  position: relative;
+  box-shadow: 0 0 50px rgba(var(--game-color-rgb), 0.7), 0 0 100px rgba(var(--game-color-rgb), 0.4), 0 8px 20px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
+  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 1), 0 2px 6px rgba(0,0,0,0.9); position: relative;
 }
-
-/* NÚMERO DA SORTE - ROSA COM ALTA LEGIBILIDADE */
 .ball.star-color {
-  width: 70px; height: 70px;
-  border-radius: 50%;
-  border: 4px solid var(--color-pink);
-  color: var(--color-pink);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 34px; font-weight: 900;
+  width: 70px; height: 70px; border-radius: 50%; border: 4px solid var(--color-pink); color: var(--color-pink);
+  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 34px; font-weight: 900;
   background: radial-gradient(circle at 30% 30%, rgba(50,15,35,0.98), rgba(15,4,10,0.99));
-  box-shadow:
-    0 0 50px rgba(var(--color-pink-rgb), 0.7),
-    0 0 100px rgba(var(--color-pink-rgb), 0.4),
-    0 8px 20px rgba(0,0,0,0.9),
-    inset 0 2px 8px rgba(255,255,255,0.2),
-    inset 0 -4px 10px rgba(0,0,0,0.6);
-  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s;
-  text-shadow: 0 0 20px rgba(var(--color-pink-rgb), 1), 0 2px 6px rgba(0,0,0,0.9);
-  position: relative;
+  box-shadow: 0 0 50px rgba(var(--color-pink-rgb), 0.7), 0 0 100px rgba(var(--color-pink-rgb), 0.4), 0 8px 20px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
+  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--color-pink-rgb), 1), 0 2px 6px rgba(0,0,0,0.9); position: relative;
 }
 
-.simple-prize-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  text-align: center;
-}
+.result-actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top: 10px; }
+
+.simple-prize-table { width: 100%; border-collapse: collapse; margin-top: 20px; text-align: center; }
+.simple-prize-table-scroll { width: 100%; overflow-x: auto; }
 .simple-prize-table th {
-  color: var(--game-color);
-  font-family: 'Orbitron', sans-serif;
-  font-size: 16px;
-  padding: 12px 8px;
-  border-bottom: 2px solid var(--game-color);
-  text-transform: uppercase;
-  transition: color 0.5s, border-color 0.5s;
-  letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.5);
+  color: var(--game-color); font-family: 'Orbitron', sans-serif; font-size: 12px; padding: 12px 8px; border-bottom: 2px solid var(--game-color);
+  text-transform: uppercase; transition: color 0.5s, border-color 0.5s; letter-spacing: 1px; text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.5); white-space: nowrap;
 }
-.simple-prize-table td {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 18px;
-  font-weight: 700;
-  padding: 14px 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-.simple-prize-table .tier-name {
-  color: var(--text-primary);
-  text-align: left;
-  font-size: 15px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-}
-.simple-prize-table .tier-odds {
-  color: var(--color-white);
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0,0,0,0.9);
-  font-size: 15px;
-}
-.simple-prize-table .tier-value {
-  color: var(--color-yellow);
-  text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9);
-  font-size: 18px;
-  font-weight: 900;
-}
+.simple-prize-table td { font-family: 'Orbitron', sans-serif; font-size: 15px; font-weight: 700; padding: 13px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); white-space: nowrap; }
+.simple-prize-table .tier-name { color: var(--text-primary); text-align: left; font-size: 13px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); white-space: normal; }
+.simple-prize-table .tier-odds { color: var(--color-white); text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0,0,0,0.9); font-size: 13px; }
+.simple-prize-table .tier-system { color: var(--color-green); text-shadow: 0 0 12px rgba(0,255,65,0.5), 0 2px 6px rgba(0,0,0,0.9); font-size: 12px; }
+.simple-prize-table .tier-value { color: var(--color-yellow); text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); font-size: 14px; font-weight: 900; }
+.prize-table-legend { font-size: 0.68rem; color: var(--text-dim); margin-top: 10px; line-height: 1.6; }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-top: 20px;
-}
-.stat-box {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid var(--glass-border);
-  border-radius: 10px;
-  padding: 14px;
-  text-align: left;
-  backdrop-filter: blur(8px);
-}
+.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+.stat-box { background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 10px; padding: 14px; text-align: left; backdrop-filter: blur(8px); }
 .stat-box .label { font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-.stat-box .value {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
-  color: var(--game-color);
-  margin-top: 4px;
-  transition: color 0.5s;
-  text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.5);
-}
+.stat-box .value { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; color: var(--game-color); margin-top: 4px; transition: color 0.5s; text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.5); }
 .stat-box .value.ok { color: var(--color-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); }
 .stat-box .value.warn { color: var(--color-red); text-shadow: 0 0 10px rgba(255, 26, 26, 0.6); }
 
+.history-list { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; max-height: 260px; overflow-y: auto; }
+.history-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 10px; padding: 10px 14px; }
+.history-nums { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; color: var(--text-primary); letter-spacing: 1px; }
+.history-nums .s { color: var(--color-pink); }
+.history-meta { font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+.mc-table { width:100%; border-collapse: collapse; margin-top: 16px; font-size: 0.8rem; }
+.mc-table th { color: var(--game-color); font-family:'Orbitron',sans-serif; font-size: 11px; padding: 8px 6px; border-bottom: 2px solid var(--game-color); text-transform: uppercase; letter-spacing: 1px; }
+.mc-table td { padding: 10px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); font-family: 'Share Tech Mono', monospace; text-align: center; }
+.mc-table td:first-child { text-align:left; color: var(--text-primary); }
+.mc-summary { font-size: 0.72rem; color: var(--text-dim); margin-top: 12px; line-height: 1.6; }
+.mc-summary b { color: var(--color-green); }
+
 .footer {
-  margin-top: 30px;
-  padding: 24px;
-  text-align: center;
-  background: var(--glass-heavy);
-  border-radius: 20px 20px 0 0;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px);
+  margin-top: 30px; padding: 28px 24px 24px; text-align: center; background: var(--glass-heavy); border-radius: 20px 20px 0 0;
+  position: relative; overflow: hidden; border: 1px solid var(--glass-border); backdrop-filter: blur(20px);
 }
+.footer-draw-info { font-family: 'Orbitron', sans-serif; font-weight: 900; line-height: 1.8; }
+.footer-draw-info .draw-date { font-size: 24px; color: var(--color-red); text-shadow: 0 0 20px rgba(255, 26, 26, 0.6), 0 2px 10px rgba(0,0,0,0.9); display: block; }
+.footer-draw-info .draw-price { font-size: 26px; color: var(--color-yellow); text-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 2px 10px rgba(0,0,0,0.9); display: block; margin-top: 8px; }
+.footer-version { margin-top: 15px; font-size: 0.68rem; color: var(--text-dim); font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
+.footer-legal { margin-top: 14px; font-size: 0.66rem; color: var(--text-dim); line-height: 1.6; max-width: 640px; margin-left:auto; margin-right:auto; }
 
-.footer::before {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; width: 100%; height: 6px;
-  background: linear-gradient(90deg,
-    var(--color-blue) 0%, var(--color-blue) 33%,
-    var(--color-white) 33%, var(--color-white) 66%,
-    var(--color-red) 66%, var(--color-red) 100%
-  );
-  background-size: 200% 100%;
-  animation: flagWaveFR 3.5s ease-in-out infinite, flagRipple 4.5s ease-in-out infinite;
-  transform-origin: right center;
-  box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
-}
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
-.footer-draw-info {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  line-height: 1.8;
-}
-.footer-draw-info .draw-date {
-  font-size: 25px;
-  color: var(--color-red);
-  text-shadow: 0 0 20px rgba(255, 26, 26, 0.6), 0 2px 10px rgba(0,0,0,0.9);
-  display: block;
-}
-.footer-draw-info .draw-price {
-  font-size: 28px;
-  color: var(--color-yellow);
-  text-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 2px 10px rgba(0,0,0,0.9);
-  display: block;
-  margin-top: 8px;
-}
-.footer-version {
-  margin-top: 15px;
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  font-family: 'Orbitron', sans-serif;
-  letter-spacing: 2px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-}
-
-/* SCROLLBAR PERSONALIZADA */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
@@ -565,13 +398,13 @@ label.field-label .val {
 
 @media (max-width: 600px) {
   .header h1 { font-size: 1.4rem; letter-spacing: 3px; }
-  .datetime-header { font-size: 22px; }
+  .datetime-header { font-size: 20px; }
   .ball.game-color, .ball.star-color { width: 55px; height: 55px; font-size: 26px; }
   .stats-grid { grid-template-columns: 1fr; }
-  .simple-prize-table th, .simple-prize-table td { font-size: 13px; padding: 10px 4px; }
-  .simple-prize-table .tier-value { font-size: 15px; }
-  .footer-draw-info .draw-date { font-size: 20px; }
-  .footer-draw-info .draw-price { font-size: 22px; }
+  .monitor-grid { grid-template-columns: 1fr; }
+  .simple-prize-table th, .simple-prize-table td { font-size: 11px; padding: 9px 5px; }
+  .footer-draw-info .draw-date { font-size: 18px; }
+  .footer-draw-info .draw-price { font-size: 20px; }
   .price-display .price-value { font-size: 1.4rem; }
   .container { padding: 12px; }
 }
@@ -580,13 +413,15 @@ label.field-label .val {
 <body>
 <div class="container">
   <div class="header">
+    <div class="flag-5d flag-pt top" aria-hidden="true"><div class="stripe"></div><div class="stripe"></div><div class="stripe"></div></div>
     <h1>JONHY EL IGUANA</h1>
-    <div class="sub">Motor Combinatório 8D · IC 95% · Matemática Real</div>
+    <div class="sub">Motor Combinatório 8D · Dados Oficiais Santa Casa · IC 95%</div>
     <div class="datetime-header" id="datetimeHeader">--</div>
   </div>
 
   <div class="card">
-    <h2>⚙ Configuração do Sistema</h2>
+    <h2><span>⚙ Configuração do Sistema</span><span class="step-num">01</span></h2>
+    <label class="sr-only" for="gameType">Escolher jogo</label>
     <select id="gameType">
       <option value="euromilhoes">🇫🇷 EURO MILHÕES (5/50 + 2/12)</option>
       <option value="totoloto">🇵🇹 TOTOLOTO (5/49 + 1/13)</option>
@@ -595,86 +430,115 @@ label.field-label .val {
 
     <div class="flex">
       <div>
-        <label class="field-label">Números <span class="val" id="nQtyDisplay">5</span></label>
+        <label class="field-label" for="nQty">Números <span class="val" id="nQtyDisplay">5</span></label>
         <select id="nQty"></select>
       </div>
       <div>
-        <label class="field-label"><span id="starLabel">Estrelas</span> <span class="val" id="sQtyDisplay">2</span></label>
+        <label class="field-label" for="sQty"><span id="starLabel">Estrelas</span> <span class="val" id="sQtyDisplay">2</span></label>
         <select id="sQty"></select>
       </div>
     </div>
 
-    <div class="price-display">
+    <div class="price-display" aria-live="polite">
       <div class="price-label">💰 Valor da Aposta a Realizar</div>
       <div class="price-value" id="priceValue">€ 2,50</div>
       <div class="price-combos" id="priceCombos">1 combinação · 5+2</div>
     </div>
 
-    <div class="checkrow">
-      <input type="checkbox" id="filterConsec" checked>
-      <label>🚫 Rejeitar 3+ números consecutivos seguidos</label>
+    <div class="filters-toolbar" style="margin-top:16px;">
+      <button type="button" class="mini-btn" id="btnFiltersAll">Ativar todos os filtros</button>
+      <button type="button" class="mini-btn" id="btnFiltersNone">Desativar todos (sorteio puro)</button>
     </div>
-    <div class="checkrow">
-      <input type="checkbox" id="filterSum" checked>
-      <label>📊 Soma dentro do Intervalo de Confiança 95% (μ ± 1,96σ)</label>
-    </div>
-    <div class="checkrow">
-      <input type="checkbox" id="filterParity" checked>
-      <label>⚖️ Equilíbrio Par/Ímpar (rejeitar todos-pares ou todos-ímpares)</label>
-    </div>
-    <div class="checkrow">
-      <input type="checkbox" id="filterQuartile" checked>
-      <label>📈 Distribuição por Quartis Q1–Q4 (mín. 2 quartis ocupados)</label>
-    </div>
-    <div class="checkrow">
-      <input type="checkbox" id="filterDistance" checked>
-      <label>📏 Máx. 2 pares de números com distância inferior a 3</label>
-    </div>
-    <div class="checkrow">
-      <input type="checkbox" id="filterDecade" checked>
-      <label>🔟 Máx. 2 números na mesma dezena (10-19, 20-29...)</label>
-    </div>
-    <div class="checkrow">
-      <input type="checkbox" id="filterLastDigit" checked>
-      <label>🔢 Máx. 2 números a terminar no mesmo algarismo (evitar padrões muito comuns)</label>
-    </div>
+
+    <div class="checkrow"><input type="checkbox" id="filterConsec" checked><label for="filterConsec">🚫 Rejeitar 3+ números consecutivos seguidos</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterSum" checked><label for="filterSum">📊 Soma dentro do Intervalo de Confiança 95% (μ ± 1,96σ)</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterParity" checked><label for="filterParity">⚖️ Equilíbrio Par/Ímpar (rejeitar todos-pares ou todos-ímpares)</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterQuartile" checked><label for="filterQuartile">📈 Distribuição por Quartis Q1–Q4 (mín. 2 quartis ocupados)</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterDistance" checked><label for="filterDistance">📏 Máx. 2 pares de números com distância inferior a 3</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterDecade" checked><label for="filterDecade">🔟 Máx. 2 números na mesma dezena (10-19, 20-29...)</label></div>
+    <div class="checkrow"><input type="checkbox" id="filterLastDigit" checked><label for="filterLastDigit">🔢 Máx. 2 números a terminar no mesmo algarismo</label></div>
   </div>
 
   <div class="card">
-    <h2>📊 Odds Reais e Valor dos Prémios (Cálculo Hipergeométrico)</h2>
-    <div id="prizeTableContainer"></div>
+    <h2><span>📊 Odds Reais e Prémios — Santa Casa</span><span class="step-num">02</span></h2>
+    <div class="simple-prize-table-scroll"><div id="prizeTableContainer"></div></div>
   </div>
 
   <div class="monitor">
-    <div style="font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:3px;">ODDS EXATAS DO 1º PRÉMIO</div>
+    <div style="font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:3px;">ODDS EXATAS DO 1º PRÉMIO (APOSTA SIMPLES)</div>
     <div class="odds" id="oddsDisplay">1 / 139.838.160</div>
-    <div class="odds-sub" id="oddsSub">Probabilidade fixa por combinatória C(N,n) — igual para todas as apostas</div>
+    <div class="odds-sub" id="oddsSub">Idêntica à probabilidade oficial publicada pela Santa Casa para este jogo</div>
+    <div class="monitor-grid" id="monitorGrid"></div>
+  </div>
+
+  <div class="card">
+    <h2><span>🧪 Simulação Monte Carlo</span><span class="step-num">03</span></h2>
+    <p style="font-size:0.8rem; color:var(--text-dim); line-height:1.6;">
+      Simula milhares de sorteios independentes para uma aposta simples e compara a frequência empírica de cada escalão
+      com a probabilidade hipergeométrica teórica — quanto maior o número de simulações, mais a frequência observada
+      converge para a odd real (Lei dos Grandes Números).
+    </p>
+    <div class="flex" style="margin-top:14px;">
+      <button type="button" class="btn-secondary" id="btnMC10k">10.000 sorteios</button>
+      <button type="button" class="btn-secondary" id="btnMC100k">100.000 sorteios</button>
+      <button type="button" class="btn-secondary" id="btnMC500k">500.000 sorteios</button>
+    </div>
+    <div class="progress-wrap" id="mcProgressWrap"><div class="progress-bar" id="mcProgressBar"></div></div>
+    <div id="mcResultContainer"></div>
   </div>
 
   <button class="btn" id="runBtn">🎲 GERAR COMBINAÇÃO ESTATISTICAMENTE EQUILIBRADA</button>
+  <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
 
-  <div class="terminal" id="terminal">
-    <div class="log-line system">> JONHY EL IGUANA v9.0 Inicializado.</div>
-    <div class="log-line math">> Motor: Hipergeométrica exata + Monte Carlo por rejeição + 7 filtros estruturais + IC 95%.</div>
+  <div class="terminal" id="terminal" aria-live="polite" role="log">
+    <div class="log-line system">> JONHY EL IGUANA v11.0 Inicializado.</div>
+    <div class="log-line math">> Motor: Hipergeométrica exata + Monte Carlo assíncrono + 7 filtros estruturais + IC 95%.</div>
   </div>
 
   <div id="resultPanel" class="result-panel">
     <h2>🎯 COMBINAÇÃO GERADA</h2>
     <div class="balls" id="ballOutput"></div>
+    <div class="result-actions">
+      <button type="button" class="btn-secondary" id="btnCopy">📋 Copiar Números</button>
+      <button type="button" class="btn-secondary" id="btnRepeat">🔁 Gerar Outra</button>
+    </div>
     <div class="stats-grid" id="analysisGrid"></div>
   </div>
 
+  <div class="card" id="historyCard" style="display:none;">
+    <h2><span>🕓 Histórico da Sessão</span><button type="button" class="mini-btn" id="btnClearHistory">Limpar</button></h2>
+    <div class="history-list" id="historyList"></div>
+  </div>
+
   <div class="footer">
+    <div class="flag-5d flag-fr bottom" aria-hidden="true"><div class="stripe"></div><div class="stripe"></div><div class="stripe"></div></div>
     <div class="footer-draw-info" id="footerDrawInfo">
       <span class="draw-date">PRÓXIMO SORTEIO: --</span>
       <span class="draw-price">PREÇO DA APOSTA: --</span>
     </div>
-    <div class="footer-version">JONHY EL IGUANA v9.0 · MATEMÁTICA COMBINATÓRIA REAL · IC 95%</div>
+    <div class="footer-version">JONHY EL IGUANA v11.0 · MATEMÁTICA COMBINATÓRIA REAL · DADOS OFICIAIS SANTA CASA</div>
+    <div class="footer-legal">As odds apresentadas correspondem às probabilidades oficiais de cada jogo da Santa Casa (Euromilhões, Totoloto, EuroDreams). Os valores em euros dos escalões inferiores variam por sorteio consoante vendas e nº de vencedores — consulte jogossantacasa.pt para os valores exatos do concurso atual.</div>
   </div>
 </div>
 
 <script>
 'use strict';
+
+/* ===========================================================================
+   DADOS OFICIAIS SANTA CASA (verificados):
+   - Euromilhões 5/50 + 2/12 → 13 categorias oficiais de prémio.
+     Odds do 1º prémio: 1 / 139.838.160 (C(50,5)×C(12,2)).
+   - Totoloto 5/49 + 1/13 → 6 categorias oficiais.
+     Odds do 1º prémio: 1 / 24.789.492 (C(49,5)×C(13,1)). 1º prémio mínimo
+     garantido: €1.000.000 (sem limite de jackpot).
+   - EuroDreams 6/40 + 1/5 → 6 categorias oficiais.
+     Odds do 1º prémio: 1 / 19.191.900 (C(40,6)×C(5,1)). 1º prémio pago em
+     renda de €20.000/mês durante 30 anos (≈€7,2M); 2º prémio €2.000/mês
+     durante 5 anos (€120.000); 6ª categoria é reembolso fixo do valor da
+     aposta (€2,50).
+   Os valores de escalões intermédios variam por sorteio (percentagem do
+   fundo de prémios) — aqui marcados como "Variável" em vez de inventados.
+=========================================================================== */
 
 const REGRAS = {
   euromilhoes: {
@@ -683,13 +547,22 @@ const REGRAS = {
     stars: { min: 1, max: 12, sorteados: 2, minAposta: 2, maxAposta: 5, nome: "Estrelas" },
     preco: 2.50,
     diasSorteio: [2, 5],
-    horaSorteio: "21:00",
+    horaSorteio: "19:00",
+    jackpotInfo: "Início ≈ €17.000.000 · Acumula até ao teto de €230.000.000",
     premios: [
-      { n: 5, s: 2, nome: "1º Prémio (5+2)", valor: 30000000 },
-      { n: 5, s: 1, nome: "2º Prémio (5+1)", valor: 400000 },
-      { n: 5, s: 0, nome: "3º Prémio (5+0)", valor: 40000 },
-      { n: 4, s: 2, nome: "4º Prémio (4+2)", valor: 3000 },
-      { n: 4, s: 1, nome: "5º Prémio (4+1)", valor: 150 }
+      { n: 5, s: 2, nome: "1º Prémio (5+2) — Jackpot", valor: null, valorTxt: "Acumulado (ver info)" },
+      { n: 5, s: 1, nome: "2º Prémio (5+1)", valor: null, valorTxt: "Variável" },
+      { n: 5, s: 0, nome: "3º Prémio (5+0)", valor: null, valorTxt: "Variável" },
+      { n: 4, s: 2, nome: "4º Prémio (4+2)", valor: null, valorTxt: "Variável" },
+      { n: 4, s: 1, nome: "5º Prémio (4+1)", valor: null, valorTxt: "Variável" },
+      { n: 3, s: 2, nome: "6º Prémio (3+2)", valor: null, valorTxt: "Variável" },
+      { n: 2, s: 2, nome: "7º Prémio (2+2)", valor: null, valorTxt: "Variável" },
+      { n: 4, s: 0, nome: "8º Prémio (4+0)", valor: null, valorTxt: "Variável" },
+      { n: 3, s: 1, nome: "9º Prémio (3+1)", valor: null, valorTxt: "Variável" },
+      { n: 3, s: 0, nome: "10º Prémio (3+0)", valor: null, valorTxt: "Variável" },
+      { n: 1, s: 2, nome: "11º Prémio (1+2)", valor: null, valorTxt: "Variável" },
+      { n: 2, s: 1, nome: "12º Prémio (2+1)", valor: null, valorTxt: "Variável" },
+      { n: 2, s: 0, nome: "13º Prémio (2+0)", valor: null, valorTxt: "Variável (fixo baixo)" }
     ]
   },
   totoloto: {
@@ -698,12 +571,15 @@ const REGRAS = {
     stars: { min: 1, max: 13, sorteados: 1, minAposta: 1, maxAposta: 1, nome: "Nº Sorte" },
     preco: 1.00,
     diasSorteio: [1, 3, 6],
-    horaSorteio: "21:00",
+    horaSorteio: "20:30",
+    jackpotInfo: "1º prémio mínimo garantido de €1.000.000, sem limite de jackpot",
     premios: [
-      { n: 5, s: 1, nome: "1º Prémio (5+1)", valor: 3000000 },
-      { n: 5, s: 0, nome: "2º Prémio (5+0)", valor: 50000 },
-      { n: 4, s: 1, nome: "3º Prémio (4+1)", valor: 2000 },
-      { n: 4, s: 0, nome: "4º Prémio (4+0)", valor: 100 }
+      { n: 5, s: 1, nome: "1º Prémio (5+Nº Sorte) — Jackpot", valor: 1000000, valorTxt: "≥ €1.000.000 (mín. garantido)" },
+      { n: 5, s: 0, nome: "2º Prémio (5 números)", valor: null, valorTxt: "Variável" },
+      { n: 4, s: 1, nome: "3º Prémio (4+Nº Sorte)", valor: null, valorTxt: "Variável" },
+      { n: 4, s: 0, nome: "4º Prémio (4 números)", valor: null, valorTxt: "Variável" },
+      { n: 3, s: 1, nome: "5º Prémio (3+Nº Sorte)", valor: null, valorTxt: "Variável" },
+      { n: 2, s: 1, nome: "6º Prémio (2+Nº Sorte)", valor: null, valorTxt: "Variável" }
     ]
   },
   eurodreams: {
@@ -713,11 +589,14 @@ const REGRAS = {
     preco: 2.50,
     diasSorteio: [1, 4],
     horaSorteio: "21:00",
+    jackpotInfo: "Renda vitalícia: €20.000/mês × 30 anos (≈€7,2M) · Super Sorteio: €30.000/mês",
     premios: [
-      { n: 6, s: 1, nome: "1º Prémio (6+1)", valor: 1200000 },
-      { n: 6, s: 0, nome: "2º Prémio (6+0)", valor: 300000 },
-      { n: 5, s: 1, nome: "3º Prémio (5+1)", valor: 24000 },
-      { n: 5, s: 0, nome: "4º Prémio (5+0)", valor: 500 }
+      { n: 6, s: 1, nome: "1º Prémio (6+Sonho) — Renda 30 anos", valor: 7200000, valorTxt: "€20.000/mês × 30 anos" },
+      { n: 6, s: 0, nome: "2º Prémio (6 números) — Renda 5 anos", valor: 120000, valorTxt: "€2.000/mês × 5 anos" },
+      { n: 5, s: 1, nome: "3º Prémio (5+Sonho)", valor: null, valorTxt: "Variável" },
+      { n: 5, s: 0, nome: "4º Prémio (5 números)", valor: null, valorTxt: "Variável" },
+      { n: 4, s: null, nome: "5º Prémio (4 números)", valor: null, valorTxt: "Variável", ignoreDream: true },
+      { n: 3, s: null, nome: "6º Prémio (3 números) — Reembolso", valor: 2.50, valorTxt: "€2,50 (reembolso da aposta)", ignoreDream: true }
     ]
   }
 };
@@ -728,73 +607,45 @@ const CORES_JOGO = {
   eurodreams:  { game: '#00FF41', gameRGB: '0, 255, 65' }
 };
 
-/* ---------- MATEMÁTICA COMBINATÓRIA (exata, sem arredondamentos intermédios) ---------- */
-
+/* ---------- MATEMÁTICA COMBINATÓRIA (exata, BigInt) ---------- */
 const combCache = new Map();
-// C(n,k) calculado com BigInt para precisão exata (evita erro de vírgula flutuante
-// em números grandes como C(50,5) = 2.118.760).
 function C(n, k) {
   if (k < 0 || k > n || n < 0) return 0;
   if (k === 0 || k === n) return 1;
   k = Math.min(k, n - k);
   const key = n + ',' + k;
   if (combCache.has(key)) return combCache.get(key);
-  let numerator = 1n;
-  let denominator = 1n;
-  for (let i = 0; i < k; i++) {
-    numerator *= BigInt(n - i);
-    denominator *= BigInt(i + 1);
-  }
-  const result = numerator / denominator; // divisão exata, sem resto
-  const res = Number(result);
+  let numerator = 1n, denominator = 1n;
+  for (let i = 0; i < k; i++) { numerator *= BigInt(n - i); denominator *= BigInt(i + 1); }
+  const res = Number(numerator / denominator);
   combCache.set(key, res);
   return res;
 }
 
-// Probabilidade hipergeométrica exata P(X = k) para uma população N,
-// com K "sucessos" (números sorteados), amostra de tamanho n (números apostados).
 function probHipergeometrica(N, K, n, k) {
   if (k > K || k > n || (n - k) > (N - K)) return 0;
   return (C(K, k) * C(N - K, n - k)) / C(N, n);
 }
 
-/* ---------- ESTATÍSTICA DA SOMA (distribuição exata via convolução, não aproximação normal) ---------- */
+function probSistemaPeloMenos(N, K, n, minK) {
+  const upper = Math.min(n, K);
+  if (minK > upper) return 0;
+  let total = 0;
+  for (let k = minK; k <= upper; k++) total += probHipergeometrica(N, K, n, k);
+  return total;
+}
 
-// Distribui a soma de k números distintos escolhidos de 1..N.
-// Calcula média (μ) e desvio-padrão (σ) EXATOS por fórmula fechada
-// (não Monte Carlo, não aproximação): para uma amostra sem reposição
-// de k elementos de {1,...,N}, μ = k(N+1)/2 e σ² = k(N+1)(N-k)/12.
-// Esta é a fórmula estatística correta para amostragem sem reposição
-// (hipergeométrica multivariada), verificável analiticamente.
 function calcularEstatisticasSoma(max, sorteados) {
-  const N = max;
-  const k = sorteados;
+  const N = max, k = sorteados;
   const mu = k * (N + 1) / 2;
   const variancia = k * (N + 1) * (N - k) / 12;
-  const sigma = Math.sqrt(variancia);
-  return { mu, sigma };
+  return { mu, sigma: Math.sqrt(variancia) };
 }
-
-function calcularQuartis(N) {
-  return {
-    Q1: Math.ceil(N * 0.25),
-    Q2: Math.ceil(N * 0.50),
-    Q3: Math.ceil(N * 0.75),
-    Q4: N
-  };
-}
-
-/* ---------- GERADOR: amostragem aleatória uniforme + Monte Carlo por rejeição ----------
-   Importante: a amostragem em si é sempre uniforme (Fisher-Yates parcial),
-   ou seja, TODAS as combinações continuam a ter a mesma probabilidade de serem
-   sorteadas no jogo real. Os filtros abaixo apenas REJEITAM e voltam a tentar
-   quando a combinação gerada cai fora de padrões estatisticamente comuns —
-   isto não altera nem pode alterar a probabilidade de ganhar. */
+function calcularQuartis(N) { return { Q1: Math.ceil(N * 0.25), Q2: Math.ceil(N * 0.50), Q3: Math.ceil(N * 0.75), Q4: N }; }
 
 function amostraUniformeSemReposicao(min, max, qtd) {
   const pool = [];
   for (let i = min; i <= max; i++) pool.push(i);
-  // Fisher-Yates parcial (amostragem uniforme correta, sem viés)
   for (let i = 0; i < qtd; i++) {
     const j = i + Math.floor(Math.random() * (pool.length - i));
     [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -804,150 +655,107 @@ function amostraUniformeSemReposicao(min, max, qtd) {
 
 function contarConsecutivosMax(nums) {
   let maxConsec = 1, atual = 1;
-  for (let i = 1; i < nums.length; i++) {
-    if (nums[i] === nums[i - 1] + 1) {
-      atual++;
-      maxConsec = Math.max(maxConsec, atual);
-    } else {
-      atual = 1;
-    }
-  }
+  for (let i = 1; i < nums.length; i++) { if (nums[i] === nums[i-1]+1) { atual++; maxConsec = Math.max(maxConsec, atual); } else atual = 1; }
   return maxConsec;
 }
+function contarParesProximos(nums) { let c=0; for (let i=1;i<nums.length;i++) if (nums[i]-nums[i-1]<3) c++; return c; }
+function contarMaxPorDezena(nums) { const d={}; nums.forEach(n=>{const k=Math.floor((n-1)/10); d[k]=(d[k]||0)+1;}); return Math.max(...Object.values(d)); }
+function contarMaxUltimoAlgarismo(nums) { const d={}; nums.forEach(n=>{const k=n%10; d[k]=(d[k]||0)+1;}); return Math.max(...Object.values(d)); }
 
-function contarParesProximos(nums) {
-  let count = 0;
-  for (let i = 1; i < nums.length; i++) {
-    if (nums[i] - nums[i - 1] < 3) count++;
-  }
-  return count;
-}
-
-function contarMaxPorDezena(nums) {
-  const dezenas = {};
-  nums.forEach(n => {
-    const d = Math.floor((n - 1) / 10);
-    dezenas[d] = (dezenas[d] || 0) + 1;
-  });
-  return Math.max(...Object.values(dezenas));
-}
-
-function contarMaxUltimoAlgarismo(nums) {
-  const digitos = {};
-  nums.forEach(n => {
-    const d = n % 10;
-    digitos[d] = (digitos[d] || 0) + 1;
-  });
-  return Math.max(...Object.values(digitos));
-}
-
-function gerarCombinacaoOtimizada(regra, nQty, sQty) {
-  const maxTentativas = 200000;
-  let tentativas = 0;
-
-  const stats = calcularEstatisticasSoma(regra.nums.max, nQty);
-  const somaMin = Math.max(nQty, Math.round(stats.mu - 1.96 * stats.sigma));
-  const somaMax = Math.min(nQty * regra.nums.max, Math.round(stats.mu + 1.96 * stats.sigma));
-  const quartis = calcularQuartis(regra.nums.max);
-
-  const usarConsec    = document.getElementById('filterConsec').checked;
-  const usarSum       = document.getElementById('filterSum').checked;
-  const usarParity    = document.getElementById('filterParity').checked;
-  const usarQuartile  = document.getElementById('filterQuartile').checked;
-  const usarDistance  = document.getElementById('filterDistance').checked;
-  const usarDecade    = document.getElementById('filterDecade').checked;
-  const usarLastDigit = document.getElementById('filterLastDigit').checked;
-
-  let ultimaTentativa = null;
-
-  while (tentativas < maxTentativas) {
-    tentativas++;
-
-    const nums = amostraUniformeSemReposicao(regra.nums.min, regra.nums.max, nQty).sort((a, b) => a - b);
-    const stars = amostraUniformeSemReposicao(regra.stars.min, regra.stars.max, sQty).sort((a, b) => a - b);
-    ultimaTentativa = { nums, stars };
-
-    if (usarConsec && contarConsecutivosMax(nums) >= 3) continue;
-
-    if (usarParity) {
-      const pares = nums.filter(n => n % 2 === 0).length;
-      if (pares === 0 || pares === nums.length) continue;
-    }
-
-    if (usarSum) {
-      const soma = nums.reduce((a, b) => a + b, 0);
-      if (soma < somaMin || soma > somaMax) continue;
-    }
-
-    if (usarQuartile) {
-      const q1 = nums.filter(n => n <= quartis.Q1).length;
-      const q2 = nums.filter(n => n > quartis.Q1 && n <= quartis.Q2).length;
-      const q3 = nums.filter(n => n > quartis.Q2 && n <= quartis.Q3).length;
-      const q4 = nums.filter(n => n > quartis.Q3).length;
-      const ocupados = [q1, q2, q3, q4].filter(c => c > 0).length;
-      if (ocupados < 2) continue;
-    }
-
-    if (usarDistance && contarParesProximos(nums) > 2) continue;
-    if (usarDecade && contarMaxPorDezena(nums) > 2) continue;
-    if (usarLastDigit && contarMaxUltimoAlgarismo(nums) > 2) continue;
-
-    return { nums, stars, tentativas, stats, somaMin, somaMax, quartis, esgotado: false };
-  }
-
-  // Se esgotar as tentativas (pode acontecer com filtros muito restritivos
-  // combinados com apostas de muitos números), devolve a última combinação
-  // válida gerada e avisa no terminal — nunca finge sucesso.
+function getFiltrosAtivos() {
   return {
-    nums: ultimaTentativa.nums,
-    stars: ultimaTentativa.stars,
-    tentativas: maxTentativas,
-    stats, somaMin, somaMax, quartis,
-    esgotado: true
+    consec: document.getElementById('filterConsec').checked,
+    sum: document.getElementById('filterSum').checked,
+    parity: document.getElementById('filterParity').checked,
+    quartile: document.getElementById('filterQuartile').checked,
+    distance: document.getElementById('filterDistance').checked,
+    decade: document.getElementById('filterDecade').checked,
+    lastDigit: document.getElementById('filterLastDigit').checked
   };
+}
+
+function passaFiltros(nums, filtros, somaMin, somaMax, quartis) {
+  if (filtros.consec && contarConsecutivosMax(nums) >= 3) return false;
+  if (filtros.parity) { const pares = nums.filter(n=>n%2===0).length; if (pares===0 || pares===nums.length) return false; }
+  if (filtros.sum) { const soma = nums.reduce((a,b)=>a+b,0); if (soma<somaMin || soma>somaMax) return false; }
+  if (filtros.quartile) {
+    const q1=nums.filter(n=>n<=quartis.Q1).length, q2=nums.filter(n=>n>quartis.Q1&&n<=quartis.Q2).length;
+    const q3=nums.filter(n=>n>quartis.Q2&&n<=quartis.Q3).length, q4=nums.filter(n=>n>quartis.Q3).length;
+    if ([q1,q2,q3,q4].filter(c=>c>0).length < 2) return false;
+  }
+  if (filtros.distance && contarParesProximos(nums) > 2) return false;
+  if (filtros.decade && contarMaxPorDezena(nums) > 2) return false;
+  if (filtros.lastDigit && contarMaxUltimoAlgarismo(nums) > 2) return false;
+  return true;
+}
+
+function gerarCombinacaoAsync(regra, nQty, sQty, onProgress) {
+  return new Promise((resolve) => {
+    const maxTentativas = 300000, tamanhoBloco = 4000;
+    let tentativas = 0, ultimaTentativa = null;
+    const stats = calcularEstatisticasSoma(regra.nums.max, nQty);
+    const somaMin = Math.max(nQty, Math.round(stats.mu - 1.96 * stats.sigma));
+    const somaMax = Math.min(nQty * regra.nums.max, Math.round(stats.mu + 1.96 * stats.sigma));
+    const quartis = calcularQuartis(regra.nums.max);
+    const filtros = getFiltrosAtivos();
+
+    function processarBloco() {
+      const limite = Math.min(tentativas + tamanhoBloco, maxTentativas);
+      while (tentativas < limite) {
+        tentativas++;
+        const nums = amostraUniformeSemReposicao(regra.nums.min, regra.nums.max, nQty).sort((a,b)=>a-b);
+        const stars = amostraUniformeSemReposicao(regra.stars.min, regra.stars.max, sQty).sort((a,b)=>a-b);
+        ultimaTentativa = { nums, stars };
+        if (passaFiltros(nums, filtros, somaMin, somaMax, quartis)) {
+          resolve({ nums, stars, tentativas, stats, somaMin, somaMax, quartis, esgotado: false });
+          return;
+        }
+      }
+      if (onProgress) onProgress(tentativas, maxTentativas);
+      if (tentativas >= maxTentativas) {
+        resolve({ nums: ultimaTentativa.nums, stars: ultimaTentativa.stars, tentativas: maxTentativas, stats, somaMin, somaMax, quartis, esgotado: true });
+        return;
+      }
+      setTimeout(processarBloco, 0);
+    }
+    processarBloco();
+  });
 }
 
 function calcularPreco(regra, n, s) {
   const combosNums = C(n, regra.nums.sorteados);
   const combosStars = C(s, regra.stars.sorteados);
   const totalCombos = combosNums * combosStars;
-  const custo = totalCombos * regra.preco;
-  return { totalCombos, custo };
+  return { totalCombos, custo: totalCombos * regra.preco };
 }
 
 let currentGame = 'euromilhoes';
+let historico = [];
 
 function getNextDrawDate(diasSemana, hora) {
   const agora = new Date();
-  const diasNomes = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+  const diasNomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
   let diasAte = 7;
-
   for (const d of diasSemana) {
     let diff = d - agora.getDay();
     if (diff < 0) diff += 7;
     if (diff === 0) {
-      const [h, m] = hora.split(':').map(Number);
-      if (agora.getHours() > h || (agora.getHours() === h && agora.getMinutes() >= m)) {
-        diff = 7;
-      }
+      const [h,m] = hora.split(':').map(Number);
+      if (agora.getHours() > h || (agora.getHours() === h && agora.getMinutes() >= m)) diff = 7;
     }
     if (diff < diasAte) diasAte = diff;
   }
-
   const dataProx = new Date(agora);
   dataProx.setDate(agora.getDate() + diasAte);
-  const diaSemana = diasNomes[dataProx.getDay()];
-  const dataFmt = dataProx.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
-
-  return `${diaSemana}, ${dataFmt} às ${hora}`;
+  const dataFmt = dataProx.toLocaleDateString('pt-PT', { day:'2-digit', month:'2-digit', year:'numeric' });
+  return `${diasNomes[dataProx.getDay()]}, ${dataFmt} às ${hora}`;
 }
 
 function aplicarCoresJogo(gameKey) {
   const cores = CORES_JOGO[gameKey];
   if (!cores) return;
-  const root = document.documentElement;
-  root.style.setProperty('--game-color', cores.game);
-  root.style.setProperty('--game-color-rgb', cores.gameRGB);
+  document.documentElement.style.setProperty('--game-color', cores.game);
+  document.documentElement.style.setProperty('--game-color-rgb', cores.gameRGB);
 }
 
 function updateUI() {
@@ -955,16 +763,12 @@ function updateUI() {
     currentGame = document.getElementById('gameType').value;
     const regra = REGRAS[currentGame];
     if (!regra) return;
-
     aplicarCoresJogo(currentGame);
 
     const nSel = document.getElementById('nQty');
     nSel.innerHTML = '';
     for (let i = regra.nums.minAposta; i <= regra.nums.maxAposta; i++) {
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = i;
-      nSel.appendChild(opt);
+      const opt = document.createElement('option'); opt.value = i; opt.textContent = i; nSel.appendChild(opt);
     }
     nSel.value = regra.nums.minAposta;
     document.getElementById('nQtyDisplay').textContent = regra.nums.minAposta;
@@ -973,32 +777,23 @@ function updateUI() {
     sSel.innerHTML = '';
     const isFixed = regra.stars.minAposta === regra.stars.maxAposta;
     for (let i = regra.stars.minAposta; i <= regra.stars.maxAposta; i++) {
-      const opt = document.createElement('option');
-      opt.value = i;
-      opt.textContent = i;
-      sSel.appendChild(opt);
+      const opt = document.createElement('option'); opt.value = i; opt.textContent = i; sSel.appendChild(opt);
     }
     sSel.value = regra.stars.minAposta;
     sSel.disabled = isFixed;
     document.getElementById('starLabel').textContent = regra.stars.nome + (isFixed ? ' (Fixo)' : '');
     document.getElementById('sQtyDisplay').textContent = regra.stars.minAposta;
 
-    nSel.onchange = function () {
-      document.getElementById('nQtyDisplay').textContent = this.value;
-      updatePriceDisplay();
-      updateFooter();
-    };
-    sSel.onchange = function () {
-      document.getElementById('sQtyDisplay').textContent = this.value;
-      updatePriceDisplay();
-      updateFooter();
-    };
+    nSel.onchange = function () { document.getElementById('nQtyDisplay').textContent = this.value; updatePriceDisplay(); updateFooter(); renderPrizeTable(regra); };
+    sSel.onchange = function () { document.getElementById('sQtyDisplay').textContent = this.value; updatePriceDisplay(); updateFooter(); renderPrizeTable(regra); };
 
     renderPrizeTable(regra);
     updateOdds(regra);
     updatePriceDisplay();
     updateFooter();
-
+    updateMonitorGrid(regra);
+    document.getElementById('resultPanel').style.display = 'none';
+    document.getElementById('mcResultContainer').innerHTML = '';
     addLog(`Jogo selecionado: ${regra.nome}`, 'system');
   } catch (err) {
     console.error('Erro em updateUI:', err);
@@ -1011,7 +806,6 @@ function updatePriceDisplay() {
   const n = parseInt(document.getElementById('nQty').value, 10);
   const s = parseInt(document.getElementById('sQty').value, 10);
   const { totalCombos, custo } = calcularPreco(regra, n, s);
-
   document.getElementById('priceValue').textContent = `€ ${custo.toFixed(2).replace('.', ',')}`;
   document.getElementById('priceCombos').textContent = `${totalCombos.toLocaleString('pt-PT')} combinação(ões) · ${n}+${s}`;
 }
@@ -1022,7 +816,6 @@ function updateFooter() {
   const s = parseInt(document.getElementById('sQty').value, 10);
   const { custo } = calcularPreco(regra, n, s);
   const proximoSorteio = getNextDrawDate(regra.diasSorteio, regra.horaSorteio);
-
   document.getElementById('footerDrawInfo').innerHTML = `
     <span class="draw-date">PRÓXIMO SORTEIO: ${proximoSorteio}</span>
     <span class="draw-price">PREÇO DA APOSTA: € ${custo.toFixed(2).replace('.', ',')}</span>
@@ -1032,37 +825,76 @@ function updateFooter() {
 function updateOdds(regra) {
   const totalCombos = C(regra.nums.max, regra.nums.sorteados) * C(regra.stars.max, regra.stars.sorteados);
   document.getElementById('oddsDisplay').textContent = `1 / ${totalCombos.toLocaleString('pt-PT')}`;
+  document.getElementById('oddsSub').textContent = `Cálculo exato C(${regra.nums.max},${regra.nums.sorteados})×C(${regra.stars.max},${regra.stars.sorteados}) — idêntico ao valor oficial da Santa Casa`;
+}
+
+function updateMonitorGrid(regra) {
+  const probQualquer = 1 - (1 - (1/1)) ; // placeholder unused
+  const grid = document.getElementById('monitorGrid');
+  const anyPrizeText = {
+    euromilhoes: '1 em 13',
+    totoloto: '1 em 7',
+    eurodreams: '1 em ~6'
+  }[currentGame] || '—';
+  grid.innerHTML = `
+    <div class="monitor-mini"><div class="mlabel">Sorteios / semana</div><div class="mval">${regra.diasSorteio.length}</div></div>
+    <div class="monitor-mini"><div class="mlabel">Chance de qualquer prémio</div><div class="mval">${anyPrizeText}</div></div>
+    <div class="monitor-mini"><div class="mlabel">Preço da aposta simples</div><div class="mval">€ ${regra.preco.toFixed(2).replace('.', ',')}</div></div>
+  `;
 }
 
 function renderPrizeTable(regra) {
+  const nQty = parseInt(document.getElementById('nQty').value, 10) || regra.nums.minAposta;
+  const sQty = parseInt(document.getElementById('sQty').value, 10) || regra.stars.minAposta;
+  const isSystem = nQty > regra.nums.sorteados || sQty > regra.stars.sorteados;
+
   const container = document.getElementById('prizeTableContainer');
   let html = `<table class="simple-prize-table">
-    <thead>
-      <tr>
-        <th style="text-align:left;">Escalão</th>
-        <th>Odds Reais</th>
-        <th>Valor (€)</th>
-      </tr>
-    </thead>
-    <tbody>`;
+    <thead><tr>
+      <th style="text-align:left;">Escalão</th>
+      <th>Odds Aposta Simples</th>
+      ${isSystem ? '<th>Chance no Seu Sistema</th>' : ''}
+      <th>Valor (€)</th>
+    </tr></thead><tbody>`;
 
   regra.premios.forEach(p => {
-    const probNums = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n);
-    const probStars = probHipergeometrica(regra.stars.max, regra.stars.sorteados, regra.stars.sorteados, p.s);
-    const probReal = probNums * probStars;
+    let probReal;
+    if (p.ignoreDream) {
+      probReal = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n);
+    } else {
+      const probNums = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n);
+      const probStars = probHipergeometrica(regra.stars.max, regra.stars.sorteados, regra.stars.sorteados, p.s);
+      probReal = probNums * probStars;
+    }
     const odds = probReal > 0 ? 1 / probReal : Infinity;
-
     const oddsFmt = isFinite(odds) ? '1 / ' + Math.round(odds).toLocaleString('pt-PT') : 'N/D';
-    const valorFmt = '€ ' + p.valor.toLocaleString('pt-PT');
+    const valorFmt = p.valor !== null ? '€ ' + p.valor.toLocaleString('pt-PT') : p.valorTxt;
 
-    html += `<tr>
-      <td class="tier-name">${p.nome}</td>
-      <td class="tier-odds">${oddsFmt}</td>
-      <td class="tier-value">${valorFmt}</td>
-    </tr>`;
+    let sistemaCell = '';
+    if (isSystem) {
+      let probSistema;
+      if (p.ignoreDream) {
+        probSistema = probSistemaPeloMenos(regra.nums.max, regra.nums.sorteados, nQty, p.n);
+      } else {
+        const probSistemaNums = probSistemaPeloMenos(regra.nums.max, regra.nums.sorteados, nQty, p.n);
+        const probSistemaStars = probSistemaPeloMenos(regra.stars.max, regra.stars.sorteados, sQty, p.s);
+        probSistema = probSistemaNums * probSistemaStars;
+      }
+      const oddsSistema = probSistema > 0 ? 1 / probSistema : Infinity;
+      const sistemaFmt = isFinite(oddsSistema)
+        ? (probSistema >= 0.001 ? (probSistema * 100).toFixed(2) + '%' : '1 / ' + Math.round(oddsSistema).toLocaleString('pt-PT'))
+        : 'N/D';
+      sistemaCell = `<td class="tier-system">${sistemaFmt}</td>`;
+    }
+
+    html += `<tr><td class="tier-name">${p.nome}</td><td class="tier-odds">${oddsFmt}</td>${sistemaCell}<td class="tier-value">${valorFmt}</td></tr>`;
   });
 
   html += `</tbody></table>`;
+  html += `<div class="prize-table-legend">📌 ${regra.jackpotInfo}. Odds calculadas por combinatória hipergeométrica exata — idênticas às probabilidades oficiais publicadas pela Santa Casa. Valores marcados "Variável" dependem das vendas e nº de vencedores de cada sorteio real.</div>`;
+  if (isSystem) {
+    html += `<div class="prize-table-legend">"Chance no Seu Sistema" = probabilidade real de acertar <b>pelo menos uma vez</b> nesse escalão jogando todas as combinações do seu sistema — soma de probabilidades hipergeométricas exatas, não aproximação.</div>`;
+  }
   container.innerHTML = html;
 }
 
@@ -1075,138 +907,204 @@ function addLog(msg, type) {
   term.scrollTop = term.scrollHeight;
 }
 
-document.getElementById('runBtn').addEventListener('click', async function () {
-  const btn = this;
+function setProgress(pct, wrapId, barId) {
+  const wrap = document.getElementById(wrapId || 'progressWrap');
+  const bar = document.getElementById(barId || 'progressBar');
+  if (pct === null) { wrap.classList.remove('active'); bar.style.width = '0%'; return; }
+  wrap.classList.add('active');
+  bar.style.width = Math.min(100, pct) + '%';
+}
+
+async function executarGeracao() {
+  const btn = document.getElementById('runBtn');
   btn.disabled = true;
   btn.textContent = '🎲 A CALCULAR...';
-
+  setProgress(2);
   try {
     document.getElementById('terminal').innerHTML = '';
-    addLog('Iniciando amostragem uniforme + Monte Carlo por rejeição (7 filtros, IC 95%)...', 'system');
-
-    await new Promise(r => setTimeout(r, 150));
+    addLog('Iniciando amostragem uniforme + rejeição assíncrona (7 filtros, IC 95%)...', 'system');
+    await new Promise(r => setTimeout(r, 100));
 
     const regra = REGRAS[currentGame];
     const nQty = parseInt(document.getElementById('nQty').value, 10);
     const sQty = parseInt(document.getElementById('sQty').value, 10);
-
     const stats = calcularEstatisticasSoma(regra.nums.max, nQty);
     const quartis = calcularQuartis(regra.nums.max);
 
     addLog(`Distribuição exata da soma: μ=${stats.mu.toFixed(1)} | σ=${stats.sigma.toFixed(2)}`, 'math');
-    addLog(`IC 95% da soma: [${Math.round(stats.mu - 1.96 * stats.sigma)} ; ${Math.round(stats.mu + 1.96 * stats.sigma)}]`, 'math');
+    addLog(`IC 95% da soma: [${Math.round(stats.mu - 1.96*stats.sigma)} ; ${Math.round(stats.mu + 1.96*stats.sigma)}]`, 'math');
     addLog(`Quartis: Q1≤${quartis.Q1} | Q2≤${quartis.Q2} | Q3≤${quartis.Q3} | Q4≤${quartis.Q4}`, 'math');
     addLog(`Alvo: ${nQty} números + ${sQty} ${regra.stars.nome}`, 'math');
 
-    const resultado = gerarCombinacaoOtimizada(regra, nQty, sQty);
+    const resultado = await gerarCombinacaoAsync(regra, nQty, sQty, (tent, maxT) => setProgress((tent/maxT)*100));
 
     if (resultado.esgotado) {
-      addLog(`Limite de ${resultado.tentativas} iterações atingido — filtros muito restritivos para esta combinação. A mostrar a última tentativa gerada.`, 'warn');
+      addLog(`Limite de ${resultado.tentativas.toLocaleString('pt-PT')} iterações atingido — filtros muito restritivos. A mostrar a última tentativa gerada.`, 'warn');
     } else {
-      addLog(`Combinação válida encontrada após ${resultado.tentativas} iteração(ões) de filtragem.`, 'success');
+      addLog(`Combinação válida encontrada após ${resultado.tentativas.toLocaleString('pt-PT')} iteração(ões).`, 'success');
     }
-    addLog(`Lembrete: a probabilidade real de acerto do 1º prémio mantém-se inalterada (ver "Odds Exatas" acima).`, 'system');
+    addLog(`A probabilidade real de acerto do 1º prémio mantém-se inalterada (ver "Odds Exatas" acima).`, 'system');
 
     exibirResultado(resultado.nums, resultado.stars, regra, resultado);
+    adicionarAoHistorico(regra, resultado.nums, resultado.stars);
   } catch (err) {
     console.error('Erro ao gerar:', err);
     addLog('Erro: ' + err.message, 'warn');
   } finally {
     btn.disabled = false;
     btn.textContent = '🎲 GERAR COMBINAÇÃO ESTATISTICAMENTE EQUILIBRADA';
+    setProgress(null);
   }
+}
+document.getElementById('runBtn').addEventListener('click', executarGeracao);
+document.getElementById('btnRepeat').addEventListener('click', executarGeracao);
+
+document.getElementById('btnFiltersAll').addEventListener('click', () => {
+  ['filterConsec','filterSum','filterParity','filterQuartile','filterDistance','filterDecade','filterLastDigit'].forEach(id => document.getElementById(id).checked = true);
+  addLog('Todos os filtros estruturais ativados.', 'system');
+});
+document.getElementById('btnFiltersNone').addEventListener('click', () => {
+  ['filterConsec','filterSum','filterParity','filterQuartile','filterDistance','filterDecade','filterLastDigit'].forEach(id => document.getElementById(id).checked = false);
+  addLog('Todos os filtros desativados — sorteio puramente aleatório (uniforme).', 'system');
 });
 
 function exibirResultado(nums, stars, regra, resultado) {
   const panel = document.getElementById('resultPanel');
   const ballOut = document.getElementById('ballOutput');
   ballOut.innerHTML = '';
-
-  nums.forEach(n => {
-    const b = document.createElement('div');
-    b.className = 'ball game-color';
-    b.textContent = String(n).padStart(2, '0');
-    ballOut.appendChild(b);
-  });
-
+  nums.forEach(n => { const b=document.createElement('div'); b.className='ball game-color'; b.textContent=String(n).padStart(2,'0'); ballOut.appendChild(b); });
   if (stars && stars.length > 0) {
-    const sep = document.createElement('div');
-    sep.style.width = '100%';
-    sep.style.height = '1px';
-    sep.style.background = 'linear-gradient(90deg, transparent, var(--glass-border), transparent)';
-    sep.style.margin = '10px 0';
+    const sep = document.createElement('div'); sep.style.width='100%'; sep.style.height='1px';
+    sep.style.background = 'linear-gradient(90deg, transparent, var(--glass-border), transparent)'; sep.style.margin='10px 0';
     ballOut.appendChild(sep);
-
-    stars.forEach(s => {
-      const b = document.createElement('div');
-      b.className = 'ball star-color';
-      b.textContent = String(s).padStart(2, '0');
-      ballOut.appendChild(b);
-    });
+    stars.forEach(s => { const b=document.createElement('div'); b.className='ball star-color'; b.textContent=String(s).padStart(2,'0'); ballOut.appendChild(b); });
   }
 
-  const soma = nums.reduce((a, b) => a + b, 0);
-  const pares = nums.filter(n => n % 2 === 0).length;
-  const impares = nums.length - pares;
+  const soma = nums.reduce((a,b)=>a+b,0);
+  const pares = nums.filter(n=>n%2===0).length, impares = nums.length - pares;
   const somaOk = soma >= resultado.somaMin && soma <= resultado.somaMax;
   const zScore = (soma - resultado.stats.mu) / resultado.stats.sigma;
+  const q1=nums.filter(n=>n<=resultado.quartis.Q1).length, q2=nums.filter(n=>n>resultado.quartis.Q1&&n<=resultado.quartis.Q2).length;
+  const q3=nums.filter(n=>n>resultado.quartis.Q2&&n<=resultado.quartis.Q3).length, q4=nums.filter(n=>n>resultado.quartis.Q3).length;
+  const quartisOcupados = [q1,q2,q3,q4].filter(c=>c>0).length;
+  const paresProximos = contarParesProximos(nums), maxConsec = contarConsecutivosMax(nums);
+  const maxDezena = contarMaxPorDezena(nums), maxDigito = contarMaxUltimoAlgarismo(nums);
 
-  const q1 = nums.filter(n => n <= resultado.quartis.Q1).length;
-  const q2 = nums.filter(n => n > resultado.quartis.Q1 && n <= resultado.quartis.Q2).length;
-  const q3 = nums.filter(n => n > resultado.quartis.Q2 && n <= resultado.quartis.Q3).length;
-  const q4 = nums.filter(n => n > resultado.quartis.Q3).length;
-  const quartisOcupados = [q1, q2, q3, q4].filter(c => c > 0).length;
-
-  const paresProximos = contarParesProximos(nums);
-  const maxConsec = contarConsecutivosMax(nums);
-  const maxDezena = contarMaxPorDezena(nums);
-  const maxDigito = contarMaxUltimoAlgarismo(nums);
-
-  const analysisGrid = document.getElementById('analysisGrid');
-  analysisGrid.innerHTML = `
-    <div class="stat-box">
-      <div class="label">Soma (Z-Score)</div>
-      <div class="value ${somaOk ? 'ok' : 'warn'}">${soma} (z=${zScore.toFixed(2)}) ${somaOk ? '✓' : '⚠'}</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Par / Ímpar</div>
-      <div class="value">${pares} / ${impares}</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Quartis Ocupados</div>
-      <div class="value ${quartisOcupados >= 2 ? 'ok' : 'warn'}">${quartisOcupados}/4 (${q1}-${q2}-${q3}-${q4})</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Pares Próximos (Δ&lt;3)</div>
-      <div class="value ${paresProximos <= 2 ? 'ok' : 'warn'}">${paresProximos} (máx 2)</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Consecutivos Máx.</div>
-      <div class="value ${maxConsec < 3 ? 'ok' : 'warn'}">${maxConsec} (máx 2)</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Máx. por Dezena</div>
-      <div class="value ${maxDezena <= 2 ? 'ok' : 'warn'}">${maxDezena} (máx 2)</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Máx. Mesmo Algarismo Final</div>
-      <div class="value ${maxDigito <= 2 ? 'ok' : 'warn'}">${maxDigito} (máx 2)</div>
-    </div>
-    <div class="stat-box">
-      <div class="label">Iterações até Válida</div>
-      <div class="value">${resultado.tentativas.toLocaleString('pt-PT')}</div>
-    </div>
+  document.getElementById('analysisGrid').innerHTML = `
+    <div class="stat-box"><div class="label">Soma (Z-Score)</div><div class="value ${somaOk?'ok':'warn'}">${soma} (z=${zScore.toFixed(2)}) ${somaOk?'✓':'⚠'}</div></div>
+    <div class="stat-box"><div class="label">Par / Ímpar</div><div class="value">${pares} / ${impares}</div></div>
+    <div class="stat-box"><div class="label">Quartis Ocupados</div><div class="value ${quartisOcupados>=2?'ok':'warn'}">${quartisOcupados}/4 (${q1}-${q2}-${q3}-${q4})</div></div>
+    <div class="stat-box"><div class="label">Pares Próximos (Δ&lt;3)</div><div class="value ${paresProximos<=2?'ok':'warn'}">${paresProximos} (máx 2)</div></div>
+    <div class="stat-box"><div class="label">Consecutivos Máx.</div><div class="value ${maxConsec<3?'ok':'warn'}">${maxConsec} (máx 2)</div></div>
+    <div class="stat-box"><div class="label">Máx. por Dezena</div><div class="value ${maxDezena<=2?'ok':'warn'}">${maxDezena} (máx 2)</div></div>
+    <div class="stat-box"><div class="label">Máx. Mesmo Algarismo Final</div><div class="value ${maxDigito<=2?'ok':'warn'}">${maxDigito} (máx 2)</div></div>
+    <div class="stat-box"><div class="label">Iterações até Válida</div><div class="value">${resultado.tentativas.toLocaleString('pt-PT')}</div></div>
   `;
-
+  panel.dataset.nums = nums.join(', ');
+  panel.dataset.stars = stars.join(', ');
+  panel.dataset.game = regra.nome;
   panel.style.display = 'block';
   setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 }
 
+document.getElementById('btnCopy').addEventListener('click', async function () {
+  const panel = document.getElementById('resultPanel');
+  const texto = `${panel.dataset.game || ''} — Números: ${panel.dataset.nums || ''}${panel.dataset.stars ? ' | Estrelas: ' + panel.dataset.stars : ''}`;
+  try { await navigator.clipboard.writeText(texto); this.textContent = '✅ Copiado!'; }
+  catch (e) { this.textContent = '⚠ Não foi possível copiar'; }
+  setTimeout(() => { this.textContent = '📋 Copiar Números'; }, 1800);
+});
+
+function adicionarAoHistorico(regra, nums, stars) {
+  const agora = new Date();
+  historico.unshift({ game: regra.nome, nums: nums.slice(), stars: stars.slice(), hora: agora.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}) });
+  if (historico.length > 8) historico.pop();
+  renderHistorico();
+}
+function renderHistorico() {
+  const card = document.getElementById('historyCard');
+  const list = document.getElementById('historyList');
+  if (historico.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  list.innerHTML = historico.map(h => `
+    <div class="history-item">
+      <div class="history-nums">${h.nums.map(n=>String(n).padStart(2,'0')).join(' · ')}${h.stars.length ? ' <span class="s">| ' + h.stars.map(s=>String(s).padStart(2,'0')).join(' · ') + '</span>' : ''}</div>
+      <div class="history-meta">${h.game} · ${h.hora}</div>
+    </div>`).join('');
+}
+document.getElementById('btnClearHistory').addEventListener('click', () => { historico = []; renderHistorico(); addLog('Histórico da sessão limpo.', 'system'); });
+
+/* ---------- MONTE CARLO: valida empiricamente as odds teóricas ---------- */
+function runMonteCarloAsync(regra, totalSorteios, onProgress) {
+  return new Promise((resolve) => {
+    const tamanhoBloco = 5000;
+    let feitos = 0;
+    const contagens = {};
+    regra.premios.forEach(p => { contagens[p.nome] = 0; });
+
+    function bloco() {
+      const limite = Math.min(feitos + tamanhoBloco, totalSorteios);
+      while (feitos < limite) {
+        feitos++;
+        const drawNums = amostraUniformeSemReposicao(regra.nums.min, regra.nums.max, regra.nums.sorteados);
+        const drawStars = amostraUniformeSemReposicao(regra.stars.min, regra.stars.max, regra.stars.sorteados);
+        const meusNums = amostraUniformeSemReposicao(regra.nums.min, regra.nums.max, regra.nums.sorteados);
+        const meusStars = amostraUniformeSemReposicao(regra.stars.min, regra.stars.max, regra.stars.sorteados);
+        const acertosNums = meusNums.filter(n => drawNums.includes(n)).length;
+        const acertosStars = meusStars.filter(s => drawStars.includes(s)).length;
+
+        regra.premios.forEach(p => {
+          if (p.ignoreDream) { if (acertosNums === p.n) contagens[p.nome]++; }
+          else if (acertosNums === p.n && acertosStars === p.s) contagens[p.nome]++;
+        });
+      }
+      if (onProgress) onProgress(feitos, totalSorteios);
+      if (feitos >= totalSorteios) { resolve(contagens); return; }
+      setTimeout(bloco, 0);
+    }
+    bloco();
+  });
+}
+
+async function executarMonteCarlo(totalSorteios) {
+  const regra = REGRAS[currentGame];
+  const container = document.getElementById('mcResultContainer');
+  const buttons = [document.getElementById('btnMC10k'), document.getElementById('btnMC100k'), document.getElementById('btnMC500k')];
+  buttons.forEach(b => b.disabled = true);
+  setProgress(1, 'mcProgressWrap', 'mcProgressBar');
+  addLog(`Iniciando simulação Monte Carlo: ${totalSorteios.toLocaleString('pt-PT')} sorteios independentes...`, 'system');
+
+  const contagens = await runMonteCarloAsync(regra, totalSorteios, (feitos, total) => setProgress((feitos/total)*100, 'mcProgressWrap', 'mcProgressBar'));
+
+  let html = `<table class="mc-table"><thead><tr><th style="text-align:left;">Escalão</th><th>Teórico</th><th>Simulado</th><th>Nº Acertos</th></tr></thead><tbody>`;
+  regra.premios.forEach(p => {
+    let probTeorica;
+    if (p.ignoreDream) probTeorica = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n);
+    else probTeorica = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n) * probHipergeometrica(regra.stars.max, regra.stars.sorteados, regra.stars.sorteados, p.s);
+
+    const contagem = contagens[p.nome] || 0;
+    const probSimulada = contagem / totalSorteios;
+    const teoricoFmt = probTeorica > 0 ? '1/' + Math.round(1/probTeorica).toLocaleString('pt-PT') : '≈0';
+    const simuladoFmt = probSimulada > 0 ? '1/' + Math.round(1/probSimulada).toLocaleString('pt-PT') : (contagem === 0 ? 'sem ocorrências' : '—');
+    html += `<tr><td>${p.nome}</td><td>${teoricoFmt}</td><td>${simuladoFmt}</td><td>${contagem.toLocaleString('pt-PT')}</td></tr>`;
+  });
+  html += `</tbody></table>`;
+  html += `<div class="mc-summary">Com <b>${totalSorteios.toLocaleString('pt-PT')}</b> sorteios simulados, a coluna "Simulado" tende a aproximar-se da coluna "Teórico" à medida que o número de simulações aumenta — isto é uma verificação empírica direta de que a matemática hipergeométrica usada nas odds corresponde ao comportamento real de um sorteio aleatório uniforme. Escalões muito raros (ex: 1º prémio) podem mostrar "sem ocorrências" mesmo em 500.000 simulações, o que é matematicamente esperado dada a odd real de milhões para 1.</div>`;
+  container.innerHTML = html;
+
+  addLog(`Simulação concluída: ${totalSorteios.toLocaleString('pt-PT')} sorteios processados.`, 'success');
+  buttons.forEach(b => b.disabled = false);
+  setProgress(null, 'mcProgressWrap', 'mcProgressBar');
+}
+
+document.getElementById('btnMC10k').addEventListener('click', () => executarMonteCarlo(10000));
+document.getElementById('btnMC100k').addEventListener('click', () => executarMonteCarlo(100000));
+document.getElementById('btnMC500k').addEventListener('click', () => executarMonteCarlo(500000));
+
 function updateClock() {
   const now = new Date();
-  const dataFmt = now.toLocaleDateString('pt-PT', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' }).toUpperCase();
-  const horaFmt = now.toLocaleTimeString('pt-PT');
-  document.getElementById('datetimeHeader').textContent = `${dataFmt} | ${horaFmt}`;
+  const dataFmt = now.toLocaleDateString('pt-PT', { weekday:'short', day:'2-digit', month:'2-digit', year:'numeric' }).toUpperCase();
+  document.getElementById('datetimeHeader').textContent = `${dataFmt} | ${now.toLocaleTimeString('pt-PT')}`;
 }
 setInterval(updateClock, 1000);
 
@@ -1215,10 +1113,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('gameType').addEventListener('change', updateUI);
     updateUI();
     updateClock();
-    addLog('Sistema pronto. Motor 8D com 7 filtros estruturais ativo.', 'system');
-  } catch (err) {
-    console.error('Erro na inicialização:', err);
-  }
+    addLog('Sistema pronto. Motor 8D com dados oficiais Santa Casa e simulação Monte Carlo ativos.', 'system');
+  } catch (err) { console.error('Erro na inicialização:', err); }
 });
 </script>
 </body>
