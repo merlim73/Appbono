@@ -6,6 +6,7 @@
 <title>JONHY EL IGUANA · 1º PRÉMIO</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
+/* ===== VARIÁVEIS ===== */
 :root {
   --bg-deep: #010205;
   --glass: rgba(8, 12, 22, 0.88);
@@ -63,7 +64,7 @@ body::before {
 @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes pulseBar { 0%,100% { opacity:.55 } 50% { opacity:1 } }
 
-/* ===== BANDEIRA PORTUGUESA REAL: verde (2/5) + vermelho (3/5), sem 3ª risca ===== */
+/* ===== BANDEIRAS ===== */
 @keyframes flagWave5D {
   0%   { transform: perspective(400px) rotateX(0deg) rotateY(0deg) skewX(0deg) scaleY(1) translateZ(0px); }
   20%  { transform: perspective(400px) rotateX(6deg) rotateY(-4deg) skewX(-5deg) scaleY(0.97) translateZ(6px); }
@@ -94,7 +95,7 @@ body::before {
 .flag-5d .stripe:nth-child(2) { animation-delay: 0.3s; }
 .flag-5d .stripe:nth-child(3) { animation-delay: 0.15s; }
 
-/* Bandeira PT real: 2/5 verde + 3/5 vermelho */
+/* PT: 2/5 verde + 3/5 vermelho */
 .flag-pt .stripe:nth-child(1) { flex: 2; background: linear-gradient(120deg, var(--color-green-flag), #024d29, var(--color-green-flag)); box-shadow: 0 0 18px rgba(4,106,56,0.6); }
 .flag-pt .stripe:nth-child(2) { flex: 3; background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); box-shadow: 0 0 18px rgba(255,26,26,0.5); }
 .flag-pt-emblem {
@@ -106,22 +107,11 @@ body::before {
   z-index: 2;
 }
 
-/* Bandeira FR (correta): azul, branco, vermelho */
+/* FR: azul, branco, vermelho */
 .flag-fr .stripe:nth-child(1) { flex:1; background: linear-gradient(120deg, var(--color-blue), #003b99, var(--color-blue)); box-shadow: 0 0 18px rgba(0,102,255,0.5); }
 .flag-fr .stripe:nth-child(2) { flex:1; background: linear-gradient(120deg, var(--color-white), #cfd8e8, var(--color-white)); box-shadow: 0 0 18px rgba(255,255,255,0.4); }
 .flag-fr .stripe:nth-child(3) { flex:1; background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); box-shadow: 0 0 18px rgba(255,26,26,0.5); }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-}
-
-a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible {
-  outline: 3px solid var(--color-gold);
-  outline-offset: 2px;
-  border-radius: 8px;
-}
-
-/* ===== CABEÇALHO — 2cm mais alto, com astrolábio + quinas douradas a "ondular" ===== */
 @keyframes armillarySway {
   0%,100% { transform: rotate(-4deg) translateY(0px); }
   25%     { transform: rotate(2deg) translateY(-4px); }
@@ -133,6 +123,11 @@ a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible
   50%     { filter: brightness(1.4) drop-shadow(0 0 24px rgba(255,215,0,0.9)); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* ===== LAYOUT ===== */
 .header {
   background: var(--glass-heavy);
   border: 1px solid var(--glass-border);
@@ -260,7 +255,7 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 }
 .checkrow input { width: 18px; height: 18px; accent-color: var(--game-color); cursor: pointer; flex-shrink: 0; }
 
-/* ===== PAINEL 1º PRÉMIO — substitui o antigo "monitor" genérico ===== */
+/* ===== 1º PRÉMIO ===== */
 .firstprize-card {
   background: linear-gradient(180deg, rgba(5,8,16,0.95), rgba(2,4,8,0.98));
   border: 2px solid var(--color-gold); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 16px;
@@ -271,6 +266,7 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 .fp-odds { font-family: 'Orbitron', sans-serif; font-size: 1.7rem; font-weight: 900; color: var(--color-gold); margin: 8px 0 4px; text-shadow: 0 0 25px rgba(255, 215, 0, 0.6), 0 2px 10px rgba(0,0,0,0.9); }
 .fp-jackpot { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.5px; margin-top: 4px; line-height: 1.5; }
 
+/* ===== BOTÕES ===== */
 .btn {
   width: 100%; padding: 20px;
   background: linear-gradient(135deg, rgba(204, 119, 34, 0.3), rgba(204, 119, 34, 0.08));
@@ -295,6 +291,7 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 .progress-wrap.active { display: block; }
 .progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--game-color), var(--color-gold)); animation: pulseBar 1.2s ease-in-out infinite; transition: width 0.2s ease-out; }
 
+/* ===== TERMINAL ===== */
 .terminal {
   background: rgba(0,0,0,0.75); border: 1px solid var(--glass-border); border-radius: 12px; height: 130px; overflow-y: auto;
   padding: 14px; font-size: 0.72rem; color: var(--color-green); line-height: 1.6; font-family: 'Share Tech Mono', monospace;
@@ -306,6 +303,7 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 .log-line.success { color: var(--color-gold); border-left-color: var(--color-gold); text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
 .log-line.warn { color: var(--color-red); border-left-color: var(--color-red); text-shadow: 0 0 8px rgba(255, 26, 26, 0.4); }
 
+/* ===== RESULTADO ===== */
 .result-panel {
   display: none; border: 2px solid var(--game-color);
   background: linear-gradient(180deg, rgba(5,8,16,0.92), rgba(2,4,8,0.96));
@@ -321,18 +319,19 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
   display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 30px; font-weight: 900;
   background: radial-gradient(circle at 30% 30%, rgba(20,30,50,0.98), rgba(2,4,8,0.99));
   box-shadow: 0 0 50px rgba(var(--game-color-rgb), 0.7), 0 0 100px rgba(var(--game-color-rgb), 0.4), 0 8px 20px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
-  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 1), 0 2px 6px rgba(0,0,0,0.9); position: relative;
+  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 1), 0 2px 6px rgba(0,0,0,0.9);
 }
 .ball.star-color {
   width: 64px; height: 64px; border-radius: 50%; border: 4px solid var(--color-pink); color: var(--color-pink);
   display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 30px; font-weight: 900;
   background: radial-gradient(circle at 30% 30%, rgba(50,15,35,0.98), rgba(15,4,10,0.99));
   box-shadow: 0 0 50px rgba(var(--color-pink-rgb), 0.7), 0 0 100px rgba(var(--color-pink-rgb), 0.4), 0 8px 20px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
-  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--color-pink-rgb), 1), 0 2px 6px rgba(0,0,0,0.9); position: relative;
+  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--color-pink-rgb), 1), 0 2px 6px rgba(0,0,0,0.9);
 }
 
 .result-actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top: 8px; }
 
+/* ===== TABELAS ===== */
 .simple-prize-table { width: 100%; border-collapse: collapse; margin-top: 16px; text-align: center; }
 .simple-prize-table-scroll { width: 100%; overflow-x: auto; }
 .simple-prize-table th {
@@ -348,6 +347,19 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 .simple-prize-table .tier-value { color: var(--color-gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); font-size: 13.5px; font-weight: 900; }
 .prize-table-legend { font-size: 0.66rem; color: var(--text-dim); margin-top: 8px; line-height: 1.55; }
 
+.prize-details { margin-top: 10px; }
+.prize-details summary {
+  list-style: none; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 0.68rem; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--game-color); padding: 10px 14px;
+  background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 10px;
+  transition: border-color 0.3s, color 0.3s; text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.4);
+}
+.prize-details summary::-webkit-details-marker { display: none; }
+.prize-details summary::before { content: '▸ '; }
+.prize-details[open] summary::before { content: '▾ '; }
+.prize-details summary:hover { border-color: var(--game-color); }
+
+/* ===== STATS ===== */
 .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
 .stat-box { background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 10px; padding: 12px; text-align: left; backdrop-filter: blur(8px); }
 .stat-box .label { font-size: 0.63rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
@@ -355,12 +367,14 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 .stat-box .value.ok { color: var(--color-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); }
 .stat-box .value.warn { color: var(--color-red); text-shadow: 0 0 10px rgba(255, 26, 26, 0.6); }
 
+/* ===== HISTÓRICO ===== */
 .history-list { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; max-height: 240px; overflow-y: auto; }
 .history-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 10px; padding: 9px 12px; }
 .history-nums { font-family: 'Share Tech Mono', monospace; font-size: 0.82rem; color: var(--text-primary); letter-spacing: 1px; }
 .history-nums .s { color: var(--color-pink); }
 .history-meta { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
 
+/* ===== MONTE CARLO ===== */
 .mc-table { width:100%; border-collapse: collapse; margin-top: 14px; font-size: 0.78rem; }
 .mc-table th { color: var(--game-color); font-family:'Orbitron',sans-serif; font-size: 10.5px; padding: 7px 6px; border-bottom: 2px solid var(--game-color); text-transform: uppercase; letter-spacing: 1px; }
 .mc-table td { padding: 9px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); font-family: 'Share Tech Mono', monospace; text-align: center; }
@@ -368,6 +382,7 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 .mc-summary { font-size: 0.7rem; color: var(--text-dim); margin-top: 10px; line-height: 1.55; }
 .mc-summary b { color: var(--color-green); }
 
+/* ===== FOOTER ===== */
 .footer {
   margin-top: 24px; padding: 24px 20px 20px; text-align: center; background: var(--glass-heavy); border-radius: 20px 20px 0 0;
   position: relative; overflow: hidden; border: 1px solid var(--glass-border); backdrop-filter: blur(20px);
@@ -454,7 +469,6 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
     </div>
   </div>
 
-  <!-- PAINEL 1º PRÉMIO: números/estrelas necessários + odds exatas + info real do jackpot -->
   <div class="firstprize-card">
     <div class="fp-label">🏆 1º Prémio — o que é preciso acertar</div>
     <div class="fp-combo" id="fpCombo">5 números + 2 Estrelas</div>
@@ -475,7 +489,11 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
     <div class="checkrow"><input type="checkbox" id="filterDistance" checked><label for="filterDistance">📏 Máx. 2 pares próximos (Δ&lt;3)</label></div>
     <div class="checkrow"><input type="checkbox" id="filterDecade" checked><label for="filterDecade">🔟 Máx. 2 na mesma dezena</label></div>
     <div class="checkrow"><input type="checkbox" id="filterLastDigit" checked><label for="filterLastDigit">🔢 Máx. 2 no mesmo algarismo final</label></div>
-    <div class="simple-prize-table-scroll" style="margin-top:14px;"><div id="prizeTableContainer"></div></div>
+
+    <details class="prize-details">
+      <summary>Ver tabela completa de escalões e prémios</summary>
+      <div class="simple-prize-table-scroll" style="margin-top:10px;"><div id="prizeTableContainer"></div></div>
+    </details>
   </div>
 
   <div class="card">
@@ -496,7 +514,7 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
   <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
 
   <div class="terminal" id="terminal" aria-live="polite" role="log">
-    <div class="log-line system">> JONHY EL IGUANA v12.0 Inicializado.</div>
+    <div class="log-line system">> JONHY EL IGUANA v13.0 Inicializado.</div>
     <div class="log-line math">> Motor: Hipergeométrica exata + Monte Carlo assíncrono + 7 filtros estruturais.</div>
   </div>
 
@@ -508,6 +526,11 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
       <button type="button" class="btn-secondary" id="btnRepeat">🔁 Gerar Outra</button>
     </div>
     <div class="stats-grid" id="analysisGrid"></div>
+
+    <details class="prize-details" id="resultEscalaoDetails">
+      <summary>Probabilidade real desta aposta, por escalão (1º ao último)</summary>
+      <div class="simple-prize-table-scroll" style="margin-top:10px;"><div id="resultEscalaoTable"></div></div>
+    </details>
   </div>
 
   <div class="card" id="historyCard" style="display:none;">
@@ -521,7 +544,7 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
       <span class="draw-date">PRÓXIMO SORTEIO: --</span>
       <span class="draw-price">PREÇO DA APOSTA: --</span>
     </div>
-    <div class="footer-version">JONHY EL IGUANA v12.0 · MATEMÁTICA COMBINATÓRIA REAL · DADOS OFICIAIS SANTA CASA</div>
+    <div class="footer-version">JONHY EL IGUANA v13.0 · MATEMÁTICA COMBINATÓRIA REAL · DADOS OFICIAIS SANTA CASA</div>
     <div class="footer-legal">As odds apresentadas correspondem às probabilidades oficiais de cada jogo da Santa Casa (Euromilhões, Totoloto, EuroDreams). Os valores em euros dos escalões inferiores variam por sorteio consoante vendas e nº de vencedores — consulte jogossantacasa.pt para os valores exatos do concurso atual.</div>
   </div>
 </div>
@@ -529,22 +552,9 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 <script>
 'use strict';
 
-/* ===========================================================================
-   DADOS OFICIAIS SANTA CASA (verificados):
-   - Euromilhões 5/50 + 2/12 → 13 categorias oficiais de prémio.
-     Odds do 1º prémio: 1 / 139.838.160 (C(50,5)×C(12,2)).
-   - Totoloto 5/49 + 1/13 → 6 categorias oficiais.
-     Odds do 1º prémio: 1 / 24.789.492 (C(49,5)×C(13,1)). 1º prémio mínimo
-     garantido: €1.000.000 (sem limite de jackpot).
-   - EuroDreams 6/40 + 1/5 → 6 categorias oficiais.
-     Odds do 1º prémio: 1 / 19.191.900 (C(40,6)×C(5,1)). 1º prémio pago em
-     renda de €20.000/mês durante 30 anos (≈€7,2M); 2º prémio €2.000/mês
-     durante 5 anos (€120.000); 6ª categoria é reembolso fixo do valor da
-     aposta (€2,50).
-   Os valores de escalões intermédios variam por sorteio (percentagem do
-   fundo de prémios) — aqui marcados como "Variável" em vez de inventados.
-=========================================================================== */
-
+/* ============================================================
+   DADOS OFICIAIS SANTA CASA
+   ============================================================ */
 const REGRAS = {
   euromilhoes: {
     nome: "EURO MILHÕES",
@@ -612,7 +622,9 @@ const CORES_JOGO = {
   eurodreams:  { game: '#00FF41', gameRGB: '0, 255, 65' }
 };
 
-/* ---------- MATEMÁTICA COMBINATÓRIA (exata, BigInt) ---------- */
+/* ============================================================
+   MATEMÁTICA COMBINATÓRIA
+   ============================================================ */
 const combCache = new Map();
 function C(n, k) {
   if (k < 0 || k > n || n < 0) return 0;
@@ -763,6 +775,9 @@ function aplicarCoresJogo(gameKey) {
   document.documentElement.style.setProperty('--game-color-rgb', cores.gameRGB);
 }
 
+/* ============================================================
+   UI
+   ============================================================ */
 function updateUI() {
   try {
     currentGame = document.getElementById('gameType').value;
@@ -826,8 +841,6 @@ function updateFooter() {
   `;
 }
 
-/* Painel do 1º Prémio: mostra exatamente os números/estrelas necessários e a odd exata
-   (C(N,n)×C(S,s) — cálculo combinatório real, não estimativa). */
 function updateFirstPrize(regra) {
   const totalCombos = C(regra.nums.max, regra.nums.sorteados) * C(regra.stars.max, regra.stars.sorteados);
   const comboTxt = `${regra.nums.sorteados} números + ${regra.stars.sorteados} ${regra.stars.nome}`;
@@ -836,12 +849,12 @@ function updateFirstPrize(regra) {
   document.getElementById('fpJackpot').textContent = regra.jackpotInfo;
 }
 
-function renderPrizeTable(regra) {
-  const nQty = parseInt(document.getElementById('nQty').value, 10) || regra.nums.minAposta;
-  const sQty = parseInt(document.getElementById('sQty').value, 10) || regra.stars.minAposta;
+/* ============================================================
+   TABELAS DE ESCALÕES
+   ============================================================ */
+function construirTabelaEscaloes(regra, nQty, sQty) {
   const isSystem = nQty > regra.nums.sorteados || sQty > regra.stars.sorteados;
 
-  const container = document.getElementById('prizeTableContainer');
   let html = `<table class="simple-prize-table">
     <thead><tr>
       <th style="text-align:left;">Escalão</th>
@@ -888,9 +901,22 @@ function renderPrizeTable(regra) {
   if (isSystem) {
     html += `<div class="prize-table-legend">"Chance no Seu Sistema" = probabilidade real de acertar <b>pelo menos uma vez</b> nesse escalão jogando todas as combinações do seu sistema.</div>`;
   }
-  container.innerHTML = html;
+  return html;
 }
 
+function renderPrizeTable(regra) {
+  const nQty = parseInt(document.getElementById('nQty').value, 10) || regra.nums.minAposta;
+  const sQty = parseInt(document.getElementById('sQty').value, 10) || regra.stars.minAposta;
+  document.getElementById('prizeTableContainer').innerHTML = construirTabelaEscaloes(regra, nQty, sQty);
+}
+
+function renderResultEscalaoTable(regra, nQty, sQty) {
+  document.getElementById('resultEscalaoTable').innerHTML = construirTabelaEscaloes(regra, nQty, sQty);
+}
+
+/* ============================================================
+   LOG, PROGRESSO E RESULTADOS
+   ============================================================ */
 function addLog(msg, type) {
   const term = document.getElementById('terminal');
   const div = document.createElement('div');
@@ -908,59 +934,7 @@ function setProgress(pct, wrapId, barId) {
   bar.style.width = Math.min(100, pct) + '%';
 }
 
-async function executarGeracao() {
-  const btn = document.getElementById('runBtn');
-  btn.disabled = true;
-  btn.textContent = '🎲 A CALCULAR...';
-  setProgress(2);
-  try {
-    document.getElementById('terminal').innerHTML = '';
-    addLog('Iniciando amostragem uniforme + rejeição assíncrona (7 filtros)...', 'system');
-    await new Promise(r => setTimeout(r, 100));
-
-    const regra = REGRAS[currentGame];
-    const nQty = parseInt(document.getElementById('nQty').value, 10);
-    const sQty = parseInt(document.getElementById('sQty').value, 10);
-    const stats = calcularEstatisticasSoma(regra.nums.max, nQty);
-    const quartis = calcularQuartis(regra.nums.max);
-
-    addLog(`Distribuição exata da soma: μ=${stats.mu.toFixed(1)} | σ=${stats.sigma.toFixed(2)}`, 'math');
-    addLog(`IC 95% da soma: [${Math.round(stats.mu - 1.96*stats.sigma)} ; ${Math.round(stats.mu + 1.96*stats.sigma)}]`, 'math');
-    addLog(`Alvo: ${nQty} números + ${sQty} ${regra.stars.nome}`, 'math');
-
-    const resultado = await gerarCombinacaoAsync(regra, nQty, sQty, (tent, maxT) => setProgress((tent/maxT)*100));
-
-    if (resultado.esgotado) {
-      addLog(`Limite de ${resultado.tentativas.toLocaleString('pt-PT')} iterações atingido — a mostrar a última tentativa gerada.`, 'warn');
-    } else {
-      addLog(`Combinação válida encontrada após ${resultado.tentativas.toLocaleString('pt-PT')} iteração(ões).`, 'success');
-    }
-    addLog(`A probabilidade real de acerto do 1º prémio mantém-se inalterada (ver painel acima).`, 'system');
-
-    exibirResultado(resultado.nums, resultado.stars, regra, resultado);
-    adicionarAoHistorico(regra, resultado.nums, resultado.stars);
-  } catch (err) {
-    console.error('Erro ao gerar:', err);
-    addLog('Erro: ' + err.message, 'warn');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '🎲 GERAR COMBINAÇÃO ESTATISTICAMENTE EQUILIBRADA';
-    setProgress(null);
-  }
-}
-document.getElementById('runBtn').addEventListener('click', executarGeracao);
-document.getElementById('btnRepeat').addEventListener('click', executarGeracao);
-
-document.getElementById('btnFiltersAll').addEventListener('click', () => {
-  ['filterConsec','filterSum','filterParity','filterQuartile','filterDistance','filterDecade','filterLastDigit'].forEach(id => document.getElementById(id).checked = true);
-  addLog('Todos os filtros estruturais ativados.', 'system');
-});
-document.getElementById('btnFiltersNone').addEventListener('click', () => {
-  ['filterConsec','filterSum','filterParity','filterQuartile','filterDistance','filterDecade','filterLastDigit'].forEach(id => document.getElementById(id).checked = false);
-  addLog('Todos os filtros desativados — sorteio puramente aleatório (uniforme).', 'system');
-});
-
-function exibirResultado(nums, stars, regra, resultado) {
+function exibirResultado(nums, stars, regra, resultado, nQty, sQty) {
   const panel = document.getElementById('resultPanel');
   const ballOut = document.getElementById('ballOutput');
   ballOut.innerHTML = '';
@@ -992,6 +966,9 @@ function exibirResultado(nums, stars, regra, resultado) {
     <div class="stat-box"><div class="label">Máx. Mesmo Algarismo Final</div><div class="value ${maxDigito<=2?'ok':'warn'}">${maxDigito} (máx 2)</div></div>
     <div class="stat-box"><div class="label">Iterações até Válida</div><div class="value">${resultado.tentativas.toLocaleString('pt-PT')}</div></div>
   `;
+
+  renderResultEscalaoTable(regra, nQty, sQty);
+
   panel.dataset.nums = nums.join(', ');
   panel.dataset.stars = stars.join(', ');
   panel.dataset.game = regra.nome;
@@ -999,14 +976,38 @@ function exibirResultado(nums, stars, regra, resultado) {
   setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
 }
 
-document.getElementById('btnCopy').addEventListener('click', async function () {
-  const panel = document.getElementById('resultPanel');
-  const texto = `${panel.dataset.game || ''} — Números: ${panel.dataset.nums || ''}${panel.dataset.stars ? ' | Estrelas: ' + panel.dataset.stars : ''}`;
-  try { await navigator.clipboard.writeText(texto); this.textContent = '✅ Copiado!'; }
-  catch (e) { this.textContent = '⚠ Não foi possível copiar'; }
-  setTimeout(() => { this.textContent = '📋 Copiar Números'; }, 1800);
-});
+/* ============================================================
+   CÓPIA (com fallback)
+   ============================================================ */
+function copiarTexto(texto) {
+  return new Promise((resolve, reject) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(texto).then(resolve).catch(() => copiarFallback(texto, resolve, reject));
+    } else {
+      copiarFallback(texto, resolve, reject);
+    }
+  });
+}
+function copiarFallback(texto, resolve, reject) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = texto;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    ta.style.top = '0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    ta.setSelectionRange(0, texto.length);
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    ok ? resolve() : reject(new Error('execCommand falhou'));
+  } catch (e) { reject(e); }
+}
 
+/* ============================================================
+   HISTÓRICO
+   ============================================================ */
 function adicionarAoHistorico(regra, nums, stars) {
   const agora = new Date();
   historico.unshift({ game: regra.nome, nums: nums.slice(), stars: stars.slice(), hora: agora.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}) });
@@ -1024,9 +1025,10 @@ function renderHistorico() {
       <div class="history-meta">${h.game} · ${h.hora}</div>
     </div>`).join('');
 }
-document.getElementById('btnClearHistory').addEventListener('click', () => { historico = []; renderHistorico(); addLog('Histórico da sessão limpo.', 'system'); });
 
-/* ---------- MONTE CARLO: valida empiricamente as odds teóricas ---------- */
+/* ============================================================
+   MONTE CARLO
+   ============================================================ */
 function runMonteCarloAsync(regra, totalSorteios, onProgress) {
   return new Promise((resolve) => {
     const tamanhoBloco = 5000;
@@ -1089,10 +1091,53 @@ async function executarMonteCarlo(totalSorteios) {
   setProgress(null, 'mcProgressWrap', 'mcProgressBar');
 }
 
-document.getElementById('btnMC10k').addEventListener('click', () => executarMonteCarlo(10000));
-document.getElementById('btnMC100k').addEventListener('click', () => executarMonteCarlo(100000));
-document.getElementById('btnMC500k').addEventListener('click', () => executarMonteCarlo(500000));
+/* ============================================================
+   GERAR COMBINAÇÃO PRINCIPAL
+   ============================================================ */
+async function executarGeracao() {
+  const btn = document.getElementById('runBtn');
+  btn.disabled = true;
+  btn.textContent = '🎲 A CALCULAR...';
+  setProgress(2);
+  try {
+    document.getElementById('terminal').innerHTML = '';
+    addLog('Iniciando amostragem uniforme + rejeição assíncrona (7 filtros)...', 'system');
+    await new Promise(r => setTimeout(r, 100));
 
+    const regra = REGRAS[currentGame];
+    const nQty = parseInt(document.getElementById('nQty').value, 10);
+    const sQty = parseInt(document.getElementById('sQty').value, 10);
+    const stats = calcularEstatisticasSoma(regra.nums.max, nQty);
+    const quartis = calcularQuartis(regra.nums.max);
+
+    addLog(`Distribuição exata da soma: μ=${stats.mu.toFixed(1)} | σ=${stats.sigma.toFixed(2)}`, 'math');
+    addLog(`IC 95% da soma: [${Math.round(stats.mu - 1.96*stats.sigma)} ; ${Math.round(stats.mu + 1.96*stats.sigma)}]`, 'math');
+    addLog(`Alvo: ${nQty} números + ${sQty} ${regra.stars.nome}`, 'math');
+
+    const resultado = await gerarCombinacaoAsync(regra, nQty, sQty, (tent, maxT) => setProgress((tent/maxT)*100));
+
+    if (resultado.esgotado) {
+      addLog(`Limite de ${resultado.tentativas.toLocaleString('pt-PT')} iterações atingido — a mostrar a última tentativa gerada.`, 'warn');
+    } else {
+      addLog(`Combinação válida encontrada após ${resultado.tentativas.toLocaleString('pt-PT')} iteração(ões).`, 'success');
+    }
+    addLog(`A probabilidade real de acerto do 1º prémio mantém-se inalterada (ver painel acima).`, 'system');
+
+    exibirResultado(resultado.nums, resultado.stars, regra, resultado, nQty, sQty);
+    adicionarAoHistorico(regra, resultado.nums, resultado.stars);
+  } catch (err) {
+    console.error('Erro ao gerar:', err);
+    addLog('Erro: ' + err.message, 'warn');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🎲 GERAR COMBINAÇÃO ESTATISTICAMENTE EQUILIBRADA';
+    setProgress(null);
+  }
+}
+
+/* ============================================================
+   RELÓGIO
+   ============================================================ */
 function updateClock() {
   const now = new Date();
   const dataFmt = now.toLocaleDateString('pt-PT', { weekday:'short', day:'2-digit', month:'2-digit', year:'numeric' }).toUpperCase();
@@ -1100,9 +1145,34 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 
+/* ============================================================
+   INICIALIZAÇÃO E EVENTOS
+   ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
   try {
     document.getElementById('gameType').addEventListener('change', updateUI);
+    document.getElementById('runBtn').addEventListener('click', executarGeracao);
+    document.getElementById('btnRepeat').addEventListener('click', executarGeracao);
+    document.getElementById('btnCopy').addEventListener('click', async function () {
+      const panel = document.getElementById('resultPanel');
+      const texto = `${panel.dataset.game || ''} — Números: ${panel.dataset.nums || ''}${panel.dataset.stars ? ' | Estrelas: ' + panel.dataset.stars : ''}`;
+      try { await copiarTexto(texto); this.textContent = '✅ Copiado!'; }
+      catch (e) { this.textContent = '⚠ Não foi possível copiar'; }
+      setTimeout(() => { this.textContent = '📋 Copiar Números'; }, 1800);
+    });
+    document.getElementById('btnFiltersAll').addEventListener('click', () => {
+      ['filterConsec','filterSum','filterParity','filterQuartile','filterDistance','filterDecade','filterLastDigit'].forEach(id => document.getElementById(id).checked = true);
+      addLog('Todos os filtros estruturais ativados.', 'system');
+    });
+    document.getElementById('btnFiltersNone').addEventListener('click', () => {
+      ['filterConsec','filterSum','filterParity','filterQuartile','filterDistance','filterDecade','filterLastDigit'].forEach(id => document.getElementById(id).checked = false);
+      addLog('Todos os filtros desativados — sorteio puramente aleatório (uniforme).', 'system');
+    });
+    document.getElementById('btnClearHistory').addEventListener('click', () => { historico = []; renderHistorico(); addLog('Histórico da sessão limpo.', 'system'); });
+    document.getElementById('btnMC10k').addEventListener('click', () => executarMonteCarlo(10000));
+    document.getElementById('btnMC100k').addEventListener('click', () => executarMonteCarlo(100000));
+    document.getElementById('btnMC500k').addEventListener('click', () => executarMonteCarlo(500000));
+
     updateUI();
     updateClock();
     addLog('Sistema pronto. Painel de 1º Prémio, dados oficiais Santa Casa e simulação Monte Carlo ativos.', 'system');
@@ -1110,4 +1180,4 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 </body>
-</html>
+        </html>
