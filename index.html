@@ -723,14 +723,12 @@ function passaFiltros(nums,filtros,somaMin,somaMax,quartis,maxNum,ultimaAposta){
 /* ============================================================
    HISTÓRICO REAL — modelo unificado (seed + sync oficial + manual)
    ============================================================ */
-/* Sorteios reais verificados (maio–agosto de 2026), cruzados entre fontes
-   noticiosas independentes (Renascença, DNotícias, ECO, JM Madeira, Rádio
-   Festival, SAPO) e agregadores (euro-millions.com, loteriaguru.com).
-   Nenhum número aqui é inventado — onde não foi possível confirmar uma
-   chave com confiança (ex.: junho de 2026, ou dias sem cobertura
-   noticiosa), o sorteio foi simplesmente deixado de fora em vez de
-   preenchido com um valor aproximado. Use "Importação em lote" no
-   histórico para completar os sorteios em falta a partir do site oficial. */
+/* Sorteios reais verificados, cruzados entre fontes noticiosas independentes
+   (Renascença, DNotícias, JN, DN Madeira, SAPO) e agregadores (euro-millions.com,
+   loteriaguru.com, jogoselotaria.com). Nenhum número aqui é inventado — onde não
+   foi possível confirmar uma chave com confiança, o sorteio foi deixado de fora
+   em vez de preenchido com um valor aproximado. Use a captura via userscript ou
+   "Registar manualmente" para completar sorteios em falta a partir do site oficial. */
 /* Histórico do Euromilhões (2020-2026) codificado de forma compacta para
    manter o ficheiro leve — cada registo é "DDMMAA:n1,n2,n3,n4,n5:e1,e2",
    descodificado em EM_HISTORICO abaixo. Todos os valores são reais (ver
@@ -751,15 +749,15 @@ const SEED_DRAWS = {
     ...parseHistoricoPacked(EM_HISTORICO_PACKED),
   ],
   totoloto:[
-    {data:"26/08/2026",numeros:[1,8,24,26,40],sorte:4,concurso:"069/2026",fonte:'importado'},
-    {data:"22/08/2026",numeros:[12,30,42,45,48],sorte:9,concurso:"068/2026",fonte:'importado'},
-    {data:"19/08/2026",numeros:[3,5,26,36,46],sorte:5,concurso:"067/2026",fonte:'importado'},
-    {data:"15/08/2026",numeros:[5,16,32,34,37],sorte:2,concurso:"066/2026",fonte:'importado'},
-    {data:"12/08/2026",numeros:[1,3,8,12,37],sorte:10,concurso:"065/2026",fonte:'importado'},
-    {data:"08/08/2026",numeros:[1,10,29,33,46],sorte:4,concurso:"064/2026",fonte:'importado'},
-    {data:"05/08/2026",numeros:[6,14,17,21,32],sorte:2,concurso:"063/2026",fonte:'importado'},
-    {data:"01/08/2026",numeros:[14,18,23,40,47],sorte:12,concurso:"062/2026",fonte:'importado'},
-    {data:"29/07/2026",numeros:[16,33,39,42,45],sorte:4,concurso:"061/2026",fonte:'importado'},
+    {data:"26/08/2026",numeros:[1,8,24,26,40],sorte:4,concurso:"068/2026",fonte:'importado'},
+    {data:"22/08/2026",numeros:[12,30,42,45,48],sorte:9,concurso:"067/2026",fonte:'importado'},
+    {data:"19/08/2026",numeros:[3,5,26,36,46],sorte:5,concurso:"066/2026",fonte:'importado'},
+    {data:"15/08/2026",numeros:[5,16,32,34,37],sorte:2,concurso:"065/2026",fonte:'importado'},
+    {data:"12/08/2026",numeros:[1,3,8,12,37],sorte:10,concurso:"064/2026",fonte:'importado'},
+    {data:"08/08/2026",numeros:[1,10,29,33,46],sorte:4,concurso:"063/2026",fonte:'importado'},
+    {data:"05/08/2026",numeros:[6,14,17,21,32],sorte:2,concurso:"062/2026",fonte:'importado'},
+    {data:"01/08/2026",numeros:[14,18,23,40,47],sorte:12,concurso:"061/2026",fonte:'importado'},
+    {data:"29/07/2026",numeros:[16,33,39,42,45],sorte:4,concurso:"060/2026",fonte:'importado'},
     {data:"25/07/2026",numeros:[2,27,43,45,47],sorte:1,fonte:'importado'},
     {data:"22/07/2026",numeros:[7,20,23,24,41],sorte:9,concurso:"058/2026",fonte:'importado'},
     {data:"18/07/2026",numeros:[8,24,28,31,47],sorte:3,fonte:'importado'},
@@ -774,9 +772,14 @@ const SEED_DRAWS = {
     {data:"30/05/2026",numeros:[4,17,20,21,43],sorte:2,concurso:"044/2026",fonte:'importado'},
     {data:"16/05/2026",numeros:[9,24,25,36,42],sorte:2,concurso:"039/2026",fonte:'importado'},
     {data:"09/05/2026",numeros:[5,7,13,21,40],sorte:7,concurso:"037/2026",fonte:'importado'},
-    {data:"06/05/2026",numeros:[2,10,37,39,43],sorte:1,concurso:"036/2026",fonte:'importado'}
+    {data:"06/05/2026",numeros:[2,10,37,39,43],sorte:1,concurso:"036/2026",fonte:'importado'},
+    {data:"22/04/2026",numeros:[13,22,27,30,48],sorte:1,concurso:"032/2026",fonte:'importado'},
+    {data:"15/04/2026",numeros:[1,14,19,33,48],sorte:1,concurso:"030/2026",fonte:'importado'},
+    {data:"04/04/2026",numeros:[5,17,24,37,42],sorte:10,concurso:"027/2026",fonte:'importado'}
   ],
   eurodreams:[
+    {data:"27/08/2026",numeros:[6,12,29,30,35,38],sonho:3,fonte:'importado'},
+    {data:"24/08/2026",numeros:[3,11,17,23,28,30],sonho:2,fonte:'importado'},
     {data:"13/08/2026",numeros:[10,14,18,20,26,30],sonho:5,concurso:"066/2026",fonte:'importado'},
     {data:"10/08/2026",numeros:[7,9,10,26,33,40],sonho:1,concurso:"065/2026",fonte:'importado'},
     {data:"06/08/2026",numeros:[3,18,22,24,26,33],sonho:2,concurso:"064/2026",fonte:'importado'},
@@ -785,12 +788,22 @@ const SEED_DRAWS = {
     {data:"27/07/2026",numeros:[2,4,13,16,21,25],sonho:3,concurso:"061/2026",fonte:'importado'},
     {data:"23/07/2026",numeros:[3,4,17,21,31,33],sonho:2,concurso:"060/2026",fonte:'importado'},
     {data:"20/07/2026",numeros:[8,11,12,22,26,36],sonho:1,concurso:"059/2026",fonte:'importado'},
-    {data:"16/07/2026",numeros:[1,9,14,16,30,40],sonho:3,concurso:"058/2026",fonte:'importado'},
+    {data:"16/07/2026",numeros:[1,9,14,16,30,40],sonho:3,concurso:"057/2026",fonte:'importado'},
+    {data:"13/07/2026",numeros:[9,12,13,17,21,30],sonho:1,concurso:"056/2026",fonte:'importado'},
+    {data:"02/07/2026",numeros:[3,12,23,24,36,40],sonho:3,concurso:"053/2026",fonte:'importado'},
     {data:"28/05/2026",numeros:[11,12,17,22,25,35],sonho:4,concurso:"043/2026",fonte:'importado'},
     {data:"25/05/2026",numeros:[4,13,17,22,27,30],sonho:1,concurso:"042/2026",fonte:'importado'},
     {data:"18/05/2026",numeros:[3,11,16,20,21,22],sonho:4,concurso:"040/2026",fonte:'importado'},
     {data:"14/05/2026",numeros:[3,7,9,21,24,27],sonho:4,concurso:"039/2026",fonte:'importado'},
-    {data:"07/05/2026",numeros:[9,12,13,24,32,38],sonho:5,concurso:"037/2026",fonte:'importado'}
+    {data:"07/05/2026",numeros:[9,12,13,24,32,38],sonho:5,concurso:"037/2026",fonte:'importado'},
+    {data:"25/06/2026",numeros:[1,4,11,16,17,38],sonho:1,fonte:'importado'},
+    {data:"22/06/2026",numeros:[4,10,14,15,29,37],sonho:3,fonte:'importado'},
+    {data:"11/06/2026",numeros:[6,18,22,25,31,32],sonho:5,concurso:"047/2026",fonte:'importado'},
+    {data:"04/06/2026",numeros:[1,9,17,22,37,39],sonho:3,concurso:"045/2026",fonte:'importado'},
+    {data:"26/02/2026",numeros:[17,18,19,21,23,36],sonho:4,fonte:'importado'},
+    {data:"16/02/2026",numeros:[6,10,13,24,26,38],sonho:3,fonte:'importado'},
+    {data:"05/02/2026",numeros:[3,10,20,21,37,38],sonho:3,fonte:'importado'},
+    {data:"02/02/2026",numeros:[2,7,23,24,32,37],sonho:3,fonte:'importado'}
   ]
 };
 const MAX_DRAWS_PER_GAME = 3000;
@@ -894,7 +907,8 @@ const RSS_URL = 'https://www.jogossantacasa.pt/web/SCRss/rssFeedCartRes';
 
 /** Estratégias de fetch ordenadas por fiabilidade (2026).
  *  rss2json e feed2json devolvem JSON já decodificado (sem problemas de iso-8859-1)
- *  e costumam ter CORS aberto. Proxies CORS genéricos são fallback. */
+ *  e costumam ter CORS aberto. Proxies CORS genéricos são fallback — quantos mais
+ *  melhor, porque basta UM responder para a sincronização ter sucesso. */
 const RSS_STRATEGIES = [
   {
     name: 'rss2json',
@@ -932,6 +946,31 @@ const RSS_STRATEGIES = [
   {
     name: 'allorigins-get',
     url: () => 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL),
+    parse: async (r) => {
+      const data = await r.json();
+      const xml = data && data.contents ? data.contents : '';
+      if (!xml) throw new Error('empty');
+      return parseXmlItemsFromString(xml);
+    }
+  },
+  {
+    name: 'codetabs',
+    url: () => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(RSS_URL),
+    parse: async (r) => parseXmlItems(await decodeRssBody(r))
+  },
+  {
+    name: 'corsproxy-io',
+    url: () => 'https://corsproxy.io/?url=' + encodeURIComponent(RSS_URL),
+    parse: async (r) => parseXmlItems(await decodeRssBody(r))
+  },
+  {
+    name: 'thingproxy',
+    url: () => 'https://thingproxy.freeboard.io/fetch/' + RSS_URL,
+    parse: async (r) => parseXmlItems(await decodeRssBody(r))
+  },
+  {
+    name: 'whateverorigin',
+    url: () => 'https://whateverorigin.org/get?url=' + encodeURIComponent(RSS_URL),
     parse: async (r) => {
       const data = await r.json();
       const xml = data && data.contents ? data.contents : '';
@@ -1440,655 +1479,4 @@ function updateUI(){
     sSel.onchange=function(){ document.getElementById('sQtyDisplay').textContent=this.value; updatePriceDisplay(); updateFooter(); renderPrizeTable(regra); };
 
     renderPrizeTable(regra);
-    updateFirstPrize(regra);
-    updatePriceDisplay();
-    updateFooter();
-    document.getElementById('resultPanel').style.display='none';
-    document.getElementById('mcResultContainer').innerHTML='';
-    document.getElementById('mcRealChi').innerHTML='';
-    updateMultiUI();
-    renderManualGrids();
-    renderUltimoSorteioOficial();
-    renderHistoricoTab();
-    updateQfNames();
-    updateCkNames();
-    updateQfValidation();
-    addLog(`Jogo selecionado: ${regra.nome}`,'system');
-  }catch(err){ console.error('Erro em updateUI:',err); addLog('Erro: '+err.message,'warn'); }
-}
-function updateQfNames(){
-  const regra=REGRAS[currentGame];
-  document.getElementById('qfNumsLabel').textContent=`Números sorteados (${regra.nums.sorteados})`;
-  document.getElementById('qfExtraLabel').textContent=`${regra.stars.nome} (${regra.stars.sorteados})`;
-}
-function updateCkNames(){
-  const regra=REGRAS[currentGame];
-  document.getElementById('ckExtraLabel').textContent=regra.stars.nome;
-}
-function updatePriceDisplay(){
-  const regra=REGRAS[currentGame];
-  const n=parseInt(document.getElementById('nQty').value,10);
-  const s=parseInt(document.getElementById('sQty').value,10);
-  const {totalCombos,custo}=calcularPreco(regra,n,s);
-  document.getElementById('priceValue').textContent=`€ ${custo.toFixed(2).replace('.',',')}`;
-  document.getElementById('priceCombos').textContent=`${totalCombos.toLocaleString('pt-PT')} combinação(ões) · ${n}+${s}`;
-}
-function updateFooter(){
-  const regra=REGRAS[currentGame];
-  const n=parseInt(document.getElementById('nQty').value,10);
-  const s=parseInt(document.getElementById('sQty').value,10);
-  const {custo}=calcularPreco(regra,n,s);
-  const proximoSorteio=getNextDrawDate(regra.diasSorteio,regra.horaSorteio);
-  document.getElementById('footerDrawInfo').innerHTML=`
-    <span class="draw-date">PRÓXIMO SORTEIO: ${proximoSorteio}</span>
-    <span class="draw-price">PREÇO DA APOSTA: € ${custo.toFixed(2).replace('.',',')}</span>`;
-}
-function updateFirstPrize(regra){
-  const totalCombos=C(regra.nums.max,regra.nums.sorteados)*C(regra.stars.max,regra.stars.sorteados);
-  document.getElementById('fpCombo').textContent=`${regra.nums.sorteados} números + ${regra.stars.sorteados} ${regra.stars.nome}`;
-  document.getElementById('fpOdds').textContent=`1 em ${totalCombos.toLocaleString('pt-PT')}`;
-  document.getElementById('fpJackpot').textContent=regra.jackpotInfo;
-}
-function construirTabelaEscaloes(regra,nQty,sQty,targetIdx){
-  const isSystem=nQty>regra.nums.sorteados||sQty>regra.stars.sorteados;
-  let html=`<table class="prize-table"><thead><tr><th style="text-align:left;">Escalão</th><th>Odds simples</th>${isSystem?'<th>No seu sistema</th>':''}<th>Valor (€)</th></tr></thead><tbody>`;
-  regra.premios.forEach((p,idx)=>{
-    let probReal;
-    if(p.ignoreDream) probReal=probHipergeometrica(regra.nums.max,regra.nums.sorteados,regra.nums.sorteados,p.n);
-    else{
-      const probNums=probHipergeometrica(regra.nums.max,regra.nums.sorteados,regra.nums.sorteados,p.n);
-      const probStars=probHipergeometrica(regra.stars.max,regra.stars.sorteados,regra.stars.sorteados,p.s);
-      probReal=probNums*probStars;
-    }
-    const odds=probReal>0?1/probReal:Infinity;
-    const oddsFmt=isFinite(odds)?'1/'+Math.round(odds).toLocaleString('pt-PT'):'N/D';
-    const valorFmt=p.valor!=null?'€ '+p.valor.toLocaleString('pt-PT'):p.valorTxt;
-    let sistemaCell='';
-    if(isSystem){
-      let probSistema;
-      if(p.ignoreDream) probSistema=probSistemaPeloMenos(regra.nums.max,regra.nums.sorteados,nQty,p.n);
-      else{
-        const probSistemaNums=probSistemaPeloMenos(regra.nums.max,regra.nums.sorteados,nQty,p.n);
-        const probSistemaStars=probSistemaPeloMenos(regra.stars.max,regra.stars.sorteados,sQty,p.s);
-        probSistema=probSistemaNums*probSistemaStars;
-      }
-      const oddsSistema=probSistema>0?1/probSistema:Infinity;
-      const sistemaFmt=isFinite(oddsSistema)?(probSistema>=0.001?(probSistema*100).toFixed(2)+'%':'1/'+Math.round(oddsSistema).toLocaleString('pt-PT')):'N/D';
-      sistemaCell=`<td>${sistemaFmt}</td>`;
-    }
-    const rowClass=idx===0?'first-tier':(idx===targetIdx?'target-tier':'');
-    html+=`<tr class="${rowClass}"><td class="tier-name">${p.nome}</td><td>${oddsFmt}</td>${sistemaCell}<td class="tier-value">${valorFmt}</td></tr>`;
-  });
-  html+=`</tbody></table><div class="prize-legend">${regra.jackpotInfo}. Odds calculadas por combinatória hipergeométrica exata.</div>`;
-  if(isSystem) html+=`<div class="prize-legend">"No seu sistema" = probabilidade real de acertar pelo menos uma vez nesse escalão jogando todas as combinações do sistema.</div>`;
-  return html;
-}
-function renderPrizeTable(regra){
-  const nQty=parseInt(document.getElementById('nQty').value,10)||regra.nums.minAposta;
-  const sQty=parseInt(document.getElementById('sQty').value,10)||regra.stars.minAposta;
-  document.getElementById('prizeTableContainer').innerHTML=construirTabelaEscaloes(regra,nQty,sQty);
-}
-function renderResultEscalaoTable(regra,nQty,sQty){
-  document.getElementById('resultEscalaoTable').innerHTML=construirTabelaEscaloes(regra,nQty,sQty);
-}
-
-/* ============================================================
-   HISTÓRICO TAB
-   ============================================================ */
-const MESES_PT=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-function renderHistoricoTab(){
-  const gameKey=currentGame;
-  const dados=getHistoricoCompleto(gameKey);
-  document.getElementById('histCountLabel').textContent=` · ${dados.length} sorteio(s)`;
-  const monthSel=document.getElementById('histMonthFilter');
-  const mesesPresentes=new Map();
-  dados.forEach(s=>{ const [d,m,y]=s.data.split('/'); const key=`${y}-${m}`; if(!mesesPresentes.has(key)) mesesPresentes.set(key,`${MESES_PT[parseInt(m,10)-1]} ${y}`); });
-  const mesesOrdenados=Array.from(mesesPresentes.entries()).sort((a,b)=>b[0].localeCompare(a[0]));
-  const valorAtual=monthSel.value||'all';
-  monthSel.innerHTML='<option value="all">Todos os meses</option>'+mesesOrdenados.map(([k,l])=>`<option value="${k}">${l}</option>`).join('');
-  monthSel.value=mesesPresentes.has(valorAtual)||valorAtual==='all'?valorAtual:'all';
-  const filtro=monthSel.value;
-  const filtrados=filtro==='all'?dados:dados.filter(s=>{ const [d,m,y]=s.data.split('/'); return `${y}-${m}`===filtro; });
-
-  const list=document.getElementById('historyDrawsList');
-  if(!filtrados.length){ list.innerHTML='<div class="prize-legend">Sem sorteios para mostrar. Sincronize ou registe manualmente acima.</div>'; }
-  else{
-    list.innerHTML=filtrados.map(d=>{
-      const extras=extraValores(gameKey,d);
-      const badge=`<span class="src-badge ${d.fonte==='oficial'?'oficial':(d.fonte==='importado'?'importado':'manual')}">${d.fonte==='oficial'?'OFICIAL':(d.fonte==='importado'?'IMPORTADO':'MANUAL')}</span>`;
-      return `<div class="history-item">
-        <div class="history-nums">${d.numeros.map(n=>String(n).padStart(2,'0')).join(' · ')} <span class="s">| ${extras.map(n=>String(n).padStart(2,'0')).join(' · ')}</span></div>
-        <div class="history-meta">${d.data}${d.concurso&&!d.concurso.startsWith('manual-')?' · '+d.concurso:''} ${badge}</div>
-      </div>`;
-    }).join('');
-  }
-
-  const {freqNum,total}=getFrequenciaReal(gameKey);
-  const regra=REGRAS[gameKey];
-  const maxFreq=Math.max(1,...freqNum.slice(1));
-  let freqHtml='<div style="display:flex;flex-direction:column;gap:5px;">';
-  let any=false;
-  for(let n=1;n<=regra.nums.max;n++){
-    if(freqNum[n]===0) continue; any=true;
-    const pct=(freqNum[n]/maxFreq)*100;
-    freqHtml+=`<div class="freq-row"><div class="freq-ball">${String(n).padStart(2,'0')}</div><div class="freq-bar-track"><div class="freq-bar-fill" style="width:${pct}%"></div></div><div class="freq-count">${freqNum[n]}</div></div>`;
-  }
-  freqHtml+='</div>';
-  document.getElementById('historicoFreqContainer').innerHTML = any ? freqHtml : '<div class="prize-legend">Sem dados suficientes ainda.</div>';
-}
-document.addEventListener('change', function(e){ if(e.target && e.target.id==='histMonthFilter') renderHistoricoTab(); });
-
-function refreshAfterHistoryChange(){
-  renderUltimoSorteioOficial();
-  renderHistoricoTab();
-}
-
-/* ============================================================
-   CONFERIR APOSTA
-   ============================================================ */
-function verificarAposta(){
-  const regra=REGRAS[currentGame];
-  const userNums=parseNumbersFromInput(document.getElementById('ckNums').value);
-  const userExtra=parseNumbersFromInput(document.getElementById('ckExtra').value);
-  const box=document.getElementById('checkResult');
-  if(!userNums.length){ toast('Indique os seus números',true); return; }
-  const draws=getHistoricoCompleto(currentGame);
-  if(!draws.length){ box.innerHTML='<div class="prize-legend">Sem sorteios registados para comparar. Sincronize ou registe manualmente.</div>'; return; }
-  let html='';
-  draws.forEach(d=>{
-    const extras=extraValores(currentGame,d);
-    const numHits=userNums.filter(n=>d.numeros.includes(n));
-    const extraHits=userExtra.filter(n=>extras.includes(n));
-    const tier=regra.premios.find(p=>{
-      if(p.ignoreDream) return numHits.length===p.n;
-      return numHits.length===p.n && extraHits.length===p.s;
-    });
-    html+=`<div class="history-item">
-      <div>
-        <div class="history-nums">${d.data}${d.concurso&&!d.concurso.startsWith('manual-')?' · '+d.concurso:''}</div>
-        <div class="history-meta">${numHits.length} números certos · ${extraHits.length} ${regra.stars.nome} certas ${tier?' · <span style="color:var(--ok);">'+tier.nome+'</span>':''}</div>
-      </div>
-    </div>`;
-  });
-  box.innerHTML=html+'<div class="prize-legend" style="margin-top:8px;">Comparação meramente informativa contra o histórico registado — confirme sempre em jogossantacasa.pt.</div>';
-}
-
-/* ============================================================
-   LOG / PROGRESSO / TOAST
-   ============================================================ */
-function toast(msg,isError){
-  let t=document.getElementById('globalToast');
-  if(!t){ t=document.createElement('div'); t.id='globalToast'; t.className='toast'; document.body.appendChild(t); }
-  t.classList.toggle('err',!!isError);
-  t.textContent=msg; t.classList.add('show');
-  clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove('show'),2800);
-}
-function addLog(msg,type){
-  const term=document.getElementById('terminal');
-  const div=document.createElement('div');
-  div.className=`log-line ${type||'system'}`;
-  div.textContent=`> ${msg}`;
-  term.appendChild(div); term.scrollTop=term.scrollHeight;
-}
-function setProgress(pct,wrapId,barId){
-  const wrap=document.getElementById(wrapId||'progressWrap');
-  const bar=document.getElementById(barId||'progressBar');
-  if(pct===null){ wrap.classList.remove('active'); bar.style.width='0%'; return; }
-  wrap.classList.add('active'); bar.style.width=Math.min(100,pct)+'%';
-}
-function exibirResultado(nums,stars,regra,resultado,nQty,sQty,method){
-  const panel=document.getElementById('resultPanel');
-  const ballOut=document.getElementById('ballOutput'); ballOut.innerHTML='';
-  nums.forEach(n=>{ const b=document.createElement('div'); b.className='ball n'; b.textContent=String(n).padStart(2,'0'); ballOut.appendChild(b); });
-  if(stars&&stars.length>0){
-    const sep=document.createElement('div'); sep.style.width='100%'; sep.style.height='1px'; sep.style.background='var(--line-strong)'; sep.style.margin='6px 0';
-    ballOut.appendChild(sep);
-    stars.forEach(s=>{ const b=document.createElement('div'); b.className='ball s'; b.textContent=String(s).padStart(2,'0'); ballOut.appendChild(b); });
-  }
-  const soma=nums.reduce((a,b)=>a+b,0);
-  const pares=nums.filter(n=>n%2===0).length, impares=nums.length-pares;
-  const somaOk=soma>=resultado.somaMin&&soma<=resultado.somaMax;
-  const zScore=(soma-resultado.stats.mu)/resultado.stats.sigma;
-  const q1=nums.filter(n=>n<=resultado.quartis.Q1).length,q2=nums.filter(n=>n>resultado.quartis.Q1&&n<=resultado.quartis.Q2).length;
-  const q3=nums.filter(n=>n>resultado.quartis.Q2&&n<=resultado.quartis.Q3).length,q4=nums.filter(n=>n>resultado.quartis.Q3).length;
-  const quartisOcupados=[q1,q2,q3,q4].filter(c=>c>0).length;
-  const maxConsec=contarConsecutivosMax(nums);
-  const maxDezena=contarMaxPorDezena(nums);
-  const metades=contarMetades(nums,regra.nums.max);
-  document.getElementById('analysisGrid').innerHTML=`
-    <div class="stat-box"><div class="label">Método</div><div class="value">${method}</div></div>
-    <div class="stat-box"><div class="label">Soma (Z-score)</div><div class="value ${somaOk?'ok':'warn'}">${soma} (z=${zScore.toFixed(2)})</div></div>
-    <div class="stat-box"><div class="label">Par / Ímpar</div><div class="value">${pares} / ${impares}</div></div>
-    <div class="stat-box"><div class="label">Metade baixa / alta</div><div class="value ${metades.baixa>0&&metades.alta>0?'ok':'warn'}">${metades.baixa} / ${metades.alta}</div></div>
-    <div class="stat-box"><div class="label">Quartis ocupados</div><div class="value ${quartisOcupados>=2?'ok':'warn'}">${quartisOcupados}/4 (${q1}-${q2}-${q3}-${q4})</div></div>
-    <div class="stat-box"><div class="label">Consecutivos máx.</div><div class="value ${maxConsec<3?'ok':'warn'}">${maxConsec} (máx 2)</div></div>
-    <div class="stat-box"><div class="label">Máx. por dezena</div><div class="value ${maxDezena<=2?'ok':'warn'}">${maxDezena} (máx 2)</div></div>
-    <div class="stat-box"><div class="label">Iterações até válida</div><div class="value">${resultado.tentativas.toLocaleString('pt-PT')}</div></div>
-  `;
-  renderResultEscalaoTable(regra,nQty,sQty);
-  panel.dataset.nums=nums.join(', ');
-  panel.dataset.stars=stars.join(', ');
-  panel.dataset.game=regra.nome;
-  panel.dataset.method=method;
-  panel.style.display='block';
-  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
-}
-function copiarTexto(texto){
-  return new Promise((resolve,reject)=>{
-    if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(texto).then(resolve).catch(()=>copiarFallback(texto,resolve,reject));
-    else copiarFallback(texto,resolve,reject);
-  });
-}
-function copiarFallback(texto,resolve,reject){
-  try{
-    const ta=document.createElement('textarea'); ta.value=texto; ta.style.position='fixed'; ta.style.left='-9999px';
-    document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,texto.length);
-    const ok=document.execCommand('copy'); document.body.removeChild(ta);
-    ok?resolve():reject(new Error('execCommand falhou'));
-  }catch(e){ reject(e); }
-}
-
-/* ============================================================
-   MONTE CARLO
-   ============================================================ */
-function runMonteCarloAsync(regra,totalSorteios,onProgress){
-  return new Promise((resolve)=>{
-    const tamanhoBloco=20000; let feitos=0;
-    const nTiers=regra.premios.length;
-    const contagens=new Uint32Array(nTiers);
-    const snapshots=[]; const targetIdx=nTiers-1;
-    const minhaAposta=amostraUniformeSemReposicao(regra.nums.min,regra.nums.max,regra.nums.sorteados);
-    const minhasStars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,regra.stars.sorteados);
-    const apostaSet=new Set(minhaAposta); const starsSet=new Set(minhasStars);
-    function bloco(){
-      const limite=Math.min(feitos+tamanhoBloco,totalSorteios);
-      while(feitos<limite){
-        feitos++;
-        const drawNums=amostraUniformeSemReposicao(regra.nums.min,regra.nums.max,regra.nums.sorteados);
-        const drawStars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,regra.stars.sorteados);
-        let an=0; for(let i=0;i<drawNums.length;i++) if(apostaSet.has(drawNums[i])) an++;
-        let as_=0; for(let i=0;i<drawStars.length;i++) if(starsSet.has(drawStars[i])) as_++;
-        for(let ti=0;ti<nTiers;ti++){
-          const p=regra.premios[ti];
-          if(p.ignoreDream){ if(an===p.n) contagens[ti]++; }
-          else if(an===p.n&&as_===p.s) contagens[ti]++;
-        }
-      }
-      snapshots.push({feitos,prob:contagens[targetIdx]/feitos});
-      if(onProgress) onProgress(feitos,totalSorteios);
-      if(feitos>=totalSorteios){ resolve({contagens,snapshots,minhaAposta,minhasStars}); return; }
-      setTimeout(bloco,0);
-    }
-    bloco();
-  });
-}
-function construirSVGConvergencia(snapshots,probTeorica){
-  if(!snapshots||snapshots.length<2) return '';
-  const W=600,H=150,padL=6,padR=6,padT=8,padB=8;
-  const plotW=W-padL-padR, plotH=H-padT-padB;
-  const probs=snapshots.map(s=>s.prob);
-  const maxV=Math.max(probTeorica*1.4,Math.max.apply(null,probs))||(probTeorica*2)||0.01;
-  function xAt(i){ return padL+(i/(snapshots.length-1))*plotW; }
-  function yAt(p){ return padT+plotH-(Math.max(0,Math.min(1,p/maxV)))*plotH; }
-  const linhaPts=snapshots.map((s,i)=>xAt(i).toFixed(1)+','+yAt(s.prob).toFixed(1)).join(' ');
-  const topPts=snapshots.map((s,i)=>{ const se=Math.sqrt(probTeorica*(1-probTeorica)/s.feitos)*1.96; return xAt(i).toFixed(1)+','+yAt(s.prob+se).toFixed(1); });
-  const botPts=snapshots.slice().reverse().map((s,ri)=>{ const i=snapshots.length-1-ri; const se=Math.sqrt(probTeorica*(1-probTeorica)/s.feitos)*1.96; return xAt(i).toFixed(1)+','+yAt(Math.max(0,s.prob-se)).toFixed(1); });
-  const bandaPts=topPts.concat(botPts).join(' ');
-  const yTeo=yAt(probTeorica).toFixed(1);
-  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:130px;display:block;">
-    <polygon points="${bandaPts}" fill="rgba(111,214,232,0.12)" stroke="none"></polygon>
-    <line x1="${padL}" y1="${yTeo}" x2="${W-padR}" y2="${yTeo}" stroke="#EFC272" stroke-width="2" stroke-dasharray="8,6" opacity="0.9"></line>
-    <polyline points="${linhaPts}" fill="none" stroke="#6FD6E8" stroke-width="2.5"></polyline>
-  </svg>`;
-}
-function chiSquarePValueApprox(chi2,df){
-  if(df<=0) return 1;
-  const z=(Math.pow(chi2/df,1/3)-(1-2/(9*df)))/Math.sqrt(2/(9*df));
-  const t=1/(1+0.2316419*Math.abs(z));
-  const d=0.3989423*Math.exp(-z*z/2);
-  let p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
-  if(z<=0) p=1-p;
-  return Math.max(0,Math.min(1,p));
-}
-async function executarMonteCarlo(totalSorteios){
-  const regra=REGRAS[currentGame];
-  const container=document.getElementById('mcResultContainer');
-  const buttons=[document.getElementById('btnMC10k'),document.getElementById('btnMC100k'),document.getElementById('btnMC500k'),document.getElementById('btnMC1M')];
-  buttons.forEach(b=>b.disabled=true);
-  setProgress(1,'mcProgressWrap','mcProgressBar');
-  addLog(`Iniciando simulação Monte Carlo: ${totalSorteios.toLocaleString('pt-PT')} sorteios (aposta de referência fixa)...`,'system');
-  const {contagens,snapshots,minhaAposta,minhasStars}=await runMonteCarloAsync(regra,totalSorteios,(f,t)=>setProgress((f/t)*100,'mcProgressWrap','mcProgressBar'));
-  const escaloes=regra.premios.map((p,idx)=>{
-    let probTeorica;
-    if(p.ignoreDream) probTeorica=probHipergeometrica(regra.nums.max,regra.nums.sorteados,regra.nums.sorteados,p.n);
-    else probTeorica=probHipergeometrica(regra.nums.max,regra.nums.sorteados,regra.nums.sorteados,p.n)*probHipergeometrica(regra.stars.max,regra.stars.sorteados,regra.stars.sorteados,p.s);
-    const contagem=contagens[idx]||0; const esperado=probTeorica*totalSorteios;
-    return {p,idx,probTeorica,contagem,esperado};
-  });
-  const observaveis=escaloes.filter(e=>e.esperado>=1);
-  const inobservaveis=escaloes.filter(e=>e.esperado<1);
-  const targetIdx=observaveis.length?observaveis[observaveis.length-1].idx:escaloes[escaloes.length-1].idx;
-  const probTeoricaTarget=escaloes[targetIdx].probTeorica;
-  let html=`<table class="mc-table"><thead><tr><th style="text-align:left;">Escalão</th><th>Teórico</th><th>Simulado</th><th>Nº acertos</th></tr></thead><tbody>`;
-  let chi2=0,gl=0;
-  observaveis.forEach(e=>{
-    const {p,idx,probTeorica,contagem,esperado}=e;
-    const probSimulada=contagem/totalSorteios;
-    const teoricoFmt='1/'+Math.round(1/probTeorica).toLocaleString('pt-PT');
-    const simuladoFmt=probSimulada>0?'1/'+Math.round(1/probSimulada).toLocaleString('pt-PT'):'sem ocorrências';
-    if(esperado>=5){ chi2+=Math.pow(contagem-esperado,2)/esperado; gl++; }
-    const rowStyle=idx===targetIdx?' style="background:rgba(79,203,142,0.07);"':'';
-    html+=`<tr${rowStyle}><td>${p.nome}</td><td>${teoricoFmt}</td><td>${simuladoFmt}</td><td>${contagem.toLocaleString('pt-PT')}</td></tr>`;
-  });
-  html+=`</tbody></table>`;
-  if(inobservaveis.length){
-    html+=`<div class="prize-legend" style="margin-top:8px;">Escalões demasiado raros para aparecer de forma fiável em ${totalSorteios.toLocaleString('pt-PT')} sorteios:</div><table class="mc-table" style="margin-top:4px;"><tbody>`;
-    inobservaveis.forEach(e=>{ html+=`<tr><td>${e.p.nome}</td><td>1/${Math.round(1/e.probTeorica).toLocaleString('pt-PT')}</td></tr>`; });
-    html+=`</tbody></table>`;
-  }
-  const pValor=chiSquarePValueApprox(chi2,gl);
-  const chiOk=pValor>0.05;
-  html+=`<div class="chi-box">
-    <div><span class="cl">χ² (gl=${gl})</span> <span class="cv">${chi2.toFixed(3)}</span></div>
-    <div><span class="cl">p-valor (aprox.)</span> <span class="cv" style="color:${chiOk?'var(--ok)':'var(--warn)'};">${(pValor*100).toFixed(2)}%</span></div>
-    <div><span class="cl">Resultado</span> <span class="cv">${chiOk?'✅ sem evidência de enviesamento':'⚠️ possível enviesamento'}</span></div>
-  </div>`;
-  const chartSvg=construirSVGConvergencia(snapshots,probTeoricaTarget);
-  html+=`<div class="mc-chart-wrap">${chartSvg}<div class="prize-legend" style="text-align:center;">Frequência observada (azul) vs. teórica (amarela) — banda cinza: IC 95%.</div></div>`;
-  html+=`<div class="prize-legend" style="margin-top:8px;">Aposta de referência: <b>${minhaAposta.join(' - ')}</b> ${minhasStars?'| '+minhasStars.join(' - '):''} (fixa). Apenas o sorteio simulado varia.</div>`;
-  container.innerHTML=html;
-
-  // qui-quadrado extra: uniformidade do histórico REAL registado (descritivo, não preditivo)
-  const {freqNum,total}=getFrequenciaReal(currentGame);
-  const realBox=document.getElementById('mcRealChi');
-  if(total>=15){
-    const esperadoPorNum=total*regra.nums.sorteados/regra.nums.max;
-    let chi2Real=0;
-    for(let n=1;n<=regra.nums.max;n++){ const diff=freqNum[n]-esperadoPorNum; chi2Real+=(diff*diff)/esperadoPorNum; }
-    const dfReal=regra.nums.max-1;
-    const pReal=chiSquarePValueApprox(chi2Real,dfReal);
-    realBox.innerHTML=`<div class="chi-box">
-      <div><span class="cl">χ² do histórico REAL (${total} sorteios)</span> <span class="cv">${chi2Real.toFixed(2)}</span></div>
-      <div><span class="cl">p-valor</span> <span class="cv" style="color:${pReal>0.05?'var(--ok)':'var(--warn)'};">${(pReal*100).toFixed(2)}%</span></div>
-    </div><div class="prize-legend">Compara a distribuição dos números realmente sorteados com a uniformidade teórica esperada — útil apenas para confirmar que o sorteio oficial é aleatório, nunca para prever o próximo.</div>`;
-  } else {
-    realBox.innerHTML=`<div class="prize-legend">Registe pelo menos 15 sorteios reais no histórico para calcular também o χ² do histórico real.</div>`;
-  }
-
-  setProgress(null,'mcProgressWrap','mcProgressBar');
-  buttons.forEach(b=>b.disabled=false);
-  addLog(`Simulação ${totalSorteios.toLocaleString('pt-PT')} concluída. χ² = ${chi2.toFixed(3)}`,'success');
-  toast(`Monte Carlo ${totalSorteios.toLocaleString()} concluído.`);
-}
-
-/* ============================================================
-   MULTIPLOS
-   ============================================================ */
-function updateMultiUI(){
-  const regra=REGRAS[currentGame];
-  const nSel=document.getElementById('multiN'); nSel.innerHTML='';
-  for(let i=regra.nums.minAposta;i<=regra.nums.maxAposta;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; nSel.appendChild(o); }
-  nSel.value=regra.nums.minAposta;
-  const sSel=document.getElementById('multiS'); sSel.innerHTML='';
-  const isFixed=regra.stars.minAposta===regra.stars.maxAposta;
-  for(let i=regra.stars.minAposta;i<=regra.stars.maxAposta;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; sSel.appendChild(o); }
-  sSel.value=regra.stars.minAposta; sSel.disabled=isFixed;
-  document.getElementById('multiStarLabel').textContent=regra.stars.nome+(isFixed?' (fixo)':'');
-  const sel=document.getElementById('ticketSelector'); sel.innerHTML='';
-  for(let i=1;i<=10;i++){
-    const btn=document.createElement('button'); btn.type='button'; btn.className='ticket-btn'+(i===1?' selected':''); btn.textContent=i; btn.dataset.val=i;
-    btn.onclick=function(){ sel.querySelectorAll('.ticket-btn').forEach(b=>b.classList.remove('selected')); this.classList.add('selected'); updateMultiPrice(); };
-    sel.appendChild(btn);
-  }
-  updateMultiPrice();
-}
-function updateMultiPrice(){
-  const regra=REGRAS[currentGame];
-  const n=parseInt(document.getElementById('multiN').value,10);
-  const s=parseInt(document.getElementById('multiS').value,10);
-  const qtd=parseInt(document.querySelector('#ticketSelector .ticket-btn.selected')?.dataset.val||1,10);
-  const {totalCombos,custo}=calcularPreco(regra,n,s);
-  const total=custo*qtd;
-  document.getElementById('multiTotalPrice').textContent=`€ ${total.toFixed(2).replace('.',',')}`;
-  document.getElementById('multiTotalDetail').textContent=`${qtd} bilhete(s) × ${totalCombos} combinação(ões) cada · ${n}+${s}`;
-}
-function gerarMultiplos(){
-  const regra=REGRAS[currentGame];
-  const n=parseInt(document.getElementById('multiN').value,10);
-  const s=parseInt(document.getElementById('multiS').value,10);
-  const qtd=parseInt(document.querySelector('#ticketSelector .ticket-btn.selected')?.dataset.val||1,10);
-  const overlap=parseInt(document.getElementById('multiOverlap').value,10);
-  const container=document.getElementById('multiTicketsList'); container.innerHTML='';
-  setProgress(1,'multiProgressWrap','multiProgressBar');
-  const tickets=[]; const usedSets=[]; let tentativas=0; const maxTentativas=1000*qtd;
-  while(tickets.length<qtd&&tentativas<maxTentativas){
-    tentativas++;
-    const nums=amostraUniformeSemReposicao(regra.nums.min,regra.nums.max,n);
-    const stars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,s);
-    let ok=true;
-    if(overlap<99&&usedSets.length){ for(const ex of usedSets){ const common=nums.filter(x=>ex.nums.includes(x)).length; if(common>overlap){ ok=false; break; } } }
-    if(ok){ usedSets.push({nums,stars}); tickets.push({nums,stars}); }
-  }
-  setProgress(null,'multiProgressWrap','multiProgressBar');
-  if(tickets.length<qtd) container.innerHTML=`<div class="prize-legend" style="color:var(--warn);">Apenas ${tickets.length} bilhetes gerados (impossível evitar sobreposição com os parâmetros atuais).</div>`;
-  tickets.forEach((t,idx)=>{
-    const card=document.createElement('div'); card.className='ticket-card';
-    card.innerHTML=`<div class="th">Bilhete ${idx+1}</div><div class="balls">${t.nums.map(n=>`<div class="ball n small">${String(n).padStart(2,'0')}</div>`).join('')}<div style="width:100%;height:1px;background:var(--line-strong);margin:4px 0;"></div>${t.stars.map(s=>`<div class="ball s small">${String(s).padStart(2,'0')}</div>`).join('')}</div>`;
-    container.appendChild(card);
-  });
-  addLog(`${tickets.length} bilhetes gerados para ${regra.nome}.`,'success');
-  toast(`${tickets.length} bilhetes gerados!`);
-}
-
-/* ============================================================
-   MANUAL
-   ============================================================ */
-let manualSelectedNums=new Set();
-let manualSelectedStars=new Set();
-function renderManualGrids(){
-  const regra=REGRAS[currentGame];
-  manualSelectedNums.clear(); manualSelectedStars.clear();
-  document.getElementById('manualNumLabel').textContent=`Números (mín. ${regra.nums.minAposta})`;
-  document.getElementById('manualStarLabel').textContent=`${regra.stars.nome} (mín. ${regra.stars.minAposta})`;
-  const numGrid=document.getElementById('manualNumGrid'); numGrid.innerHTML='';
-  for(let i=1;i<=regra.nums.max;i++){ const btn=document.createElement('div'); btn.className='pick-btn'; btn.textContent=i; btn.onclick=()=>toggleManualNum(i,btn); numGrid.appendChild(btn); }
-  const starGrid=document.getElementById('manualStarGrid'); starGrid.innerHTML='';
-  for(let i=1;i<=regra.stars.max;i++){ const btn=document.createElement('div'); btn.className='pick-btn'; btn.textContent=i; btn.onclick=()=>toggleManualStar(i,btn); starGrid.appendChild(btn); }
-  updateManualUI();
-}
-function toggleManualNum(n,btn){
-  if(manualSelectedNums.has(n)){ manualSelectedNums.delete(n); btn.classList.remove('sel-n'); }
-  else{ const regra=REGRAS[currentGame]; if(manualSelectedNums.size>=regra.nums.maxAposta){ addLog(`Máximo ${regra.nums.maxAposta} números.`,'warn'); return; } manualSelectedNums.add(n); btn.classList.add('sel-n'); }
-  updateManualUI();
-}
-function toggleManualStar(n,btn){
-  if(manualSelectedStars.has(n)){ manualSelectedStars.delete(n); btn.classList.remove('sel-s'); }
-  else{ const regra=REGRAS[currentGame]; if(manualSelectedStars.size>=regra.stars.maxAposta){ addLog(`Máximo ${regra.stars.maxAposta} ${regra.stars.nome}.`,'warn'); return; } manualSelectedStars.add(n); btn.classList.add('sel-s'); }
-  updateManualUI();
-}
-function updateManualUI(){
-  const regra=REGRAS[currentGame];
-  const nums=Array.from(manualSelectedNums).sort((a,b)=>a-b);
-  const stars=Array.from(manualSelectedStars).sort((a,b)=>a-b);
-  const nOk=nums.length>=regra.nums.minAposta, sOk=stars.length>=regra.stars.minAposta;
-  const msg=document.getElementById('manualValidation'); const errs=[];
-  if(!nOk) errs.push(`${nums.length}/${regra.nums.minAposta} números`);
-  if(!sOk) errs.push(`${stars.length}/${regra.stars.minAposta} ${regra.stars.nome}`);
-  if(errs.length){ msg.textContent=errs.join(' · '); msg.className='validation-msg err'; } else { msg.textContent='✓ Válido'; msg.className='validation-msg ok'; }
-  const combN=C(nums.length,regra.nums.sorteados), combS=C(stars.length,regra.stars.sorteados);
-  const totalCombos=combN*combS, custo=totalCombos*regra.preco;
-  document.getElementById('manualPrice').textContent=`€ ${custo.toFixed(2).replace('.',',')}`;
-  document.getElementById('manualPriceDetail').textContent=totalCombos?`${totalCombos} combinação(ões) · ${nums.length}+${stars.length}`:'Selecione números';
-  document.getElementById('manualComb').textContent=totalCombos.toLocaleString('pt-PT');
-  document.getElementById('manualSum').textContent=nums.reduce((a,b)=>a+b,0);
-  const preview=document.getElementById('manualCombosPreview');
-  if(totalCombos>0&&totalCombos<=100){
-    const combosN=getCombinations(nums,regra.nums.sorteados);
-    const combosS=getCombinations(stars,regra.stars.sorteados);
-    let amostra=[];
-    for(let i=0;i<Math.min(combosN.length,20);i++){
-      const cn=combosN[i]||combosN[0]; const cs=combosS.length?combosS[i%combosS.length]:[];
-      amostra.push(`[${cn.join(', ')}] ${cs.length?'| '+cs.join(', '):''}`);
-    }
-    preview.style.display='block'; preview.innerHTML=amostra.map(s=>`<span class="combo-chip">${s}</span>`).join('');
-  } else preview.style.display='none';
-  document.getElementById('manualEscalaoTable').innerHTML=construirTabelaEscaloes(regra,nums.length,stars.length);
-}
-function limparManual(){ manualSelectedNums.clear(); manualSelectedStars.clear(); renderManualGrids(); addLog('Aposta manual limpa.','system'); }
-async function guardarManual(){
-  const regra=REGRAS[currentGame];
-  const nums=Array.from(manualSelectedNums).sort((a,b)=>a-b), stars=Array.from(manualSelectedStars).sort((a,b)=>a-b);
-  if(nums.length<regra.nums.minAposta||stars.length<regra.stars.minAposta){ addLog('Seleção inválida.','warn'); return; }
-  const entry={game:regra.nome,nums,stars,metodo:'Manual',data:new Date().toLocaleDateString('pt-PT')+' '+new Date().toLocaleTimeString('pt-PT')};
-  const ok=await guardarApostaPersistente(entry);
-  if(ok){ addLog('Aposta manual guardada.','success'); toast('Aposta guardada!'); renderApostasGuardadas(); }
-  else{ addLog('Falha ao guardar aposta manual.','warn'); toast('Erro ao guardar.',true); }
-}
-
-/* ============================================================
-   TABS
-   ============================================================ */
-function switchTab(tabId){
-  document.querySelectorAll('.tabpanel').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
-  const panel=document.getElementById('tab-'+tabId); if(panel) panel.classList.add('active');
-  const tabBtn=document.querySelector(`.tab[data-tab="${tabId}"]`); if(tabBtn) tabBtn.classList.add('active');
-  if(tabId==='historico'){ renderHistoricoTab(); sincronizarOficial(true).catch(()=>{}); }
-  if(tabId==='multiplo') updateMultiUI();
-  if(tabId==='manual') renderManualGrids();
-}
-
-/* ============================================================
-   INIT
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', async function(){
- try{
-  historicoUser = await carregarHistoricoUser();
-  renderFilterGrid();
-  renderManualGrids();
-
-  document.getElementById('gamePills').addEventListener('click', function(e){
-    const btn=e.target.closest('.game-pill'); if(!btn) return;
-    currentGame=btn.dataset.game; updateUI();
-  });
-
-  document.getElementById('genMethod').addEventListener('change', function(){ document.getElementById('methodInfo').textContent=METHOD_INFO[this.value]||''; });
-  document.getElementById('genMethod').dispatchEvent(new Event('change'));
-  document.getElementById('confLevel').addEventListener('change', ()=>{ renderPrizeTable(REGRAS[currentGame]); });
-
-  document.getElementById('runBtn').addEventListener('click', async function(){
-    const regra=REGRAS[currentGame];
-    const nQty=parseInt(document.getElementById('nQty').value,10);
-    const sQty=parseInt(document.getElementById('sQty').value,10);
-    const method=document.getElementById('genMethod').value;
-    this.disabled=true; setProgress(1);
-    addLog(`A gerar com método "${method}"...`,'math');
-    try{
-      const resultado=await gerarCombinacaoAsync(regra,nQty,sQty,method,currentGame,ultimaApostaGerador,(f,m)=>setProgress((f/m)*100));
-      ultimaApostaGerador=resultado.nums;
-      exibirResultado(resultado.nums,resultado.stars,regra,resultado,nQty,sQty,method);
-      if(resultado.esgotado) addLog('Aviso: esgotadas as tentativas. Última combinação mostrada.','warn');
-      else addLog(`Combinação válida encontrada após ${resultado.tentativas.toLocaleString('pt-PT')} iterações.`,'success');
-      setProgress(null);
-    }catch(err){ addLog('Erro: '+err.message,'warn'); setProgress(null); }
-    this.disabled=false;
-  });
-
-  document.getElementById('btnFiltersAll').addEventListener('click', ()=>{ document.querySelectorAll('#filterGrid input[type=checkbox]').forEach(el=>el.checked=true); });
-  document.getElementById('btnFiltersNone').addEventListener('click', ()=>{ document.querySelectorAll('#filterGrid input[type=checkbox]').forEach(el=>el.checked=false); });
-
-  document.getElementById('btnCopy').addEventListener('click', async function(){
-    const panel=document.getElementById('resultPanel');
-    const texto=`Números: ${panel.dataset.nums||''} | Estrelas: ${panel.dataset.stars||''}`;
-    try{ await copiarTexto(texto); toast('Copiado!'); addLog('Combinação copiada.','system'); }catch(e){ toast('Falha ao copiar.',true); }
-  });
-  document.getElementById('btnSave').addEventListener('click', async function(){
-    const panel=document.getElementById('resultPanel');
-    const nums=(panel.dataset.nums||'').split(',').map(Number).filter(n=>!isNaN(n));
-    const stars=(panel.dataset.stars||'').split(',').map(Number).filter(n=>!isNaN(n));
-    if(!nums.length){ toast('Nada para guardar.',true); return; }
-    const entry={game:panel.dataset.game||currentGame,nums,stars,metodo:panel.dataset.method||'Gerador',data:new Date().toLocaleDateString('pt-PT')+' '+new Date().toLocaleTimeString('pt-PT')};
-    const ok=await guardarApostaPersistente(entry);
-    if(ok){ toast('Guardado!'); addLog('Combinação guardada.','success'); renderApostasGuardadas(); } else toast('Erro ao guardar.',true);
-  });
-  document.getElementById('btnRepeat').addEventListener('click', function(){ document.getElementById('runBtn').click(); });
-
-  document.getElementById('btnClearHistory').addEventListener('click', async function(){
-    if(confirm('Tem a certeza que quer apagar todas as apostas guardadas?')){
-      await limparApostasPersistentes(); renderApostasGuardadas(); addLog('Histórico de apostas apagado.','system'); toast('Histórico apagado.');
-    }
-  });
-
-  document.getElementById('btnMC10k').addEventListener('click', ()=>executarMonteCarlo(10000));
-  document.getElementById('btnMC100k').addEventListener('click', ()=>executarMonteCarlo(100000));
-  document.getElementById('btnMC500k').addEventListener('click', ()=>executarMonteCarlo(500000));
-  document.getElementById('btnMC1M').addEventListener('click', ()=>executarMonteCarlo(1000000));
-
-  document.getElementById('multiRunBtn').addEventListener('click', gerarMultiplos);
-  document.getElementById('multiN').addEventListener('change', updateMultiPrice);
-  document.getElementById('multiS').addEventListener('change', updateMultiPrice);
-  document.getElementById('btnSaveAllMulti').addEventListener('click', async function(){
-    const tickets=document.querySelectorAll('#multiTicketsList .ticket-card');
-    if(!tickets.length){ toast('Nenhum bilhete para guardar.',true); return; }
-    let saved=0;
-    for(const card of tickets){
-      const nums=Array.from(card.querySelectorAll('.ball.n')).map(el=>parseInt(el.textContent,10));
-      const stars=Array.from(card.querySelectorAll('.ball.s')).map(el=>parseInt(el.textContent,10));
-      if(nums.length){
-        const entry={game:REGRAS[currentGame].nome,nums,stars,metodo:'Múltiplos',data:new Date().toLocaleDateString('pt-PT')+' '+new Date().toLocaleTimeString('pt-PT')};
-        if(await guardarApostaPersistente(entry)) saved++;
-      }
-    }
-    if(saved){ toast(`${saved} bilhetes guardados.`); renderApostasGuardadas(); } else toast('Erro ao guardar.',true);
-  });
-  document.getElementById('btnExportMulti').addEventListener('click', function(){
-    const tickets=document.querySelectorAll('#multiTicketsList .ticket-card');
-    if(!tickets.length){ toast('Nenhum bilhete para exportar.',true); return; }
-    let csv='Bilhete,Números,Estrelas\n';
-    tickets.forEach((card,idx)=>{
-      const nums=Array.from(card.querySelectorAll('.ball.n')).map(el=>el.textContent).join(' ');
-      const stars=Array.from(card.querySelectorAll('.ball.s')).map(el=>el.textContent).join(' ');
-      csv+=`${idx+1},"${nums}","${stars}"\n`;
-    });
-    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
-    const link=document.createElement('a'); link.href=URL.createObjectURL(blob);
-    link.download=`bilhetes_${currentGame}_${new Date().toISOString().slice(0,10)}.csv`; link.click();
-    toast('CSV exportado!');
-  });
-
-  document.getElementById('btnSaveManual').addEventListener('click', guardarManual);
-  document.getElementById('btnClearManual').addEventListener('click', limparManual);
-
-  document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click', ()=>switchTab(btn.dataset.tab)));
-
-  document.getElementById('btnSync').addEventListener('click', ()=>sincronizarOficial(false));
-  document.getElementById('btnSync2').addEventListener('click', ()=>sincronizarOficial(false));
-  document.getElementById('btnGoHistorico').addEventListener('click', ()=>{ switchTab('historico'); document.getElementById('qfPanel').scrollIntoView({behavior:'smooth',block:'start'}); });
-  document.getElementById('qfDate').addEventListener('input', updateQfValidation);
-  document.getElementById('qfNums').addEventListener('input', updateQfValidation);
-  document.getElementById('qfExtra').addEventListener('input', updateQfValidation);
-  document.getElementById('btnAddOficial').addEventListener('click', adicionarSorteioManual);
-  document.getElementById('btnCheck').addEventListener('click', verificarAposta);
-
-  function atualizarRelogio(){
-    const agora=new Date();
-    document.getElementById('clock').textContent=agora.toLocaleTimeString('pt-PT');
-    const diaSemana=agora.toLocaleDateString('pt-PT',{weekday:'long'});
-    const dataFmt=agora.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'});
-    document.getElementById('clockDay').textContent=`${diaSemana} · ${dataFmt}`;
-  }
-  atualizarRelogio(); setInterval(atualizarRelogio,1000);
-
-  await renderApostasGuardadas();
-  updateUI();
-  // Tenta sincronizar automaticamente ao carregar, com retry em caso de falha
-  try{ if(navigator.onLine) sincronizarOficial(true).catch(()=>{}); }catch(e){}
- }catch(err){
-   console.error('Erro crítico na inicialização:', err);
-   try{ addLog('Erro crítico na inicialização: '+err.message,'warn'); }catch(e){}
-   try{ updateUI(); }catch(e){}
- }
-});
-</script>
-</body>
-</html>
+    updateFirstPrize(re
