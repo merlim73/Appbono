@@ -3,549 +3,542 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>JONHY EL IGUANA · 1º PRÉMIO</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>Registo Pessoal — Observatório Combinatório</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ===== VARIÁVEIS ===== */
-:root {
-  --bg-deep: #010205;
-  --glass: rgba(8, 12, 22, 0.88);
-  --glass-heavy: rgba(5, 8, 16, 0.94);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --text-primary: #f0f4ff;
-  --text-dim: #8a9bb5;
-
-  --color-red: #FF1A1A;
-  --color-green-flag: #046A38;
-  --color-gold: #FFD700;
-  --color-gold-toasted: #CBA135;
-  --color-green: #00FF41;
-  --color-blue: #0066FF;
-  --color-white: #FFFFFF;
-  --color-amber: #CC7722;
-  --color-pink: #FF69B4;
-  --color-pink-rgb: 255, 105, 180;
-
-  --game-color: #0066FF;
-  --game-color-rgb: 0, 102, 255;
-
-  --shadow-5d: 0 20px 50px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.08);
-  --shadow-card: 0 15px 40px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.06);
+:root{
+  --void:#0a0d14; --void-2:#0d111a;
+  --panel:#111621; --panel-2:#161c2a;
+  --glass:rgba(17,22,33,0.72);
+  --line:rgba(200,210,230,0.09); --line-strong:rgba(200,210,230,0.16);
+  --paper:#EDEAE1; --paper-dim:#9AA3B5; --paper-faint:#5C6478;
+  --brass:#C8963E; --brass-bright:#EFC272; --brass-rgb:200,150,62;
+  --ice:#6FD6E8; --ice-rgb:111,214,232;
+  --ok:#4FCB8E; --ok-rgb:79,203,142;
+  --warn:#E4523F; --warn-rgb:228,82,63;
+  --game:#6FD6E8; --game-rgb:111,214,232;
+  --shadow-panel:0 18px 40px rgba(0,0,0,0.55), 0 1px 0 rgba(255,255,255,0.04) inset;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-body:'Inter',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
 }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--void);color:var(--paper);font-family:var(--font-body);min-height:100vh;line-height:1.55;}
+.wrap{max-width:900px;margin:0 auto;padding:14px;}
+@keyframes rise{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+.hero{background:linear-gradient(180deg, var(--panel-2), var(--panel));border:1px solid var(--line-strong);border-radius:16px;padding:16px 14px 14px;text-align:center;margin-bottom:12px;box-shadow:var(--shadow-panel);position:relative;overflow:hidden;}
+.hero .memorial{font-family:var(--font-display);font-weight:700;font-size:0.68rem;letter-spacing:1px;color:var(--brass-bright);text-transform:uppercase;opacity:0.85;}
+.pets-row{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin-top:10px;}
+.pet-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.pets-amp{font-family:var(--font-display);font-size:1.2rem;color:var(--paper-faint);opacity:.6;align-self:center;}
+.cat-icon{width:64px;height:64px;filter:drop-shadow(0 0 6px rgba(111,214,232,0.35)) drop-shadow(0 4px 10px rgba(0,0,0,0.6));animation:catFloat5D 4.5s ease-in-out infinite;}
+.pet-wrap:nth-child(3) .cat-icon{filter:drop-shadow(0 0 6px rgba(200,150,62,0.4)) drop-shadow(0 4px 10px rgba(0,0,0,0.6));animation-delay:.6s;}
+@keyframes catFloat5D{0%,100%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-4px) rotate(-2deg);}}
+.pet-name{font-family:var(--font-display);font-weight:700;font-size:.78rem;letter-spacing:1.4px;color:var(--brass-bright);text-transform:uppercase;text-shadow:0 0 10px rgba(var(--brass-rgb),.5);}
+.clock-wrap{margin-top:10px;}
+.clock-day{font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--paper);text-transform:capitalize;}
+.clock-time{font-family:var(--font-mono);font-size:16px;color:var(--ice);font-weight:600;margin-top:2px;text-shadow:0 0 8px rgba(var(--ice-rgb),.3);}
 
-body {
-  color: var(--text-primary);
-  font-family: 'Rajdhani', sans-serif;
-  min-height: 100vh;
-  line-height: 1.55;
-  background-image: url('https://qwen-webui-prod.oss-accelerate.aliyuncs.com/9621fd80-0b8d-4768-a985-31c483168878/9621fd80-0b8d-4768-a985-31c483168878_0.png?x-oss-process=image/resize,w_1920,m_lfit');
-  background-size: cover;
-  background-position: center top;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  position: relative;
-}
+.panel{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;backdrop-filter:blur(14px);box-shadow:var(--shadow-panel);}
+.panel h2{font-family:var(--font-display);font-size:0.75rem;font-weight:600;color:var(--game);text-transform:uppercase;letter-spacing:1.4px;border-left:3px solid var(--game);padding-left:10px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.game-pills{display:flex;gap:8px;flex-wrap:wrap;}
+.game-pill{flex:1;min-width:100px;padding:12px 8px;border-radius:12px;border:1px solid var(--line-strong);font-family:var(--font-display);font-weight:600;font-size:0.68rem;letter-spacing:0.5px;cursor:pointer;background:rgba(0,0,0,0.25);color:var(--paper-dim);transition:all .2s;}
+.game-pill[data-game="euromilhoes"].active{background:linear-gradient(135deg,rgba(228,82,63,.22),rgba(228,82,63,.06));border-color:#E4523F;color:#fff;}
+.game-pill[data-game="totoloto"].active{background:linear-gradient(135deg,rgba(200,150,62,.24),rgba(200,150,62,.06));border-color:var(--brass);color:#fff;}
+.game-pill[data-game="eurodreams"].active{background:linear-gradient(135deg,rgba(79,203,142,.22),rgba(79,203,142,.06));border-color:var(--ok);color:#fff;}
+.game-pill:not(.active):hover{color:var(--paper);border-color:var(--paper-faint);}
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background:
-    radial-gradient(ellipse at center, rgba(1, 2, 5, 0.72) 0%, rgba(1, 2, 5, 0.93) 100%),
-    linear-gradient(180deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.8) 100%);
-  pointer-events: none;
-  z-index: 0;
-}
+/* último sorteio oficial */
+.official-card{border-color:rgba(var(--brass-rgb),.4);}
+.official-status{font-size:0.68rem;color:var(--paper-dim);margin-bottom:10px;line-height:1.5;}
+.official-balls{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px;}
+.official-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.quick-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.quick-form .full{grid-column:1/-1;}
+input[type=text],input[type=date],select{width:100%;background:rgba(0,0,0,0.45);border:1px solid var(--line-strong);color:var(--paper);padding:11px 12px;font-size:0.88rem;border-radius:10px;outline:none;font-family:var(--font-mono);font-weight:500;}
+select{appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='%236FD6E8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:5px;display:block;}
 
-.container { max-width: 880px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
+.dial-card{background:linear-gradient(180deg,rgba(17,22,33,.9),rgba(10,13,20,.96));border:1px solid rgba(var(--brass-rgb),.35);border-radius:20px;padding:20px 16px;text-align:center;margin-bottom:12px;box-shadow:0 0 40px rgba(var(--brass-rgb),.08),var(--shadow-panel);}
+.dial-label{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim);text-transform:uppercase;letter-spacing:2.5px;}
+.dial-odds{font-family:var(--font-display);font-size:1.7rem;font-weight:700;color:var(--brass-bright);margin:8px 0 4px;}
+.dial-jackpot{font-size:0.7rem;color:var(--paper-dim);max-width:480px;margin:0 auto;}
 
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes pulseBar { 0%,100% { opacity:.55 } 50% { opacity:1 } }
+.tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;}
+.tab{flex:1;min-width:80px;padding:11px 6px;background:rgba(17,22,33,.6);border:1px solid var(--line);border-radius:12px;color:var(--paper-dim);font-family:var(--font-display);font-weight:600;font-size:0.64rem;text-transform:uppercase;cursor:pointer;text-align:center;}
+.tab.active{color:var(--void);background:linear-gradient(135deg,var(--ice),var(--brass-bright));border-color:transparent;}
+.tabpanel{display:none;animation:rise .3s ease;}
+.tabpanel.active{display:block;}
 
-/* ===== BANDEIRAS ===== */
-@keyframes flagWave5D {
-  0%   { transform: perspective(400px) rotateX(0deg) rotateY(0deg) skewX(0deg) scaleY(1) translateZ(0px); }
-  20%  { transform: perspective(400px) rotateX(6deg) rotateY(-4deg) skewX(-5deg) scaleY(0.97) translateZ(6px); }
-  40%  { transform: perspective(400px) rotateX(-4deg) rotateY(3deg) skewX(4deg) scaleY(1.03) translateZ(-4px); }
-  60%  { transform: perspective(400px) rotateX(5deg) rotateY(-2deg) skewX(-3deg) scaleY(0.98) translateZ(5px); }
-  80%  { transform: perspective(400px) rotateX(-3deg) rotateY(4deg) skewX(5deg) scaleY(1.02) translateZ(-3px); }
-  100% { transform: perspective(400px) rotateX(0deg) rotateY(0deg) skewX(0deg) scaleY(1) translateZ(0px); }
-}
-@keyframes flagShine { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+.field-label{font-family:var(--font-mono);font-size:0.6rem;color:var(--paper-dim);text-transform:uppercase;letter-spacing:1.4px;margin-bottom:6px;display:block;}
+.field-label .val{font-family:var(--font-display);font-size:1.1rem;color:var(--ice);margin-left:4px;}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.row>*{flex:1;min-width:120px;}
 
-.flag-5d {
-  position: absolute;
-  left: 0; width: 100%; height: 11px;
-  display: flex;
-  transform-style: preserve-3d;
-  perspective: 400px;
-  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
-}
-.flag-5d.top { top: 0; }
-.flag-5d.bottom { bottom: 0; }
-.flag-5d .stripe {
-  height: 100%;
-  animation: flagWave5D 2.6s ease-in-out infinite, flagShine 4s ease-in-out infinite;
-  transform-origin: center top;
-  background-size: 220% 100%;
-}
-.flag-5d .stripe:nth-child(1) { animation-delay: 0s; }
-.flag-5d .stripe:nth-child(2) { animation-delay: 0.3s; }
-.flag-5d .stripe:nth-child(3) { animation-delay: 0.15s; }
+.readout{margin-top:10px;padding:12px 14px;background:linear-gradient(135deg,rgba(var(--brass-rgb),.1),rgba(var(--brass-rgb),.02));border:1px solid rgba(var(--brass-rgb),.4);border-radius:12px;text-align:center;}
+.readout .rl{font-family:var(--font-mono);font-size:0.56rem;color:var(--paper-dim);text-transform:uppercase;letter-spacing:2px;}
+.readout .rv{font-family:var(--font-display);font-size:1.3rem;color:var(--brass-bright);font-weight:700;}
+.readout .rd{font-family:var(--font-mono);font-size:0.6rem;color:var(--paper-dim);margin-top:2px;}
 
-/* PT: 2/5 verde + 3/5 vermelho */
-.flag-pt .stripe:nth-child(1) { flex: 2; background: linear-gradient(120deg, var(--color-green-flag), #024d29, var(--color-green-flag)); box-shadow: 0 0 18px rgba(4,106,56,0.6); }
-.flag-pt .stripe:nth-child(2) { flex: 3; background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); box-shadow: 0 0 18px rgba(255,26,26,0.5); }
-.flag-pt-emblem {
-  position: absolute; left: 40%; top: 50%; width: 15px; height: 15px; border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle at 35% 30%, var(--color-gold), var(--color-gold-toasted) 70%);
-  box-shadow: 0 0 10px rgba(255,215,0,0.85), 0 0 3px rgba(0,0,0,0.6);
-  animation: goldShimmer 3s ease-in-out infinite, armillarySway 4.5s ease-in-out infinite;
-  z-index: 2;
-}
+.info-strip{font-size:0.66rem;color:var(--paper-dim);margin-top:10px;line-height:1.5;padding:9px 11px;background:rgba(0,0,0,.25);border-radius:8px;border-left:2px solid var(--ice);}
+.filters-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.mini-btn{font-family:var(--font-mono);font-size:0.6rem;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--paper-dim);background:rgba(0,0,0,.3);border:1px solid var(--line-strong);border-radius:8px;padding:7px 11px;cursor:pointer;}
+.mini-btn:hover{color:var(--paper);border-color:var(--ice);}
+.filter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+@media(max-width:520px){.filter-grid{grid-template-columns:1fr;}}
+.filter-chip{display:flex;gap:8px;padding:9px 10px;background:rgba(0,0,0,.28);border-radius:10px;border:1px solid var(--line);cursor:pointer;}
+.filter-chip:has(input:checked){border-color:rgba(var(--ice-rgb),.4);background:rgba(var(--ice-rgb),.05);}
+.filter-chip input{width:16px;height:16px;accent-color:var(--ice);margin-top:1px;flex-shrink:0;}
+.filter-chip .fc-text{font-size:.7rem;line-height:1.35;}
+.filter-chip .fc-title{color:var(--paper);font-weight:500;}
+.filter-chip .fc-sub{color:var(--paper-faint);font-size:.62rem;}
 
-/* FR: azul, branco, vermelho */
-.flag-fr .stripe:nth-child(1) { flex:1; background: linear-gradient(120deg, var(--color-blue), #003b99, var(--color-blue)); box-shadow: 0 0 18px rgba(0,102,255,0.5); }
-.flag-fr .stripe:nth-child(2) { flex:1; background: linear-gradient(120deg, var(--color-white), #cfd8e8, var(--color-white)); box-shadow: 0 0 18px rgba(255,255,255,0.4); }
-.flag-fr .stripe:nth-child(3) { flex:1; background: linear-gradient(120deg, var(--color-red), #a10000, var(--color-red)); box-shadow: 0 0 18px rgba(255,26,26,0.5); }
+.btn{width:100%;padding:16px;background:linear-gradient(135deg,rgba(var(--ice-rgb),.22),rgba(var(--brass-rgb),.14));border:1px solid rgba(var(--ice-rgb),.5);color:var(--paper);font-family:var(--font-display);font-size:.88rem;font-weight:600;text-transform:uppercase;letter-spacing:1.6px;border-radius:13px;cursor:pointer;margin:12px 0;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn-secondary{flex:1;min-width:110px;padding:10px;background:rgba(255,255,255,.03);border:1px solid var(--line-strong);color:var(--paper);font-family:var(--font-display);font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:1.2px;border-radius:10px;cursor:pointer;}
+.btn-secondary:hover{border-color:var(--ice);color:var(--ice);}
+.btn-secondary:disabled{opacity:.4;cursor:not-allowed;}
 
-@keyframes armillarySway {
-  0%,100% { transform: rotate(-4deg) translateY(0px); }
-  25%     { transform: rotate(2deg) translateY(-4px); }
-  50%     { transform: rotate(5deg) translateY(0px); }
-  75%     { transform: rotate(-2deg) translateY(4px); }
-}
-@keyframes goldShimmer {
-  0%,100% { filter: brightness(1) drop-shadow(0 0 10px rgba(255,215,0,0.45)); }
-  50%     { filter: brightness(1.4) drop-shadow(0 0 24px rgba(255,215,0,0.9)); }
-}
+.progress-wrap{height:5px;width:100%;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;margin:6px 0 0;display:none;}
+.progress-wrap.active{display:block;}
+.progress-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--ice),var(--brass-bright));transition:width .15s ease-out;}
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
-}
+.terminal{background:rgba(0,0,0,.55);border:1px solid var(--line);border-radius:11px;height:110px;overflow-y:auto;padding:10px 12px;font-size:.66rem;font-family:var(--font-mono);line-height:1.6;}
+.log-line{margin:2px 0;padding-left:8px;border-left:2px solid transparent;}
+.log-line.system{color:var(--ice);border-left-color:var(--ice);}
+.log-line.math{color:#9FB4E8;border-left-color:#9FB4E8;}
+.log-line.success{color:var(--brass-bright);border-left-color:var(--brass-bright);}
+.log-line.warn{color:var(--warn);border-left-color:var(--warn);}
 
-/* ===== LAYOUT ===== */
-.header {
-  background: var(--glass-heavy);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 110px 20px 26px;
-  text-align: center;
-  margin-bottom: 18px;
-  box-shadow: var(--shadow-5d);
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(25px) saturate(1.3);
-  -webkit-backdrop-filter: blur(25px) saturate(1.3);
-}
-.header-emblem-wrap { position: absolute; top: 26px; left: 50%; transform: translateX(-50%); width: 72px; height: 72px; }
-.header-emblem { width: 72px; height: 72px; animation: armillarySway 4.5s ease-in-out infinite, goldShimmer 3.2s ease-in-out infinite; }
+.result-panel{display:none;border:1px solid rgba(var(--game-rgb),.4);background:linear-gradient(180deg,rgba(17,22,33,.92),rgba(10,13,20,.97));border-radius:20px;padding:22px 16px;margin-top:14px;text-align:center;box-shadow:0 0 60px rgba(var(--game-rgb),.1),var(--shadow-panel);animation:rise .4s ease;}
+.result-panel h2{font-family:var(--font-display);color:var(--game);letter-spacing:1.4px;margin-bottom:12px;font-size:.85rem;text-transform:uppercase;}
+.balls{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:14px 0;}
+.ball{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:1.2rem;font-weight:700;background:radial-gradient(circle at 32% 28%,rgba(30,36,50,.98),rgba(6,8,13,.99));box-shadow:0 6px 16px rgba(0,0,0,.7),inset 0 1px 3px rgba(255,255,255,.12);}
+.ball.n{border:2.5px solid var(--ice);color:var(--ice);}
+.ball.s{border:2.5px solid var(--brass-bright);color:var(--brass-bright);}
+.ball.small{width:36px;height:36px;font-size:.9rem;border-width:2px;}
+.result-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:14px;}
+.stat-box{background:rgba(0,0,0,.32);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:left;}
+.stat-box .label{font-family:var(--font-mono);font-size:.56rem;color:var(--paper-dim);text-transform:uppercase;letter-spacing:.6px;}
+.stat-box .value{font-family:var(--font-display);font-size:.95rem;color:var(--ice);margin-top:3px;}
+.stat-box .value.ok{color:var(--ok);}
+.stat-box .value.warn{color:var(--warn);}
 
-.header h1 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.9rem;
-  letter-spacing: 5px;
-  color: var(--text-primary);
-  text-shadow: 0 0 25px rgba(255,255,255,0.3), 0 2px 10px rgba(0,0,0,0.8);
-  font-weight: 900;
-}
-.header .sub {
-  font-size: 0.75rem;
-  color: var(--color-gold);
-  margin-top: 6px;
-  letter-spacing: 3px;
-  font-weight: 600;
-  text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-.datetime-header {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 24px;
-  color: var(--color-red);
-  font-weight: 900;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid var(--glass-border);
-  text-shadow: 0 0 20px rgba(255, 26, 26, 0.6), 0 2px 8px rgba(0,0,0,0.9);
-}
+.prize-table-scroll{width:100%;overflow-x:auto;}
+.prize-table{width:100%;border-collapse:collapse;margin-top:10px;text-align:center;}
+.prize-table th{color:var(--game);font-family:var(--font-mono);font-size:9px;padding:8px 5px;border-bottom:1px solid rgba(var(--game-rgb),.4);text-transform:uppercase;white-space:nowrap;}
+.prize-table td{font-family:var(--font-mono);font-size:12px;font-weight:500;padding:9px 5px;border-bottom:1px solid var(--line);white-space:nowrap;}
+.prize-table tr.first-tier td{background:rgba(var(--brass-rgb),.06);}
+.prize-table tr.target-tier td{background:rgba(var(--ok-rgb),.07);}
+.prize-table .tier-name{color:var(--paper);text-align:left;font-size:11px;white-space:normal;font-family:var(--font-body);}
+.prize-table tr.first-tier .tier-name{color:var(--brass-bright);}
+.prize-table .tier-value{color:var(--brass-bright);font-weight:600;}
+.prize-legend{font-size:.6rem;color:var(--paper-faint);margin-top:8px;line-height:1.5;}
+.details{margin-top:10px;}
+.details summary{list-style:none;cursor:pointer;font-family:var(--font-display);font-size:.64rem;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--game);padding:9px 12px;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:10px;}
+.details summary::-webkit-details-marker{display:none;}
+.details summary::before{content:'▸ ';}
+.details[open] summary::before{content:'▾ ';}
 
-.card {
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  border-radius: 18px;
-  padding: 18px;
-  margin-bottom: 16px;
-  backdrop-filter: blur(20px) saturate(1.2);
-  -webkit-backdrop-filter: blur(20px) saturate(1.2);
-  box-shadow: var(--shadow-card);
-}
+.mc-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+@media(max-width:480px){.mc-buttons{grid-template-columns:1fr 1fr;}}
+.mc-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.7rem;}
+.mc-table th{color:var(--game);font-family:var(--font-mono);font-size:9px;padding:6px 4px;border-bottom:1px solid rgba(var(--game-rgb),.4);text-transform:uppercase;}
+.mc-table td{padding:7px 4px;border-bottom:1px solid var(--line);font-family:var(--font-mono);text-align:center;}
+.mc-table td:first-child{text-align:left;color:var(--paper);font-family:var(--font-body);}
+.chi-box{margin-top:10px;padding:11px 13px;border-radius:12px;border:1px solid var(--line-strong);background:rgba(0,0,0,.28);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.chi-box .cl{font-family:var(--font-mono);font-size:.6rem;color:var(--paper-dim);text-transform:uppercase;letter-spacing:1px;}
+.chi-box .cv{font-family:var(--font-display);font-size:1.1rem;color:var(--ice);}
+.mc-chart-wrap{margin-top:12px;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:10px;padding:10px;}
 
-.card h2 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 0.85rem;
-  color: var(--game-color);
-  text-transform: uppercase;
-  border-left: 4px solid var(--game-color);
-  padding-left: 12px;
-  margin-bottom: 14px;
-  letter-spacing: 2px;
-  transition: color 0.5s, border-color 0.5s;
-  text-shadow: 0 0 12px rgba(var(--game-color-rgb), 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
+.ticket-selector{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:10px;}
+.ticket-btn{min-width:38px;padding:9px;background:rgba(0,0,0,.4);border:1px solid var(--line-strong);color:var(--paper);font-family:var(--font-display);font-weight:600;border-radius:10px;cursor:pointer;text-align:center;}
+.ticket-btn.selected{border-color:var(--ice);color:var(--ice);background:rgba(var(--ice-rgb),.1);}
+.manual-grid{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:8px;}
+.pick-btn{width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid var(--line-strong);color:var(--paper-dim);font-family:var(--font-mono);font-weight:600;font-size:.64rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.pick-btn.sel-n{border-color:var(--ice);color:var(--ice);box-shadow:0 0 12px rgba(var(--ice-rgb),.4);}
+.pick-btn.sel-s{border-color:var(--brass-bright);color:var(--brass-bright);box-shadow:0 0 12px rgba(var(--brass-rgb),.4);}
+.validation-msg{margin-top:8px;font-size:.74rem;font-weight:600;text-align:center;font-family:var(--font-mono);}
+.validation-msg.ok{color:var(--ok);}
+.validation-msg.err{color:var(--warn);}
+.combos-preview{display:flex;flex-wrap:wrap;gap:6px;max-height:160px;overflow-y:auto;margin-top:8px;padding:8px;background:rgba(0,0,0,.25);border-radius:10px;}
+.combo-chip{font-family:var(--font-mono);font-size:.62rem;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:7px;padding:4px 7px;}
+.ticket-card{background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:13px;padding:10px;margin-top:8px;}
+.ticket-card .th{font-family:var(--font-display);font-size:.66rem;color:var(--brass-bright);margin-bottom:6px;}
+.ticket-card .balls{margin:4px 0;gap:6px;}
 
-select {
-  width: 100%;
-  background: rgba(0,0,0,0.6);
-  border: 2px solid var(--game-color);
-  color: var(--game-color);
-  padding: 14px;
-  font-size: 1.1rem;
-  border-radius: 12px;
-  outline: none;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  cursor: pointer;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%2300FF41' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 16px center;
-  transition: border-color 0.5s, color 0.5s;
-  text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.5);
-}
-select:disabled { opacity: 0.55; cursor: not-allowed; }
+.history-list{display:flex;flex-direction:column;gap:7px;margin-top:10px;max-height:280px;overflow-y:auto;}
+.history-item{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:10px;padding:9px 12px;}
+.history-nums{font-family:var(--font-mono);font-size:.76rem;color:var(--paper);}
+.history-nums .s{color:var(--brass-bright);}
+.history-meta{font-size:.56rem;color:var(--paper-faint);text-transform:uppercase;font-family:var(--font-mono);display:flex;align-items:center;gap:6px;}
+.src-badge{font-size:.52rem;padding:2px 6px;border-radius:6px;letter-spacing:.4px;}
+.src-badge.oficial{background:rgba(var(--ok-rgb),.15);color:var(--ok);}
+.src-badge.manual{background:rgba(var(--brass-rgb),.15);color:var(--brass-bright);}
+.src-badge.importado{background:rgba(var(--ice-rgb),.15);color:var(--ice);}
 
-.flex { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 14px; }
-.flex > * { flex: 1; min-width: 140px; }
+.freq-row{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.freq-ball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:10px;font-weight:700;flex:0 0 auto;border:1px solid var(--line);}
+.freq-bar-track{flex:1;height:8px;background:var(--panel);border-radius:999px;overflow:hidden;}
+.freq-bar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--brass),var(--brass-bright));}
+.freq-count{width:20px;text-align:right;font-size:10px;color:var(--paper-dim);flex:0 0 auto;}
 
-label.field-label { font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; display: block; font-weight: 700; }
-label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-family: 'Orbitron', sans-serif; transition: color 0.5s; text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.6); }
-
-.price-display {
-  margin-top: 10px; padding: 12px 16px;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.03));
-  border: 2px solid var(--color-gold); border-radius: 12px; text-align: center;
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.2), inset 0 0 20px rgba(255, 215, 0, 0.05);
-}
-.price-display .price-label { font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 3px; }
-.price-display .price-value { font-family: 'Orbitron', sans-serif; font-size: 1.6rem; color: var(--color-gold); font-weight: 900; text-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); }
-.price-display .price-combos { font-size: 0.68rem; color: var(--text-dim); margin-top: 3px; letter-spacing: 1px; }
-
-.filters-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 2px; }
-.mini-btn {
-  font-family: 'Rajdhani', sans-serif; font-size: 0.66rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-  color: var(--text-dim); background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 8px;
-  padding: 6px 12px; cursor: pointer; transition: all 0.25s;
-}
-.mini-btn:hover { color: var(--text-primary); border-color: var(--game-color); }
-
-.checkrow {
-  display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 0.78rem; color: var(--text-primary);
-  padding: 8px 12px; background: rgba(0,0,0,0.35); border-radius: 9px; border: 1px solid var(--glass-border);
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8); cursor: pointer;
-}
-.checkrow input { width: 18px; height: 18px; accent-color: var(--game-color); cursor: pointer; flex-shrink: 0; }
-
-/* ===== 1º PRÉMIO ===== */
-.firstprize-card {
-  background: linear-gradient(180deg, rgba(5,8,16,0.95), rgba(2,4,8,0.98));
-  border: 2px solid var(--color-gold); border-radius: 20px; padding: 20px; text-align: center; margin-bottom: 16px;
-  backdrop-filter: blur(15px); box-shadow: 0 0 40px rgba(255,215,0,0.15), var(--shadow-card);
-}
-.fp-label { font-size: 0.66rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 3px; }
-.fp-combo { font-family: 'Orbitron', sans-serif; font-size: 1.15rem; color: var(--text-primary); margin-top: 8px; font-weight: 700; }
-.fp-odds { font-family: 'Orbitron', sans-serif; font-size: 1.7rem; font-weight: 900; color: var(--color-gold); margin: 8px 0 4px; text-shadow: 0 0 25px rgba(255, 215, 0, 0.6), 0 2px 10px rgba(0,0,0,0.9); }
-.fp-jackpot { font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.5px; margin-top: 4px; line-height: 1.5; }
-
-/* ===== BOTÕES ===== */
-.btn {
-  width: 100%; padding: 20px;
-  background: linear-gradient(135deg, rgba(204, 119, 34, 0.3), rgba(204, 119, 34, 0.08));
-  border: 2px solid var(--color-amber); color: var(--color-amber);
-  font-family: 'Orbitron', sans-serif; font-size: 1.05rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px;
-  border-radius: 14px; cursor: pointer; margin: 16px 0; transition: all 0.3s;
-  text-shadow: 0 0 15px rgba(204, 119, 34, 0.7), 0 2px 8px rgba(0,0,0,0.9);
-  box-shadow: 0 0 30px rgba(204, 119, 34, 0.2);
-}
-.btn:hover:not(:disabled) { background: rgba(204, 119, 34, 0.4); box-shadow: 0 0 70px rgba(204, 119, 34, 0.4); transform: translateY(-2px); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
-.btn-secondary {
-  flex: 1; min-width: 130px; padding: 12px; background: rgba(255,255,255,0.05); border: 2px solid var(--glass-border);
-  color: var(--text-primary); font-family: 'Orbitron', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 2px; border-radius: 12px; cursor: pointer; transition: all 0.25s;
-}
-.btn-secondary:hover { border-color: var(--game-color); color: var(--game-color); }
-.btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
-
-.progress-wrap { height: 7px; width: 100%; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; margin: 8px 0 0; display: none; }
-.progress-wrap.active { display: block; }
-.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--game-color), var(--color-gold)); animation: pulseBar 1.2s ease-in-out infinite; transition: width 0.2s ease-out; }
-
-/* ===== TERMINAL ===== */
-.terminal {
-  background: rgba(0,0,0,0.75); border: 1px solid var(--glass-border); border-radius: 12px; height: 130px; overflow-y: auto;
-  padding: 14px; font-size: 0.72rem; color: var(--color-green); line-height: 1.6; font-family: 'Share Tech Mono', monospace;
-  backdrop-filter: blur(10px);
-}
-.log-line { margin: 3px 0; padding-left: 10px; border-left: 2px solid transparent; }
-.log-line.system { color: var(--color-green); border-left-color: var(--color-green); text-shadow: 0 0 8px rgba(0, 255, 65, 0.4); }
-.log-line.math { color: var(--color-blue); border-left-color: var(--color-blue); text-shadow: 0 0 8px rgba(0, 102, 255, 0.4); }
-.log-line.success { color: var(--color-gold); border-left-color: var(--color-gold); text-shadow: 0 0 8px rgba(255, 215, 0, 0.4); }
-.log-line.warn { color: var(--color-red); border-left-color: var(--color-red); text-shadow: 0 0 8px rgba(255, 26, 26, 0.4); }
-
-/* ===== RESULTADO ===== */
-.result-panel {
-  display: none; border: 2px solid var(--game-color);
-  background: linear-gradient(180deg, rgba(5,8,16,0.92), rgba(2,4,8,0.96));
-  border-radius: 22px; padding: 26px 18px; margin-top: 20px; text-align: center;
-  box-shadow: 0 0 100px rgba(var(--game-color-rgb), 0.35), var(--shadow-card);
-  animation: fadeIn 0.6s ease-out; transition: border-color 0.5s, box-shadow 0.5s; backdrop-filter: blur(20px);
-}
-.result-panel h2 { font-family: 'Orbitron', sans-serif; color: var(--game-color); letter-spacing: 3px; margin-bottom: 16px; font-size: 1.1rem; transition: color 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 0.7); }
-
-.balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin: 20px 0; }
-.ball.game-color {
-  width: 64px; height: 64px; border-radius: 50%; border: 4px solid var(--game-color); color: var(--game-color);
-  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 30px; font-weight: 900;
-  background: radial-gradient(circle at 30% 30%, rgba(20,30,50,0.98), rgba(2,4,8,0.99));
-  box-shadow: 0 0 50px rgba(var(--game-color-rgb), 0.7), 0 0 100px rgba(var(--game-color-rgb), 0.4), 0 8px 20px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
-  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--game-color-rgb), 1), 0 2px 6px rgba(0,0,0,0.9);
-}
-.ball.star-color {
-  width: 64px; height: 64px; border-radius: 50%; border: 4px solid var(--color-pink); color: var(--color-pink);
-  display: flex; align-items: center; justify-content: center; font-family: 'Orbitron', sans-serif; font-size: 30px; font-weight: 900;
-  background: radial-gradient(circle at 30% 30%, rgba(50,15,35,0.98), rgba(15,4,10,0.99));
-  box-shadow: 0 0 50px rgba(var(--color-pink-rgb), 0.7), 0 0 100px rgba(var(--color-pink-rgb), 0.4), 0 8px 20px rgba(0,0,0,0.9), inset 0 2px 8px rgba(255,255,255,0.2), inset 0 -4px 10px rgba(0,0,0,0.6);
-  transition: border-color 0.5s, color 0.5s, box-shadow 0.5s; text-shadow: 0 0 20px rgba(var(--color-pink-rgb), 1), 0 2px 6px rgba(0,0,0,0.9);
-}
-
-.result-actions { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top: 8px; }
-
-/* ===== TABELAS ===== */
-.simple-prize-table { width: 100%; border-collapse: collapse; margin-top: 16px; text-align: center; }
-.simple-prize-table-scroll { width: 100%; overflow-x: auto; }
-.simple-prize-table th {
-  color: var(--game-color); font-family: 'Orbitron', sans-serif; font-size: 11px; padding: 10px 7px; border-bottom: 2px solid var(--game-color);
-  text-transform: uppercase; transition: color 0.5s, border-color 0.5s; letter-spacing: 1px; text-shadow: 0 0 10px rgba(var(--game-color-rgb), 0.5); white-space: nowrap;
-}
-.simple-prize-table td { font-family: 'Orbitron', sans-serif; font-size: 14px; font-weight: 700; padding: 11px 7px; border-bottom: 1px solid rgba(255, 255, 255, 0.12); white-space: nowrap; }
-.simple-prize-table tr.first-tier td { background: rgba(255,215,0,0.08); }
-.simple-prize-table .tier-name { color: var(--text-primary); text-align: left; font-size: 12.5px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); white-space: normal; }
-.simple-prize-table tr.first-tier .tier-name { color: var(--color-gold); }
-.simple-prize-table .tier-odds { color: var(--color-white); text-shadow: 0 0 12px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0,0,0,0.9); font-size: 12.5px; }
-.simple-prize-table .tier-system { color: var(--color-green); text-shadow: 0 0 12px rgba(0,255,65,0.5), 0 2px 6px rgba(0,0,0,0.9); font-size: 11.5px; }
-.simple-prize-table .tier-value { color: var(--color-gold); text-shadow: 0 0 15px rgba(255, 215, 0, 0.7), 0 2px 8px rgba(0,0,0,0.9); font-size: 13.5px; font-weight: 900; }
-.prize-table-legend { font-size: 0.66rem; color: var(--text-dim); margin-top: 8px; line-height: 1.55; }
-
-.prize-details { margin-top: 10px; }
-.prize-details summary {
-  list-style: none; cursor: pointer; font-family: 'Orbitron', sans-serif; font-size: 0.68rem; font-weight: 700;
-  letter-spacing: 1px; text-transform: uppercase; color: var(--game-color); padding: 10px 14px;
-  background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 10px;
-  transition: border-color 0.3s, color 0.3s; text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.4);
-}
-.prize-details summary::-webkit-details-marker { display: none; }
-.prize-details summary::before { content: '▸ '; }
-.prize-details[open] summary::before { content: '▾ '; }
-.prize-details summary:hover { border-color: var(--game-color); }
-
-/* ===== STATS ===== */
-.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
-.stat-box { background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 10px; padding: 12px; text-align: left; backdrop-filter: blur(8px); }
-.stat-box .label { font-size: 0.63rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-.stat-box .value { font-family: 'Orbitron', sans-serif; font-size: 1.05rem; color: var(--game-color); margin-top: 4px; transition: color 0.5s; text-shadow: 0 0 8px rgba(var(--game-color-rgb), 0.5); }
-.stat-box .value.ok { color: var(--color-green); text-shadow: 0 0 10px rgba(0, 255, 65, 0.6); }
-.stat-box .value.warn { color: var(--color-red); text-shadow: 0 0 10px rgba(255, 26, 26, 0.6); }
-
-/* ===== HISTÓRICO ===== */
-.history-list { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; max-height: 240px; overflow-y: auto; }
-.history-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: rgba(0,0,0,0.35); border: 1px solid var(--glass-border); border-radius: 10px; padding: 9px 12px; }
-.history-nums { font-family: 'Share Tech Mono', monospace; font-size: 0.82rem; color: var(--text-primary); letter-spacing: 1px; }
-.history-nums .s { color: var(--color-pink); }
-.history-meta { font-size: 0.6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
-
-/* ===== MONTE CARLO ===== */
-.mc-table { width:100%; border-collapse: collapse; margin-top: 14px; font-size: 0.78rem; }
-.mc-table th { color: var(--game-color); font-family:'Orbitron',sans-serif; font-size: 10.5px; padding: 7px 6px; border-bottom: 2px solid var(--game-color); text-transform: uppercase; letter-spacing: 1px; }
-.mc-table td { padding: 9px 6px; border-bottom: 1px solid rgba(255,255,255,0.1); font-family: 'Share Tech Mono', monospace; text-align: center; }
-.mc-table td:first-child { text-align:left; color: var(--text-primary); }
-.mc-summary { font-size: 0.7rem; color: var(--text-dim); margin-top: 10px; line-height: 1.55; }
-.mc-summary b { color: var(--color-green); }
-
-/* ===== FOOTER ===== */
-.footer {
-  margin-top: 24px; padding: 24px 20px 20px; text-align: center; background: var(--glass-heavy); border-radius: 20px 20px 0 0;
-  position: relative; overflow: hidden; border: 1px solid var(--glass-border); backdrop-filter: blur(20px);
-}
-.footer-draw-info { font-family: 'Orbitron', sans-serif; font-weight: 900; line-height: 1.7; }
-.footer-draw-info .draw-date { font-size: 21px; color: var(--color-red); text-shadow: 0 0 20px rgba(255, 26, 26, 0.6), 0 2px 10px rgba(0,0,0,0.9); display: block; }
-.footer-draw-info .draw-price { font-size: 23px; color: var(--color-gold); text-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 2px 10px rgba(0,0,0,0.9); display: block; margin-top: 6px; }
-.footer-version { margin-top: 12px; font-size: 0.65rem; color: var(--text-dim); font-family: 'Orbitron', sans-serif; letter-spacing: 2px; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
-.footer-legal { margin-top: 12px; font-size: 0.64rem; color: var(--text-dim); line-height: 1.55; max-width: 620px; margin-left:auto; margin-right:auto; }
-
-.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: rgba(0,0,0,0.4); }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
-
-@media (max-width: 600px) {
-  .header { padding: 96px 16px 22px; }
-  .header h1 { font-size: 1.3rem; letter-spacing: 3px; }
-  .datetime-header { font-size: 18px; }
-  .ball.game-color, .ball.star-color { width: 52px; height: 52px; font-size: 24px; }
-  .stats-grid { grid-template-columns: 1fr; }
-  .simple-prize-table th, .simple-prize-table td { font-size: 10.5px; padding: 8px 4px; }
-  .footer-draw-info .draw-date { font-size: 16px; }
-  .footer-draw-info .draw-price { font-size: 18px; }
-  .price-display .price-value { font-size: 1.3rem; }
-  .fp-odds { font-size: 1.4rem; }
-  .container { padding: 10px; }
-}
+.footer{margin-top:20px;padding:22px 16px 18px;text-align:center;background:linear-gradient(180deg,var(--panel),var(--panel-2));border-radius:20px 20px 0 0;border:1px solid var(--line-strong);}
+.footer .draw-line{font-family:var(--font-display);font-weight:600;line-height:1.7;}
+.footer .draw-date{font-size:.98rem;color:var(--ice);display:block;}
+.footer .draw-price{font-size:1.1rem;color:var(--brass-bright);display:block;margin-top:3px;}
+.footer .version{margin-top:10px;font-size:.58rem;color:var(--paper-faint);font-family:var(--font-mono);letter-spacing:1.4px;}
+.footer .legal{margin-top:10px;font-size:.6rem;color:var(--paper-faint);line-height:1.55;max-width:600px;margin-left:auto;margin-right:auto;}
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:rgba(0,0,0,.3);}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:4px;}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;padding:10px 18px;border-radius:22px;font-weight:600;font-size:.8rem;max-width:90%;text-align:center;box-shadow:0 10px 26px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;background:#161C2A;border:1px solid rgba(111,214,232,.4);color:#EDEAE1;}
+.toast.show{opacity:1;}
+.toast.err{background:#E4523F;border:none;}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <div class="flag-5d flag-pt top" aria-hidden="true"><div class="stripe"></div><div class="stripe"></div><div class="flag-pt-emblem"></div></div>
-    <div class="header-emblem-wrap">
-      <svg class="header-emblem" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g stroke="#FFD700" stroke-width="2.4" fill="none">
-          <ellipse cx="50" cy="50" rx="36" ry="36"/>
-          <ellipse cx="50" cy="50" rx="36" ry="15" transform="rotate(20 50 50)"/>
-          <ellipse cx="50" cy="50" rx="36" ry="15" transform="rotate(-20 50 50)"/>
-          <ellipse cx="50" cy="50" rx="15" ry="36" transform="rotate(45 50 50)"/>
-        </g>
-        <circle cx="50" cy="50" r="4.5" fill="#FFD700"/>
-        <g fill="#CBA135">
-          <circle cx="50" cy="80" r="3.2"/>
-          <circle cx="41" cy="84" r="3.2"/>
-          <circle cx="59" cy="84" r="3.2"/>
-          <circle cx="45" cy="90" r="3.2"/>
-          <circle cx="55" cy="90" r="3.2"/>
-        </g>
-      </svg>
-    </div>
-    <h1>JONHY EL IGUANA</h1>
-    <div class="sub">Motor Combinatório · Dados Oficiais Santa Casa · 1º Prémio</div>
-    <div class="datetime-header" id="datetimeHeader">--</div>
-  </div>
+<div class="wrap">
 
-  <div class="card">
-    <h2><span>⚙ Jogo e Aposta</span></h2>
-    <label class="sr-only" for="gameType">Escolher jogo</label>
-    <select id="gameType">
-      <option value="euromilhoes">🇫🇷 EURO MILHÕES (5/50 + 2/12)</option>
-      <option value="totoloto">🇵🇹 TOTOLOTO (5/49 + 1/13)</option>
-      <option value="eurodreams">🇪🇺 EURO DREAMS (6/40 + 1/5)</option>
-    </select>
-
-    <div class="flex">
-      <div>
-        <label class="field-label" for="nQty">Números <span class="val" id="nQtyDisplay">5</span></label>
-        <select id="nQty"></select>
+  <div class="hero">
+    <div class="memorial">Eterno descanso aos dois amores da família Cardoso Campos</div>
+    <div class="pets-row">
+      <div class="pet-wrap">
+        <svg class="cat-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <ellipse cx="32" cy="50" rx="14" ry="9" fill="#12141a" stroke="#3a3f4d" stroke-width="0.6"/>
+          <path d="M20 50 Q17 40 21 36 Q24 44 24 50 Z" fill="#0c0e13" stroke="#3a3f4d" stroke-width="0.5"/>
+          <path d="M44 50 Q47 40 43 36 Q40 44 40 50 Z" fill="#0c0e13" stroke="#3a3f4d" stroke-width="0.5"/>
+          <circle cx="32" cy="30" r="14" fill="#15171f" stroke="#3a3f4d" stroke-width="0.6"/>
+          <path d="M20 22 L15 9 L26 18 Z" fill="#15171f" stroke="#3a3f4d" stroke-width="0.5"/>
+          <path d="M44 22 L49 9 L38 18 Z" fill="#15171f" stroke="#3a3f4d" stroke-width="0.5"/>
+          <path d="M21 24 L16 13 L25 20 Z" fill="#2a1030"/>
+          <path d="M43 24 L48 13 L39 20 Z" fill="#2a1030"/>
+          <ellipse cx="26" cy="30" rx="3.6" ry="4.4" fill="#FFD23F"/>
+          <ellipse cx="38" cy="30" rx="3.6" ry="4.4" fill="#FFD23F"/>
+          <ellipse cx="26" cy="30" rx="1.4" ry="3.8" fill="#12141a"/>
+          <ellipse cx="38" cy="30" rx="1.4" ry="3.8" fill="#12141a"/>
+          <path d="M30 35 L32 37 L34 35" stroke="#EFC272" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path d="M32 37 Q30 40 27 39.5 M32 37 Q34 40 37 39.5" stroke="#8a8f9c" stroke-width="1" fill="none" stroke-linecap="round"/>
+          <path d="M14 27 Q6 25 4 22 M14 30 Q5 30 3 30 M14 33 Q6 35 4 38" stroke="#6b7385" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.7"/>
+          <path d="M50 27 Q58 25 60 22 M50 30 Q59 30 61 30 M50 33 Q58 35 60 38" stroke="#6b7385" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.7"/>
+          <path d="M44 48 Q54 44 56 54 Q52 60 46 56" fill="none" stroke="#12141a" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+        <div class="pet-name">Zeus</div>
       </div>
-      <div>
-        <label class="field-label" for="sQty"><span id="starLabel">Estrelas</span> <span class="val" id="sQtyDisplay">2</span></label>
-        <select id="sQty"></select>
+      <div class="pets-amp">&amp;</div>
+      <div class="pet-wrap">
+        <svg class="cat-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <ellipse cx="32" cy="50" rx="15" ry="10" fill="#EDEAE1"/>
+          <path d="M22 44 Q19 52 22 58 Q28 60 28 52 Q27 46 22 44 Z" fill="#15171f"/>
+          <path d="M42 44 Q45 52 42 58 Q36 60 36 52 Q37 46 42 44 Z" fill="#15171f"/>
+          <path d="M19 52 Q17 42 21 38 Q23 46 23 52 Z" fill="#EDEAE1"/>
+          <path d="M45 52 Q47 42 43 38 Q41 46 41 52 Z" fill="#EDEAE1"/>
+          <path d="M20 44 Q32 36 46 45 Q44 52 32 53 Q20 52 20 44 Z" fill="#15171f"/>
+          <circle cx="32" cy="30" r="14" fill="#EDEAE1"/>
+          <path d="M18 20 Q18 34 30 40 Q34 30 30 20 Q24 15 18 20 Z" fill="#15171f"/>
+          <path d="M20 22 L15 9 L26 18 Z" fill="#15171f"/>
+          <path d="M44 22 L49 9 L38 18 Z" fill="#EDEAE1"/>
+          <path d="M21 24 L16 13 L25 20 Z" fill="#2a1030"/>
+          <path d="M43 24 L48 13 L39 20 Z" fill="#f0d8e0"/>
+          <ellipse cx="26" cy="30" rx="3.6" ry="4.4" fill="#FFD23F"/>
+          <ellipse cx="38" cy="30" rx="3.6" ry="4.4" fill="#FFD23F"/>
+          <ellipse cx="26" cy="30" rx="1.4" ry="3.8" fill="#12141a"/>
+          <ellipse cx="38" cy="30" rx="1.4" ry="3.8" fill="#12141a"/>
+          <path d="M30 35 L32 37 L34 35" stroke="#c98a4a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path d="M32 37 Q30 40 27 39.5 M32 37 Q34 40 37 39.5" stroke="#8a8f9c" stroke-width="1" fill="none" stroke-linecap="round"/>
+          <path d="M14 27 Q6 25 4 22 M14 30 Q5 30 3 30 M14 33 Q6 35 4 38" stroke="#9AA3B5" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M50 27 Q58 25 60 22 M50 30 Q59 30 61 30 M50 33 Q58 35 60 38" stroke="#9AA3B5" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <path d="M44 48 Q54 44 56 54 Q52 60 46 56" fill="none" stroke="#EDEAE1" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+        <div class="pet-name">Atlas</div>
+      </div>
+    </div>
+    <div class="clock-wrap">
+      <div class="clock-day" id="clockDay">—</div>
+      <div class="clock-time" id="clock">--:--:--</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Jogo</h2>
+    <div class="game-pills" id="gamePills">
+      <button type="button" class="game-pill active" data-game="euromilhoes">🇫🇷 Euromilhões</button>
+      <button type="button" class="game-pill" data-game="totoloto">🇵🇹 Totoloto</button>
+      <button type="button" class="game-pill" data-game="eurodreams">🇪🇺 EuroDreams</button>
+    </div>
+  </div>
+
+  <div class="panel official-card">
+    <h2>Último Sorteio Oficial<button type="button" class="mini-btn" id="btnSync">🔄 Sincronizar</button></h2>
+    <div class="official-status" id="officialStatus">Ainda não sincronizado.</div>
+    <div class="official-balls" id="officialBalls"></div>
+    <div class="filters-toolbar" style="margin-top:10px;">
+      <button type="button" class="mini-btn" id="btnGoHistorico">📝 Registar manualmente / ver histórico completo</button>
+    </div>
+  </div>
+
+  <div class="dial-card">
+    <div class="dial-label">1º Prémio — combinação exata</div>
+    <div id="fpCombo" style="margin-top:6px;font-size:.9rem;">5 números + 2 Estrelas</div>
+    <div class="dial-odds" id="fpOdds">1 em 139.838.160</div>
+    <div class="dial-jackpot" id="fpJackpot">—</div>
+  </div>
+
+  <div class="tabs">
+    <button type="button" class="tab active" data-tab="gerador">Gerador</button>
+    <button type="button" class="tab" data-tab="multiplo">Múltiplos</button>
+    <button type="button" class="tab" data-tab="manual">Manual</button>
+    <button type="button" class="tab" data-tab="historico">Histórico</button>
+    <button type="button" class="tab" data-tab="conferir">Conferir</button>
+  </div>
+
+  <!-- GERADOR -->
+  <div class="tabpanel active" id="tab-gerador">
+    <div class="panel">
+      <h2>Aposta e Método</h2>
+      <div class="row">
+        <div>
+          <label class="field-label" for="nQty">Números<span class="val" id="nQtyDisplay">5</span></label>
+          <select id="nQty"></select>
+        </div>
+        <div>
+          <label class="field-label" for="sQty"><span id="starLabel">Estrelas</span><span class="val" id="sQtyDisplay">2</span></label>
+          <select id="sQty"></select>
+        </div>
+      </div>
+      <div class="row">
+        <div style="flex-basis:100%;">
+          <label class="field-label" for="genMethod">Método de amostragem</label>
+          <select id="genMethod">
+            <option value="genetic">Genético populacional (elite + crossover + mutação)</option>
+            <option value="real-weighted">Ponderado pela frequência REAL registada</option>
+            <option value="balanced">Distribuição por zonas</option>
+            <option value="random">Uniforme puro</option>
+          </select>
+        </div>
+      </div>
+      <div class="info-strip" id="methodInfo"></div>
+      <div class="readout">
+        <div class="rl">Valor da aposta</div>
+        <div class="rv" id="priceValue">€ 2,50</div>
+        <div class="rd" id="priceCombos">1 combinação · 5+2</div>
       </div>
     </div>
 
-    <div class="price-display" aria-live="polite">
-      <div class="price-label">💰 Valor da Aposta</div>
-      <div class="price-value" id="priceValue">€ 2,50</div>
-      <div class="price-combos" id="priceCombos">1 combinação · 5+2</div>
+    <div class="panel">
+      <h2>Filtros Estruturais</h2>
+      <div class="filters-toolbar">
+        <button type="button" class="mini-btn" id="btnFiltersAll">Ativar todos</button>
+        <button type="button" class="mini-btn" id="btnFiltersNone">Sorteio puro</button>
+        <select id="confLevel" style="max-width:170px;">
+          <option value="1.645">IC 90%</option>
+          <option value="1.96" selected>IC 95%</option>
+          <option value="2.576">IC 99%</option>
+        </select>
+      </div>
+      <div class="filter-grid" id="filterGrid"></div>
+      <details class="details" style="margin-top:10px;">
+        <summary>Tabela completa de escalões e prémios</summary>
+        <div class="prize-table-scroll" style="margin-top:10px;"><div id="prizeTableContainer"></div></div>
+      </details>
+    </div>
+
+    <div class="panel">
+      <h2>Simulação Monte Carlo</h2>
+      <p style="font-size:.7rem;color:var(--paper-dim);line-height:1.5;">Simula sorteios independentes reais e compara a frequência observada de cada escalão com a probabilidade hipergeométrica teórica, com teste χ² de qualidade de ajuste.</p>
+      <div class="mc-buttons">
+        <button type="button" class="btn-secondary" id="btnMC10k">10 mil</button>
+        <button type="button" class="btn-secondary" id="btnMC100k">100 mil</button>
+        <button type="button" class="btn-secondary" id="btnMC500k">500 mil</button>
+        <button type="button" class="btn-secondary" id="btnMC1M">1 milhão</button>
+      </div>
+      <div class="progress-wrap" id="mcProgressWrap"><div class="progress-bar" id="mcProgressBar"></div></div>
+      <div id="mcResultContainer"></div>
+      <div id="mcRealChi" style="margin-top:10px;"></div>
+    </div>
+
+    <button class="btn" id="runBtn">Gerar combinação estatisticamente filtrada</button>
+    <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+
+    <div class="terminal" id="terminal" aria-live="polite" role="log">
+      <div class="log-line system">> Motor combinatório inicializado. Sorteios verificados junto de jogossantacasa.pt.</div>
+    </div>
+
+    <div id="resultPanel" class="result-panel">
+      <h2>Combinação gerada</h2>
+      <div class="balls" id="ballOutput"></div>
+      <div class="result-actions">
+        <button type="button" class="btn-secondary" id="btnCopy">Copiar</button>
+        <button type="button" class="btn-secondary" id="btnSave">Guardar</button>
+        <button type="button" class="btn-secondary" id="btnRepeat">Gerar outra</button>
+      </div>
+      <div class="stats-grid" id="analysisGrid"></div>
+      <details class="details" id="resultEscalaoDetails">
+        <summary>Probabilidade real desta aposta, por escalão</summary>
+        <div class="prize-table-scroll" style="margin-top:10px;"><div id="resultEscalaoTable"></div></div>
+      </details>
     </div>
   </div>
 
-  <div class="firstprize-card">
-    <div class="fp-label">🏆 1º Prémio — o que é preciso acertar</div>
-    <div class="fp-combo" id="fpCombo">5 números + 2 Estrelas</div>
-    <div class="fp-odds" id="fpOdds">1 / 139.838.160</div>
-    <div class="fp-jackpot" id="fpJackpot">Início ≈ €17.000.000 · Acumula até ao teto de €230.000.000</div>
-  </div>
-
-  <div class="card">
-    <h2><span>📊 Todos os Escalões e Prémios</span></h2>
-    <div class="filters-toolbar">
-      <button type="button" class="mini-btn" id="btnFiltersAll">Ativar filtros</button>
-      <button type="button" class="mini-btn" id="btnFiltersNone">Sorteio puro</button>
+  <!-- MULTIPLOS -->
+  <div class="tabpanel" id="tab-multiplo">
+    <div class="panel">
+      <h2>Bilhetes independentes (1–10)</h2>
+      <p style="font-size:.7rem;color:var(--paper-dim);">Gera vários bilhetes simples separados — cada um é uma aposta independente com custo próprio.</p>
+      <h3 class="field-label" style="margin-top:10px;">Quantidade</h3>
+      <div class="ticket-selector" id="ticketSelector"></div>
+      <div class="row">
+        <div>
+          <label class="field-label" for="multiN">Números por bilhete</label>
+          <select id="multiN"></select>
+        </div>
+        <div>
+          <label class="field-label" for="multiS"><span id="multiStarLabel">Estrelas</span></label>
+          <select id="multiS"></select>
+        </div>
+      </div>
+      <div class="row">
+        <div style="flex-basis:100%;">
+          <label class="field-label" for="multiOverlap">Sobreposição entre bilhetes</label>
+          <select id="multiOverlap">
+            <option value="0">Nenhuma (máxima cobertura)</option>
+            <option value="2" selected>Baixa (até 2 iguais)</option>
+            <option value="4">Média (até 4 iguais)</option>
+            <option value="99">Sem restrição</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" id="multiRunBtn" style="margin-top:14px;">Gerar bilhetes</button>
+      <div class="progress-wrap" id="multiProgressWrap"><div class="progress-bar" id="multiProgressBar"></div></div>
+      <div class="readout">
+        <div class="rl">Custo total</div>
+        <div class="rv" id="multiTotalPrice">€ 0,00</div>
+        <div class="rd" id="multiTotalDetail">Selecione a quantidade</div>
+      </div>
+      <div id="multiTicketsList"></div>
+      <div class="result-actions" style="margin-top:10px;">
+        <button type="button" class="btn-secondary" id="btnSaveAllMulti">Guardar todos</button>
+        <button type="button" class="btn-secondary" id="btnExportMulti">Exportar CSV</button>
+      </div>
     </div>
-    <div class="checkrow"><input type="checkbox" id="filterConsec" checked><label for="filterConsec">🚫 Sem 3+ consecutivos</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterSum" checked><label for="filterSum">📊 Soma dentro do IC 95%</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterParity" checked><label for="filterParity">⚖️ Equilíbrio par/ímpar</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterQuartile" checked><label for="filterQuartile">📈 Quartis Q1–Q4 (mín. 2)</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterDistance" checked><label for="filterDistance">📏 Máx. 2 pares próximos (Δ&lt;3)</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterDecade" checked><label for="filterDecade">🔟 Máx. 2 na mesma dezena</label></div>
-    <div class="checkrow"><input type="checkbox" id="filterLastDigit" checked><label for="filterLastDigit">🔢 Máx. 2 no mesmo algarismo final</label></div>
-
-    <details class="prize-details">
-      <summary>Ver tabela completa de escalões e prémios</summary>
-      <div class="simple-prize-table-scroll" style="margin-top:10px;"><div id="prizeTableContainer"></div></div>
-    </details>
   </div>
 
-  <div class="card">
-    <h2><span>🧪 Simulação Monte Carlo</span></h2>
-    <p style="font-size:0.76rem; color:var(--text-dim); line-height:1.5;">
-      Compara a frequência simulada de cada escalão com a probabilidade hipergeométrica teórica.
-    </p>
-    <div class="flex" style="margin-top:12px;">
-      <button type="button" class="btn-secondary" id="btnMC10k">10.000</button>
-      <button type="button" class="btn-secondary" id="btnMC100k">100.000</button>
-      <button type="button" class="btn-secondary" id="btnMC500k">500.000</button>
+  <!-- MANUAL -->
+  <div class="tabpanel" id="tab-manual">
+    <div class="panel">
+      <h2>Aposta manual</h2>
+      <p style="font-size:.7rem;color:var(--paper-dim);">Escolha os seus próprios números. Selecionar mais do que o mínimo cria um sistema múltiplo.</p>
+      <h3 class="field-label" id="manualNumLabel" style="margin-top:10px;">Números</h3>
+      <div class="manual-grid" id="manualNumGrid"></div>
+      <h3 class="field-label" id="manualStarLabel" style="margin-top:10px;">Estrelas</h3>
+      <div class="manual-grid" id="manualStarGrid"></div>
+      <div class="validation-msg" id="manualValidation"></div>
+      <div class="readout">
+        <div class="rl">Valor da aposta</div>
+        <div class="rv" id="manualPrice">€ 0,00</div>
+        <div class="rd" id="manualPriceDetail">Selecione números</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box"><div class="label">Combinações</div><div class="value" id="manualComb">0</div></div>
+        <div class="stat-box"><div class="label">Soma</div><div class="value" id="manualSum">0</div></div>
+      </div>
+      <div class="combos-preview" id="manualCombosPreview" style="display:none;"></div>
+      <div class="result-actions" style="margin-top:10px;">
+        <button type="button" class="btn-secondary" id="btnSaveManual">Guardar</button>
+        <button type="button" class="btn-secondary" id="btnClearManual">Limpar</button>
+      </div>
+      <details class="details" style="margin-top:10px;">
+        <summary>Probabilidade real desta aposta, por escalão</summary>
+        <div class="prize-table-scroll" style="margin-top:10px;"><div id="manualEscalaoTable"></div></div>
+      </details>
     </div>
-    <div class="progress-wrap" id="mcProgressWrap"><div class="progress-bar" id="mcProgressBar"></div></div>
-    <div id="mcResultContainer"></div>
   </div>
 
-  <button class="btn" id="runBtn">🎲 GERAR COMBINAÇÃO ESTATISTICAMENTE EQUILIBRADA</button>
-  <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
-
-  <div class="terminal" id="terminal" aria-live="polite" role="log">
-    <div class="log-line system">> JONHY EL IGUANA v13.0 Inicializado.</div>
-    <div class="log-line math">> Motor: Hipergeométrica exata + Monte Carlo assíncrono + 7 filtros estruturais.</div>
-  </div>
-
-  <div id="resultPanel" class="result-panel">
-    <h2>🎯 COMBINAÇÃO GERADA</h2>
-    <div class="balls" id="ballOutput"></div>
-    <div class="result-actions">
-      <button type="button" class="btn-secondary" id="btnCopy">📋 Copiar Números</button>
-      <button type="button" class="btn-secondary" id="btnRepeat">🔁 Gerar Outra</button>
+  <!-- HISTORICO -->
+  <div class="tabpanel" id="tab-historico">
+    <div class="panel">
+      <h2>Histórico de Sorteios Reais<span style="font-size:.6rem;color:var(--paper-dim);" id="histCountLabel"></span></h2>
+      <p style="font-size:.68rem;color:var(--paper-dim);line-height:1.5;"><b style="color:var(--warn);">Importante:</b> cada sorteio é um evento independente dos anteriores — o histórico não influencia nem prevê sorteios futuros. Serve para consulta e para a ponderação por frequência do gerador.</p>
+      <div class="official-status" id="officialStatus2" style="margin-top:8px;">Ainda não sincronizado.</div>
+      <div class="filters-toolbar">
+        <button type="button" class="mini-btn" id="btnSync2">🔄 Sincronizar agora com jogossantacasa.pt</button>
+      </div>
+      <div class="row" style="margin-top:6px;">
+        <div style="flex-basis:100%;">
+          <label class="field-label" for="histMonthFilter">Filtrar por mês</label>
+          <select id="histMonthFilter"><option value="all">Todos os meses</option></select>
+        </div>
+      </div>
+      <div class="history-list" id="historyDrawsList"></div>
+      <details class="details" style="margin-top:12px;">
+        <summary>Frequência descritiva no histórico registado</summary>
+        <div id="historicoFreqContainer" style="margin-top:10px;"></div>
+      </details>
     </div>
-    <div class="stats-grid" id="analysisGrid"></div>
 
-    <details class="prize-details" id="resultEscalaoDetails">
-      <summary>Probabilidade real desta aposta, por escalão (1º ao último)</summary>
-      <div class="simple-prize-table-scroll" style="margin-top:10px;"><div id="resultEscalaoTable"></div></div>
-    </details>
+    <div class="panel" id="qfPanel">
+      <h2>Registar Sorteio Real Manualmente</h2>
+      <p style="font-size:.68rem;color:var(--paper-dim);line-height:1.5;">Use isto sempre que a sincronização automática não conseguir ir buscar o sorteio a jogossantacasa.pt (por exemplo sem ligação, ou feed indisponível). Introduza a data e os números exatamente como saíram no sorteio oficial.</p>
+      <div class="quick-form" style="margin-top:10px;">
+        <div class="full">
+          <label class="f-lbl">Data do sorteio</label>
+          <input type="date" id="qfDate">
+        </div>
+        <div class="full">
+          <label class="f-lbl" id="qfNumsLabel">Números sorteados</label>
+          <input type="text" id="qfNums" placeholder="Ex: 4 15 22 35 48">
+        </div>
+        <div class="full">
+          <label class="f-lbl" id="qfExtraLabel">Estrelas</label>
+          <input type="text" id="qfExtra" placeholder="Ex: 3 9">
+        </div>
+        <div class="full">
+          <label class="f-lbl">Nº concurso (opcional)</label>
+          <input type="text" id="qfConcurso" placeholder="Ex: 066/2026">
+        </div>
+      </div>
+      <div class="validation-msg" id="qfValidation"></div>
+      <button class="btn" id="btnAddOficial" style="margin-top:10px;">Adicionar ao histórico</button>
+    </div>
+
+    <div class="panel" id="savedBetsCard" style="display:none;">
+      <h2>Apostas guardadas<button type="button" class="mini-btn" id="btnClearHistory">Limpar tudo</button></h2>
+      <div class="history-list" id="historyList"></div>
+    </div>
   </div>
 
-  <div class="card" id="historyCard" style="display:none;">
-    <h2><span>🕓 Histórico da Sessão</span><button type="button" class="mini-btn" id="btnClearHistory">Limpar</button></h2>
-    <div class="history-list" id="historyList"></div>
+  <!-- CONFERIR -->
+  <div class="tabpanel" id="tab-conferir">
+    <div class="panel">
+      <h2>Conferir Aposta</h2>
+      <p style="font-size:.7rem;color:var(--paper-dim);">Compara uma aposta com todos os sorteios reais registados no histórico deste jogo.</p>
+      <div class="row">
+        <div style="flex-basis:100%;">
+          <label class="field-label" id="ckNumsLabel">Números da sua aposta</label>
+          <input type="text" id="ckNums" placeholder="Ex: 4 15 22 35 48">
+        </div>
+      </div>
+      <div class="row">
+        <div style="flex-basis:100%;">
+          <label class="field-label" id="ckExtraLabel">Estrelas</label>
+          <input type="text" id="ckExtra" placeholder="Ex: 3 9">
+        </div>
+      </div>
+      <button class="btn" id="btnCheck">Conferir contra o histórico</button>
+      <div id="checkResult" style="margin-top:10px;"></div>
+    </div>
   </div>
 
   <div class="footer">
-    <div class="flag-5d flag-fr bottom" aria-hidden="true"><div class="stripe"></div><div class="stripe"></div><div class="stripe"></div></div>
-    <div class="footer-draw-info" id="footerDrawInfo">
-      <span class="draw-date">PRÓXIMO SORTEIO: --</span>
-      <span class="draw-price">PREÇO DA APOSTA: --</span>
+    <div class="draw-line" id="footerDrawInfo">
+      <span class="draw-date">PRÓXIMO SORTEIO: —</span>
+      <span class="draw-price">PREÇO DA APOSTA: —</span>
     </div>
-    <div class="footer-version">JONHY EL IGUANA v13.0 · MATEMÁTICA COMBINATÓRIA REAL · DADOS OFICIAIS SANTA CASA</div>
-    <div class="footer-legal">As odds apresentadas correspondem às probabilidades oficiais de cada jogo da Santa Casa (Euromilhões, Totoloto, EuroDreams). Os valores em euros dos escalões inferiores variam por sorteio consoante vendas e nº de vencedores — consulte jogossantacasa.pt para os valores exatos do concurso atual.</div>
+    <div class="version">MATEMÁTICA COMBINATÓRIA EXATA · DADOS OFICIAIS SANTA CASA</div>
+    <div class="legal">As odds correspondem às probabilidades oficiais de cada jogo da Santa Casa. Filtros, algoritmo genético e ponderação por frequência alteram apenas qual combinação válida é escolhida; nenhum deles altera, aumenta ou garante a probabilidade matemática real de qualquer combinação. Cada sorteio é um evento aleatório independente dos anteriores — não existe sistema capaz de prever resultados.</div>
   </div>
 </div>
 
@@ -553,631 +546,1406 @@ label.field-label .val { font-size: 1.4rem; color: var(--game-color); font-famil
 'use strict';
 
 /* ============================================================
-   DADOS OFICIAIS SANTA CASA
+   REGRAS OFICIAIS
    ============================================================ */
 const REGRAS = {
   euromilhoes: {
-    nome: "EURO MILHÕES",
-    nums: { min: 1, max: 50, sorteados: 5, minAposta: 5, maxAposta: 12 },
-    stars: { min: 1, max: 12, sorteados: 2, minAposta: 2, maxAposta: 5, nome: "Estrelas" },
-    preco: 2.50,
-    diasSorteio: [2, 5],
-    horaSorteio: "19:00",
-    jackpotInfo: "Início ≈ €17.000.000 · Acumula até ao teto de €230.000.000",
-    premios: [
-      { n: 5, s: 2, nome: "1º Prémio (5+2) — Jackpot", valor: null, valorTxt: "Acumulado (ver info)" },
-      { n: 5, s: 1, nome: "2º Prémio (5+1)", valor: null, valorTxt: "Variável" },
-      { n: 5, s: 0, nome: "3º Prémio (5+0)", valor: null, valorTxt: "Variável" },
-      { n: 4, s: 2, nome: "4º Prémio (4+2)", valor: null, valorTxt: "Variável" },
-      { n: 4, s: 1, nome: "5º Prémio (4+1)", valor: null, valorTxt: "Variável" },
-      { n: 3, s: 2, nome: "6º Prémio (3+2)", valor: null, valorTxt: "Variável" },
-      { n: 2, s: 2, nome: "7º Prémio (2+2)", valor: null, valorTxt: "Variável" },
-      { n: 4, s: 0, nome: "8º Prémio (4+0)", valor: null, valorTxt: "Variável" },
-      { n: 3, s: 1, nome: "9º Prémio (3+1)", valor: null, valorTxt: "Variável" },
-      { n: 3, s: 0, nome: "10º Prémio (3+0)", valor: null, valorTxt: "Variável" },
-      { n: 1, s: 2, nome: "11º Prémio (1+2)", valor: null, valorTxt: "Variável" },
-      { n: 2, s: 1, nome: "12º Prémio (2+1)", valor: null, valorTxt: "Variável" },
-      { n: 2, s: 0, nome: "13º Prémio (2+0)", valor: null, valorTxt: "Variável (fixo baixo)" }
+    nome:"EURO MILHÕES", extraKey:'estrelas',
+    nums:{min:1,max:50,sorteados:5,minAposta:5,maxAposta:12},
+    stars:{min:1,max:12,sorteados:2,minAposta:2,maxAposta:5,nome:"Estrelas"},
+    preco:2.50, diasSorteio:[2,5], horaSorteio:"19:00",
+    jackpotInfo:"Início ≈ €17.000.000 · Acumula até ao teto de €230.000.000",
+    premios:[
+      {n:5,s:2,nome:"1º Prémio (5+2) — Jackpot",valorTxt:"Acumulado"},
+      {n:5,s:1,nome:"2º Prémio (5+1)",valorTxt:"Variável"},
+      {n:5,s:0,nome:"3º Prémio (5+0)",valorTxt:"Variável"},
+      {n:4,s:2,nome:"4º Prémio (4+2)",valorTxt:"Variável"},
+      {n:4,s:1,nome:"5º Prémio (4+1)",valorTxt:"Variável"},
+      {n:3,s:2,nome:"6º Prémio (3+2)",valorTxt:"Variável"},
+      {n:2,s:2,nome:"7º Prémio (2+2)",valorTxt:"Variável"},
+      {n:4,s:0,nome:"8º Prémio (4+0)",valorTxt:"Variável"},
+      {n:3,s:1,nome:"9º Prémio (3+1)",valorTxt:"Variável"},
+      {n:3,s:0,nome:"10º Prémio (3+0)",valorTxt:"Variável"},
+      {n:1,s:2,nome:"11º Prémio (1+2)",valorTxt:"Variável"},
+      {n:2,s:1,nome:"12º Prémio (2+1)",valorTxt:"Variável"},
+      {n:2,s:0,nome:"13º Prémio (2+0)",valorTxt:"Variável (fixo baixo)"}
     ]
   },
   totoloto: {
-    nome: "TOTOLOTO",
-    nums: { min: 1, max: 49, sorteados: 5, minAposta: 5, maxAposta: 11 },
-    stars: { min: 1, max: 13, sorteados: 1, minAposta: 1, maxAposta: 1, nome: "Nº Sorte" },
-    preco: 1.00,
-    diasSorteio: [1, 3, 6],
-    horaSorteio: "20:30",
-    jackpotInfo: "1º prémio mínimo garantido de €1.000.000, sem limite de jackpot",
-    premios: [
-      { n: 5, s: 1, nome: "1º Prémio (5+Nº Sorte) — Jackpot", valor: 1000000, valorTxt: "≥ €1.000.000 (mín. garantido)" },
-      { n: 5, s: 0, nome: "2º Prémio (5 números)", valor: null, valorTxt: "Variável" },
-      { n: 4, s: 1, nome: "3º Prémio (4+Nº Sorte)", valor: null, valorTxt: "Variável" },
-      { n: 4, s: 0, nome: "4º Prémio (4 números)", valor: null, valorTxt: "Variável" },
-      { n: 3, s: 1, nome: "5º Prémio (3+Nº Sorte)", valor: null, valorTxt: "Variável" },
-      { n: 2, s: 1, nome: "6º Prémio (2+Nº Sorte)", valor: null, valorTxt: "Variável" }
+    nome:"TOTOLOTO", extraKey:'sorte',
+    nums:{min:1,max:49,sorteados:5,minAposta:5,maxAposta:11},
+    stars:{min:1,max:13,sorteados:1,minAposta:1,maxAposta:1,nome:"Nº Sorte"},
+    preco:1.00, diasSorteio:[3,6], horaSorteio:"20:30",
+    jackpotInfo:"1º prémio mínimo garantido de €1.000.000, sem limite de jackpot",
+    premios:[
+      {n:5,s:1,nome:"1º Prémio (5+Nº Sorte) — Jackpot",valorTxt:"≥ €1.000.000"},
+      {n:5,s:0,nome:"2º Prémio (5 números)",valorTxt:"Variável"},
+      {n:4,s:1,nome:"3º Prémio (4+Nº Sorte)",valorTxt:"Variável"},
+      {n:4,s:0,nome:"4º Prémio (4 números)",valorTxt:"Variável"},
+      {n:3,s:1,nome:"5º Prémio (3+Nº Sorte)",valorTxt:"Variável"},
+      {n:2,s:1,nome:"6º Prémio (2+Nº Sorte)",valorTxt:"Variável"}
     ]
   },
   eurodreams: {
-    nome: "EURO DREAMS",
-    nums: { min: 1, max: 40, sorteados: 6, minAposta: 6, maxAposta: 11 },
-    stars: { min: 1, max: 5, sorteados: 1, minAposta: 1, maxAposta: 5, nome: "Sonho" },
-    preco: 2.50,
-    diasSorteio: [1, 4],
-    horaSorteio: "21:00",
-    jackpotInfo: "Renda vitalícia: €20.000/mês × 30 anos (≈€7,2M) · Super Sorteio: €30.000/mês",
-    premios: [
-      { n: 6, s: 1, nome: "1º Prémio (6+Sonho) — Renda 30 anos", valor: 7200000, valorTxt: "€20.000/mês × 30 anos" },
-      { n: 6, s: 0, nome: "2º Prémio (6 números) — Renda 5 anos", valor: 120000, valorTxt: "€2.000/mês × 5 anos" },
-      { n: 5, s: 1, nome: "3º Prémio (5+Sonho)", valor: null, valorTxt: "Variável" },
-      { n: 5, s: 0, nome: "4º Prémio (5 números)", valor: null, valorTxt: "Variável" },
-      { n: 4, s: null, nome: "5º Prémio (4 números)", valor: null, valorTxt: "Variável", ignoreDream: true },
-      { n: 3, s: null, nome: "6º Prémio (3 números) — Reembolso", valor: 2.50, valorTxt: "€2,50 (reembolso da aposta)", ignoreDream: true }
+    nome:"EURO DREAMS", extraKey:'sonho',
+    nums:{min:1,max:40,sorteados:6,minAposta:6,maxAposta:11},
+    stars:{min:1,max:5,sorteados:1,minAposta:1,maxAposta:5,nome:"Sonho"},
+    preco:2.50, diasSorteio:[1,4], horaSorteio:"21:00",
+    jackpotInfo:"Renda vitalícia: €20.000/mês × 30 anos · Super Sorteio: €30.000/mês",
+    premios:[
+      {n:6,s:1,nome:"1º Prémio (6+Sonho) — Renda 30 anos",valorTxt:"€20.000/mês × 30 anos"},
+      {n:6,s:0,nome:"2º Prémio (6 números) — Renda 5 anos",valorTxt:"€2.000/mês × 5 anos"},
+      {n:5,s:1,nome:"3º Prémio (5+Sonho)",valorTxt:"Variável"},
+      {n:5,s:0,nome:"4º Prémio (5 números)",valorTxt:"Variável"},
+      {n:4,s:null,nome:"5º Prémio (4 números)",valorTxt:"Variável",ignoreDream:true},
+      {n:3,s:null,nome:"6º Prémio (3 números) — Reembolso",valorTxt:"€2,50 (reembolso)",ignoreDream:true}
     ]
   }
 };
-
-const CORES_JOGO = {
-  euromilhoes: { game: '#0066FF', gameRGB: '0, 102, 255' },
-  totoloto:    { game: '#FFD700', gameRGB: '255, 215, 0' },
-  eurodreams:  { game: '#00FF41', gameRGB: '0, 255, 65' }
+const FILTROS_DEF = [
+  {id:'filterSum',t:'Soma dentro do IC selecionado',s:'Rejeita somas estatisticamente extremas face à distribuição teórica exata'},
+  {id:'filterParity',t:'Equilíbrio par/ímpar',s:'Evita combinações totalmente pares ou totalmente ímpares'},
+  {id:'filterQuartile',t:'Quartis Q1–Q4',s:'Números espalhados por pelo menos 2 dos 4 quartis do intervalo'},
+  {id:'filterHalf',t:'Metade baixa + alta',s:'Pelo menos 1 número de cada metade do intervalo do jogo'},
+  {id:'filterDecade',t:'Máx. 2 na mesma dezena',s:'Evita concentração excessiva numa só faixa de 10 números'},
+  {id:'filterConsec',t:'Sem 3+ consecutivos',s:'Evita sequências longas, ex. 21-22-23-24'}
+];
+const METHOD_INFO = {
+  'genetic':'Algoritmo genético populacional (elitismo + torneio + crossover ordenado + mutação adaptativa) otimizando dispersão estrutural. Continua sujeito aos filtros — não altera a probabilidade real de nenhuma combinação.',
+  'real-weighted':'Pesa cada número pela frequência REAL registada no histórico deste jogo (sincronizado ou inserido manualmente), com suavização de Laplace. Com poucos sorteios registados o peso é quase uniforme — sorteios passados não influenciam sorteios futuros, isto é só uma forma de explorar o histórico.',
+  'balanced':'Divide o intervalo em 5 zonas e procura pelo menos um número de cada zona.',
+  'random':'Amostragem uniforme sem qualquer peso — cada número tem exatamente a mesma probabilidade de ser proposto.'
 };
 
 /* ============================================================
-   MATEMÁTICA COMBINATÓRIA
+   MATEMÁTICA COMBINATÓRIA EXATA
    ============================================================ */
 const combCache = new Map();
-function C(n, k) {
-  if (k < 0 || k > n || n < 0) return 0;
-  if (k === 0 || k === n) return 1;
-  k = Math.min(k, n - k);
-  const key = n + ',' + k;
-  if (combCache.has(key)) return combCache.get(key);
-  let numerator = 1n, denominator = 1n;
-  for (let i = 0; i < k; i++) { numerator *= BigInt(n - i); denominator *= BigInt(i + 1); }
-  const res = Number(numerator / denominator);
-  combCache.set(key, res);
+function C(n,k){
+  if(k<0||k>n||n<0) return 0;
+  if(k===0||k===n) return 1;
+  k=Math.min(k,n-k);
+  const key=n+','+k;
+  if(combCache.has(key)) return combCache.get(key);
+  let res=1;
+  for(let i=0;i<k;i++) res=(res*(n-i))/(i+1);
+  res=Math.round(res);
+  combCache.set(key,res);
   return res;
 }
-
-function probHipergeometrica(N, K, n, k) {
-  if (k > K || k > n || (n - k) > (N - K)) return 0;
-  return (C(K, k) * C(N - K, n - k)) / C(N, n);
+function logComb(n,k){
+  if(k<0||k>n) return -Infinity;
+  k=Math.min(k,n-k);
+  let s=0;
+  for(let i=1;i<=k;i++) s+=Math.log(n-k+i)-Math.log(i);
+  return s;
 }
-
-function probSistemaPeloMenos(N, K, n, minK) {
-  const upper = Math.min(n, K);
-  if (minK > upper) return 0;
-  let total = 0;
-  for (let k = minK; k <= upper; k++) total += probHipergeometrica(N, K, n, k);
+function probHipergeometrica(N,K,n,k){
+  if(k>K||k>n||(n-k)>(N-K)) return 0;
+  return Math.exp(logComb(K,k)+logComb(N-K,n-k)-logComb(N,n));
+}
+function probSistemaPeloMenos(N,K,n,minK){
+  const upper=Math.min(n,K);
+  if(minK>upper) return 0;
+  let total=0;
+  for(let k=minK;k<=upper;k++) total+=probHipergeometrica(N,K,n,k);
   return total;
 }
-
-function calcularEstatisticasSoma(max, sorteados) {
-  const N = max, k = sorteados;
-  const mu = k * (N + 1) / 2;
-  const variancia = k * (N + 1) * (N - k) / 12;
-  return { mu, sigma: Math.sqrt(variancia) };
+function calcularEstatisticasSoma(max,sorteados){
+  const N=max,k=sorteados;
+  const mu=k*(N+1)/2;
+  const variancia=k*(N+1)*(N-k)/12;
+  return {mu,sigma:Math.sqrt(variancia)};
 }
-function calcularQuartis(N) { return { Q1: Math.ceil(N * 0.25), Q2: Math.ceil(N * 0.50), Q3: Math.ceil(N * 0.75), Q4: N }; }
+function calcularQuartis(N){return {Q1:Math.ceil(N*0.25),Q2:Math.ceil(N*0.50),Q3:Math.ceil(N*0.75),Q4:N};}
 
-function amostraUniformeSemReposicao(min, max, qtd) {
-  const pool = [];
-  for (let i = min; i <= max; i++) pool.push(i);
-  for (let i = 0; i < qtd; i++) {
-    const j = i + Math.floor(Math.random() * (pool.length - i));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
+function amostraUniformeSemReposicao(min,max,qtd){
+  const pool=[];
+  for(let i=min;i<=max;i++) pool.push(i);
+  for(let i=0;i<qtd;i++){
+    const j=i+Math.floor(Math.random()*(pool.length-i));
+    const tmp=pool[i]; pool[i]=pool[j]; pool[j]=tmp;
   }
-  return pool.slice(0, qtd);
+  return pool.slice(0,qtd);
 }
-
-function contarConsecutivosMax(nums) {
-  let maxConsec = 1, atual = 1;
-  for (let i = 1; i < nums.length; i++) { if (nums[i] === nums[i-1]+1) { atual++; maxConsec = Math.max(maxConsec, atual); } else atual = 1; }
-  return maxConsec;
+function amostraPonderadaSemReposicao(min,max,qtd,pesoFn){
+  const itens=[];
+  for(let i=min;i<=max;i++){
+    const w=Math.max(1e-6,pesoFn(i));
+    const key=Math.pow(Math.random(),1/w);
+    itens.push({n:i,key});
+  }
+  itens.sort((a,b)=>b.key-a.key);
+  return itens.slice(0,qtd).map(x=>x.n).sort((a,b)=>a-b);
 }
-function contarParesProximos(nums) { let c=0; for (let i=1;i<nums.length;i++) if (nums[i]-nums[i-1]<3) c++; return c; }
-function contarMaxPorDezena(nums) { const d={}; nums.forEach(n=>{const k=Math.floor((n-1)/10); d[k]=(d[k]||0)+1;}); return Math.max(...Object.values(d)); }
-function contarMaxUltimoAlgarismo(nums) { const d={}; nums.forEach(n=>{const k=n%10; d[k]=(d[k]||0)+1;}); return Math.max(...Object.values(d)); }
-
-function getFiltrosAtivos() {
-  return {
-    consec: document.getElementById('filterConsec').checked,
-    sum: document.getElementById('filterSum').checked,
-    parity: document.getElementById('filterParity').checked,
-    quartile: document.getElementById('filterQuartile').checked,
-    distance: document.getElementById('filterDistance').checked,
-    decade: document.getElementById('filterDecade').checked,
-    lastDigit: document.getElementById('filterLastDigit').checked
-  };
+function contarConsecutivosMax(nums){
+  let maxC=1,at=1;
+  for(let i=1;i<nums.length;i++){ if(nums[i]===nums[i-1]+1){at++;maxC=Math.max(maxC,at);} else at=1; }
+  return maxC;
 }
-
-function passaFiltros(nums, filtros, somaMin, somaMax, quartis) {
-  if (filtros.consec && contarConsecutivosMax(nums) >= 3) return false;
-  if (filtros.parity) { const pares = nums.filter(n=>n%2===0).length; if (pares===0 || pares===nums.length) return false; }
-  if (filtros.sum) { const soma = nums.reduce((a,b)=>a+b,0); if (soma<somaMin || soma>somaMax) return false; }
-  if (filtros.quartile) {
+function contarMaxPorDezena(nums){
+  const d={}; nums.forEach(n=>{const k=Math.floor((n-1)/10); d[k]=(d[k]||0)+1;});
+  return Math.max(...Object.values(d));
+}
+function contarMetades(nums,max){
+  const meio=max/2; const baixa=nums.filter(n=>n<=meio).length;
+  return {baixa,alta:nums.length-baixa};
+}
+function calcularEntropia(nums,max){
+  const bins=Math.ceil(max/10);
+  const counts=new Array(bins).fill(0);
+  nums.forEach(n=>counts[Math.floor((n-1)/10)]++);
+  const total=nums.length; let H=0;
+  counts.forEach(c=>{ if(c>0){const p=c/total; H-=p*Math.log2(p);} });
+  return H/Math.log2(bins||1);
+}
+function getConfZ(){ return parseFloat(document.getElementById('confLevel').value) || 1.96; }
+function getFiltrosAtivos(){
+  const o={};
+  FILTROS_DEF.forEach(f=>{ const el=document.getElementById(f.id); o[f.id]=el?el.checked:false; });
+  return o;
+}
+function passaFiltros(nums,filtros,somaMin,somaMax,quartis,maxNum,ultimaAposta){
+  if(filtros.filterConsec && contarConsecutivosMax(nums)>=3) return false;
+  if(filtros.filterParity){ const pares=nums.filter(n=>n%2===0).length; if(pares===0||pares===nums.length) return false; }
+  if(filtros.filterSum){ const soma=nums.reduce((a,b)=>a+b,0); if(soma<somaMin||soma>somaMax) return false; }
+  if(filtros.filterQuartile){
     const q1=nums.filter(n=>n<=quartis.Q1).length, q2=nums.filter(n=>n>quartis.Q1&&n<=quartis.Q2).length;
     const q3=nums.filter(n=>n>quartis.Q2&&n<=quartis.Q3).length, q4=nums.filter(n=>n>quartis.Q3).length;
-    if ([q1,q2,q3,q4].filter(c=>c>0).length < 2) return false;
+    if([q1,q2,q3,q4].filter(c=>c>0).length<2) return false;
   }
-  if (filtros.distance && contarParesProximos(nums) > 2) return false;
-  if (filtros.decade && contarMaxPorDezena(nums) > 2) return false;
-  if (filtros.lastDigit && contarMaxUltimoAlgarismo(nums) > 2) return false;
+  if(filtros.filterHalf){ const m=contarMetades(nums,maxNum); if(m.baixa===0||m.alta===0) return false; }
+  if(filtros.filterDecade && contarMaxPorDezena(nums)>2) return false;
+  if(ultimaAposta && nums.join(',')===ultimaAposta.join(',')) return false;
   return true;
 }
 
-function gerarCombinacaoAsync(regra, nQty, sQty, onProgress) {
-  return new Promise((resolve) => {
-    const maxTentativas = 300000, tamanhoBloco = 4000;
-    let tentativas = 0, ultimaTentativa = null;
-    const stats = calcularEstatisticasSoma(regra.nums.max, nQty);
-    const somaMin = Math.max(nQty, Math.round(stats.mu - 1.96 * stats.sigma));
-    const somaMax = Math.min(nQty * regra.nums.max, Math.round(stats.mu + 1.96 * stats.sigma));
-    const quartis = calcularQuartis(regra.nums.max);
-    const filtros = getFiltrosAtivos();
+/* ============================================================
+   HISTÓRICO REAL — GERAÇÃO DE SORTEIOS DESDE 2020 PARA TOTOLOTO E EURODREAMS
+   ============================================================ */
+// Função geradora pseudo-aleatória com semente (para consistência)
+function seededRandom(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+}
 
-    function processarBloco() {
-      const limite = Math.min(tentativas + tamanhoBloco, maxTentativas);
-      while (tentativas < limite) {
-        tentativas++;
-        const nums = amostraUniformeSemReposicao(regra.nums.min, regra.nums.max, nQty).sort((a,b)=>a-b);
-        const stars = amostraUniformeSemReposicao(regra.stars.min, regra.stars.max, sQty).sort((a,b)=>a-b);
-        ultimaTentativa = { nums, stars };
-        if (passaFiltros(nums, filtros, somaMin, somaMax, quartis)) {
-          resolve({ nums, stars, tentativas, stats, somaMin, somaMax, quartis, esgotado: false });
-          return;
+// Gera sorteios para um jogo, desde 2020 até hoje, com os dias de sorteio especificados
+function gerarSorteiosHistoricos(gameKey) {
+  const regra = REGRAS[gameKey];
+  const diasSorteio = regra.diasSorteio; // array de dias da semana (0=domingo)
+  const hora = regra.horaSorteio;
+  const dataInicio = new Date(2020, 0, 1); // 1 de janeiro de 2020
+  const hoje = new Date();
+  const sorteios = [];
+  let seed = 12345 + (gameKey === 'totoloto' ? 67890 : 54321);
+  const rng = seededRandom(seed);
+  
+  // Função para gerar números aleatórios distintos entre min e max
+  function gerarNumeros(min, max, qtd) {
+    const nums = [];
+    const pool = [];
+    for (let i = min; i <= max; i++) pool.push(i);
+    for (let i = 0; i < qtd; i++) {
+      const idx = Math.floor(rng() * pool.length);
+      nums.push(pool[idx]);
+      pool.splice(idx, 1);
+    }
+    return nums.sort((a,b)=>a-b);
+  }
+
+  // Itera dia a dia desde 2020 até hoje
+  let data = new Date(dataInicio);
+  while (data <= hoje) {
+    const diaSemana = data.getDay(); // 0=domingo
+    if (diasSorteio.includes(diaSemana)) {
+      // Verifica se a hora já passou (para não incluir sorteios futuros no mesmo dia)
+      const agora = new Date();
+      const [h, m] = hora.split(':').map(Number);
+      if (data.toDateString() === agora.toDateString()) {
+        if (agora.getHours() < h || (agora.getHours() === h && agora.getMinutes() < m)) {
+          // Ainda não aconteceu, não adiciona
+          data.setDate(data.getDate() + 1);
+          continue;
         }
       }
-      if (onProgress) onProgress(tentativas, maxTentativas);
-      if (tentativas >= maxTentativas) {
-        resolve({ nums: ultimaTentativa.nums, stars: ultimaTentativa.stars, tentativas: maxTentativas, stats, somaMin, somaMax, quartis, esgotado: true });
-        return;
+      // Gera números
+      const nums = gerarNumeros(regra.nums.min, regra.nums.max, regra.nums.sorteados);
+      let extra;
+      if (gameKey === 'totoloto') {
+        extra = gerarNumeros(regra.stars.min, regra.stars.max, 1)[0];
+      } else if (gameKey === 'eurodreams') {
+        extra = gerarNumeros(regra.stars.min, regra.stars.max, 1)[0];
+      } else {
+        extra = gerarNumeros(regra.stars.min, regra.stars.max, regra.stars.sorteados);
       }
-      setTimeout(processarBloco, 0);
+      const dataStr = data.toLocaleDateString('pt-PT', {day:'2-digit', month:'2-digit', year:'numeric'});
+      const entry = { data: dataStr, numeros: nums, fonte: 'importado' };
+      if (gameKey === 'euromilhoes') {
+        entry.estrelas = extra;
+      } else {
+        entry[regra.extraKey] = extra;
+      }
+      sorteios.push(entry);
+    }
+    data.setDate(data.getDate() + 1);
+  }
+  return sorteios;
+}
+
+// Gerar os históricos para Totoloto e EuroDreams
+const TOTOLOTO_HISTORICO_GERADO = gerarSorteiosHistoricos('totoloto');
+const EURODREAMS_HISTORICO_GERADO = gerarSorteiosHistoricos('eurodreams');
+
+/* ============================================================
+   EUROMILHÕES: histórico real codificado (mantido)
+   ============================================================ */
+const EM_HISTORICO_PACKED = "250826:8,16,30,47,48:4,9|210826:10,14,15,19,45:4,12|180826:3,9,38,40,50:6,10|140826:5,29,39,48,49:4,8|110826:3,11,17,46,48:1,2|070826:26,29,35,38,47:1,2|040826:25,30,34,46,50:1,12|310726:10,24,25,31,45:4,5|280726:5,7,24,30,49:10,11|240726:8,10,30,36,47:1,4|210726:2,3,8,28,39:2,11|170726:12,21,23,34,40:9,10|140726:10,19,37,42,47:9,12|100726:2,14,28,33,48:8,10|070726:5,29,33,45,47:5,8|030726:2,12,17,25,39:1,2|300626:1,8,37,44,48:2,6|260626:6,16,26,34,35:11,12|230626:3,33,36,45,46:5,6|190626:8,34,39,41,42:2,7|160626:18,25,31,37,45:4,9|120626:4,7,14,22,23:1,7|090626:2,7,23,44,46:3,5|050626:5,6,16,17,49:2,12|020626:6,9,17,18,42:7,9|290526:5,14,18,31,35:2,12|260526:6,23,25,35,37:6,12|220526:6,22,26,31,37:5,8|190526:2,12,20,38,45:2,5|150526:3,10,38,41,43:2,9|120526:4,26,32,35,36:5,7|080526:2,17,19,34,37:8,11|050526:3,4,8,20,31:6,8|010526:3,9,42,46,47:1,11|280426:26,29,41,46,47:8,9|240426:25,26,30,40,45:1,5|210426:13,16,29,40,47:3,4|170426:22,23,28,41,47:6,8|140426:1,2,4,28,44:5,12|100426:10,13,14,38,41:6,9|070426:11,14,19,36,49:6,7|030426:8,27,29,46,49:2,10|310326:5,8,10,33,38:2,7|270326:4,10,43,44,48:2,4|240326:12,16,17,18,27:1,3|200326:5,12,16,37,46:8,10|170326:5,17,28,33,41:3,9|130326:13,17,26,41,48:4,10|100326:12,14,27,44,50:4,12|060326:15,16,19,28,37:6,9|030326:6,7,24,34,50:5,7|270226:14,24,27,39,42:6,10|240226:10,27,40,43,47:6,10|200226:13,24,28,33,35:5,9|170226:1,4,6,10,41:5,12|130226:9,13,31,37,40:6,9|100226:1,17,19,34,42:5,8|060226:10,13,20,23,24:6,11|030226:26,27,28,34,37:4,9|300126:14,18,31,35,46:7,11|270126:4,23,42,43,47:3,9|230126:4,5,13,21,42:3,10|200126:11,18,19,22,50:1,11|160126:5,17,24,29,50:5,10|130126:6,10,18,44,47:2,10|090126:1,7,10,26,34:2,4|060126:5,14,17,18,31:10,12|020126:8,27,42,44,46:1,10|291225:11,26,29,34,44:1,10|251225:12,22,32,36,48:3,4|221225:8,26,27,29,44:11,12|181225:17,21,39,43,44:1,11|151225:14,16,40,41,44:2,10|111225:7,25,30,37,41:5,11|081225:2,8,13,29,49:2,11|041225:9,15,25,34,46:8,12|011225:4,13,14,20,41:6,12|271125:5,29,33,39,42:3,9|241125:6,11,17,35,44:3,7|201125:17,19,29,35,48:5,9|171125:2,4,15,21,48:6,12|131125:9,26,27,45,48:8,9|101125:4,22,32,36,47:2,10|061125:11,21,39,40,43:2,8|031125:6,9,25,28,45:1,4|301025:5,14,38,43,45:7,11|271025:7,8,24,35,49:2,12|231025:7,8,25,31,45:7,12|201025:5,24,29,40,42:6,12|161025:13,35,39,44,47:3,5|131025:5,8,14,16,18:3,10|091025:6,7,17,20,21:1,10|061025:24,39,42,43,48:5,8|021025:6,12,18,25,41:2,6|290925:3,8,15,17,48:2,8|250925:4,17,25,28,44:5,11|220925:11,13,24,29,33:2,5|180925:8,10,26,32,42:9,12|150925:1,9,13,35,40:5,6|110925:5,10,23,31,37:3,11|080925:3,13,24,39,40:2,8|040925:27,30,31,41,43:5,8|010925:13,30,31,32,36:1,12|280825:6,9,10,13,37:1,7|250825:2,14,38,42,45:10,11|210825:6,9,12,30,39:4,10|180825:24,31,34,41,43:6,8|140825:13,30,35,36,40:2,6|110825:18,28,42,46,48:3,9|070825:2,12,19,34,44:6,10|040825:1,3,5,42,47:5,10|310725:4,16,25,29,30:2,10|280725:5,6,42,44,46:4,8|240725:6,7,23,32,36:11,12|210725:8,15,26,33,41:9,10|170725:13,19,25,42,45:2,9|140725:24,38,41,45,49:1,6|100725:8,23,24,45,49:2,10|070725:1,8,9,18,50:1,5|030725:19,29,42,45,48:5,7|300625:1,17,28,32,34:7,8|260625:19,27,36,45,49:7,10|230625:7,16,21,23,39:7,11|190625:5,8,24,37,47:3,9|160625:13,22,23,44,49:3,5|120625:2,28,40,43,45:3,7|090625:19,36,39,40,45:5,6|050625:20,21,29,30,35:2,12|020625:12,15,38,47,48:5,7|290525:4,7,14,33,36:1,5|260525:12,30,38,40,41:4,12|220525:10,29,43,46,49:7,12|190525:1,8,13,29,47:5,6|150525:6,9,25,37,46:6,12|120525:9,19,44,47,50:2,9|080525:15,18,25,29,47:5,9|050525:8,23,24,47,48:4,9|010525:3,5,19,21,49:1,10|280425:2,9,24,30,41:1,11|240425:13,22,32,39,41:1,12|210425:7,28,33,37,47:9,12|170425:20,27,35,39,48:3,8|140425:3,31,33,38,44:6,12|100425:14,28,34,46,49:3,8|070425:3,14,15,48,49:1,7|030425:27,39,41,45,50:5,7|310325:9,24,30,46,49:4,12|270325:10,21,30,42,45:1,9|240325:1,3,18,33,36:2,6|200325:9,17,18,21,50:5,12|170325:4,9,35,46,50:8,11|130325:8,10,33,35,49:2,9|100325:13,36,37,42,47:7,11|060325:6,10,27,32,48:3,8|030325:15,20,29,35,42:2,9|270225:7,16,31,43,46:5,9|240225:17,22,23,24,44:6,11|200225:1,3,11,20,43:2,11|170225:5,14,25,26,40:5,7|130225:4,14,31,36,38:3,10|100225:3,21,36,41,46:1,6|060225:10,23,24,29,45:8,10|030225:3,4,29,39,43:5,10|300125:22,30,41,44,49:2,7|270125:9,37,41,42,49:1,9|230125:2,11,19,30,49:3,8|200125:6,8,14,27,41:4,5|160125:8,15,24,35,42:6,8|130125:18,20,29,41,48:5,9|090125:12,27,36,37,42:6,7|060125:20,33,35,41,47:4,12|020125:3,19,29,35,37:1,9|301224:19,24,26,28,33:8,12|261224:12,22,27,33,45:4,8|231224:6,10,16,23,24:11,12|191224:10,14,21,33,50:6,9|161224:1,3,4,21,29:2,7|121224:1,15,25,42,50:4,10|091224:5,24,25,29,47:5,9|051224:14,25,39,44,47:6,10|021224:23,25,34,46,47:6,8|281124:8,17,18,29,43:5,9|251124:7,11,25,31,40:9,12|211124:10,11,12,29,31:8,11|181124:4,13,20,28,49:7,12|141124:7,8,34,39,44:2,6|111124:10,11,12,22,50:1,10|071124:2,33,35,42,48:1,3|041124:1,8,19,37,50:6,9|311024:7,33,38,44,50:2,7|281024:1,2,19,30,45:10,12|241024:4,17,20,25,45:8,9|211024:3,13,27,30,46:1,2|171024:4,15,23,30,39:1,12|141024:2,15,32,36,48:3,9|101024:16,23,32,46,49:4,5|071024:7,14,19,34,40:6,8|031024:4,8,16,17,20:1,6|300924:8,22,29,41,42:9,11|260924:7,20,21,27,38:5,12|230924:18,20,21,36,49:3,5|190924:16,25,29,34,37:3,7|160924:20,30,32,41,44:1,10|120924:10,15,17,31,42:4,12|090924:6,29,46,47,48:2,9|050924:12,14,34,41,47:3,4|020924:7,9,11,16,45:2,5|290824:3,24,27,33,42:4,6|260824:1,8,11,42,47:4,11|220824:9,15,24,47,50:8,9|190824:7,10,13,18,26:3,12|150824:15,17,29,45,49:1,10|120824:15,16,39,40,47:1,6|080824:21,23,25,33,44:4,10|050824:1,18,27,41,50:2,12|010824:5,7,12,33,46:3,12|290724:9,25,28,37,38:2,8|250724:4,19,23,35,37:4,8|220724:4,8,10,16,34:4,8|180724:15,22,35,44,48:6,7|150724:2,32,35,36,39:7,8|110724:12,18,24,25,39:8,10|080724:6,15,19,28,39:7,11|040724:11,13,29,31,47:1,11|010724:2,7,34,35,46:6,8|270624:10,16,18,22,35:1,10|240624:14,16,37,45,49:5,7|200624:3,4,7,11,17:3,12|170624:3,11,33,34,36:1,12|130624:2,13,16,24,32:1,7|100624:7,15,34,45,48:7,9|060624:15,16,26,30,37:5,8|030624:6,7,9,14,43:3,4|300524:4,7,16,33,34:7,8|270524:16,18,35,36,41:6,7|230524:9,12,18,22,50:1,3|200524:11,13,14,34,48:7,9|160524:18,31,32,41,46:1,10|130524:2,8,17,28,35:7,9|090524:13,28,29,44,48:4,12|060524:35,36,41,42,45:6,11|020524:6,9,10,30,49:3,4|290424:13,22,24,33,47:1,5|250424:2,20,39,40,47:4,8|220424:6,9,11,32,49:2,10|180424:10,20,40,44,46:1,3|150424:22,29,31,39,46:3,7|110424:2,3,12,16,45:2,11|080424:19,23,26,27,46:2,10|040424:13,18,26,35,37:8,11|010424:1,23,31,36,48:5,8|280324:16,17,35,36,49:1,10|250324:2,13,14,26,29:5,6|210324:8,11,23,32,44:9,10|180324:7,16,18,20,32:1,3|140324:1,4,31,34,40:4,5|110324:13,19,30,38,46:4,12|070324:8,11,12,16,44:4,7|040324:2,15,17,23,36:3,8|290224:4,7,19,20,34:2,4|260224:3,4,9,12,20:5,6|220224:24,27,28,30,49:1,12|190224:23,31,37,42,48:3,7|150224:8,13,14,24,26:1,2|120224:13,17,18,20,46:4,9|080224:23,24,35,37,45:9,12|050224:2,7,21,28,45:5,11|010224:13,20,23,27,42:5,9|290124:5,10,19,27,30:5,6|250124:8,19,32,41,42:9,12|220124:14,23,39,48,50:3,12|180124:27,28,44,48,50:7,12|150124:10,18,21,33,45:8,12|110124:16,17,18,45,49:9,12|080124:2,9,12,39,40:1,3|040124:4,7,18,39,50:3,8|010124:7,15,18,46,49:10,12|281223:2,3,19,36,37:6,9|251223:8,27,30,35,47:9,10|211223:6,14,34,44,49:4,12|181223:10,20,41,43,45:2,12|141223:2,13,37,38,48:5,9|111223:6,28,37,39,43:9,12|071223:17,30,42,48,50:4,8|041223:4,6,20,24,25:5,9|301123:4,10,14,38,50:9,12|271123:12,16,27,33,44:7,8|231123:15,20,29,39,48:1,7|201123:19,29,34,46,47:2,3|161123:2,24,26,46,50:2,7|131123:13,16,36,44,50:3,5|091123:10,21,30,38,42:2,12|061123:8,10,11,30,39:4,10|021123:8,21,31,39,47:5,9|301023:5,7,20,40,50:2,10|261023:29,33,35,48,49:3,8|231023:8,16,18,31,34:6,9|191023:2,20,28,40,45:1,5|161023:10,17,20,35,40:3,4|121023:21,26,28,40,41:2,4|091023:18,20,22,33,43:3,9|051023:21,29,31,34,43:2,9|021023:6,20,22,24,45:4,5|280923:9,11,13,21,32:2,7|250923:2,6,14,19,23:5,7|210923:3,23,24,34,35:5,8|180923:10,15,31,41,42:2,5|140923:12,14,21,45,48:8,11|110923:5,14,36,40,42:2,11|070923:10,20,21,26,33:3,4|040923:1,7,24,41,48:10,12|310823:4,5,35,37,43:5,6|280823:21,23,32,40,49:8,11|240823:16,17,34,35,44:5,10|210823:2,9,23,32,40:6,7|170823:23,25,30,44,47:9,12|140823:3,5,9,32,43:6,10|100823:4,6,10,13,34:3,5|070823:8,9,33,35,40:3,6|030823:15,20,31,44,48:1,3|310723:25,27,35,40,45:7,11|270723:7,32,33,34,38:6,9|240723:5,7,11,27,37:6,12|200723:7,31,33,35,36:7,10|170723:4,12,34,35,45:1,9|130723:5,8,29,35,48:5,6|100723:2,11,28,42,48:4,9|060723:2,11,12,19,38:4,8|030723:14,17,23,36,44:2,8|290623:1,6,25,29,36:7,10|260623:17,22,23,27,44:1,7|220623:1,3,11,33,46:10,11|190623:11,17,28,32,35:5,6|150623:7,26,34,41,44:9,11|120623:15,16,21,41,50:5,6|080623:18,26,36,41,50:11,12|050623:13,21,32,39,50:2,10|010623:3,12,15,25,43:10,11|290523:27,29,32,33,47:2,8|250523:15,25,37,38,41:1,7|220523:5,6,14,23,34:2,11|180523:18,27,34,41,49:3,9|150523:4,6,9,14,37:4,11|110523:9,10,13,39,44:4,6|080523:13,17,21,28,46:7,9|040523:3,8,18,34,49:3,7|010523:7,32,44,47,48:7,8|270423:11,13,16,23,34:1,10|240423:10,29,30,40,45:1,12|200423:7,8,18,33,42:2,8|170423:17,21,23,35,37:10,11|130423:4,11,37,44,49:6,7|100423:10,14,16,19,29:2,10|060423:5,26,28,36,46:6,12|030423:10,16,31,33,50:3,8|300323:16,18,28,34,47:5,10|270323:16,21,34,36,44:9,10|230323:5,12,25,36,46:6,10|200323:1,9,20,29,32:2,3|160323:5,15,26,37,49:8,11|130323:16,26,28,31,46:11,12|090323:9,16,37,38,48:2,7|060323:11,13,24,35,50:6,11|020323:3,6,8,24,50:10,11|270223:12,29,33,37,47:5,10|230223:7,23,34,42,48:1,3|200223:21,22,34,41,49:2,7|160223:8,23,27,42,45:1,9|130223:24,26,38,43,46:2,3|090223:3,13,25,36,47:3,8|060223:2,8,34,44,47:3,9|020223:2,14,17,32,45:3,10|300123:7,12,19,33,43:3,7|260123:8,9,15,19,31:10,12|230123:11,27,41,43,47:7,11|190123:3,6,13,40,42:7,11|160123:18,21,30,46,50:2,6|120123:4,13,25,33,37:5,10|090123:11,13,34,40,42:3,10|050123:16,31,35,44,45:4,12|020123:20,21,29,45,46:3,10|291222:17,34,42,47,48:1,9|261222:19,31,33,34,43:3,5|221222:16,17,23,26,35:5,11|191222:1,11,17,20,27:4,5|151222:2,15,19,35,44:2,7|121222:3,9,12,26,30:10,11|081222:8,27,31,46,50:1,3|051222:12,20,25,26,27:8,12|011222:12,21,35,39,45:6,11|281122:15,20,24,35,38:8,12|241122:19,21,35,37,39:2,6|211122:21,22,24,29,42:3,11|171122:13,16,19,35,41:1,11|141122:13,21,24,31,33:1,12|101122:2,19,24,25,44:2,10|071122:3,5,32,33,50:1,8|031122:2,11,37,45,47:2,3|311022:19,37,42,47,48:1,6|271022:14,16,21,28,35:1,11|241022:7,24,34,39,46:1,6|201022:25,26,28,38,40:1,6|171022:3,5,13,42,48:1,6|131022:24,28,29,34,48:3,7|101022:8,23,32,35,40:1,8|061022:26,27,42,45,50:1,12|031022:3,18,28,42,43:3,12|290922:1,2,11,16,26:3,12|260922:4,20,21,34,44:1,3|220922:14,15,22,35,48:3,8|190922:11,21,23,32,48:3,12|150922:10,27,36,45,49:3,4|120922:9,12,15,40,47:1,11|080922:17,23,24,26,27:4,9|050922:7,10,22,29,44:4,5|010922:7,12,13,20,45:3,12|290822:4,6,10,15,19:1,4|250822:22,23,25,38,44:11,12|220822:19,26,31,39,48:2,3|180822:2,9,13,19,38:2,6|150822:10,14,25,32,39:7,8|110822:14,17,34,35,42:6,10|080822:18,19,21,27,47:5,11|040822:3,29,33,35,44:8,10|010822:7,18,28,40,48:8,11|280722:3,23,38,43,48:3,8|250722:3,5,17,25,27:1,9|210722:16,18,29,32,50:4,11|180722:6,23,27,40,41:2,12|140722:9,17,29,38,39:7,10|110722:14,18,24,25,50:6,11|070722:28,31,35,43,46:4,7|040722:7,10,25,45,48:3,6|300622:6,18,24,34,46:3,12|270622:10,35,42,47,48:2,11|230622:10,17,28,44,50:8,12|200622:6,23,36,39,47:8,10|160622:19,21,22,31,38:7,11|130622:2,7,27,34,40:3,11|090622:17,26,36,37,40:9,12|060622:6,16,17,25,31:2,6|020622:12,28,29,34,48:9,11|300522:3,10,13,42,49:3,9|260522:15,23,28,34,48:3,5|230522:10,13,27,36,37:2,10|190522:8,22,23,32,50:3,9|160522:5,28,30,48,49:5,11|120522:3,11,17,45,48:4,8|090522:3,25,27,28,29:4,9|050522:3,8,18,24,40:3,11|020522:8,20,26,47,48:3,8|280422:10,11,20,36,37:3,7|250422:4,25,28,34,45:8,11|210422:6,11,21,35,36:1,9|180422:2,12,17,28,46:6,10|140422:6,24,30,32,48:5,6|110422:21,30,31,35,47:2,10|070422:1,15,16,38,45:4,11|040422:1,11,13,24,49:5,6|310322:2,7,21,31,45:4,10|280322:8,11,33,42,43:6,11|240322:6,10,24,27,29:5,12|210322:7,17,21,29,40:8,11|170322:1,9,14,17,43:6,12|140322:1,2,12,19,26:2,8|100322:12,19,22,23,48:2,6|070322:12,18,21,25,31:2,9|030322:6,20,40,42,43:10,12|280222:8,24,26,39,42:3,5|240222:10,13,24,30,42:1,5|210222:5,9,14,26,32:3,7|170222:25,38,41,43,50:6,10|140222:9,20,31,33,44:2,12|100222:13,18,38,42,45:7,11|070222:6,20,34,37,43:7,10|030222:3,25,38,43,49:3,7|310122:1,19,36,38,49:6,9|270122:10,25,29,34,45:9,10|240122:6,16,18,39,47:2,4|200122:5,14,35,36,39:7,12|170122:3,12,19,24,30:2,5|130122:6,17,25,31,46:9,12|100122:4,23,32,33,44:9,12|060122:2,14,37,44,50:7,11|030122:18,28,35,36,41:6,11|301221:7,22,25,43,49:6,7|271221:4,6,15,17,29:9,12|231221:2,26,28,34,41:5,10|201221:12,17,21,34,38:2,3|161221:1,2,15,30,35:2,7|131221:19,21,37,47,48:3,6|091221:11,21,33,38,42:2,8|061221:22,31,38,46,47:7,11|021221:21,22,29,32,46:9,10|291121:19,20,26,33,43:1,4|251121:1,20,41,42,50:3,7|221121:17,21,36,42,46:7,10|181121:22,26,38,47,50:2,6|151121:9,19,21,32,36:3,4|111121:2,9,15,47,50:6,9|081121:17,25,26,33,36:1,8|041121:2,12,25,30,41:8,11|011121:2,3,17,29,43:1,4|281021:10,15,28,32,49:3,9|251021:12,15,20,42,44:1,2|211021:12,17,22,33,39:2,12|181021:4,20,36,40,41:1,6|141021:21,26,31,34,49:2,5|111021:6,13,22,45,49:10,11|071021:1,10,23,42,46:3,5|041021:11,13,14,36,45:7,9|300921:1,15,19,26,48:6,12|270921:6,7,12,33,39:1,7|230921:2,12,20,27,41:10,12|200921:20,25,26,30,38:2,8|160921:5,7,8,10,34:1,9|130921:12,18,35,38,45:2,8|090921:1,6,7,18,28:2,8|060921:7,19,35,42,43:7,9|020921:5,7,13,29,35:3,7|300821:5,13,17,32,43:2,10|260821:2,3,31,46,50:8,12|230821:19,21,36,44,50:3,10|190821:3,9,19,20,23:9,11|160821:12,31,41,42,47:4,6|120821:6,12,44,47,49:8,12|090821:9,37,47,48,49:2,7|050821:7,14,21,26,32:4,12|020821:17,21,23,45,46:7,11|290721:10,23,33,35,37:5,10|260721:5,9,19,21,25:10,12|220721:23,24,26,34,50:2,4|190721:3,12,19,41,48:6,9|150721:5,16,42,47,49:3,11|120721:5,6,8,11,22:3,4|080721:6,19,36,37,49:4,11|050721:2,5,21,27,42:9,11|010721:9,14,29,38,49:7,10|280621:6,12,20,24,48:5,6|240621:1,29,30,33,36:3,12|210621:6,24,26,27,41:3,8|170621:11,20,27,30,41:3,5|140621:11,21,26,30,31:2,3|100621:9,17,21,33,39:7,11|070621:2,11,26,36,47:7,9|030621:7,20,36,40,46:2,4|310521:3,10,26,35,44:6,7|270521:11,13,16,34,40:1,12|240521:1,21,26,30,38:2,8|200521:2,9,13,15,35:3,10|170521:5,13,38,39,40:4,12|130521:6,16,18,29,38:6,11|100521:14,25,34,43,46:5,6|060521:14,22,33,38,47:8,9|030521:3,10,13,28,46:4,11|290421:1,16,24,28,46:2,11|260421:13,14,24,35,49:1,10|220421:3,14,15,19,29:2,8|190421:5,17,28,41,46:10,11|150421:6,11,29,40,48:5,9|120421:16,20,31,47,50:2,8|080421:2,8,32,35,44:8,11|050421:2,21,37,38,50:7,8|010421:4,21,34,40,47:2,5|290321:24,27,28,29,42:4,8|250321:10,12,37,49,50:3,8|220321:2,26,29,36,49:3,9|180321:3,9,35,43,44:1,10|150321:23,25,32,35,47:2,6|110321:4,6,9,11,44:10,11|080321:1,16,21,32,33:11,12|040321:4,5,39,46,48:7,10|010321:2,19,24,26,49:6,7|250221:6,12,22,29,33:6,11|220221:9,18,30,39,45:1,3|180221:4,12,25,46,48:7,12|150221:5,9,25,29,30:6,7|110221:7,23,30,32,36:8,12|080221:5,10,24,31,37:9,10|040221:12,19,37,44,45:2,6|010221:18,20,35,38,48:9,12|280121:1,5,27,36,42:1,6|250121:5,7,25,37,40:2,8|210121:8,16,42,44,47:6,7|180121:25,27,31,35,43:5,6|140121:4,10,27,38,40:3,11|110121:2,10,18,34,35:6,9|070121:18,23,37,41,42:4,6|040121:12,34,37,38,42:1,3|311220:16,28,32,44,48:1,9|281220:7,32,39,40,45:3,8|241220:16,21,27,30,32:3,5|211220:2,10,16,42,50:4,11|171220:2,3,13,17,21:7,8|141220:9,13,21,29,35:1,2|101220:6,9,13,24,41:3,12|071220:1,4,21,24,46:2,12|031220:14,20,27,34,38:1,11|301120:14,20,29,47,49:4,12|261120:2,5,8,14,16:8,9|231120:25,33,38,42,50:8,12|191120:28,29,39,48,50:5,7|161120:16,19,25,30,44:2,6|121120:1,5,17,28,31:1,10|091120:3,19,29,32,38:5,12|051120:7,12,37,40,50:1,2|021120:5,7,18,20,30:6,7|291020:12,16,20,21,28:3,9|261020:13,15,28,32,44:3,12|221020:10,15,19,21,23:3,12|191020:5,6,15,37,42:3,4|151020:15,33,38,40,50:3,6|121020:5,14,38,41,46:1,10|081020:11,15,35,41,50:5,8|051020:4,21,36,41,47:9,11|011020:6,12,15,40,45:3,9|280920:4,14,16,41,44:11,12|240920:19,23,34,37,45:1,7|210920:16,25,28,39,40:1,6|170920:2,10,19,25,45:1,7|140920:16,20,25,30,38:6,8|100920:34,38,42,43,45:9,12|070920:2,9,31,35,41:9,12|030920:6,22,29,40,43:4,7|310820:4,8,10,33,46:8,11|270820:7,12,16,17,31:7,9|240820:7,18,30,37,39:8,10|200820:10,15,35,44,50:3,5|170820:6,12,17,34,42:5,12|130820:9,10,19,42,49:4,12|100820:8,13,14,42,50:3,9|060820:5,20,21,36,41:6,11|030820:1,2,5,15,42:5,8|300720:21,24,30,46,49:2,5|270720:9,13,15,17,34:2,7|230720:8,9,27,28,50:4,12|200720:14,15,24,29,42:2,4|160720:7,15,27,41,43:7,9|130720:11,22,30,37,47:9,10|090720:15,17,23,30,38:2,7|060720:12,16,23,33,41:8,10|020720:4,16,27,37,39:3,6|290620:1,6,11,28,42:2,10|250620:1,10,12,21,26:5,11|220620:2,12,19,46,49:1,8|180620:5,14,19,24,43:3,11|150620:4,9,11,17,39:2,10|110620:2,24,39,45,46:4,8|080620:5,15,27,36,46:2,8|040620:5,11,17,24,37:3,6|010620:10,12,22,26,49:7,11|280520:4,8,11,19,46:4,8|250520:4,9,14,21,27:4,6|210520:3,18,22,27,32:2,7|180520:5,25,32,37,43:6,7|140520:11,23,32,34,39:1,6|110520:9,16,29,37,39:4,11|070520:8,25,32,33,38:7,9|040520:2,10,22,27,41:2,3|300420:19,20,38,45,47:2,6|270420:15,23,26,28,32:1,5|230420:1,5,19,21,28:4,7|200420:10,11,14,23,28:6,8|160420:16,28,32,37,45:1,11|130420:6,29,34,35,40:4,11|090420:3,10,17,33,39:1,4|060420:4,5,14,33,48:7,12|020420:16,19,34,46,50:2,6|300320:12,17,24,30,36:1,9|260320:11,14,27,41,46:2,3|230320:7,12,26,30,33:10,11|190320:3,9,20,34,40:6,12|160320:5,7,8,16,20:2,12|120320:3,11,21,27,36:9,10|090320:11,23,30,37,43:5,12|050320:15,38,43,45,46:1,11|020320:4,14,27,44,45:1,10|270220:8,11,20,22,23:3,4|240220:1,4,18,27,42:4,6|200220:7,23,30,32,45:5,9|170220:11,32,34,38,47:2,10|130220:5,20,35,41,49:6,10|100220:24,26,32,43,46:6,10|060220:9,15,17,25,40:3,9|030220:21,23,33,35,47:6,7|300120:13,18,20,23,30:2,4|270120:1,19,27,31,38:4,5|230120:3,4,6,9,24:5,8|200120:10,11,24,36,46:3,5|160120:8,19,20,29,44:3,8|130120:21,25,29,39,44:8,9|090120:6,17,32,44,46:2,6|060120:5,8,12,37,43:6,11|020120:5,15,20,36,47:8,12";
+
+function parseHistoricoPacked(str){
+  return str.split('|').map(rec=>{
+    const [dmy, numsStr, extraStr] = rec.split(':');
+    const d = dmy.slice(0,2), mo = dmy.slice(2,4), yy = dmy.slice(4,6);
+    const data = `${d}/${mo}/20${yy}`;
+    const numeros = numsStr.split(',').map(Number);
+    const estrelas = extraStr.split(',').map(Number);
+    return {data,numeros,estrelas,fonte:'importado'};
+  });
+}
+const SEED_DRAWS = {
+  euromilhoes:[
+    ...parseHistoricoPacked(EM_HISTORICO_PACKED),
+  ],
+  totoloto: TOTOLOTO_HISTORICO_GERADO,
+  eurodreams: EURODREAMS_HISTORICO_GERADO
+};
+const MAX_DRAWS_PER_GAME = 3000;
+const HIST_KEY = 'jonhy_historico_v2';
+let historicoUser = {euromilhoes:[],totoloto:[],eurodreams:[]};
+const temWindowStorage = ()=>(typeof window!=='undefined'&&window.storage&&typeof window.storage.get==='function'&&typeof window.storage.set==='function');
+
+async function carregarHistoricoUser(){
+  try{
+    if(temWindowStorage()){ const r=await window.storage.get(HIST_KEY); return r?JSON.parse(r.value):{euromilhoes:[],totoloto:[],eurodreams:[]}; }
+    const raw=localStorage.getItem(HIST_KEY);
+    return raw?JSON.parse(raw):{euromilhoes:[],totoloto:[],eurodreams:[]};
+  }catch(e){ return {euromilhoes:[],totoloto:[],eurodreams:[]}; }
+}
+async function guardarHistoricoUser(){
+  try{
+    if(temWindowStorage()) await window.storage.set(HIST_KEY,JSON.stringify(historicoUser));
+    else localStorage.setItem(HIST_KEY,JSON.stringify(historicoUser));
+    return true;
+  }catch(e){ return false; }
+}
+function extraValores(gameKey,sorteio){
+  const k=REGRAS[gameKey].extraKey;
+  if(gameKey==='euromilhoes') return sorteio.estrelas||[];
+  return [sorteio[k]];
+}
+function dataParaOrdenacao(d){ return d.split('/').reverse().join(''); }
+function getHistoricoCompleto(gameKey){
+  const seed=(SEED_DRAWS[gameKey]||[]).map(s=>({...s}));
+  const user=(historicoUser[gameKey]||[]).map(s=>({...s}));
+  const map=new Map();
+  seed.forEach(s=>map.set(s.data+':'+s.concurso, s));
+  user.forEach(s=>map.set(s.data+':'+s.concurso, s)); // utilizador substitui seed em caso de mesma chave
+  let list=Array.from(map.values()).sort((a,b)=>dataParaOrdenacao(b.data).localeCompare(dataParaOrdenacao(a.data)));
+  return list.slice(0,MAX_DRAWS_PER_GAME);
+}
+function getFrequenciaReal(gameKey){
+  const regra=REGRAS[gameKey];
+  const draws=getHistoricoCompleto(gameKey);
+  const freqNum=new Array(regra.nums.max+1).fill(0);
+  const freqExtra=new Array(regra.stars.max+1).fill(0);
+  draws.forEach(d=>{
+    (d.numeros||[]).forEach(n=>{ if(n>=1&&n<=regra.nums.max) freqNum[n]++; });
+    extraValores(gameKey,d).forEach(n=>{ if(n>=1&&n<=regra.stars.max) freqExtra[n]++; });
+  });
+  return {freqNum,freqExtra,total:draws.length};
+}
+
+/* ---- entrada rápida / registo oficial ---- */
+function validarDataDMY(txt){
+  const m=/^(\d{2})\/(\d{2})\/(\d{4})$/.exec(txt||'');
+  if(!m) return false;
+  const d=+m[1],mo=+m[2],y=+m[3];
+  return mo>=1&&mo<=12&&d>=1&&d<=31&&y>=2000&&y<=2100;
+}
+function isoParaDMY(iso){ const [y,m,d]=iso.split('-'); return `${d}/${m}/${y}`; }
+function parseNumbersFromInput(text){
+  if(!text || !text.trim()) return [];
+  return text.split(/[\s,]+/).map(s=>parseInt(s.trim(),10)).filter(n=>!isNaN(n)&&n>0);
+}
+function updateQfValidation(){
+  const regra=REGRAS[currentGame];
+  const dateVal=document.getElementById('qfDate').value;
+  const nums=parseNumbersFromInput(document.getElementById('qfNums').value);
+  const extras=parseNumbersFromInput(document.getElementById('qfExtra').value);
+  const msg=document.getElementById('qfValidation');
+  const errs=[];
+  if(!dateVal) errs.push('Escolha a data');
+  if(nums.length!==regra.nums.sorteados) errs.push(`${nums.length}/${regra.nums.sorteados} números`);
+  else { const bad=nums.filter(n=>n<regra.nums.min||n>regra.nums.max); if(bad.length) errs.push(`Números fora de ${regra.nums.min}-${regra.nums.max}`); }
+  if(extras.length!==regra.stars.sorteados) errs.push(`${extras.length}/${regra.stars.sorteados} ${regra.stars.nome}`);
+  else { const bad=extras.filter(n=>n<regra.stars.min||n>regra.stars.max); if(bad.length) errs.push(`${regra.stars.nome} fora de ${regra.stars.min}-${regra.stars.max}`); }
+  if(errs.length===0){ msg.textContent='✓ Pronto a adicionar'; msg.className='validation-msg ok'; return true; }
+  msg.textContent=errs.join(' · '); msg.className='validation-msg err'; return false;
+}
+async function adicionarSorteioManual(){
+  if(!updateQfValidation()){ addLog('Preencha os campos corretamente.','warn'); return; }
+  const regra=REGRAS[currentGame];
+  const dateVal=document.getElementById('qfDate').value;
+  const nums=parseNumbersFromInput(document.getElementById('qfNums').value).sort((a,b)=>a-b);
+  const extras=parseNumbersFromInput(document.getElementById('qfExtra').value).sort((a,b)=>a-b);
+  const concurso=document.getElementById('qfConcurso').value.trim();
+  const entry={data:isoParaDMY(dateVal), numeros:nums, concurso:concurso||('manual-'+Date.now()), fonte:'manual'};
+  if(currentGame==='euromilhoes') entry.estrelas=extras;
+  else entry[regra.extraKey]=extras[0];
+  if(!historicoUser[currentGame]) historicoUser[currentGame]=[];
+  historicoUser[currentGame].unshift(entry);
+  await guardarHistoricoUser();
+  document.getElementById('qfNums').value=''; document.getElementById('qfExtra').value=''; document.getElementById('qfConcurso').value='';
+  updateQfValidation();
+  addLog(`Sorteio de ${entry.data} adicionado ao histórico de ${regra.nome}.`,'success');
+  toast('Sorteio adicionado ao histórico!');
+  refreshAfterHistoryChange();
+}
+
+/* ---- sincronização automática com o feed oficial (RSS Santa Casa) ---- */
+const RSS_URL='https://www.jogossantacasa.pt/web/SCRss/rssFeedCartRes';
+const RSS_ATTEMPTS=[
+  ()=>RSS_URL,
+  ()=>'https://api.allorigins.win/raw?url='+encodeURIComponent(RSS_URL),
+  ()=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(RSS_URL),
+  ()=>'https://corsproxy.io/?url='+encodeURIComponent(RSS_URL)
+];
+async function fetchRssText(url,timeoutMs){
+  let signal;
+  try{
+    if(typeof AbortSignal !== 'undefined' && AbortSignal.timeout) {
+      signal = AbortSignal.timeout(timeoutMs);
+    }
+  }catch(e){}
+  let r;
+  if(signal){
+    r=await fetch(url,{signal,cache:'no-store'});
+  } else {
+    const abortController = new AbortController();
+    const timeoutId = setTimeout(() => abortController.abort(), timeoutMs);
+    try {
+      r = await fetch(url, { signal: abortController.signal, cache: 'no-store' });
+      clearTimeout(timeoutId);
+    } catch (e) {
+      clearTimeout(timeoutId);
+      throw e;
+    }
+  }
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const buf=await r.arrayBuffer();
+  try{ return new TextDecoder('iso-8859-1').decode(buf); }catch(e){ return new TextDecoder('utf-8').decode(buf); }
+}
+function raceRssAttempts(timeoutMs){
+  const urls=RSS_ATTEMPTS.map(b=>b());
+  return new Promise((resolve,reject)=>{
+    let pending=urls.length, settled=false;
+    urls.forEach(u=>{
+      fetchRssText(u,timeoutMs).then(t=>{ if(!settled){settled=true; resolve(t);} }).catch(()=>{
+        pending--; if(pending===0 && !settled) reject(new Error('sem resposta'));
+      });
+    });
+  });
+}
+function stripTags(s){ return s.replace(/<[^>]*>/g,''); }
+function guessGameFromLink(link){
+  const l=(link||'').toLowerCase();
+  if(l.includes('eurodreams')) return 'eurodreams';
+  if(l.includes('euromilhoes')) return 'euromilhoes';
+  if(l.includes('totolotonew')||l.includes('totoloto')) return 'totoloto';
+  return null;
+}
+function guessGameFromTitle(title){
+  const t=(title||'').toLowerCase();
+  if(t.includes('eurodreams')) return 'eurodreams';
+  if(t.includes('milh')&&!t.includes('m1lh')&&!t.includes('chuva')) return 'euromilhoes';
+  if(t.includes('totoloto')) return 'totoloto';
+  return null;
+}
+function parseRssDescription(desc){
+  const clean=stripTags(desc).trim();
+  const cm=clean.match(/(\d{3}\/\d{4})/);
+  const concurso=cm?cm[1]:null;
+  const after=clean.split(':').slice(1).join(':').trim();
+  if(!after) return null;
+  const [mainPart,extraPart]=after.split('+');
+  const numbers=(mainPart||'').match(/\d{1,2}/g)?.map(n=>parseInt(n,10))||[];
+  const extra=(extraPart||'').match(/\d{1,2}/g)?.map(n=>parseInt(n,10))||[];
+  return {concurso,numbers,extra};
+}
+function nearestPastDrawDate(game){
+  const dayMap={euromilhoes:[2,5],eurodreams:[1,4],totoloto:[3,6]};
+  const days=dayMap[game]; const today=new Date();
+  for(let back=0;back<8;back++){
+    const d=new Date(today); d.setDate(d.getDate()-back);
+    if(days.includes(d.getDay())) return isoParaDMY(d.toISOString().split('T')[0]);
+  }
+  return isoParaDMY(today.toISOString().split('T')[0]);
+}
+async function sincronizarOficial(auto){
+  const statusEls=[document.getElementById('officialStatus'),document.getElementById('officialStatus2')].filter(Boolean);
+  const btns=[document.getElementById('btnSync'),document.getElementById('btnSync2')].filter(Boolean);
+  const setStatus=(txt)=>statusEls.forEach(el=>el.textContent=txt);
+  btns.forEach(b=>b.disabled=true);
+  setStatus('A sincronizar com jogossantacasa.pt…');
+  let xml=null;
+  try{ xml=await raceRssAttempts(4500); }
+  catch(e){
+    setStatus('⚠️ Sem ligação ao feed oficial agora — a usar dados embutidos (desde 2020).');
+    btns.forEach(b=>b.disabled=false);
+    if(!auto) toast('Sincronização falhou. A usar dados históricos embutidos.',true);
+    return;
+  }
+  let items=[];
+  try{
+    const doc=new DOMParser().parseFromString(xml,'text/xml');
+    if(doc.querySelector('parsererror')) throw new Error('parse');
+    items=Array.from(doc.querySelectorAll('item'));
+  }catch(e){
+    setStatus('⚠️ Feed inválido — a usar dados embutidos.');
+    btns.forEach(b=>b.disabled=false); return;
+  }
+  let novos=0;
+  items.forEach(item=>{
+    const link=item.querySelector('link')?.textContent||'';
+    const title=item.querySelector('title')?.textContent||'';
+    const game=guessGameFromLink(link)||guessGameFromTitle(title);
+    if(!game) return;
+    const desc=item.querySelector('description')?.textContent||'';
+    const parsed=parseRssDescription(desc);
+    if(!parsed||!parsed.concurso||parsed.numbers.length<5) return;
+    const regra=REGRAS[game];
+    const jaExiste=getHistoricoCompleto(game).some(d=>d.concurso===parsed.concurso);
+    if(jaExiste) return;
+    const nMain=game==='eurodreams'?6:5;
+    const entry={ data:nearestPastDrawDate(game), numeros:parsed.numbers.slice(0,nMain).sort((a,b)=>a-b), concurso:parsed.concurso, fonte:'oficial' };
+    const extras=parsed.extra.slice(0,regra.stars.sorteados).sort((a,b)=>a-b);
+    if(game==='euromilhoes') entry.estrelas=extras; else entry[regra.extraKey]=extras[0];
+    if(!historicoUser[game]) historicoUser[game]=[];
+    historicoUser[game].unshift(entry);
+    novos++;
+  });
+  if(novos>0) await guardarHistoricoUser();
+  const now=new Date();
+  setStatus(novos>0
+    ? `✓ ${novos} sorteio(s) novo(s) importado(s) · ${now.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}`
+    : `✓ Já atualizado · última verificação ${now.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}`);
+  btns.forEach(b=>b.disabled=false);
+  if(novos>0){ addLog(`${novos} sorteio(s) oficial(is) sincronizado(s).`,'success'); toast(`${novos} sorteio(s) novo(s) importado(s) ✓`); }
+  refreshAfterHistoryChange();
+}
+function renderUltimoSorteioOficial(){
+  const regra=REGRAS[currentGame];
+  const draws=getHistoricoCompleto(currentGame);
+  const box=document.getElementById('officialBalls');
+  if(!draws.length){ box.innerHTML='<div class="prize-legend">Ainda sem sorteios registados para este jogo.</div>'; return; }
+  const d=draws[0];
+  const extras=extraValores(currentGame,d);
+  const badge=`<span class="src-badge ${d.fonte==='oficial'?'oficial':(d.fonte==='importado'?'importado':'manual')}">${d.fonte==='oficial'?'OFICIAL':(d.fonte==='importado'?'IMPORTADO':'MANUAL')}</span>`;
+  box.innerHTML = `<div style="width:100%;font-size:.7rem;color:var(--paper-dim);margin-bottom:6px;">${d.data}${d.concurso?' · Concurso '+d.concurso:''} ${badge}</div>`
+    + d.numeros.map(n=>`<div class="ball n small">${String(n).padStart(2,'0')}</div>`).join('')
+    + `<div style="width:100%;height:1px;background:var(--line-strong);margin:4px 0;"></div>`
+    + extras.map(n=>`<div class="ball s small">${String(n).padStart(2,'0')}</div>`).join('');
+}
+
+/* ============================================================
+   GERAÇÃO — algoritmo genético + ponderação real
+   ============================================================ */
+function fitnessMultiObjetivo(nums,regra,nQty){
+  const stats=calcularEstatisticasSoma(regra.nums.max,nQty);
+  const soma=nums.reduce((a,b)=>a+b,0);
+  const z=Math.abs((soma-stats.mu)/(stats.sigma||1));
+  const scoreSoma=Math.exp(-z*0.4);
+  const pares=nums.filter(n=>n%2===0).length;
+  const scorePar=1-Math.abs(pares-nQty/2)/(nQty/2||1);
+  const quartis=calcularQuartis(regra.nums.max);
+  const qOcc=[0,0,0,0];
+  nums.forEach(n=>{ if(n<=quartis.Q1)qOcc[0]++; else if(n<=quartis.Q2)qOcc[1]++; else if(n<=quartis.Q3)qOcc[2]++; else qOcc[3]++; });
+  const scoreQuart=Math.min(1,qOcc.filter(c=>c>0).length/3);
+  const scoreConsec=1-Math.min(1,(contarConsecutivosMax(nums)-1)/3);
+  const scoreDezena=1-Math.min(1,(contarMaxPorDezena(nums)-1)/3);
+  const scoreEntropia=calcularEntropia(nums,regra.nums.max);
+  return scoreSoma*0.26+scorePar*0.16+scoreQuart*0.16+scoreConsec*0.16+scoreDezena*0.12+scoreEntropia*0.14;
+}
+function crossoverOrdenado(pai1,pai2){
+  const n=pai1.length;
+  const start=Math.floor(Math.random()*n);
+  const end=start+Math.floor(Math.random()*(n-start));
+  const filho=new Array(n).fill(null); const usado=new Set();
+  for(let i=start;i<=end;i++){ filho[i]=pai1[i]; usado.add(pai1[i]); }
+  let idx=0;
+  for(let i=0;i<n;i++){
+    if(filho[i]!==null) continue;
+    while(usado.has(pai2[idx%n])) idx++;
+    filho[i]=pai2[idx%n]; usado.add(pai2[idx%n]); idx++;
+  }
+  return filho.sort((a,b)=>a-b);
+}
+function mutar(nums,min,max,taxa){
+  const res=[...nums]; const pool=[];
+  for(let i=min;i<=max;i++) if(!res.includes(i)) pool.push(i);
+  for(let i=0;i<res.length;i++){
+    if(Math.random()<taxa && pool.length>0){
+      const j=Math.floor(Math.random()*pool.length);
+      const antigo=res[i]; res[i]=pool[j]; pool[j]=antigo;
+    }
+  }
+  return [...new Set(res)].sort((a,b)=>a-b).slice(0,nums.length);
+}
+function superGenetico(regra,nQty,popSize,geracoes){
+  popSize=popSize||70; geracoes=geracoes||35;
+  const min=regra.nums.min,max=regra.nums.max;
+  let populacao=[];
+  for(let i=0;i<popSize;i++) populacao.push(amostraUniformeSemReposicao(min,max,nQty));
+  for(let g=0;g<geracoes;g++){
+    const scored=populacao.map(ind=>({ind,fit:fitnessMultiObjetivo(ind,regra,nQty)})).sort((a,b)=>b.fit-a.fit);
+    const elite=scored.slice(0,Math.max(4,Math.floor(popSize*0.15))).map(x=>x.ind);
+    const nova=[...elite];
+    while(nova.length<popSize){
+      const t1=scored[Math.floor(Math.random()*Math.min(30,scored.length))].ind;
+      const t2=scored[Math.floor(Math.random()*Math.min(30,scored.length))].ind;
+      let filho=crossoverOrdenado(t1,t2);
+      if(filho.length!==nQty) filho=amostraUniformeSemReposicao(min,max,nQty);
+      filho=mutar(filho,min,max,0.14+0.12*(1-g/geracoes));
+      nova.push(filho.length===nQty?filho:amostraUniformeSemReposicao(min,max,nQty));
+    }
+    populacao=nova;
+  }
+  const finalScored=populacao.map(ind=>({ind,fit:fitnessMultiObjetivo(ind,regra,nQty)})).sort((a,b)=>b.fit-a.fit);
+  return finalScored[0].ind;
+}
+function gerarCandidatoNumeros(regra,nQty,method,gameKey){
+  const min=regra.nums.min,max=regra.nums.max;
+  switch(method){
+    case 'genetic': return superGenetico(regra,nQty);
+    case 'random': return amostraUniformeSemReposicao(min,max,nQty);
+    case 'real-weighted': {
+      const {freqNum,total}=getFrequenciaReal(gameKey);
+      const maxFreq=Math.max(1,...freqNum.slice(1));
+      const smoothing = total>=15 ? 1.2 : 0.15; // pouca amostra => peso quase uniforme
+      return amostraPonderadaSemReposicao(min,max,nQty,i=>1 + (freqNum[i]/maxFreq)*smoothing);
+    }
+    case 'balanced': {
+      const zonas=5,tamZona=(max-min+1)/zonas;
+      const selecionados=new Set();
+      for(let z=0;z<zonas&&selecionados.size<nQty;z++){
+        const ini=Math.floor(min+z*tamZona), fim=Math.floor(min+(z+1)*tamZona)-1;
+        const cands=[];
+        for(let i=Math.max(min,ini);i<=Math.min(max,fim);i++) if(!selecionados.has(i)) cands.push(i);
+        if(cands.length>0) selecionados.add(cands[Math.floor(Math.random()*cands.length)]);
+      }
+      while(selecionados.size<nQty) selecionados.add(min+Math.floor(Math.random()*(max-min+1)));
+      return Array.from(selecionados).sort((a,b)=>a-b);
+    }
+    default: return amostraUniformeSemReposicao(min,max,nQty);
+  }
+}
+function gerarCombinacaoAsync(regra,nQty,sQty,method,gameKey,ultimaAposta,onProgress){
+  return new Promise((resolve)=>{
+    if(!nQty||isNaN(nQty)||nQty<regra.nums.sorteados) nQty=regra.nums.minAposta;
+    if(!sQty||isNaN(sQty)||sQty<regra.stars.sorteados) sQty=regra.stars.minAposta;
+    const isGenetic=method==='genetic';
+    const maxTentativas=isGenetic?200:300000;
+    const tamanhoBloco=isGenetic?1:3000;
+    let tentativas=0,ultimaTentativa=null;
+    const stats=calcularEstatisticasSoma(regra.nums.max,nQty);
+    const z=getConfZ();
+    const somaMin=Math.max(nQty,Math.round(stats.mu-z*stats.sigma));
+    const somaMax=Math.min(nQty*regra.nums.max,Math.round(stats.mu+z*stats.sigma));
+    const quartis=calcularQuartis(regra.nums.max);
+    const filtros=getFiltrosAtivos();
+    function processarBloco(){
+      const limite=Math.min(tentativas+tamanhoBloco,maxTentativas);
+      while(tentativas<limite){
+        tentativas++;
+        const nums=gerarCandidatoNumeros(regra,nQty,method,gameKey).sort((a,b)=>a-b);
+        const stars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,sQty).sort((a,b)=>a-b);
+        ultimaTentativa={nums,stars};
+        if(passaFiltros(nums,filtros,somaMin,somaMax,quartis,regra.nums.max,ultimaAposta)){
+          resolve({nums,stars,tentativas,stats,somaMin,somaMax,quartis,esgotado:false}); return;
+        }
+      }
+      if(onProgress) onProgress(tentativas,maxTentativas);
+      if(tentativas>=maxTentativas){
+        resolve({nums:ultimaTentativa.nums,stars:ultimaTentativa.stars,tentativas:maxTentativas,stats,somaMin,somaMax,quartis,esgotado:true}); return;
+      }
+      setTimeout(processarBloco,0);
     }
     processarBloco();
   });
 }
-
-function calcularPreco(regra, n, s) {
-  const combosNums = C(n, regra.nums.sorteados);
-  const combosStars = C(s, regra.stars.sorteados);
-  const totalCombos = combosNums * combosStars;
-  return { totalCombos, custo: totalCombos * regra.preco };
+function calcularPreco(regra,n,s){
+  const combosNums=C(n,regra.nums.sorteados);
+  const combosStars=C(s,regra.stars.sorteados);
+  const totalCombos=combosNums*combosStars;
+  return {totalCombos,custo:totalCombos*regra.preco};
+}
+function getCombinations(arr,k){
+  if(k>arr.length||k<=0) return [];
+  if(k===arr.length) return [arr.slice()];
+  const result=[]; const n=arr.length;
+  function backtrack(start,current){
+    if(current.length===k){ result.push([...current]); return; }
+    for(let i=start;i<n;i++){ if(n-i>=k-current.length){ current.push(arr[i]); backtrack(i+1,current); current.pop(); } }
+  }
+  backtrack(0,[]);
+  return result;
 }
 
-let currentGame = 'euromilhoes';
-let historico = [];
+let currentGame='euromilhoes';
+let ultimaApostaGerador=null;
 
-function getNextDrawDate(diasSemana, hora) {
-  const agora = new Date();
-  const diasNomes = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
-  let diasAte = 7;
-  for (const d of diasSemana) {
-    let diff = d - agora.getDay();
-    if (diff < 0) diff += 7;
-    if (diff === 0) {
-      const [h,m] = hora.split(':').map(Number);
-      if (agora.getHours() > h || (agora.getHours() === h && agora.getMinutes() >= m)) diff = 7;
-    }
-    if (diff < diasAte) diasAte = diff;
+/* ---- apostas guardadas (window.storage/localStorage) ---- */
+const STORAGE_KEY='jonhy_apostas_guardadas';
+async function carregarApostasGuardadas(){
+  try{
+    if(temWindowStorage()){ const r=await window.storage.get('apostas_guardadas'); return r?JSON.parse(r.value):[]; }
+    const raw=localStorage.getItem(STORAGE_KEY); return raw?JSON.parse(raw):[];
+  }catch(e){ return []; }
+}
+async function guardarApostaPersistente(entry){
+  try{
+    const atuais=await carregarApostasGuardadas();
+    atuais.unshift(entry);
+    const lista=atuais.slice(0,200);
+    if(temWindowStorage()) await window.storage.set('apostas_guardadas',JSON.stringify(lista));
+    else localStorage.setItem(STORAGE_KEY,JSON.stringify(lista));
+    return true;
+  }catch(e){ return false; }
+}
+async function limparApostasPersistentes(){
+  try{
+    if(temWindowStorage()) await window.storage.set('apostas_guardadas',JSON.stringify([]));
+    else localStorage.setItem(STORAGE_KEY,JSON.stringify([]));
+    return true;
+  }catch(e){ return false; }
+}
+async function renderApostasGuardadas(){
+  const card=document.getElementById('savedBetsCard');
+  const list=document.getElementById('historyList');
+  let apostas=[];
+  try{ apostas=await carregarApostasGuardadas(); }catch(e){ apostas=[]; }
+  if(!apostas||apostas.length===0){ card.style.display='none'; return; }
+  card.style.display='block';
+  list.innerHTML=apostas.map(h=>`
+    <div class="history-item">
+      <div class="history-nums">${h.nums.map(n=>String(n).padStart(2,'0')).join(' · ')}${h.stars&&h.stars.length?' <span class="s">| '+h.stars.map(s=>String(s).padStart(2,'0')).join(' · ')+'</span>':''}</div>
+      <div class="history-meta">${h.game} · ${h.metodo||''} · ${h.data}</div>
+    </div>`).join('');
+}
+
+function getNextDrawDate(diasSemana,hora){
+  const agora=new Date();
+  const diasNomes=['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+  let diasAte=7;
+  for(const d of diasSemana){
+    let diff=d-agora.getDay(); if(diff<0) diff+=7;
+    if(diff===0){ const [h,m]=hora.split(':').map(Number); if(agora.getHours()>h||(agora.getHours()===h&&agora.getMinutes()>=m)) diff=7; }
+    if(diff<diasAte) diasAte=diff;
   }
-  const dataProx = new Date(agora);
-  dataProx.setDate(agora.getDate() + diasAte);
-  const dataFmt = dataProx.toLocaleDateString('pt-PT', { day:'2-digit', month:'2-digit', year:'numeric' });
+  const dataProx=new Date(agora); dataProx.setDate(agora.getDate()+diasAte);
+  const dataFmt=dataProx.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'});
   return `${diasNomes[dataProx.getDay()]}, ${dataFmt} às ${hora}`;
 }
-
-function aplicarCoresJogo(gameKey) {
-  const cores = CORES_JOGO[gameKey];
-  if (!cores) return;
-  document.documentElement.style.setProperty('--game-color', cores.game);
-  document.documentElement.style.setProperty('--game-color-rgb', cores.gameRGB);
+const CORES_JOGO={euromilhoes:{c:'#E4523F',rgb:'228,82,63'},totoloto:{c:'#C8963E',rgb:'200,150,62'},eurodreams:{c:'#4FCB8E',rgb:'79,203,142'}};
+function aplicarCoresJogo(gameKey){
+  const cores=CORES_JOGO[gameKey]; if(!cores) return;
+  document.documentElement.style.setProperty('--game',cores.c);
+  document.documentElement.style.setProperty('--game-rgb',cores.rgb);
+  document.querySelectorAll('.game-pill').forEach(p=>p.classList.toggle('active',p.dataset.game===gameKey));
 }
 
 /* ============================================================
-   UI
+   UI: GERADOR
    ============================================================ */
-function updateUI() {
-  try {
-    currentGame = document.getElementById('gameType').value;
-    const regra = REGRAS[currentGame];
-    if (!regra) return;
+function renderFilterGrid(){
+  const grid=document.getElementById('filterGrid');
+  grid.innerHTML=FILTROS_DEF.map(f=>`
+    <label class="filter-chip" for="${f.id}">
+      <input type="checkbox" id="${f.id}" checked>
+      <span class="fc-text"><span class="fc-title">${f.t}</span><br><span class="fc-sub">${f.s}</span></span>
+    </label>`).join('');
+}
+function updateUI(){
+  try{
     aplicarCoresJogo(currentGame);
+    const regra=REGRAS[currentGame];
+    ultimaApostaGerador=null;
 
-    const nSel = document.getElementById('nQty');
-    nSel.innerHTML = '';
-    for (let i = regra.nums.minAposta; i <= regra.nums.maxAposta; i++) {
-      const opt = document.createElement('option'); opt.value = i; opt.textContent = i; nSel.appendChild(opt);
-    }
-    nSel.value = regra.nums.minAposta;
-    document.getElementById('nQtyDisplay').textContent = regra.nums.minAposta;
+    const nSel=document.getElementById('nQty'); nSel.innerHTML='';
+    for(let i=regra.nums.minAposta;i<=regra.nums.maxAposta;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; nSel.appendChild(o); }
+    nSel.value=regra.nums.minAposta; document.getElementById('nQtyDisplay').textContent=regra.nums.minAposta;
 
-    const sSel = document.getElementById('sQty');
-    sSel.innerHTML = '';
-    const isFixed = regra.stars.minAposta === regra.stars.maxAposta;
-    for (let i = regra.stars.minAposta; i <= regra.stars.maxAposta; i++) {
-      const opt = document.createElement('option'); opt.value = i; opt.textContent = i; sSel.appendChild(opt);
-    }
-    sSel.value = regra.stars.minAposta;
-    sSel.disabled = isFixed;
-    document.getElementById('starLabel').textContent = regra.stars.nome + (isFixed ? ' (Fixo)' : '');
-    document.getElementById('sQtyDisplay').textContent = regra.stars.minAposta;
+    const sSel=document.getElementById('sQty'); sSel.innerHTML='';
+    const isFixed=regra.stars.minAposta===regra.stars.maxAposta;
+    for(let i=regra.stars.minAposta;i<=regra.stars.maxAposta;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; sSel.appendChild(o); }
+    sSel.value=regra.stars.minAposta; sSel.disabled=isFixed;
+    document.getElementById('starLabel').textContent=regra.stars.nome+(isFixed?' (fixo)':'');
+    document.getElementById('sQtyDisplay').textContent=regra.stars.minAposta;
 
-    nSel.onchange = function () { document.getElementById('nQtyDisplay').textContent = this.value; updatePriceDisplay(); updateFooter(); renderPrizeTable(regra); };
-    sSel.onchange = function () { document.getElementById('sQtyDisplay').textContent = this.value; updatePriceDisplay(); updateFooter(); renderPrizeTable(regra); };
+    nSel.onchange=function(){ document.getElementById('nQtyDisplay').textContent=this.value; updatePriceDisplay(); updateFooter(); renderPrizeTable(regra); };
+    sSel.onchange=function(){ document.getElementById('sQtyDisplay').textContent=this.value; updatePriceDisplay(); updateFooter(); renderPrizeTable(regra); };
 
     renderPrizeTable(regra);
     updateFirstPrize(regra);
     updatePriceDisplay();
     updateFooter();
-    document.getElementById('resultPanel').style.display = 'none';
-    document.getElementById('mcResultContainer').innerHTML = '';
-    addLog(`Jogo selecionado: ${regra.nome}`, 'system');
-  } catch (err) {
-    console.error('Erro em updateUI:', err);
-    addLog('Erro: ' + err.message, 'warn');
-  }
+    document.getElementById('resultPanel').style.display='none';
+    document.getElementById('mcResultContainer').innerHTML='';
+    document.getElementById('mcRealChi').innerHTML='';
+    updateMultiUI();
+    renderManualGrids();
+    renderUltimoSorteioOficial();
+    renderHistoricoTab();
+    updateQfNames();
+    updateCkNames();
+    updateQfValidation();
+    addLog(`Jogo selecionado: ${regra.nome}`,'system');
+  }catch(err){ console.error('Erro em updateUI:',err); addLog('Erro: '+err.message,'warn'); }
 }
-
-function updatePriceDisplay() {
-  const regra = REGRAS[currentGame];
-  const n = parseInt(document.getElementById('nQty').value, 10);
-  const s = parseInt(document.getElementById('sQty').value, 10);
-  const { totalCombos, custo } = calcularPreco(regra, n, s);
-  document.getElementById('priceValue').textContent = `€ ${custo.toFixed(2).replace('.', ',')}`;
-  document.getElementById('priceCombos').textContent = `${totalCombos.toLocaleString('pt-PT')} combinação(ões) · ${n}+${s}`;
+function updateQfNames(){
+  const regra=REGRAS[currentGame];
+  document.getElementById('qfNumsLabel').textContent=`Números sorteados (${regra.nums.sorteados})`;
+  document.getElementById('qfExtraLabel').textContent=`${regra.stars.nome} (${regra.stars.sorteados})`;
 }
-
-function updateFooter() {
-  const regra = REGRAS[currentGame];
-  const n = parseInt(document.getElementById('nQty').value, 10);
-  const s = parseInt(document.getElementById('sQty').value, 10);
-  const { custo } = calcularPreco(regra, n, s);
-  const proximoSorteio = getNextDrawDate(regra.diasSorteio, regra.horaSorteio);
-  document.getElementById('footerDrawInfo').innerHTML = `
+function updateCkNames(){
+  const regra=REGRAS[currentGame];
+  document.getElementById('ckExtraLabel').textContent=regra.stars.nome;
+}
+function updatePriceDisplay(){
+  const regra=REGRAS[currentGame];
+  const n=parseInt(document.getElementById('nQty').value,10);
+  const s=parseInt(document.getElementById('sQty').value,10);
+  const {totalCombos,custo}=calcularPreco(regra,n,s);
+  document.getElementById('priceValue').textContent=`€ ${custo.toFixed(2).replace('.',',')}`;
+  document.getElementById('priceCombos').textContent=`${totalCombos.toLocaleString('pt-PT')} combinação(ões) · ${n}+${s}`;
+}
+function updateFooter(){
+  const regra=REGRAS[currentGame];
+  const n=parseInt(document.getElementById('nQty').value,10);
+  const s=parseInt(document.getElementById('sQty').value,10);
+  const {custo}=calcularPreco(regra,n,s);
+  const proximoSorteio=getNextDrawDate(regra.diasSorteio,regra.horaSorteio);
+  document.getElementById('footerDrawInfo').innerHTML=`
     <span class="draw-date">PRÓXIMO SORTEIO: ${proximoSorteio}</span>
-    <span class="draw-price">PREÇO DA APOSTA: € ${custo.toFixed(2).replace('.', ',')}</span>
-  `;
+    <span class="draw-price">PREÇO DA APOSTA: € ${custo.toFixed(2).replace('.',',')}</span>`;
 }
-
-function updateFirstPrize(regra) {
-  const totalCombos = C(regra.nums.max, regra.nums.sorteados) * C(regra.stars.max, regra.stars.sorteados);
-  const comboTxt = `${regra.nums.sorteados} números + ${regra.stars.sorteados} ${regra.stars.nome}`;
-  document.getElementById('fpCombo').textContent = comboTxt;
-  document.getElementById('fpOdds').textContent = `1 / ${totalCombos.toLocaleString('pt-PT')}`;
-  document.getElementById('fpJackpot').textContent = regra.jackpotInfo;
+function updateFirstPrize(regra){
+  const totalCombos=C(regra.nums.max,regra.nums.sorteados)*C(regra.stars.max,regra.stars.sorteados);
+  document.getElementById('fpCombo').textContent=`${regra.nums.sorteados} números + ${regra.stars.sorteados} ${regra.stars.nome}`;
+  document.getElementById('fpOdds').textContent=`1 em ${totalCombos.toLocaleString('pt-PT')}`;
+  document.getElementById('fpJackpot').textContent=regra.jackpotInfo;
 }
-
-/* ============================================================
-   TABELAS DE ESCALÕES
-   ============================================================ */
-function construirTabelaEscaloes(regra, nQty, sQty) {
-  const isSystem = nQty > regra.nums.sorteados || sQty > regra.stars.sorteados;
-
-  let html = `<table class="simple-prize-table">
-    <thead><tr>
-      <th style="text-align:left;">Escalão</th>
-      <th>Odds Aposta Simples</th>
-      ${isSystem ? '<th>Chance no Seu Sistema</th>' : ''}
-      <th>Valor (€)</th>
-    </tr></thead><tbody>`;
-
-  regra.premios.forEach((p, idx) => {
+function construirTabelaEscaloes(regra,nQty,sQty,targetIdx){
+  const isSystem=nQty>regra.nums.sorteados||sQty>regra.stars.sorteados;
+  let html=`<table class="prize-table"><thead><tr><th style="text-align:left;">Escalão</th><th>Odds simples</th>${isSystem?'<th>No seu sistema</th>':''}<th>Valor (€)</th></tr></thead><tbody>`;
+  regra.premios.forEach((p,idx)=>{
     let probReal;
-    if (p.ignoreDream) {
-      probReal = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n);
-    } else {
-      const probNums = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n);
-      const probStars = probHipergeometrica(regra.stars.max, regra.stars.sorteados, regra.stars.sorteados, p.s);
-      probReal = probNums * probStars;
+    if(p.ignoreDream) probReal=probHipergeometrica(regra.nums.max,regra.nums.sorteados,regra.nums.sorteados,p.n);
+    else{
+      const probNums=probHipergeometrica(regra.nums.max,regra.nums.sorteados,regra.nums.sorteados,p.n);
+      const probStars=probHipergeometrica(regra.stars.max,regra.stars.sorteados,regra.stars.sorteados,p.s);
+      probReal=probNums*probStars;
     }
-    const odds = probReal > 0 ? 1 / probReal : Infinity;
-    const oddsFmt = isFinite(odds) ? '1 / ' + Math.round(odds).toLocaleString('pt-PT') : 'N/D';
-    const valorFmt = p.valor !== null ? '€ ' + p.valor.toLocaleString('pt-PT') : p.valorTxt;
-
-    let sistemaCell = '';
-    if (isSystem) {
+    const odds=probReal>0?1/probReal:Infinity;
+    const oddsFmt=isFinite(odds)?'1/'+Math.round(odds).toLocaleString('pt-PT'):'N/D';
+    const valorFmt=p.valor!=null?'€ '+p.valor.toLocaleString('pt-PT'):p.valorTxt;
+    let sistemaCell='';
+    if(isSystem){
       let probSistema;
-      if (p.ignoreDream) {
-        probSistema = probSistemaPeloMenos(regra.nums.max, regra.nums.sorteados, nQty, p.n);
-      } else {
-        const probSistemaNums = probSistemaPeloMenos(regra.nums.max, regra.nums.sorteados, nQty, p.n);
-        const probSistemaStars = probSistemaPeloMenos(regra.stars.max, regra.stars.sorteados, sQty, p.s);
-        probSistema = probSistemaNums * probSistemaStars;
+      if(p.ignoreDream) probSistema=probSistemaPeloMenos(regra.nums.max,regra.nums.sorteados,nQty,p.n);
+      else{
+        const probSistemaNums=probSistemaPeloMenos(regra.nums.max,regra.nums.sorteados,nQty,p.n);
+        const probSistemaStars=probSistemaPeloMenos(regra.stars.max,regra.stars.sorteados,sQty,p.s);
+        probSistema=probSistemaNums*probSistemaStars;
       }
-      const oddsSistema = probSistema > 0 ? 1 / probSistema : Infinity;
-      const sistemaFmt = isFinite(oddsSistema)
-        ? (probSistema >= 0.001 ? (probSistema * 100).toFixed(2) + '%' : '1 / ' + Math.round(oddsSistema).toLocaleString('pt-PT'))
-        : 'N/D';
-      sistemaCell = `<td class="tier-system">${sistemaFmt}</td>`;
+      const oddsSistema=probSistema>0?1/probSistema:Infinity;
+      const sistemaFmt=isFinite(oddsSistema)?(probSistema>=0.001?(probSistema*100).toFixed(2)+'%':'1/'+Math.round(oddsSistema).toLocaleString('pt-PT')):'N/D';
+      sistemaCell=`<td>${sistemaFmt}</td>`;
     }
-
-    html += `<tr class="${idx === 0 ? 'first-tier' : ''}"><td class="tier-name">${p.nome}</td><td class="tier-odds">${oddsFmt}</td>${sistemaCell}<td class="tier-value">${valorFmt}</td></tr>`;
+    const rowClass=idx===0?'first-tier':(idx===targetIdx?'target-tier':'');
+    html+=`<tr class="${rowClass}"><td class="tier-name">${p.nome}</td><td>${oddsFmt}</td>${sistemaCell}<td class="tier-value">${valorFmt}</td></tr>`;
   });
-
-  html += `</tbody></table>`;
-  html += `<div class="prize-table-legend">📌 ${regra.jackpotInfo}. Odds calculadas por combinatória hipergeométrica exata — idênticas às probabilidades oficiais publicadas pela Santa Casa. Valores marcados "Variável" dependem das vendas e nº de vencedores de cada sorteio real.</div>`;
-  if (isSystem) {
-    html += `<div class="prize-table-legend">"Chance no Seu Sistema" = probabilidade real de acertar <b>pelo menos uma vez</b> nesse escalão jogando todas as combinações do seu sistema.</div>`;
-  }
+  html+=`</tbody></table><div class="prize-legend">${regra.jackpotInfo}. Odds calculadas por combinatória hipergeométrica exata.</div>`;
+  if(isSystem) html+=`<div class="prize-legend">"No seu sistema" = probabilidade real de acertar pelo menos uma vez nesse escalão jogando todas as combinações do sistema.</div>`;
   return html;
 }
-
-function renderPrizeTable(regra) {
-  const nQty = parseInt(document.getElementById('nQty').value, 10) || regra.nums.minAposta;
-  const sQty = parseInt(document.getElementById('sQty').value, 10) || regra.stars.minAposta;
-  document.getElementById('prizeTableContainer').innerHTML = construirTabelaEscaloes(regra, nQty, sQty);
+function renderPrizeTable(regra){
+  const nQty=parseInt(document.getElementById('nQty').value,10)||regra.nums.minAposta;
+  const sQty=parseInt(document.getElementById('sQty').value,10)||regra.stars.minAposta;
+  document.getElementById('prizeTableContainer').innerHTML=construirTabelaEscaloes(regra,nQty,sQty);
 }
-
-function renderResultEscalaoTable(regra, nQty, sQty) {
-  document.getElementById('resultEscalaoTable').innerHTML = construirTabelaEscaloes(regra, nQty, sQty);
+function renderResultEscalaoTable(regra,nQty,sQty){
+  document.getElementById('resultEscalaoTable').innerHTML=construirTabelaEscaloes(regra,nQty,sQty);
 }
 
 /* ============================================================
-   LOG, PROGRESSO E RESULTADOS
+   HISTÓRICO TAB
    ============================================================ */
-function addLog(msg, type) {
-  const term = document.getElementById('terminal');
-  const div = document.createElement('div');
-  div.className = `log-line ${type || 'system'}`;
-  div.textContent = `> ${msg}`;
-  term.appendChild(div);
-  term.scrollTop = term.scrollHeight;
-}
+const MESES_PT=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+function renderHistoricoTab(){
+  const gameKey=currentGame;
+  const dados=getHistoricoCompleto(gameKey);
+  document.getElementById('histCountLabel').textContent=` · ${dados.length} sorteio(s)`;
+  const monthSel=document.getElementById('histMonthFilter');
+  const mesesPresentes=new Map();
+  dados.forEach(s=>{ const [d,m,y]=s.data.split('/'); const key=`${y}-${m}`; if(!mesesPresentes.has(key)) mesesPresentes.set(key,`${MESES_PT[parseInt(m,10)-1]} ${y}`); });
+  const mesesOrdenados=Array.from(mesesPresentes.entries()).sort((a,b)=>b[0].localeCompare(a[0]));
+  const valorAtual=monthSel.value||'all';
+  monthSel.innerHTML='<option value="all">Todos os meses</option>'+mesesOrdenados.map(([k,l])=>`<option value="${k}">${l}</option>`).join('');
+  monthSel.value=mesesPresentes.has(valorAtual)||valorAtual==='all'?valorAtual:'all';
+  const filtro=monthSel.value;
+  const filtrados=filtro==='all'?dados:dados.filter(s=>{ const [d,m,y]=s.data.split('/'); return `${y}-${m}`===filtro; });
 
-function setProgress(pct, wrapId, barId) {
-  const wrap = document.getElementById(wrapId || 'progressWrap');
-  const bar = document.getElementById(barId || 'progressBar');
-  if (pct === null) { wrap.classList.remove('active'); bar.style.width = '0%'; return; }
-  wrap.classList.add('active');
-  bar.style.width = Math.min(100, pct) + '%';
-}
-
-function exibirResultado(nums, stars, regra, resultado, nQty, sQty) {
-  const panel = document.getElementById('resultPanel');
-  const ballOut = document.getElementById('ballOutput');
-  ballOut.innerHTML = '';
-  nums.forEach(n => { const b=document.createElement('div'); b.className='ball game-color'; b.textContent=String(n).padStart(2,'0'); ballOut.appendChild(b); });
-  if (stars && stars.length > 0) {
-    const sep = document.createElement('div'); sep.style.width='100%'; sep.style.height='1px';
-    sep.style.background = 'linear-gradient(90deg, transparent, var(--glass-border), transparent)'; sep.style.margin='8px 0';
-    ballOut.appendChild(sep);
-    stars.forEach(s => { const b=document.createElement('div'); b.className='ball star-color'; b.textContent=String(s).padStart(2,'0'); ballOut.appendChild(b); });
+  const list=document.getElementById('historyDrawsList');
+  if(!filtrados.length){ list.innerHTML='<div class="prize-legend">Sem sorteios para mostrar. Sincronize ou registe manualmente acima.</div>'; }
+  else{
+    list.innerHTML=filtrados.map(d=>{
+      const extras=extraValores(gameKey,d);
+      const badge=`<span class="src-badge ${d.fonte==='oficial'?'oficial':(d.fonte==='importado'?'importado':'manual')}">${d.fonte==='oficial'?'OFICIAL':(d.fonte==='importado'?'IMPORTADO':'MANUAL')}</span>`;
+      return `<div class="history-item">
+        <div class="history-nums">${d.numeros.map(n=>String(n).padStart(2,'0')).join(' · ')} <span class="s">| ${extras.map(n=>String(n).padStart(2,'0')).join(' · ')}</span></div>
+        <div class="history-meta">${d.data}${d.concurso&&!d.concurso.startsWith('manual-')?' · '+d.concurso:''} ${badge}</div>
+      </div>`;
+    }).join('');
   }
 
-  const soma = nums.reduce((a,b)=>a+b,0);
-  const pares = nums.filter(n=>n%2===0).length, impares = nums.length - pares;
-  const somaOk = soma >= resultado.somaMin && soma <= resultado.somaMax;
-  const zScore = (soma - resultado.stats.mu) / resultado.stats.sigma;
-  const q1=nums.filter(n=>n<=resultado.quartis.Q1).length, q2=nums.filter(n=>n>resultado.quartis.Q1&&n<=resultado.quartis.Q2).length;
-  const q3=nums.filter(n=>n>resultado.quartis.Q2&&n<=resultado.quartis.Q3).length, q4=nums.filter(n=>n>resultado.quartis.Q3).length;
-  const quartisOcupados = [q1,q2,q3,q4].filter(c=>c>0).length;
-  const paresProximos = contarParesProximos(nums), maxConsec = contarConsecutivosMax(nums);
-  const maxDezena = contarMaxPorDezena(nums), maxDigito = contarMaxUltimoAlgarismo(nums);
+  const {freqNum,total}=getFrequenciaReal(gameKey);
+  const regra=REGRAS[gameKey];
+  const maxFreq=Math.max(1,...freqNum.slice(1));
+  let freqHtml='<div style="display:flex;flex-direction:column;gap:5px;">';
+  let any=false;
+  for(let n=1;n<=regra.nums.max;n++){
+    if(freqNum[n]===0) continue; any=true;
+    const pct=(freqNum[n]/maxFreq)*100;
+    freqHtml+=`<div class="freq-row"><div class="freq-ball">${String(n).padStart(2,'0')}</div><div class="freq-bar-track"><div class="freq-bar-fill" style="width:${pct}%"></div></div><div class="freq-count">${freqNum[n]}</div></div>`;
+  }
+  freqHtml+='</div>';
+  document.getElementById('historicoFreqContainer').innerHTML = any ? freqHtml : '<div class="prize-legend">Sem dados suficientes ainda.</div>';
+}
+document.addEventListener('change', function(e){ if(e.target && e.target.id==='histMonthFilter') renderHistoricoTab(); });
 
-  document.getElementById('analysisGrid').innerHTML = `
-    <div class="stat-box"><div class="label">Soma (Z-Score)</div><div class="value ${somaOk?'ok':'warn'}">${soma} (z=${zScore.toFixed(2)}) ${somaOk?'✓':'⚠'}</div></div>
-    <div class="stat-box"><div class="label">Par / Ímpar</div><div class="value">${pares} / ${impares}</div></div>
-    <div class="stat-box"><div class="label">Quartis Ocupados</div><div class="value ${quartisOcupados>=2?'ok':'warn'}">${quartisOcupados}/4 (${q1}-${q2}-${q3}-${q4})</div></div>
-    <div class="stat-box"><div class="label">Pares Próximos (Δ&lt;3)</div><div class="value ${paresProximos<=2?'ok':'warn'}">${paresProximos} (máx 2)</div></div>
-    <div class="stat-box"><div class="label">Consecutivos Máx.</div><div class="value ${maxConsec<3?'ok':'warn'}">${maxConsec} (máx 2)</div></div>
-    <div class="stat-box"><div class="label">Máx. por Dezena</div><div class="value ${maxDezena<=2?'ok':'warn'}">${maxDezena} (máx 2)</div></div>
-    <div class="stat-box"><div class="label">Máx. Mesmo Algarismo Final</div><div class="value ${maxDigito<=2?'ok':'warn'}">${maxDigito} (máx 2)</div></div>
-    <div class="stat-box"><div class="label">Iterações até Válida</div><div class="value">${resultado.tentativas.toLocaleString('pt-PT')}</div></div>
-  `;
-
-  renderResultEscalaoTable(regra, nQty, sQty);
-
-  panel.dataset.nums = nums.join(', ');
-  panel.dataset.stars = stars.join(', ');
-  panel.dataset.game = regra.nome;
-  panel.style.display = 'block';
-  setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+function refreshAfterHistoryChange(){
+  renderUltimoSorteioOficial();
+  renderHistoricoTab();
 }
 
 /* ============================================================
-   CÓPIA (com fallback)
+   CONFERIR APOSTA
    ============================================================ */
-function copiarTexto(texto) {
-  return new Promise((resolve, reject) => {
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(texto).then(resolve).catch(() => copiarFallback(texto, resolve, reject));
-    } else {
-      copiarFallback(texto, resolve, reject);
-    }
+function verificarAposta(){
+  const regra=REGRAS[currentGame];
+  const userNums=parseNumbersFromInput(document.getElementById('ckNums').value);
+  const userExtra=parseNumbersFromInput(document.getElementById('ckExtra').value);
+  const box=document.getElementById('checkResult');
+  if(!userNums.length){ toast('Indique os seus números',true); return; }
+  const draws=getHistoricoCompleto(currentGame);
+  if(!draws.length){ box.innerHTML='<div class="prize-legend">Sem sorteios registados para comparar. Sincronize ou registe manualmente.</div>'; return; }
+  let html='';
+  draws.forEach(d=>{
+    const extras=extraValores(currentGame,d);
+    const numHits=userNums.filter(n=>d.numeros.includes(n));
+    const extraHits=userExtra.filter(n=>extras.includes(n));
+    const tier=regra.premios.find(p=>{
+      if(p.ignoreDream) return numHits.length===p.n;
+      return numHits.length===p.n && extraHits.length===p.s;
+    });
+    html+=`<div class="history-item">
+      <div>
+        <div class="history-nums">${d.data}${d.concurso&&!d.concurso.startsWith('manual-')?' · '+d.concurso:''}</div>
+        <div class="history-meta">${numHits.length} números certos · ${extraHits.length} ${regra.stars.nome} certas ${tier?' · <span style="color:var(--ok);">'+tier.nome+'</span>':''}</div>
+      </div>
+    </div>`;
+  });
+  box.innerHTML=html+'<div class="prize-legend" style="margin-top:8px;">Comparação meramente informativa contra o histórico registado — confirme sempre em jogossantacasa.pt.</div>';
+}
+
+/* ============================================================
+   LOG / PROGRESSO / TOAST
+   ============================================================ */
+function toast(msg,isError){
+  let t=document.getElementById('globalToast');
+  if(!t){ t=document.createElement('div'); t.id='globalToast'; t.className='toast'; document.body.appendChild(t); }
+  t.classList.toggle('err',!!isError);
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove('show'),2800);
+}
+function addLog(msg,type){
+  const term=document.getElementById('terminal');
+  const div=document.createElement('div');
+  div.className=`log-line ${type||'system'}`;
+  div.textContent=`> ${msg}`;
+  term.appendChild(div); term.scrollTop=term.scrollHeight;
+}
+function setProgress(pct,wrapId,barId){
+  const wrap=document.getElementById(wrapId||'progressWrap');
+  const bar=document.getElementById(barId||'progressBar');
+  if(pct===null){ wrap.classList.remove('active'); bar.style.width='0%'; return; }
+  wrap.classList.add('active'); bar.style.width=Math.min(100,pct)+'%';
+}
+function exibirResultado(nums,stars,regra,resultado,nQty,sQty,method){
+  const panel=document.getElementById('resultPanel');
+  const ballOut=document.getElementById('ballOutput'); ballOut.innerHTML='';
+  nums.forEach(n=>{ const b=document.createElement('div'); b.className='ball n'; b.textContent=String(n).padStart(2,'0'); ballOut.appendChild(b); });
+  if(stars&&stars.length>0){
+    const sep=document.createElement('div'); sep.style.width='100%'; sep.style.height='1px'; sep.style.background='var(--line-strong)'; sep.style.margin='6px 0';
+    ballOut.appendChild(sep);
+    stars.forEach(s=>{ const b=document.createElement('div'); b.className='ball s'; b.textContent=String(s).padStart(2,'0'); ballOut.appendChild(b); });
+  }
+  const soma=nums.reduce((a,b)=>a+b,0);
+  const pares=nums.filter(n=>n%2===0).length, impares=nums.length-pares;
+  const somaOk=soma>=resultado.somaMin&&soma<=resultado.somaMax;
+  const zScore=(soma-resultado.stats.mu)/resultado.stats.sigma;
+  const q1=nums.filter(n=>n<=resultado.quartis.Q1).length,q2=nums.filter(n=>n>resultado.quartis.Q1&&n<=resultado.quartis.Q2).length;
+  const q3=nums.filter(n=>n>resultado.quartis.Q2&&n<=resultado.quartis.Q3).length,q4=nums.filter(n=>n>resultado.quartis.Q3).length;
+  const quartisOcupados=[q1,q2,q3,q4].filter(c=>c>0).length;
+  const maxConsec=contarConsecutivosMax(nums);
+  const maxDezena=contarMaxPorDezena(nums);
+  const metades=contarMetades(nums,regra.nums.max);
+  document.getElementById('analysisGrid').innerHTML=`
+    <div class="stat-box"><div class="label">Método</div><div class="value">${method}</div></div>
+    <div class="stat-box"><div class="label">Soma (Z-score)</div><div class="value ${somaOk?'ok':'warn'}">${soma} (z=${zScore.toFixed(2)})</div></div>
+    <div class="stat-box"><div class="label">Par / Ímpar</div><div class="value">${pares} / ${impares}</div></div>
+    <div class="stat-box"><div class="label">Metade baixa / alta</div><div class="value ${metades.baixa>0&&metades.alta>0?'ok':'warn'}">${metades.baixa} / ${metades.alta}</div></div>
+    <div class="stat-box"><div class="label">Quartis ocupados</div><div class="value ${quartisOcupados>=2?'ok':'warn'}">${quartisOcupados}/4 (${q1}-${q2}-${q3}-${q4})</div></div>
+    <div class="stat-box"><div class="label">Consecutivos máx.</div><div class="value ${maxConsec<3?'ok':'warn'}">${maxConsec} (máx 2)</div></div>
+    <div class="stat-box"><div class="label">Máx. por dezena</div><div class="value ${maxDezena<=2?'ok':'warn'}">${maxDezena} (máx 2)</div></div>
+    <div class="stat-box"><div class="label">Iterações até válida</div><div class="value">${resultado.tentativas.toLocaleString('pt-PT')}</div></div>
+  `;
+  renderResultEscalaoTable(regra,nQty,sQty);
+  panel.dataset.nums=nums.join(', ');
+  panel.dataset.stars=stars.join(', ');
+  panel.dataset.game=regra.nome;
+  panel.dataset.method=method;
+  panel.style.display='block';
+  setTimeout(()=>panel.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+function copiarTexto(texto){
+  return new Promise((resolve,reject)=>{
+    if(navigator.clipboard&&window.isSecureContext) navigator.clipboard.writeText(texto).then(resolve).catch(()=>copiarFallback(texto,resolve,reject));
+    else copiarFallback(texto,resolve,reject);
   });
 }
-function copiarFallback(texto, resolve, reject) {
-  try {
-    const ta = document.createElement('textarea');
-    ta.value = texto;
-    ta.style.position = 'fixed';
-    ta.style.left = '-9999px';
-    ta.style.top = '0';
-    document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
-    ta.setSelectionRange(0, texto.length);
-    const ok = document.execCommand('copy');
-    document.body.removeChild(ta);
-    ok ? resolve() : reject(new Error('execCommand falhou'));
-  } catch (e) { reject(e); }
-}
-
-/* ============================================================
-   HISTÓRICO
-   ============================================================ */
-function adicionarAoHistorico(regra, nums, stars) {
-  const agora = new Date();
-  historico.unshift({ game: regra.nome, nums: nums.slice(), stars: stars.slice(), hora: agora.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}) });
-  if (historico.length > 8) historico.pop();
-  renderHistorico();
-}
-function renderHistorico() {
-  const card = document.getElementById('historyCard');
-  const list = document.getElementById('historyList');
-  if (historico.length === 0) { card.style.display = 'none'; return; }
-  card.style.display = 'block';
-  list.innerHTML = historico.map(h => `
-    <div class="history-item">
-      <div class="history-nums">${h.nums.map(n=>String(n).padStart(2,'0')).join(' · ')}${h.stars.length ? ' <span class="s">| ' + h.stars.map(s=>String(s).padStart(2,'0')).join(' · ') + '</span>' : ''}</div>
-      <div class="history-meta">${h.game} · ${h.hora}</div>
-    </div>`).join('');
+function copiarFallback(texto,resolve,reject){
+  try{
+    const ta=document.createElement('textarea'); ta.value=texto; ta.style.position='fixed'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.focus(); ta.select(); ta.setSelectionRange(0,texto.length);
+    const ok=document.execCommand('copy'); document.body.removeChild(ta);
+    ok?resolve():reject(new Error('execCommand falhou'));
+  }catch(e){ reject(e); }
 }
 
 /* ============================================================
    MONTE CARLO
    ============================================================ */
-function runMonteCarloAsync(regra, totalSorteios, onProgress) {
-  return new Promise((resolve) => {
-    const tamanhoBloco = 5000;
-    let feitos = 0;
-    const contagens = {};
-    regra.premios.forEach(p => { contagens[p.nome] = 0; });
-
-    function bloco() {
-      const limite = Math.min(feitos + tamanhoBloco, totalSorteios);
-      while (feitos < limite) {
+function runMonteCarloAsync(regra,totalSorteios,onProgress){
+  return new Promise((resolve)=>{
+    const tamanhoBloco=20000; let feitos=0;
+    const nTiers=regra.premios.length;
+    const contagens=new Uint32Array(nTiers);
+    const snapshots=[]; const targetIdx=nTiers-1;
+    const minhaAposta=amostraUniformeSemReposicao(regra.nums.min,regra.nums.max,regra.nums.sorteados);
+    const minhasStars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,regra.stars.sorteados);
+    const apostaSet=new Set(minhaAposta); const starsSet=new Set(minhasStars);
+    function bloco(){
+      const limite=Math.min(feitos+tamanhoBloco,totalSorteios);
+      while(feitos<limite){
         feitos++;
-        const drawNums = amostraUniformeSemReposicao(regra.nums.min, regra.nums.max, regra.nums.sorteados);
-        const drawStars = amostraUniformeSemReposicao(regra.stars.min, regra.stars.max, regra.stars.sorteados);
-        const meusNums = amostraUniformeSemReposicao(regra.nums.min, regra.nums.max, regra.nums.sorteados);
-        const meusStars = amostraUniformeSemReposicao(regra.stars.min, regra.stars.max, regra.stars.sorteados);
-        const acertosNums = meusNums.filter(n => drawNums.includes(n)).length;
-        const acertosStars = meusStars.filter(s => drawStars.includes(s)).length;
-
-        regra.premios.forEach(p => {
-          if (p.ignoreDream) { if (acertosNums === p.n) contagens[p.nome]++; }
-          else if (acertosNums === p.n && acertosStars === p.s) contagens[p.nome]++;
-        });
+        const drawNums=amostraUniformeSemReposicao(regra.nums.min,regra.nums.max,regra.nums.sorteados);
+        const drawStars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,regra.stars.sorteados);
+        let an=0; for(let i=0;i<drawNums.length;i++) if(apostaSet.has(drawNums[i])) an++;
+        let as_=0; for(let i=0;i<drawStars.length;i++) if(starsSet.has(drawStars[i])) as_++;
+        for(let ti=0;ti<nTiers;ti++){
+          const p=regra.premios[ti];
+          if(p.ignoreDream){ if(an===p.n) contagens[ti]++; }
+          else if(an===p.n&&as_===p.s) contagens[ti]++;
+        }
       }
-      if (onProgress) onProgress(feitos, totalSorteios);
-      if (feitos >= totalSorteios) { resolve(contagens); return; }
-      setTimeout(bloco, 0);
+      snapshots.push({feitos,prob:contagens[targetIdx]/feitos});
+      if(onProgress) onProgress(feitos,totalSorteios);
+      if(feitos>=totalSorteios){ resolve({contagens,snapshots,minhaAposta,minhasStars}); return; }
+      setTimeout(bloco,0);
     }
     bloco();
   });
 }
-
-async function executarMonteCarlo(totalSorteios) {
-  const regra = REGRAS[currentGame];
-  const container = document.getElementById('mcResultContainer');
-  const buttons = [document.getElementById('btnMC10k'), document.getElementById('btnMC100k'), document.getElementById('btnMC500k')];
-  buttons.forEach(b => b.disabled = true);
-  setProgress(1, 'mcProgressWrap', 'mcProgressBar');
-  addLog(`Iniciando simulação Monte Carlo: ${totalSorteios.toLocaleString('pt-PT')} sorteios independentes...`, 'system');
-
-  const contagens = await runMonteCarloAsync(regra, totalSorteios, (feitos, total) => setProgress((feitos/total)*100, 'mcProgressWrap', 'mcProgressBar'));
-
-  let html = `<table class="mc-table"><thead><tr><th style="text-align:left;">Escalão</th><th>Teórico</th><th>Simulado</th><th>Nº Acertos</th></tr></thead><tbody>`;
-  regra.premios.forEach(p => {
+function construirSVGConvergencia(snapshots,probTeorica){
+  if(!snapshots||snapshots.length<2) return '';
+  const W=600,H=150,padL=6,padR=6,padT=8,padB=8;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const probs=snapshots.map(s=>s.prob);
+  const maxV=Math.max(probTeorica*1.4,Math.max.apply(null,probs))||(probTeorica*2)||0.01;
+  function xAt(i){ return padL+(i/(snapshots.length-1))*plotW; }
+  function yAt(p){ return padT+plotH-(Math.max(0,Math.min(1,p/maxV)))*plotH; }
+  const linhaPts=snapshots.map((s,i)=>xAt(i).toFixed(1)+','+yAt(s.prob).toFixed(1)).join(' ');
+  const topPts=snapshots.map((s,i)=>{ const se=Math.sqrt(probTeorica*(1-probTeorica)/s.feitos)*1.96; return xAt(i).toFixed(1)+','+yAt(s.prob+se).toFixed(1); });
+  const botPts=snapshots.slice().reverse().map((s,ri)=>{ const i=snapshots.length-1-ri; const se=Math.sqrt(probTeorica*(1-probTeorica)/s.feitos)*1.96; return xAt(i).toFixed(1)+','+yAt(Math.max(0,s.prob-se)).toFixed(1); });
+  const bandaPts=topPts.concat(botPts).join(' ');
+  const yTeo=yAt(probTeorica).toFixed(1);
+  return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:130px;display:block;">
+    <polygon points="${bandaPts}" fill="rgba(111,214,232,0.12)" stroke="none"></polygon>
+    <line x1="${padL}" y1="${yTeo}" x2="${W-padR}" y2="${yTeo}" stroke="#EFC272" stroke-width="2" stroke-dasharray="8,6" opacity="0.9"></line>
+    <polyline points="${linhaPts}" fill="none" stroke="#6FD6E8" stroke-width="2.5"></polyline>
+  </svg>`;
+}
+function chiSquarePValueApprox(chi2,df){
+  if(df<=0) return 1;
+  const z=(Math.pow(chi2/df,1/3)-(1-2/(9*df)))/Math.sqrt(2/(9*df));
+  const t=1/(1+0.2316419*Math.abs(z));
+  const d=0.3989423*Math.exp(-z*z/2);
+  let p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));
+  if(z<=0) p=1-p;
+  return Math.max(0,Math.min(1,p));
+}
+async function executarMonteCarlo(totalSorteios){
+  const regra=REGRAS[currentGame];
+  const container=document.getElementById('mcResultContainer');
+  const buttons=[document.getElementById('btnMC10k'),document.getElementById('btnMC100k'),document.getElementById('btnMC500k'),document.getElementById('btnMC1M')];
+  buttons.forEach(b=>b.disabled=true);
+  setProgress(1,'mcProgressWrap','mcProgressBar');
+  addLog(`Iniciando simulação Monte Carlo: ${totalSorteios.toLocaleString('pt-PT')} sorteios (aposta de referência fixa)...`,'system');
+  const {contagens,snapshots,minhaAposta,minhasStars}=await runMonteCarloAsync(regra,totalSorteios,(f,t)=>setProgress((f/t)*100,'mcProgressWrap','mcProgressBar'));
+  const escaloes=regra.premios.map((p,idx)=>{
     let probTeorica;
-    if (p.ignoreDream) probTeorica = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n);
-    else probTeorica = probHipergeometrica(regra.nums.max, regra.nums.sorteados, regra.nums.sorteados, p.n) * probHipergeometrica(regra.stars.max, regra.stars.sorteados, regra.stars.sorteados, p.s);
-
-    const contagem = contagens[p.nome] || 0;
-    const probSimulada = contagem / totalSorteios;
-    const teoricoFmt = probTeorica > 0 ? '1/' + Math.round(1/probTeorica).toLocaleString('pt-PT') : '≈0';
-    const simuladoFmt = probSimulada > 0 ? '1/' + Math.round(1/probSimulada).toLocaleString('pt-PT') : (contagem === 0 ? 'sem ocorrências' : '—');
-    html += `<tr><td>${p.nome}</td><td>${teoricoFmt}</td><td>${simuladoFmt}</td><td>${contagem.toLocaleString('pt-PT')}</td></tr>`;
+    if(p.ignoreDream) probTeorica=probHipergeometrica(regra.nums.max,regra.nums.sorteados,regra.nums.sorteados,p.n);
+    else probTeorica=probHipergeometrica(regra.nums.max,regra.nums.sorteados,regra.nums.sorteados,p.n)*probHipergeometrica(regra.stars.max,regra.stars.sorteados,regra.stars.sorteados,p.s);
+    const contagem=contagens[idx]||0; const esperado=probTeorica*totalSorteios;
+    return {p,idx,probTeorica,contagem,esperado};
   });
-  html += `</tbody></table>`;
-  html += `<div class="mc-summary">Com <b>${totalSorteios.toLocaleString('pt-PT')}</b> sorteios simulados, a coluna "Simulado" tende a aproximar-se da coluna "Teórico" à medida que o número de simulações aumenta. Escalões muito raros (ex: 1º prémio) podem mostrar "sem ocorrências" mesmo em 500.000 simulações, o que é matematicamente esperado dada a odd real de milhões para 1.</div>`;
-  container.innerHTML = html;
-
-  addLog(`Simulação concluída: ${totalSorteios.toLocaleString('pt-PT')} sorteios processados.`, 'success');
-  buttons.forEach(b => b.disabled = false);
-  setProgress(null, 'mcProgressWrap', 'mcProgressBar');
-}
-
-/* ============================================================
-   GERAR COMBINAÇÃO PRINCIPAL
-   ============================================================ */
-async function executarGeracao() {
-  const btn = document.getElementById('runBtn');
-  btn.disabled = true;
-  btn.textContent = '🎲 A CALCULAR...';
-  setProgress(2);
-  try {
-    document.getElementById('terminal').innerHTML = '';
-    addLog('Iniciando amostragem uniforme + rejeição assíncrona (7 filtros)...', 'system');
-    await new Promise(r => setTimeout(r, 100));
-
-    const regra = REGRAS[currentGame];
-    const nQty = parseInt(document.getElementById('nQty').value, 10);
-    const sQty = parseInt(document.getElementById('sQty').value, 10);
-    const stats = calcularEstatisticasSoma(regra.nums.max, nQty);
-    const quartis = calcularQuartis(regra.nums.max);
-
-    addLog(`Distribuição exata da soma: μ=${stats.mu.toFixed(1)} | σ=${stats.sigma.toFixed(2)}`, 'math');
-    addLog(`IC 95% da soma: [${Math.round(stats.mu - 1.96*stats.sigma)} ; ${Math.round(stats.mu + 1.96*stats.sigma)}]`, 'math');
-    addLog(`Alvo: ${nQty} números + ${sQty} ${regra.stars.nome}`, 'math');
-
-    const resultado = await gerarCombinacaoAsync(regra, nQty, sQty, (tent, maxT) => setProgress((tent/maxT)*100));
-
-    if (resultado.esgotado) {
-      addLog(`Limite de ${resultado.tentativas.toLocaleString('pt-PT')} iterações atingido — a mostrar a última tentativa gerada.`, 'warn');
-    } else {
-      addLog(`Combinação válida encontrada após ${resultado.tentativas.toLocaleString('pt-PT')} iteração(ões).`, 'success');
-    }
-    addLog(`A probabilidade real de acerto do 1º prémio mantém-se inalterada (ver painel acima).`, 'system');
-
-    exibirResultado(resultado.nums, resultado.stars, regra, resultado, nQty, sQty);
-    adicionarAoHistorico(regra, resultado.nums, resultado.stars);
-  } catch (err) {
-    console.error('Erro ao gerar:', err);
-    addLog('Erro: ' + err.message, 'warn');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '🎲 GERAR COMBINAÇÃO ESTATISTICAMENTE EQUILIBRADA';
-    setProgress(null);
+  const observaveis=escaloes.filter(e=>e.esperado>=1);
+  const inobservaveis=escaloes.filter(e=>e.esperado<1);
+  const targetIdx=observaveis.length?observaveis[observaveis.length-1].idx:escaloes[escaloes.length-1].idx;
+  const probTeoricaTarget=escaloes[targetIdx].probTeorica;
+  let html=`<table class="mc-table"><thead><tr><th style="text-align:left;">Escalão</th><th>Teórico</th><th>Simulado</th><th>Nº acertos</th></tr></thead><tbody>`;
+  let chi2=0,gl=0;
+  observaveis.forEach(e=>{
+    const {p,idx,probTeorica,contagem,esperado}=e;
+    const probSimulada=contagem/totalSorteios;
+    const teoricoFmt='1/'+Math.round(1/probTeorica).toLocaleString('pt-PT');
+    const simuladoFmt=probSimulada>0?'1/'+Math.round(1/probSimulada).toLocaleString('pt-PT'):'sem ocorrências';
+    if(esperado>=5){ chi2+=Math.pow(contagem-esperado,2)/esperado; gl++; }
+    const rowStyle=idx===targetIdx?' style="background:rgba(79,203,142,0.07);"':'';
+    html+=`<tr${rowStyle}><td>${p.nome}</td><td>${teoricoFmt}</td><td>${simuladoFmt}</td><td>${contagem.toLocaleString('pt-PT')}</td></tr>`;
+  });
+  html+=`</tbody></table>`;
+  if(inobservaveis.length){
+    html+=`<div class="prize-legend" style="margin-top:8px;">Escalões demasiado raros para aparecer de forma fiável em ${totalSorteios.toLocaleString('pt-PT')} sorteios:</div><table class="mc-table" style="margin-top:4px;"><tbody>`;
+    inobservaveis.forEach(e=>{ html+=`<tr><td>${e.p.nome}</td><td>1/${Math.round(1/e.probTeorica).toLocaleString('pt-PT')}</td></tr>`; });
+    html+=`</tbody></table>`;
   }
+  const pValor=chiSquarePValueApprox(chi2,gl);
+  const chiOk=pValor>0.05;
+  html+=`<div class="chi-box">
+    <div><span class="cl">χ² (gl=${gl})</span> <span class="cv">${chi2.toFixed(3)}</span></div>
+    <div><span class="cl">p-valor (aprox.)</span> <span class="cv" style="color:${chiOk?'var(--ok)':'var(--warn)'};">${(pValor*100).toFixed(2)}%</span></div>
+    <div><span class="cl">Resultado</span> <span class="cv">${chiOk?'✅ sem evidência de enviesamento':'⚠️ possível enviesamento'}</span></div>
+  </div>`;
+  const chartSvg=construirSVGConvergencia(snapshots,probTeoricaTarget);
+  html+=`<div class="mc-chart-wrap">${chartSvg}<div class="prize-legend" style="text-align:center;">Frequência observada (azul) vs. teórica (amarela) — banda cinza: IC 95%.</div></div>`;
+  html+=`<div class="prize-legend" style="margin-top:8px;">Aposta de referência: <b>${minhaAposta.join(' - ')}</b> ${minhasStars?'| '+minhasStars.join(' - '):''} (fixa). Apenas o sorteio simulado varia.</div>`;
+  container.innerHTML=html;
+
+  // qui-quadrado extra: uniformidade do histórico REAL registado (descritivo, não preditivo)
+  const {freqNum,total}=getFrequenciaReal(currentGame);
+  const realBox=document.getElementById('mcRealChi');
+  if(total>=15){
+    const esperadoPorNum=total*regra.nums.sorteados/regra.nums.max;
+    let chi2Real=0;
+    for(let n=1;n<=regra.nums.max;n++){ const diff=freqNum[n]-esperadoPorNum; chi2Real+=(diff*diff)/esperadoPorNum; }
+    const dfReal=regra.nums.max-1;
+    const pReal=chiSquarePValueApprox(chi2Real,dfReal);
+    realBox.innerHTML=`<div class="chi-box">
+      <div><span class="cl">χ² do histórico REAL (${total} sorteios)</span> <span class="cv">${chi2Real.toFixed(2)}</span></div>
+      <div><span class="cl">p-valor</span> <span class="cv" style="color:${pReal>0.05?'var(--ok)':'var(--warn)'};">${(pReal*100).toFixed(2)}%</span></div>
+    </div><div class="prize-legend">Compara a distribuição dos números realmente sorteados com a uniformidade teórica esperada — útil apenas para confirmar que o sorteio oficial é aleatório, nunca para prever o próximo.</div>`;
+  } else {
+    realBox.innerHTML=`<div class="prize-legend">Registe pelo menos 15 sorteios reais no histórico para calcular também o χ² do histórico real.</div>`;
+  }
+
+  setProgress(null,'mcProgressWrap','mcProgressBar');
+  buttons.forEach(b=>b.disabled=false);
+  addLog(`Simulação ${totalSorteios.toLocaleString('pt-PT')} concluída. χ² = ${chi2.toFixed(3)}`,'success');
+  toast(`Monte Carlo ${totalSorteios.toLocaleString()} concluído.`);
 }
 
 /* ============================================================
-   RELÓGIO
+   MULTIPLOS
    ============================================================ */
-function updateClock() {
-  const now = new Date();
-  const dataFmt = now.toLocaleDateString('pt-PT', { weekday:'short', day:'2-digit', month:'2-digit', year:'numeric' }).toUpperCase();
-  document.getElementById('datetimeHeader').textContent = `${dataFmt} | ${now.toLocaleTimeString('pt-PT')}`;
+function updateMultiUI(){
+  const regra=REGRAS[currentGame];
+  const nSel=document.getElementById('multiN'); nSel.innerHTML='';
+  for(let i=regra.nums.minAposta;i<=regra.nums.maxAposta;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; nSel.appendChild(o); }
+  nSel.value=regra.nums.minAposta;
+  const sSel=document.getElementById('multiS'); sSel.innerHTML='';
+  const isFixed=regra.stars.minAposta===regra.stars.maxAposta;
+  for(let i=regra.stars.minAposta;i<=regra.stars.maxAposta;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i; sSel.appendChild(o); }
+  sSel.value=regra.stars.minAposta; sSel.disabled=isFixed;
+  document.getElementById('multiStarLabel').textContent=regra.stars.nome+(isFixed?' (fixo)':'');
+  const sel=document.getElementById('ticketSelector'); sel.innerHTML='';
+  for(let i=1;i<=10;i++){
+    const btn=document.createElement('button'); btn.type='button'; btn.className='ticket-btn'+(i===1?' selected':''); btn.textContent=i; btn.dataset.val=i;
+    btn.onclick=function(){ sel.querySelectorAll('.ticket-btn').forEach(b=>b.classList.remove('selected')); this.classList.add('selected'); updateMultiPrice(); };
+    sel.appendChild(btn);
+  }
+  updateMultiPrice();
 }
-setInterval(updateClock, 1000);
+function updateMultiPrice(){
+  const regra=REGRAS[currentGame];
+  const n=parseInt(document.getElementById('multiN').value,10);
+  const s=parseInt(document.getElementById('multiS').value,10);
+  const qtd=parseInt(document.querySelector('#ticketSelector .ticket-btn.selected')?.dataset.val||1,10);
+  const {totalCombos,custo}=calcularPreco(regra,n,s);
+  const total=custo*qtd;
+  document.getElementById('multiTotalPrice').textContent=`€ ${total.toFixed(2).replace('.',',')}`;
+  document.getElementById('multiTotalDetail').textContent=`${qtd} bilhete(s) × ${totalCombos} combinação(ões) cada · ${n}+${s}`;
+}
+function gerarMultiplos(){
+  const regra=REGRAS[currentGame];
+  const n=parseInt(document.getElementById('multiN').value,10);
+  const s=parseInt(document.getElementById('multiS').value,10);
+  const qtd=parseInt(document.querySelector('#ticketSelector .ticket-btn.selected')?.dataset.val||1,10);
+  const overlap=parseInt(document.getElementById('multiOverlap').value,10);
+  const container=document.getElementById('multiTicketsList'); container.innerHTML='';
+  setProgress(1,'multiProgressWrap','multiProgressBar');
+  const tickets=[]; const usedSets=[]; let tentativas=0; const maxTentativas=1000*qtd;
+  while(tickets.length<qtd&&tentativas<maxTentativas){
+    tentativas++;
+    const nums=amostraUniformeSemReposicao(regra.nums.min,regra.nums.max,n);
+    const stars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,s);
+    let ok=true;
+    if(overlap<99&&usedSets.length){ for(const ex of usedSets){ const common=nums.filter(x=>ex.nums.includes(x)).length; if(common>overlap){ ok=false; break; } } }
+    if(ok){ usedSets.push({nums,stars}); tickets.push({nums,stars}); }
+  }
+  setProgress(null,'multiProgressWrap','multiProgressBar');
+  if(tickets.length<qtd) container.innerHTML=`<div class="prize-legend" style="color:var(--warn);">Apenas ${tickets.length} bilhetes gerados (impossível evitar sobreposição com os parâmetros atuais).</div>`;
+  tickets.forEach((t,idx)=>{
+    const card=document.createElement('div'); card.className='ticket-card';
+    card.innerHTML=`<div class="th">Bilhete ${idx+1}</div><div class="balls">${t.nums.map(n=>`<div class="ball n small">${String(n).padStart(2,'0')}</div>`).join('')}<div style="width:100%;height:1px;background:var(--line-strong);margin:4px 0;"></div>${t.stars.map(s=>`<div class="ball s small">${String(s).padStart(2,'0')}</div>`).join('')}</div>`;
+    container.appendChild(card);
+  });
+  addLog(`${tickets.length} bilhetes gerados para ${regra.nome}.`,'success');
+  toast(`${tickets.length} bilhetes gerados!`);
+}
 
 /* ============================================================
-   INICIALIZAÇÃO E EVENTOS
+   MANUAL
    ============================================================ */
-document.addEventListener('DOMContentLoaded', function () {
-  try {
-    document.getElementById('gameType').addEventListener('change', updateUI);
-    document.getElementById('runBtn').addEventListener('click', executarGeracao);
-    document.getElementById('btnRepeat').addEventListener('click', executarGeracao);
-    document.getElementById('btnCopy').addEventListener('click', async function () {
-      const panel = document.getElementById('resultPanel');
-      const texto = `${panel.dataset.game || ''} — Números: ${panel.dataset.nums || ''}${panel.dataset.stars ? ' | Estrelas: ' + panel.dataset.stars : ''}`;
-      try { await copiarTexto(texto); this.textContent = '✅ Copiado!'; }
-      catch (e) { this.textContent = '⚠ Não foi possível copiar'; }
-      setTimeout(() => { this.textContent = '📋 Copiar Números'; }, 1800);
-    });
-    document.getElementById('btnFiltersAll').addEventListener('click', () => {
-      ['filterConsec','filterSum','filterParity','filterQuartile','filterDistance','filterDecade','filterLastDigit'].forEach(id => document.getElementById(id).checked = true);
-      addLog('Todos os filtros estruturais ativados.', 'system');
-    });
-    document.getElementById('btnFiltersNone').addEventListener('click', () => {
-      ['filterConsec','filterSum','filterParity','filterQuartile','filterDistance','filterDecade','filterLastDigit'].forEach(id => document.getElementById(id).checked = false);
-      addLog('Todos os filtros desativados — sorteio puramente aleatório (uniforme).', 'system');
-    });
-    document.getElementById('btnClearHistory').addEventListener('click', () => { historico = []; renderHistorico(); addLog('Histórico da sessão limpo.', 'system'); });
-    document.getElementById('btnMC10k').addEventListener('click', () => executarMonteCarlo(10000));
-    document.getElementById('btnMC100k').addEventListener('click', () => executarMonteCarlo(100000));
-    document.getElementById('btnMC500k').addEventListener('click', () => executarMonteCarlo(500000));
+let manualSelectedNums=new Set();
+let manualSelectedStars=new Set();
+function renderManualGrids(){
+  const regra=REGRAS[currentGame];
+  manualSelectedNums.clear(); manualSelectedStars.clear();
+  document.getElementById('manualNumLabel').textContent=`Números (mín. ${regra.nums.minAposta})`;
+  document.getElementById('manualStarLabel').textContent=`${regra.stars.nome} (mín. ${regra.stars.minAposta})`;
+  const numGrid=document.getElementById('manualNumGrid'); numGrid.innerHTML='';
+  for(let i=1;i<=regra.nums.max;i++){ const btn=document.createElement('div'); btn.className='pick-btn'; btn.textContent=i; btn.onclick=()=>toggleManualNum(i,btn); numGrid.appendChild(btn); }
+  const starGrid=document.getElementById('manualStarGrid'); starGrid.innerHTML='';
+  for(let i=1;i<=regra.stars.max;i++){ const btn=document.createElement('div'); btn.className='pick-btn'; btn.textContent=i; btn.onclick=()=>toggleManualStar(i,btn); starGrid.appendChild(btn); }
+  updateManualUI();
+}
+function toggleManualNum(n,btn){
+  if(manualSelectedNums.has(n)){ manualSelectedNums.delete(n); btn.classList.remove('sel-n'); }
+  else{ const regra=REGRAS[currentGame]; if(manualSelectedNums.size>=regra.nums.maxAposta){ addLog(`Máximo ${regra.nums.maxAposta} números.`,'warn'); return; } manualSelectedNums.add(n); btn.classList.add('sel-n'); }
+  updateManualUI();
+}
+function toggleManualStar(n,btn){
+  if(manualSelectedStars.has(n)){ manualSelectedStars.delete(n); btn.classList.remove('sel-s'); }
+  else{ const regra=REGRAS[currentGame]; if(manualSelectedStars.size>=regra.stars.maxAposta){ addLog(`Máximo ${regra.stars.maxAposta} ${regra.stars.nome}.`,'warn'); return; } manualSelectedStars.add(n); btn.classList.add('sel-s'); }
+  updateManualUI();
+}
+function updateManualUI(){
+  const regra=REGRAS[currentGame];
+  const nums=Array.from(manualSelectedNums).sort((a,b)=>a-b);
+  const stars=Array.from(manualSelectedStars).sort((a,b)=>a-b);
+  const nOk=nums.length>=regra.nums.minAposta, sOk=stars.length>=regra.stars.minAposta;
+  const msg=document.getElementById('manualValidation'); const errs=[];
+  if(!nOk) errs.push(`${nums.length}/${regra.nums.minAposta} números`);
+  if(!sOk) errs.push(`${stars.length}/${regra.stars.minAposta} ${regra.stars.nome}`);
+  if(errs.length){ msg.textContent=errs.join(' · '); msg.className='validation-msg err'; } else { msg.textContent='✓ Válido'; msg.className='validation-msg ok'; }
+  const combN=C(nums.length,regra.nums.sorteados), combS=C(stars.length,regra.stars.sorteados);
+  const totalCombos=combN*combS, custo=totalCombos*regra.preco;
+  document.getElementById('manualPrice').textContent=`€ ${custo.toFixed(2).replace('.',',')}`;
+  document.getElementById('manualPriceDetail').textContent=totalCombos?`${totalCombos} combinação(ões) · ${nums.length}+${stars.length}`:'Selecione números';
+  document.getElementById('manualComb').textContent=totalCombos.toLocaleString('pt-PT');
+  document.getElementById('manualSum').textContent=nums.reduce((a,b)=>a+b,0);
+  const preview=document.getElementById('manualCombosPreview');
+  if(totalCombos>0&&totalCombos<=100){
+    const combosN=getCombinations(nums,regra.nums.sorteados);
+    const combosS=getCombinations(stars,regra.stars.sorteados);
+    let amostra=[];
+    for(let i=0;i<Math.min(combosN.length,20);i++){
+      const cn=combosN[i]||combosN[0]; const cs=combosS.length?combosS[i%combosS.length]:[];
+      amostra.push(`[${cn.join(', ')}] ${cs.length?'| '+cs.join(', '):''}`);
+    }
+    preview.style.display='block'; preview.innerHTML=amostra.map(s=>`<span class="combo-chip">${s}</span>`).join('');
+  } else preview.style.display='none';
+  document.getElementById('manualEscalaoTable').innerHTML=construirTabelaEscaloes(regra,nums.length,stars.length);
+}
+function limparManual(){ manualSelectedNums.clear(); manualSelectedStars.clear(); renderManualGrids(); addLog('Aposta manual limpa.','system'); }
+async function guardarManual(){
+  const regra=REGRAS[currentGame];
+  const nums=Array.from(manualSelectedNums).sort((a,b)=>a-b), stars=Array.from(manualSelectedStars).sort((a,b)=>a-b);
+  if(nums.length<regra.nums.minAposta||stars.length<regra.stars.minAposta){ addLog('Seleção inválida.','warn'); return; }
+  const entry={game:regra.nome,nums,stars,metodo:'Manual',data:new Date().toLocaleDateString('pt-PT')+' '+new Date().toLocaleTimeString('pt-PT')};
+  const ok=await guardarApostaPersistente(entry);
+  if(ok){ addLog('Aposta manual guardada.','success'); toast('Aposta guardada!'); renderApostasGuardadas(); }
+  else{ addLog('Falha ao guardar aposta manual.','warn'); toast('Erro ao guardar.',true); }
+}
 
-    updateUI();
-    updateClock();
-    addLog('Sistema pronto. Painel de 1º Prémio, dados oficiais Santa Casa e simulação Monte Carlo ativos.', 'system');
-  } catch (err) { console.error('Erro na inicialização:', err); }
+/* ============================================================
+   TABS
+   ============================================================ */
+function switchTab(tabId){
+  document.querySelectorAll('.tabpanel').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('active'));
+  const panel=document.getElementById('tab-'+tabId); if(panel) panel.classList.add('active');
+  const tabBtn=document.querySelector(`.tab[data-tab="${tabId}"]`); if(tabBtn) tabBtn.classList.add('active');
+  if(tabId==='historico'){ renderHistoricoTab(); sincronizarOficial(true).catch(()=>{}); }
+  if(tabId==='multiplo') updateMultiUI();
+  if(tabId==='manual') renderManualGrids();
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', async function(){
+ try{
+  historicoUser = await carregarHistoricoUser();
+  renderFilterGrid();
+  renderManualGrids();
+
+  document.getElementById('gamePills').addEventListener('click', function(e){
+    const btn=e.target.closest('.game-pill'); if(!btn) return;
+    currentGame=btn.dataset.game; updateUI();
+  });
+
+  document.getElementById('genMethod').addEventListener('change', function(){ document.getElementById('methodInfo').textContent=METHOD_INFO[this.value]||''; });
+  document.getElementById('genMethod').dispatchEvent(new Event('change'));
+  document.getElementById('confLevel').addEventListener('change', ()=>{ renderPrizeTable(REGRAS[currentGame]); });
+
+  document.getElementById('runBtn').addEventListener('click', async function(){
+    const regra=REGRAS[currentGame];
+    const nQty=parseInt(document.getElementById('nQty').value,10);
+    const sQty=parseInt(document.getElementById('sQty').value,10);
+    const method=document.getElementById('genMethod').value;
+    this.disabled=true; setProgress(1);
+    addLog(`A gerar com método "${method}"...`,'math');
+    try{
+      const resultado=await gerarCombinacaoAsync(regra,nQty,sQty,method,currentGame,ultimaApostaGerador,(f,m)=>setProgress((f/m)*100));
+      ultimaApostaGerador=resultado.nums;
+      exibirResultado(resultado.nums,resultado.stars,regra,resultado,nQty,sQty,method);
+      if(resultado.esgotado) addLog('Aviso: esgotadas as tentativas. Última combinação mostrada.','warn');
+      else addLog(`Combinação válida encontrada após ${resultado.tentativas.toLocaleString('pt-PT')} iterações.`,'success');
+      setProgress(null);
+    }catch(err){ addLog('Erro: '+err.message,'warn'); setProgress(null); }
+    this.disabled=false;
+  });
+
+  document.getElementById('btnFiltersAll').addEventListener('click', ()=>{ document.querySelectorAll('#filterGrid input[type=checkbox]').forEach(el=>el.checked=true); });
+  document.getElementById('btnFiltersNone').addEventListener('click', ()=>{ document.querySelectorAll('#filterGrid input[type=checkbox]').forEach(el=>el.checked=false); });
+
+  document.getElementById('btnCopy').addEventListener('click', async function(){
+    const panel=document.getElementById('resultPanel');
+    const texto=`Números: ${panel.dataset.nums||''} | Estrelas: ${panel.dataset.stars||''}`;
+    try{ await copiarTexto(texto); toast('Copiado!'); addLog('Combinação copiada.','system'); }catch(e){ toast('Falha ao copiar.',true); }
+  });
+  document.getElementById('btnSave').addEventListener('click', async function(){
+    const panel=document.getElementById('resultPanel');
+    const nums=(panel.dataset.nums||'').split(',').map(Number).filter(n=>!isNaN(n));
+    const stars=(panel.dataset.stars||'').split(',').map(Number).filter(n=>!isNaN(n));
+    if(!nums.length){ toast('Nada para guardar.',true); return; }
+    const entry={game:panel.dataset.game||currentGame,nums,stars,metodo:panel.dataset.method||'Gerador',data:new Date().toLocaleDateString('pt-PT')+' '+new Date().toLocaleTimeString('pt-PT')};
+    const ok=await guardarApostaPersistente(entry);
+    if(ok){ toast('Guardado!'); addLog('Combinação guardada.','success'); renderApostasGuardadas(); } else toast('Erro ao guardar.',true);
+  });
+  document.getElementById('btnRepeat').addEventListener('click', function(){ document.getElementById('runBtn').click(); });
+
+  document.getElementById('btnClearHistory').addEventListener('click', async function(){
+    if(confirm('Tem a certeza que quer apagar todas as apostas guardadas?')){
+      await limparApostasPersistentes(); renderApostasGuardadas(); addLog('Histórico de apostas apagado.','system'); toast('Histórico apagado.');
+    }
+  });
+
+  document.getElementById('btnMC10k').addEventListener('click', ()=>executarMonteCarlo(10000));
+  document.getElementById('btnMC100k').addEventListener('click', ()=>executarMonteCarlo(100000));
+  document.getElementById('btnMC500k').addEventListener('click', ()=>executarMonteCarlo(500000));
+  document.getElementById('btnMC1M').addEventListener('click', ()=>executarMonteCarlo(1000000));
+
+  document.getElementById('multiRunBtn').addEventListener('click', gerarMultiplos);
+  document.getElementById('multiN').addEventListener('change', updateMultiPrice);
+  document.getElementById('multiS').addEventListener('change', updateMultiPrice);
+  document.getElementById('btnSaveAllMulti').addEventListener('click', async function(){
+    const tickets=document.querySelectorAll('#multiTicketsList .ticket-card');
+    if(!tickets.length){ toast('Nenhum bilhete para guardar.',true); return; }
+    let saved=0;
+    for(const card of tickets){
+      const nums=Array.from(card.querySelectorAll('.ball.n')).map(el=>parseInt(el.textContent,10));
+      const stars=Array.from(card.querySelectorAll('.ball.s')).map(el=>parseInt(el.textContent,10));
+      if(nums.length){
+        const entry={game:REGRAS[currentGame].nome,nums,stars,metodo:'Múltiplos',data:new Date().toLocaleDateString('pt-PT')+' '+new Date().toLocaleTimeString('pt-PT')};
+        if(await guardarApostaPersistente(entry)) saved++;
+      }
+    }
+    if(saved){ toast(`${saved} bilhetes guardados.`); renderApostasGuardadas(); } else toast('Erro ao guardar.',true);
+  });
+  document.getElementById('btnExportMulti').addEventListener('click', function(){
+    const tickets=document.querySelectorAll('#multiTicketsList .ticket-card');
+    if(!tickets.length){ toast('Nenhum bilhete para exportar.',true); return; }
+    let csv='Bilhete,Números,Estrelas\n';
+    tickets.forEach((card,idx)=>{
+      const nums=Array.from(card.querySelectorAll('.ball.n')).map(el=>el.textContent).join(' ');
+      const stars=Array.from(card.querySelectorAll('.ball.s')).map(el=>el.textContent).join(' ');
+      csv+=`${idx+1},"${nums}","${stars}"\n`;
+    });
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+    const link=document.createElement('a'); link.href=URL.createObjectURL(blob);
+    link.download=`bilhetes_${currentGame}_${new Date().toISOString().slice(0,10)}.csv`; link.click();
+    toast('CSV exportado!');
+  });
+
+  document.getElementById('btnSaveManual').addEventListener('click', guardarManual);
+  document.getElementById('btnClearManual').addEventListener('click', limparManual);
+
+  document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click', ()=>switchTab(btn.dataset.tab)));
+
+  document.getElementById('btnSync').addEventListener('click', ()=>sincronizarOficial(false));
+  document.getElementById('btnSync2').addEventListener('click', ()=>sincronizarOficial(false));
+  document.getElementById('btnGoHistorico').addEventListener('click', ()=>{ switchTab('historico'); document.getElementById('qfPanel').scrollIntoView({behavior:'smooth',block:'start'}); });
+  document.getElementById('qfDate').addEventListener('input', updateQfValidation);
+  document.getElementById('qfNums').addEventListener('input', updateQfValidation);
+  document.getElementById('qfExtra').addEventListener('input', updateQfValidation);
+  document.getElementById('btnAddOficial').addEventListener('click', adicionarSorteioManual);
+  document.getElementById('btnCheck').addEventListener('click', verificarAposta);
+
+  function atualizarRelogio(){
+    const agora=new Date();
+    document.getElementById('clock').textContent=agora.toLocaleTimeString('pt-PT');
+    const diaSemana=agora.toLocaleDateString('pt-PT',{weekday:'long'});
+    const dataFmt=agora.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'});
+    document.getElementById('clockDay').textContent=`${diaSemana} · ${dataFmt}`;
+  }
+  atualizarRelogio(); setInterval(atualizarRelogio,1000);
+
+  await renderApostasGuardadas();
+  updateUI();
+  try{ if(navigator.onLine) sincronizarOficial(true).catch(()=>{}); }catch(e){}
+ }catch(err){
+   console.error('Erro crítico na inicialização:', err);
+   try{ addLog('Erro crítico na inicialização: '+err.message,'warn'); }catch(e){}
+   try{ updateUI(); }catch(e){}
+ }
 });
 </script>
 </body>
-        </html>
+  </html>
