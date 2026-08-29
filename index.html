@@ -888,16 +888,18 @@ async function adicionarSorteioManual(){
 
 /* ---- sincronização automática com o feed oficial (RSS Santa Casa) ---- */
 const RSS_URL='https://www.jogossantacasa.pt/web/SCRss/rssFeedCartRes';
-const RSS_ATTEMPTS=[
-  {url:()=>RSS_URL, json:false},
-  {url:()=>'https://api.allorigins.win/raw?url='+encodeURIComponent(RSS_URL), json:false},
-  {url:()=>'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(RSS_URL), json:false},
-  {url:()=>'https://corsproxy.io/?url='+encodeURIComponent(RSS_URL), json:false},
-  {url:()=>'https://thingproxy.freeboard.io/fetch/'+RSS_URL, json:false},
-  {url:()=>'https://api.allorigins.win/get?url='+encodeURIComponent(RSS_URL), json:true},
-  {url:()=>'https://proxy.corsfix.com/?'+RSS_URL, json:false}
+const RSS_ATTEMPTS = [
+  { url: () => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(RSS_URL), json: false },
+  { url: () => 'https://corsproxy.io/?url=' + encodeURIComponent(RSS_URL), json: false },
+  { url: () => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(RSS_URL), json: false },
+  { url: () => 'https://thingproxy.freeboard.io/fetch/' + RSS_URL, json: false },
+  { url: () => 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL), json: true },
+  { url: () => RSS_URL, json: false },
+  { url: () => 'https://cors-anywhere.herokuapp.com/' + RSS_URL, json: false },
+  { url: () => 'https://proxy.corsfix.com/?' + RSS_URL, json: false }
 ];
-async function fetchRssText(attempt,timeoutMs){
+
+async function fetchRssText(attempt, timeoutMs){
   const url=attempt.url();
   let signal;
   try{ signal = (typeof AbortSignal!=='undefined' && AbortSignal.timeout) ? AbortSignal.timeout(timeoutMs) : undefined; }catch(e){ signal=undefined; }
@@ -962,18 +964,28 @@ function nearestPastDrawDate(game){
   }
   return isoParaDMY(today.toISOString().split('T')[0]);
 }
+let syncRetryTimeout = null;
 async function sincronizarOficial(auto){
+  if(syncRetryTimeout){ clearTimeout(syncRetryTimeout); syncRetryTimeout=null; }
+
   const statusEls=[document.getElementById('officialStatus'),document.getElementById('officialStatus2')].filter(Boolean);
   const btns=[document.getElementById('btnSync'),document.getElementById('btnSync2')].filter(Boolean);
   const setStatus=(txt)=>statusEls.forEach(el=>el.textContent=txt);
   btns.forEach(b=>b.disabled=true);
   setStatus('A sincronizar com jogossantacasa.pt…');
   let xml=null;
-  try{ xml=await raceRssAttempts(4500); }
+  try{ xml=await raceRssAttempts(6000); }
   catch(e){
     setStatus('⚠️ Sem ligação ao feed oficial agora — registe manualmente no Histórico.');
     btns.forEach(b=>b.disabled=false);
     if(!auto) toast('Sincronização falhou. Tente mais tarde.',true);
+    // Se for automático, agenda nova tentativa após 15 segundos
+    if(auto){
+      syncRetryTimeout = setTimeout(() => {
+        syncRetryTimeout = null;
+        sincronizarOficial(true);
+      }, 15000);
+    }
     return;
   }
   let items=[];
@@ -983,7 +995,14 @@ async function sincronizarOficial(auto){
     items=Array.from(doc.querySelectorAll('item'));
   }catch(e){
     setStatus('⚠️ Não foi possível interpretar o feed oficial — registe manualmente no Histórico.');
-    btns.forEach(b=>b.disabled=false); return;
+    btns.forEach(b=>b.disabled=false);
+    if(auto){
+      syncRetryTimeout = setTimeout(() => {
+        syncRetryTimeout = null;
+        sincronizarOficial(true);
+      }, 15000);
+    }
+    return;
   }
   let novos=0;
   items.forEach(item=>{
@@ -1908,6 +1927,7 @@ document.addEventListener('DOMContentLoaded', async function(){
 
   await renderApostasGuardadas();
   updateUI();
+  // Tenta sincronizar automaticamente ao carregar, com retry em caso de falha
   try{ if(navigator.onLine) sincronizarOficial(true).catch(()=>{}); }catch(e){}
  }catch(err){
    console.error('Erro crítico na inicialização:', err);
@@ -1917,4 +1937,4 @@ document.addEventListener('DOMContentLoaded', async function(){
 });
 </script>
 </body>
-          </html>
+                                                                                                          </html>
