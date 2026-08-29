@@ -887,48 +887,68 @@ async function adicionarSorteioManual(){
 }
 
 /* ---- sincronização automática com o feed oficial (RSS Santa Casa) ---- */
-const RSS_URL='https://www.jogossantacasa.pt/web/SCRss/rssFeedCartRes';
+const RSS_URL = 'https://www.jogossantacasa.pt/web/SCRss/rssFeedCartRes';
+
+// Lista atualizada de proxies (ordem por fiabilidade)
 const RSS_ATTEMPTS = [
   { url: () => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(RSS_URL), json: false },
   { url: () => 'https://corsproxy.io/?url=' + encodeURIComponent(RSS_URL), json: false },
   { url: () => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(RSS_URL), json: false },
   { url: () => 'https://thingproxy.freeboard.io/fetch/' + RSS_URL, json: false },
   { url: () => 'https://api.allorigins.win/get?url=' + encodeURIComponent(RSS_URL), json: true },
-  { url: () => RSS_URL, json: false },
+  { url: () => RSS_URL, json: false }, // tentativa direta (pode funcionar em alguns ambientes)
   { url: () => 'https://cors-anywhere.herokuapp.com/' + RSS_URL, json: false },
   { url: () => 'https://proxy.corsfix.com/?' + RSS_URL, json: false }
 ];
 
-async function fetchRssText(attempt, timeoutMs){
-  const url=attempt.url();
+async function fetchRssText(attempt, timeoutMs) {
+  const url = attempt.url();
   let signal;
-  try{ signal = (typeof AbortSignal!=='undefined' && AbortSignal.timeout) ? AbortSignal.timeout(timeoutMs) : undefined; }catch(e){ signal=undefined; }
+  try { signal = (typeof AbortSignal !== 'undefined' && AbortSignal.timeout) ? AbortSignal.timeout(timeoutMs) : undefined; } catch(e) { signal = undefined; }
   let r;
-  if(signal){ r=await fetch(url,{signal,cache:'no-store'}); }
-  else{
-    const ac=new AbortController();
-    const tid=setTimeout(()=>ac.abort(),timeoutMs);
-    try{ r=await fetch(url,{signal:ac.signal,cache:'no-store'}); clearTimeout(tid); }
-    catch(e){ clearTimeout(tid); throw e; }
+  if (signal) {
+    r = await fetch(url, { signal, cache: 'no-store' });
+  } else {
+    const ac = new AbortController();
+    const tid = setTimeout(() => ac.abort(), timeoutMs);
+    try {
+      r = await fetch(url, { signal: ac.signal, cache: 'no-store' });
+      clearTimeout(tid);
+    } catch(e) {
+      clearTimeout(tid);
+      throw e;
+    }
   }
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  if(attempt.json){
-    const data=await r.json();
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  if (attempt.json) {
+    const data = await r.json();
     return data && data.contents ? data.contents : '';
   }
-  const buf=await r.arrayBuffer();
-  try{ return new TextDecoder('iso-8859-1').decode(buf); }catch(e){ return new TextDecoder('utf-8').decode(buf); }
+  const buf = await r.arrayBuffer();
+  try { return new TextDecoder('iso-8859-1').decode(buf); } catch(e) { return new TextDecoder('utf-8').decode(buf); }
 }
-function raceRssAttempts(timeoutMs){
-  return new Promise((resolve,reject)=>{
-    let pending=RSS_ATTEMPTS.length, settled=false;
-    RSS_ATTEMPTS.forEach(attempt=>{
-      fetchRssText(attempt,timeoutMs).then(t=>{ if(!settled && t){settled=true; resolve(t);} else { pending--; if(pending===0 && !settled) reject(new Error('sem resposta')); } }).catch(()=>{
-        pending--; if(pending===0 && !settled) reject(new Error('sem resposta'));
+
+function raceRssAttempts(timeoutMs) {
+  return new Promise((resolve, reject) => {
+    let pending = RSS_ATTEMPTS.length;
+    let settled = false;
+    RSS_ATTEMPTS.forEach(attempt => {
+      fetchRssText(attempt, timeoutMs).then(t => {
+        if (!settled && t) {
+          settled = true;
+          resolve(t);
+        } else {
+          pending--;
+          if (pending === 0 && !settled) reject(new Error('sem resposta'));
+        }
+      }).catch(() => {
+        pending--;
+        if (pending === 0 && !settled) reject(new Error('sem resposta'));
       });
     });
   });
 }
+
 function stripTags(s){ return s.replace(/<[^>]*>/g,''); }
 function guessGameFromLink(link){
   const l=(link||'').toLowerCase();
@@ -964,75 +984,91 @@ function nearestPastDrawDate(game){
   }
   return isoParaDMY(today.toISOString().split('T')[0]);
 }
-let syncRetryTimeout = null;
-async function sincronizarOficial(auto){
-  if(syncRetryTimeout){ clearTimeout(syncRetryTimeout); syncRetryTimeout=null; }
 
-  const statusEls=[document.getElementById('officialStatus'),document.getElementById('officialStatus2')].filter(Boolean);
-  const btns=[document.getElementById('btnSync'),document.getElementById('btnSync2')].filter(Boolean);
-  const setStatus=(txt)=>statusEls.forEach(el=>el.textContent=txt);
-  btns.forEach(b=>b.disabled=true);
+let syncRetryTimeout = null;
+
+async function sincronizarOficial(auto) {
+  // Cancela qualquer tentativa de retry anterior
+  if (syncRetryTimeout) {
+    clearTimeout(syncRetryTimeout);
+    syncRetryTimeout = null;
+  }
+
+  const statusEls = [document.getElementById('officialStatus'), document.getElementById('officialStatus2')].filter(Boolean);
+  const btns = [document.getElementById('btnSync'), document.getElementById('btnSync2')].filter(Boolean);
+  const setStatus = (txt) => statusEls.forEach(el => el.textContent = txt);
+  btns.forEach(b => b.disabled = true);
   setStatus('A sincronizar com jogossantacasa.pt…');
-  let xml=null;
-  try{ xml=await raceRssAttempts(6000); }
-  catch(e){
+
+  let xml = null;
+  try {
+    xml = await raceRssAttempts(8000); // timeout alargado para 8 segundos
+  } catch (e) {
     setStatus('⚠️ Sem ligação ao feed oficial agora — registe manualmente no Histórico.');
-    btns.forEach(b=>b.disabled=false);
-    if(!auto) toast('Sincronização falhou. Tente mais tarde.',true);
-    // Se for automático, agenda nova tentativa após 15 segundos
-    if(auto){
+    btns.forEach(b => b.disabled = false);
+    if (!auto) toast('Sincronização falhou. Tente mais tarde.', true);
+    // Se for automático, agenda nova tentativa após 20 segundos
+    if (auto) {
       syncRetryTimeout = setTimeout(() => {
         syncRetryTimeout = null;
         sincronizarOficial(true);
-      }, 15000);
+      }, 20000);
     }
     return;
   }
-  let items=[];
-  try{
-    const doc=new DOMParser().parseFromString(xml,'text/xml');
-    if(doc.querySelector('parsererror')) throw new Error('parse');
-    items=Array.from(doc.querySelectorAll('item'));
-  }catch(e){
+
+  let items = [];
+  try {
+    const doc = new DOMParser().parseFromString(xml, 'text/xml');
+    if (doc.querySelector('parsererror')) throw new Error('parse');
+    items = Array.from(doc.querySelectorAll('item'));
+  } catch (e) {
     setStatus('⚠️ Não foi possível interpretar o feed oficial — registe manualmente no Histórico.');
-    btns.forEach(b=>b.disabled=false);
-    if(auto){
+    btns.forEach(b => b.disabled = false);
+    if (auto) {
       syncRetryTimeout = setTimeout(() => {
         syncRetryTimeout = null;
         sincronizarOficial(true);
-      }, 15000);
+      }, 20000);
     }
     return;
   }
-  let novos=0;
-  items.forEach(item=>{
-    const link=item.querySelector('link')?.textContent||'';
-    const title=item.querySelector('title')?.textContent||'';
-    const game=guessGameFromLink(link)||guessGameFromTitle(title);
-    if(!game) return;
-    const desc=item.querySelector('description')?.textContent||'';
-    const parsed=parseRssDescription(desc);
-    if(!parsed||!parsed.concurso||parsed.numbers.length<5) return;
-    const regra=REGRAS[game];
-    const jaExiste=getHistoricoCompleto(game).some(d=>d.concurso===parsed.concurso);
-    if(jaExiste) return;
-    const nMain=game==='eurodreams'?6:5;
-    const entry={ data:nearestPastDrawDate(game), numeros:parsed.numbers.slice(0,nMain).sort((a,b)=>a-b), concurso:parsed.concurso, fonte:'oficial' };
-    const extras=parsed.extra.slice(0,regra.stars.sorteados).sort((a,b)=>a-b);
-    if(game==='euromilhoes') entry.estrelas=extras; else entry[regra.extraKey]=extras[0];
-    if(!historicoUser[game]) historicoUser[game]=[];
+
+  let novos = 0;
+  items.forEach(item => {
+    const link = item.querySelector('link')?.textContent || '';
+    const title = item.querySelector('title')?.textContent || '';
+    const game = guessGameFromLink(link) || guessGameFromTitle(title);
+    if (!game) return;
+    const desc = item.querySelector('description')?.textContent || '';
+    const parsed = parseRssDescription(desc);
+    if (!parsed || !parsed.concurso || parsed.numbers.length < 5) return;
+    const regra = REGRAS[game];
+    const jaExiste = getHistoricoCompleto(game).some(d => d.concurso === parsed.concurso);
+    if (jaExiste) return;
+    const nMain = game === 'eurodreams' ? 6 : 5;
+    const entry = { data: nearestPastDrawDate(game), numeros: parsed.numbers.slice(0, nMain).sort((a,b) => a - b), concurso: parsed.concurso, fonte: 'oficial' };
+    const extras = parsed.extra.slice(0, regra.stars.sorteados).sort((a,b) => a - b);
+    if (game === 'euromilhoes') entry.estrelas = extras;
+    else entry[regra.extraKey] = extras[0];
+    if (!historicoUser[game]) historicoUser[game] = [];
     historicoUser[game].unshift(entry);
     novos++;
   });
-  if(novos>0) await guardarHistoricoUser();
-  const now=new Date();
-  setStatus(novos>0
-    ? `✓ ${novos} sorteio(s) novo(s) importado(s) automaticamente · ${now.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}`
-    : `✓ Já atualizado · última verificação ${now.toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'})}`);
-  btns.forEach(b=>b.disabled=false);
-  if(novos>0){ addLog(`${novos} sorteio(s) oficial(is) sincronizado(s).`,'success'); toast(`${novos} sorteio(s) novo(s) importado(s) ✓`); }
+
+  if (novos > 0) await guardarHistoricoUser();
+  const now = new Date();
+  setStatus(novos > 0
+    ? `✓ ${novos} sorteio(s) novo(s) importado(s) automaticamente · ${now.toLocaleTimeString('pt-PT', {hour:'2-digit', minute:'2-digit'})}`
+    : `✓ Já atualizado · última verificação ${now.toLocaleTimeString('pt-PT', {hour:'2-digit', minute:'2-digit'})}`);
+  btns.forEach(b => b.disabled = false);
+  if (novos > 0) {
+    addLog(`${novos} sorteio(s) oficial(is) sincronizado(s).`, 'success');
+    toast(`${novos} sorteio(s) novo(s) importado(s) ✓`);
+  }
   refreshAfterHistoryChange();
 }
+
 function renderUltimoSorteioOficial(){
   const regra=REGRAS[currentGame];
   const draws=getHistoricoCompleto(currentGame);
@@ -1937,4 +1973,4 @@ document.addEventListener('DOMContentLoaded', async function(){
 });
 </script>
 </body>
-</html>
+  </html>
