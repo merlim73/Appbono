@@ -142,8 +142,8 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
 .details summary::before{content:'▸ ';}
 .details[open] summary::before{content:'▾ ';}
 
-.mc-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
-@media(max-width:480px){.mc-buttons{grid-template-columns:1fr 1fr;}}
+.mc-buttons{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px;}
+@media(max-width:600px){.mc-buttons{grid-template-columns:1fr 1fr;}}
 .mc-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:.7rem;}
 .mc-table th{color:var(--game);font-family:var(--font-mono);font-size:9px;padding:6px 4px;border-bottom:1px solid rgba(var(--game-rgb),.4);text-transform:uppercase;}
 .mc-table td{padding:7px 4px;border-bottom:1px solid var(--line);font-family:var(--font-mono);text-align:center;}
@@ -304,7 +304,7 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
   <!-- GERADOR -->
   <div class="tabpanel active" id="tab-gerador">
     <div class="math-note">
-      <b>Nota honesta sobre matemática:</b> cada sorteio é um evento aleatório independente dos anteriores. Nenhum filtro, algoritmo genético, ponderação por frequência ou simulação — aqui ou em qualquer ferramenta — muda, aumenta ou prevê a probabilidade real de qualquer combinação específica sair. O que esta secção faz é <b>matemática exata</b> (combinatória, hipergeométrica, Monte Carlo) para que perceba com rigor as probabilidades reais e organize as suas apostas — não para "acertar mais".
+      <b>Nota honesta sobre matemática (leia antes de apostar):</b> cada sorteio é um evento aleatório independente dos anteriores — o Totoloto, o Euromilhões e o EuroDreams não têm memória. Nenhum filtro, algoritmo genético, ponderação por frequência real, análise de "números atrasados" ou simulação Monte Carlo — aqui ou em qualquer ferramenta do mundo, paga ou grátis — muda, aumenta ou prevê a probabilidade real de qualquer combinação específica sair. Não acertar números numa aposta não significa que o gerador esteja "mal calibrado"; significa apenas que a probabilidade real é a que é (ex: 1 em 139.838.160 no 1º prémio do Euromilhões). Esta secção faz <b>matemática exata</b> (combinatória, hipergeométrica, testes de qualidade de ajuste χ² e G, Monte Carlo) só para que perceba com rigor essas probabilidades e organize as suas apostas de forma informada — <b>nunca para "acertar mais"</b>. Se está a apostar valores que lhe fariam falta, ou a apostar para tentar recuperar perdas anteriores, vale a pena parar e reavaliar.
     </div>
     <div class="panel">
       <h2>Aposta e Método</h2>
@@ -357,12 +357,13 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
 
     <div class="panel">
       <h2>Simulação Monte Carlo</h2>
-      <p style="font-size:.7rem;color:var(--paper-dim);line-height:1.5;">Simula sorteios independentes reais e compara a frequência observada de cada escalão com a probabilidade hipergeométrica teórica, com teste χ² de qualidade de ajuste (função gama incompleta exata, não aproximação).</p>
+      <p style="font-size:.7rem;color:var(--paper-dim);line-height:1.5;">Simula sorteios independentes reais e compara a frequência observada de cada escalão com a probabilidade hipergeométrica teórica, com dois testes de qualidade de ajuste independentes — χ² de Pearson e teste G de razão de verosimilhança (ambos com função gama incompleta exata, não aproximação) — mais intervalos de confiança de Wilson por escalão. Confirma que o sorteio simulado é justo; <b>não melhora, prevê nem antecipa</b> nenhum sorteio real.</p>
       <div class="mc-buttons">
         <button type="button" class="btn-secondary" id="btnMC10k">10 mil</button>
         <button type="button" class="btn-secondary" id="btnMC100k">100 mil</button>
         <button type="button" class="btn-secondary" id="btnMC500k">500 mil</button>
         <button type="button" class="btn-secondary" id="btnMC1M">1 milhão</button>
+        <button type="button" class="btn-secondary" id="btnMC5M">5 milhões</button>
       </div>
       <div class="progress-wrap" id="mcProgressWrap"><div class="progress-bar" id="mcProgressBar"></div></div>
       <div id="mcResultContainer"></div>
@@ -618,7 +619,10 @@ const FILTROS_DEF = [
   {id:'filterQuartile',t:'Quartis Q1–Q4',s:'Números espalhados por pelo menos 2 dos 4 quartis do intervalo'},
   {id:'filterHalf',t:'Metade baixa + alta',s:'Pelo menos 1 número de cada metade do intervalo do jogo'},
   {id:'filterDecade',t:'Máx. 2 na mesma dezena',s:'Evita concentração excessiva numa só faixa de 10 números'},
-  {id:'filterConsec',t:'Sem 3+ consecutivos',s:'Evita sequências longas, ex. 21-22-23-24'}
+  {id:'filterConsec',t:'Sem 3+ consecutivos',s:'Evita sequências longas, ex. 21-22-23-24'},
+  {id:'filterDigitRoot',t:'Raiz digital equilibrada',s:'Evita que a soma dos algarismos de todos os números convirja para o mesmo valor'},
+  {id:'filterRepeatLast',t:'Sem repetir o último sorteio real',s:'Evita repetir 3 ou mais números do sorteio real mais recente registado'},
+  {id:'filterEntropyMin',t:'Entropia mínima de dispersão',s:'Rejeita combinações demasiado concentradas em poucas dezenas (medida por entropia de Shannon)'}
 ];
 const METHOD_INFO = {
   'genetic':'Algoritmo genético populacional (elitismo + torneio + crossover ordenado + mutação adaptativa) otimizando dispersão estrutural. Continua sujeito aos filtros — não altera a probabilidade real de nenhuma combinação.',
@@ -715,7 +719,8 @@ function getFiltrosAtivos(){
   FILTROS_DEF.forEach(f=>{ const el=document.getElementById(f.id); o[f.id]=el?el.checked:false; });
   return o;
 }
-function passaFiltros(nums,filtros,somaMin,somaMax,quartis,maxNum,ultimaAposta){
+function raizDigital(n){ let x=n; while(x>9){ x=String(x).split('').reduce((a,c)=>a+Number(c),0); } return x; }
+function passaFiltros(nums,filtros,somaMin,somaMax,quartis,maxNum,ultimaAposta,ultimoSorteioReal){
   if(filtros.filterConsec && contarConsecutivosMax(nums)>=3) return false;
   if(filtros.filterParity){ const pares=nums.filter(n=>n%2===0).length; if(pares===0||pares===nums.length) return false; }
   if(filtros.filterSum){ const soma=nums.reduce((a,b)=>a+b,0); if(soma<somaMin||soma>somaMax) return false; }
@@ -726,6 +731,18 @@ function passaFiltros(nums,filtros,somaMin,somaMax,quartis,maxNum,ultimaAposta){
   }
   if(filtros.filterHalf){ const m=contarMetades(nums,maxNum); if(m.baixa===0||m.alta===0) return false; }
   if(filtros.filterDecade && contarMaxPorDezena(nums)>2) return false;
+  if(filtros.filterDigitRoot){
+    const raizes=new Set(nums.map(raizDigital));
+    if(raizes.size===1 && nums.length>=3) return false;
+  }
+  if(filtros.filterRepeatLast && ultimoSorteioReal && ultimoSorteioReal.length){
+    const comuns=nums.filter(n=>ultimoSorteioReal.includes(n)).length;
+    if(comuns>=3) return false;
+  }
+  if(filtros.filterEntropyMin){
+    const H=calcularEntropia(nums,maxNum);
+    if(H<0.55) return false;
+  }
   if(ultimaAposta && nums.join(',')===ultimaAposta.join(',')) return false;
   return true;
 }
@@ -773,6 +790,27 @@ function chiSquareSF(chi2,df){
   if(df<=0||!isFinite(chi2)) return 1;
   if(chi2<=0) return 1;
   return Math.max(0,Math.min(1,gammaQRegularizada(df/2,chi2/2)));
+}
+/* Teste G (razão de verosimilhança) — assintoticamente equivalente ao χ² de Pearson,
+   mas mais robusto quando algumas contagens esperadas são pequenas. Usa-se como
+   segunda confirmação independente do mesmo resultado: "os dados são consistentes
+   com aleatoriedade justa", nunca "esta combinação vai sair mais". */
+function testeG(observado,esperado){
+  let G=0;
+  for(let i=0;i<observado.length;i++){
+    const o=observado[i], e=esperado[i];
+    if(o>0 && e>0) G+=2*o*Math.log(o/e);
+  }
+  return G;
+}
+/* Intervalo de Wilson para uma proporção — mais preciso que o normal simples
+   quando a contagem observada é pequena (como em escalões raros de prémio). */
+function intervaloWilson(k,n,z){
+  if(n<=0) return {lo:0,hi:0};
+  const p=k/n, z2=z*z;
+  const centro=(p+z2/(2*n))/(1+z2/n);
+  const margem=(z/(1+z2/n))*Math.sqrt((p*(1-p)/n)+(z2/(4*n*n)));
+  return {lo:Math.max(0,centro-margem),hi:Math.min(1,centro+margem)};
 }
 
 /* ============================================================
@@ -966,8 +1004,17 @@ const RSS_ATTEMPTS=[
   {url:()=>'https://yacdn.org/proxy/'+RSS_URL, json:false},
   {url:()=>'https://api.cors.lol/?url='+encodeURIComponent(RSS_URL), json:false},
   {url:()=>'https://test.cors.workers.dev/?'+RSS_URL, json:false},
-  {url:()=>'https://cors-get-proxy.sirjosh.workers.dev/?url='+encodeURIComponent(RSS_URL), json:false}
+  {url:()=>'https://cors-get-proxy.sirjosh.workers.dev/?url='+encodeURIComponent(RSS_URL), json:false},
+  {url:()=>'https://api.scraperapi.com/?url='+encodeURIComponent(RSS_URL), json:false},
+  {url:()=>'https://cors-anywhere.herokuapp.com/'+RSS_URL, json:false},
+  {url:()=>'https://proxy.cors.sh/'+RSS_URL, json:false},
+  {url:()=>'https://r.jina.ai/'+RSS_URL, json:false},
+  {url:()=>'https://api.allorigins.win/raw?url='+encodeURIComponent(RSS_URL)+'&_='+Date.now(), json:false},
+  {url:()=>'https://translate.google.com/translate?sl=pt&tl=en&u='+encodeURIComponent(RSS_URL), json:false}
 ];
+/* Segunda ronda de tentativas com timeout maior, só corre se a primeira ronda falhar por completo.
+   Mantém a mesma lista de origens — nunca inventa dados, só dá mais tempo/tentativas à mesma fonte oficial. */
+const RSS_RETRY_TIMEOUT_MS = 9000;
 async function fetchRssText(attempt,timeoutMs){
   const url=attempt.url();
   let signal;
@@ -988,7 +1035,7 @@ async function fetchRssText(attempt,timeoutMs){
   const buf=await r.arrayBuffer();
   try{ return new TextDecoder('iso-8859-1').decode(buf); }catch(e){ return new TextDecoder('utf-8').decode(buf); }
 }
-function raceRssAttempts(timeoutMs){
+function raceRssAttemptsOnce(timeoutMs){
   return new Promise((resolve,reject)=>{
     let pending=RSS_ATTEMPTS.length, settled=false;
     RSS_ATTEMPTS.forEach(attempt=>{
@@ -997,6 +1044,14 @@ function raceRssAttempts(timeoutMs){
       });
     });
   });
+}
+async function raceRssAttempts(timeoutMs){
+  // Primeira ronda: todas as origens em paralelo, timeout normal.
+  try{ return await raceRssAttemptsOnce(timeoutMs); }
+  catch(e){
+    // Segunda ronda: mesmas origens, mais tempo — cobre ligações lentas sem inventar nada.
+    return await raceRssAttemptsOnce(RSS_RETRY_TIMEOUT_MS);
+  }
 }
 function stripTags(s){ return s.replace(/<[^>]*>/g,''); }
 function guessGameFromLink(link){
@@ -1144,7 +1199,7 @@ function mutar(nums,min,max,taxa){
   return [...new Set(res)].sort((a,b)=>a-b).slice(0,nums.length);
 }
 function superGenetico(regra,nQty,popSize,geracoes){
-  popSize=popSize||70; geracoes=geracoes||35;
+  popSize=popSize||220; geracoes=geracoes||110;
   const min=regra.nums.min,max=regra.nums.max;
   let populacao=[];
   for(let i=0;i<popSize;i++) populacao.push(amostraUniformeSemReposicao(min,max,nQty));
@@ -1205,6 +1260,8 @@ function gerarCombinacaoAsync(regra,nQty,sQty,method,gameKey,ultimaAposta,onProg
     const somaMax=Math.min(nQty*regra.nums.max,Math.round(stats.mu+z*stats.sigma));
     const quartis=calcularQuartis(regra.nums.max);
     const filtros=getFiltrosAtivos();
+    const ultimoDraws=getHistoricoCompleto(gameKey);
+    const ultimoSorteioReal=ultimoDraws.length?ultimoDraws[0].numeros:null;
     function processarBloco(){
       const limite=Math.min(tentativas+tamanhoBloco,maxTentativas);
       while(tentativas<limite){
@@ -1212,7 +1269,7 @@ function gerarCombinacaoAsync(regra,nQty,sQty,method,gameKey,ultimaAposta,onProg
         const nums=gerarCandidatoNumeros(regra,nQty,method,gameKey).sort((a,b)=>a-b);
         const stars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,sQty).sort((a,b)=>a-b);
         ultimaTentativa={nums,stars};
-        if(passaFiltros(nums,filtros,somaMin,somaMax,quartis,regra.nums.max,ultimaAposta)){
+        if(passaFiltros(nums,filtros,somaMin,somaMax,quartis,regra.nums.max,ultimaAposta,ultimoSorteioReal)){
           resolve({nums,stars,tentativas,stats,somaMin,somaMax,quartis,esgotado:false}); return;
         }
       }
@@ -1696,7 +1753,7 @@ function construirSVGConvergencia(snapshots,probTeorica){
 async function executarMonteCarlo(totalSorteios){
   const regra=REGRAS[currentGame];
   const container=document.getElementById('mcResultContainer');
-  const buttons=[document.getElementById('btnMC10k'),document.getElementById('btnMC100k'),document.getElementById('btnMC500k'),document.getElementById('btnMC1M')];
+  const buttons=[document.getElementById('btnMC10k'),document.getElementById('btnMC100k'),document.getElementById('btnMC500k'),document.getElementById('btnMC1M'),document.getElementById('btnMC5M')];
   buttons.forEach(b=>b.disabled=true);
   setProgress(1,'mcProgressWrap','mcProgressBar');
   const apostaFixa=getApostaReferencia(regra);
@@ -1713,8 +1770,8 @@ async function executarMonteCarlo(totalSorteios){
   const inobservaveis=escaloes.filter(e=>e.esperado<1);
   const targetIdx=observaveis.length?observaveis[observaveis.length-1].idx:escaloes[escaloes.length-1].idx;
   const probTeoricaTarget=escaloes[targetIdx].probTeorica;
-  let html=`<table class="mc-table"><thead><tr><th style="text-align:left;">Escalão</th><th>Teórico</th><th>Simulado</th><th>Observado</th><th>Esperado</th><th>Z</th></tr></thead><tbody>`;
-  let chi2=0,gl=0;
+  let html=`<table class="mc-table"><thead><tr><th style="text-align:left;">Escalão</th><th>Teórico</th><th>Simulado</th><th>Observado</th><th>Esperado</th><th>Z</th><th>IC 95% (Wilson)</th></tr></thead><tbody>`;
+  let chi2=0,gl=0; const obsArr=[],espArr=[];
   observaveis.forEach(e=>{
     const {p,idx,probTeorica,contagem,esperado}=e;
     const probSimulada=contagem/totalSorteios;
@@ -1722,10 +1779,12 @@ async function executarMonteCarlo(totalSorteios){
     const simuladoFmt=probSimulada>0?'1/'+Math.round(1/probSimulada).toLocaleString('pt-PT'):'sem ocorrências';
     const seCount=Math.sqrt(totalSorteios*probTeorica*(1-probTeorica));
     const zCount=seCount>0?(contagem-esperado)/seCount:0;
-    if(esperado>=5){ chi2+=Math.pow(contagem-esperado,2)/esperado; gl++; }
+    if(esperado>=5){ chi2+=Math.pow(contagem-esperado,2)/esperado; gl++; obsArr.push(contagem); espArr.push(esperado); }
+    const wilson=intervaloWilson(contagem,totalSorteios,1.96);
+    const wilsonFmt=`[${(wilson.lo*100).toFixed(4)}% – ${(wilson.hi*100).toFixed(4)}%]`;
     const rowStyle=idx===targetIdx?' style="background:rgba(79,203,142,0.07);"':'';
     const zColor=Math.abs(zCount)<2?'var(--ok)':(Math.abs(zCount)<3?'var(--brass-bright)':'var(--warn)');
-    html+=`<tr${rowStyle}><td>${p.nome}</td><td>${teoricoFmt}</td><td>${simuladoFmt}</td><td>${contagem.toLocaleString('pt-PT')}</td><td>${esperado.toFixed(1)}</td><td style="color:${zColor};">${zCount.toFixed(2)}</td></tr>`;
+    html+=`<tr${rowStyle}><td>${p.nome}</td><td>${teoricoFmt}</td><td>${simuladoFmt}</td><td>${contagem.toLocaleString('pt-PT')}</td><td>${esperado.toFixed(1)}</td><td style="color:${zColor};">${zCount.toFixed(2)}</td><td>${wilsonFmt}</td></tr>`;
   });
   html+=`</tbody></table>`;
   if(inobservaveis.length){
@@ -1735,14 +1794,23 @@ async function executarMonteCarlo(totalSorteios){
   }
   const pValor=chiSquareSF(chi2,gl);
   const chiOk=pValor>0.05;
+  const gStat=testeG(obsArr,espArr);
+  const pValorG=chiSquareSF(gStat,gl);
+  const gOk=pValorG>0.05;
   html+=`<div class="chi-box">
-    <div><span class="cl">χ² (gl=${gl})</span> <span class="cv">${chi2.toFixed(3)}</span></div>
-    <div><span class="cl">p-valor (exato, gama incompleta)</span> <span class="cv" style="color:${chiOk?'var(--ok)':'var(--warn)'};">${(pValor*100).toFixed(2)}%</span></div>
-    <div><span class="cl">Resultado</span> <span class="cv">${chiOk?'✅ sem evidência de enviesamento':'⚠️ possível enviesamento'}</span></div>
+    <div><span class="cl">χ² de Pearson (gl=${gl})</span> <span class="cv">${chi2.toFixed(3)}</span></div>
+    <div><span class="cl">p-valor χ² (exato, gama incompleta)</span> <span class="cv" style="color:${chiOk?'var(--ok)':'var(--warn)'};">${(pValor*100).toFixed(2)}%</span></div>
+  </div>
+  <div class="chi-box">
+    <div><span class="cl">Teste G (razão de verosimilhança, gl=${gl})</span> <span class="cv">${gStat.toFixed(3)}</span></div>
+    <div><span class="cl">p-valor G</span> <span class="cv" style="color:${gOk?'var(--ok)':'var(--warn)'};">${(pValorG*100).toFixed(2)}%</span></div>
+  </div>
+  <div class="chi-box">
+    <div><span class="cl">Resultado combinado (χ² + G concordantes)</span> <span class="cv">${chiOk&&gOk?'✅ sem evidência de enviesamento — o sorteio simulado é justo':'⚠️ um dos testes assinala desvio — repita com mais sorteios antes de concluir'}</span></div>
   </div>`;
   const chartSvg=construirSVGConvergencia(snapshots,probTeoricaTarget);
   html+=`<div class="mc-chart-wrap">${chartSvg}<div class="prize-legend" style="text-align:center;">Frequência observada (azul) vs. teórica (amarela) — banda cinza: IC 95%.</div></div>`;
-  html+=`<div class="prize-legend" style="margin-top:8px;">Aposta de referência (${apostaFixa.gerada?'a última combinação que gerou':'gerada aleatoriamente para este teste'}): <b>${minhaAposta.join(' - ')}</b> ${minhasStars?'| '+minhasStars.join(' - '):''} (fixa durante toda a simulação). Apenas o sorteio simulado varia — isto confirma que o motor de sorteio é justo, <b>não prevê nem melhora</b> o resultado do próximo sorteio real.</div>`;
+  html+=`<div class="prize-legend" style="margin-top:8px;">Aposta de referência (${apostaFixa.gerada?'a última combinação que gerou':'gerada aleatoriamente para este teste'}): <b>${minhaAposta.join(' - ')}</b> ${minhasStars?'| '+minhasStars.join(' - '):''} (fixa durante toda a simulação). Apenas o sorteio simulado varia — isto confirma que o motor de sorteio é justo, <b>não prevê nem melhora</b> o resultado do próximo sorteio real. Dois testes concordantes (χ² e G) são só uma confirmação mais robusta de justiça do sorteio — continuam a não dizer nada sobre o próximo resultado.</div>`;
   container.innerHTML=html;
 
   // qui-quadrado extra: uniformidade do histórico REAL registado (descritivo, não preditivo)
@@ -1750,16 +1818,25 @@ async function executarMonteCarlo(totalSorteios){
   const realBox=document.getElementById('mcRealChi');
   if(total>=15){
     const esperadoPorNum=total*regra.nums.sorteados/regra.nums.max;
-    let chi2Real=0;
-    for(let n=1;n<=regra.nums.max;n++){ const diff=freqNum[n]-esperadoPorNum; chi2Real+=(diff*diff)/esperadoPorNum; }
+    let chi2Real=0; const obsReal=[],espReal=[];
+    for(let n=1;n<=regra.nums.max;n++){ const diff=freqNum[n]-esperadoPorNum; chi2Real+=(diff*diff)/esperadoPorNum; obsReal.push(freqNum[n]); espReal.push(esperadoPorNum); }
     const dfReal=regra.nums.max-1;
     const pReal=chiSquareSF(chi2Real,dfReal);
+    const gReal=testeG(obsReal,espReal);
+    const pGReal=chiSquareSF(gReal,dfReal);
+    const numeroMaisFreq=freqNum.indexOf(Math.max(...freqNum.slice(1)));
+    const wilsonMaisFreq=intervaloWilson(freqNum[numeroMaisFreq],total*regra.nums.sorteados,1.96);
     realBox.innerHTML=`<div class="chi-box">
       <div><span class="cl">χ² do histórico REAL (${total} sorteios)</span> <span class="cv">${chi2Real.toFixed(2)}</span></div>
-      <div><span class="cl">p-valor exato</span> <span class="cv" style="color:${pReal>0.05?'var(--ok)':'var(--warn)'};">${(pReal*100).toFixed(2)}%</span></div>
-    </div><div class="prize-legend">Compara a distribuição dos números realmente sorteados com a uniformidade teórica esperada — útil apenas para confirmar que o sorteio oficial é aleatório, nunca para prever o próximo. Com poucos sorteios registados este teste tem pouca potência estatística; quanto mais sorteios registar, mais fiável fica.</div>`;
+      <div><span class="cl">p-valor χ² exato</span> <span class="cv" style="color:${pReal>0.05?'var(--ok)':'var(--warn)'};">${(pReal*100).toFixed(2)}%</span></div>
+    </div>
+    <div class="chi-box">
+      <div><span class="cl">Teste G do histórico REAL</span> <span class="cv">${gReal.toFixed(2)}</span></div>
+      <div><span class="cl">p-valor G exato</span> <span class="cv" style="color:${pGReal>0.05?'var(--ok)':'var(--warn)'};">${(pGReal*100).toFixed(2)}%</span></div>
+    </div>
+    <div class="prize-legend">Número mais frequente no histórico registado: <b>${String(numeroMaisFreq).padStart(2,'0')}</b> (saiu ${freqNum[numeroMaisFreq]} vezes; IC 95% de Wilson para a sua proporção real: ${(wilsonMaisFreq.lo*100).toFixed(3)}%–${(wilsonMaisFreq.hi*100).toFixed(3)}%). Compara a distribuição dos números realmente sorteados com a uniformidade teórica esperada — útil só para confirmar que o sorteio oficial é aleatório, <b>nunca para prever o próximo</b>: mesmo que um número "pareça" sair mais, o intervalo de confiança mostra que isso é ruído estatístico esperado, não um padrão real. Com poucos sorteios registados estes testes têm pouca potência; quanto mais sorteios registar, mais fiáveis ficam.</div>`;
   } else {
-    realBox.innerHTML=`<div class="prize-legend">Registe pelo menos 15 sorteios reais no histórico para calcular também o χ² do histórico real.</div>`;
+    realBox.innerHTML=`<div class="prize-legend">Registe pelo menos 15 sorteios reais no histórico para calcular também o χ² e o teste G do histórico real.</div>`;
   }
 
   setProgress(null,'mcProgressWrap','mcProgressBar');
@@ -1970,6 +2047,7 @@ document.addEventListener('DOMContentLoaded', async function(){
   document.getElementById('btnMC100k').addEventListener('click', ()=>executarMonteCarlo(100000));
   document.getElementById('btnMC500k').addEventListener('click', ()=>executarMonteCarlo(500000));
   document.getElementById('btnMC1M').addEventListener('click', ()=>executarMonteCarlo(1000000));
+  document.getElementById('btnMC5M').addEventListener('click', ()=>executarMonteCarlo(5000000));
 
   document.getElementById('multiRunBtn').addEventListener('click', gerarMultiplos);
   document.getElementById('multiN').addEventListener('change', updateMultiPrice);
@@ -2037,4 +2115,4 @@ document.addEventListener('DOMContentLoaded', async function(){
 });
 </script>
 </body>
-  </html>
+        </html>
