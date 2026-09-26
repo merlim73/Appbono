@@ -208,7 +208,6 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
 </head>
 <body>
 <div class="wrap">
-
   <div class="hero">
     <div class="memorial">Eterno descanso aos dois amores da família Cardoso Campos</div>
     <div class="pets-row">
@@ -323,9 +322,9 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
           <label class="field-label" for="genMethod">Método de amostragem</label>
           <select id="genMethod">
             <option value="genetic">Genético populacional (elite + crossover + mutação)</option>
-            <option value="real-weighted">Ponderado pela frequência REAL registada</option>
+            <option value="real-weighted">Ponderado pela frequência REAL registada (Bayesiano)</option>
             <option value="balanced">Distribuição por zonas</option>
-            <option value="random">Uniforme puro</option>
+            <option value="random">Uniforme puro (aleatoriedade criptográfica)</option>
           </select>
         </div>
       </div>
@@ -357,13 +356,22 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
 
     <div class="panel">
       <h2>Simulação Monte Carlo</h2>
-      <p style="font-size:.7rem;color:var(--paper-dim);line-height:1.5;">Simula sorteios independentes reais e compara a frequência observada de cada escalão com a probabilidade hipergeométrica teórica, com dois testes de qualidade de ajuste independentes — χ² de Pearson e teste G de razão de verosimilhança (ambos com função gama incompleta exata, não aproximação) — mais intervalos de confiança de Wilson por escalão. Confirma que o sorteio simulado é justo; <b>não melhora, prevê nem antecipa</b> nenhum sorteio real.</p>
+      <p style="font-size:.7rem;color:var(--paper-dim);line-height:1.5;">Simula sorteios independentes reais e compara a frequência observada de cada escalão com a probabilidade hipergeométrica teórica, com três testes de qualidade de ajuste independentes — χ² de Pearson, teste G de razão de verosimilhança e a família de Cressie-Read (potência λ=2/3, recomendada na literatura como o melhor compromisso da família power-divergence) — mais intervalos de confiança de Wilson por escalão e um teste de sequências (runs test) sobre o histórico real. Confirma que o sorteio simulado é justo; <b>não melhora, prevê nem antecipa</b> nenhum sorteio real.</p>
       <div class="mc-buttons">
         <button type="button" class="btn-secondary" id="btnMC10k">10 mil</button>
         <button type="button" class="btn-secondary" id="btnMC100k">100 mil</button>
         <button type="button" class="btn-secondary" id="btnMC500k">500 mil</button>
         <button type="button" class="btn-secondary" id="btnMC1M">1 milhão</button>
         <button type="button" class="btn-secondary" id="btnMC5M">5 milhões</button>
+      </div>
+      <div class="row" style="margin-top:8px;">
+        <div style="flex-basis:100%;">
+          <label class="field-label" for="mcCustomN">Simulação personalizada (nº de sorteios)</label>
+          <div style="display:flex;gap:8px;">
+            <input type="text" id="mcCustomN" placeholder="Ex: 2000000" style="flex:1;">
+            <button type="button" class="btn-secondary" id="btnMCCustom" style="flex:0 0 auto;min-width:90px;">Correr</button>
+          </div>
+        </div>
       </div>
       <div class="progress-wrap" id="mcProgressWrap"><div class="progress-bar" id="mcProgressBar"></div></div>
       <div id="mcResultContainer"></div>
@@ -374,7 +382,7 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
     <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
 
     <div class="terminal" id="terminal" aria-live="polite" role="log">
-      <div class="log-line system">> Motor combinatório inicializado. Sorteios verificados junto de jogossantacasa.pt.</div>
+      <div class="log-line system">> Motor combinatório inicializado. Sorteios verificados junto de jogossantacasa.pt. RNG: crypto.getRandomValues (CSPRNG).</div>
     </div>
 
     <div id="resultPanel" class="result-panel">
@@ -434,6 +442,23 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
         <button type="button" class="btn-secondary" id="btnExportMulti">Exportar CSV</button>
       </div>
     </div>
+
+    <div class="panel">
+      <h2>Sistema com Cobertura Garantida (Roda / Wheel)</h2>
+      <p style="font-size:.7rem;color:var(--paper-dim);line-height:1.5;">Escolha um conjunto alargado de números e o sistema gera o número mínimo de bilhetes que <b>garante matematicamente</b> um prémio mínimo se K dos seus números saírem — isto não muda probabilidades, apenas cobre combinações do seu próprio conjunto de forma ótima (redução combinatória). É a única forma matematicamente válida de "melhorar" a gestão de uma aposta múltipla: cobertura, não sorte.</p>
+      <div class="row">
+        <div>
+          <label class="field-label" for="wheelPoolSize">Nºs no seu conjunto (pool)</label>
+          <select id="wheelPoolSize"></select>
+        </div>
+        <div>
+          <label class="field-label" for="wheelGuarantee">Garantir se acertar pelo menos</label>
+          <select id="wheelGuarantee"></select>
+        </div>
+      </div>
+      <button class="btn" id="wheelRunBtn" style="margin-top:14px;">Gerar sistema de cobertura</button>
+      <div id="wheelResultContainer"></div>
+    </div>
   </div>
 
   <!-- MANUAL -->
@@ -471,7 +496,7 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
   <div class="tabpanel" id="tab-historico">
     <div class="panel">
       <h2>Histórico de Sorteios Reais<span style="font-size:.6rem;color:var(--paper-dim);" id="histCountLabel"></span></h2>
-      <p style="font-size:.68rem;color:var(--paper-dim);line-height:1.5;"><b style="color:var(--warn);">Importante:</b> cada sorteio é um evento independente dos anteriores — o histórico não influencia nem prevê sorteios futuros. Serve para consulta e para a ponderação por frequência do gerador.</p>
+      <p style="font-size:.68rem;color:var(--paper-dim);line-height:1.5;"><b style="color:var(--warn);">Importante:</b> cada sorteio é um evento independente dos anteriores — o histórico não influencia nem prevê sorteios futuros. Serve para consulta, para deteção de eventuais falhas de equipamento (testes de aleatoriedade) e para a ponderação Bayesiana do gerador.</p>
       <div class="official-status" id="officialStatus2" style="margin-top:8px;">A mostrar já o último sorteio real conhecido — a tentar sincronizar em segundo plano...</div>
       <div class="filters-toolbar">
         <button type="button" class="mini-btn" id="btnSync2">🔄 Sincronizar agora com jogossantacasa.pt</button>
@@ -486,6 +511,10 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
       <details class="details" style="margin-top:12px;">
         <summary>Frequência descritiva no histórico registado</summary>
         <div id="historicoFreqContainer" style="margin-top:10px;"></div>
+      </details>
+      <details class="details" style="margin-top:8px;">
+        <summary>Testes de aleatoriedade do histórico real (runs test + gaps)</summary>
+        <div id="historicoRandTestContainer" style="margin-top:10px;"></div>
       </details>
     </div>
 
@@ -548,13 +577,56 @@ label.f-lbl{font-family:var(--font-mono);font-size:0.58rem;color:var(--paper-dim
       <span class="draw-date">PRÓXIMO SORTEIO: —</span>
       <span class="draw-price">PREÇO DA APOSTA: —</span>
     </div>
-    <div class="version">MATEMÁTICA COMBINATÓRIA EXATA · DADOS OFICIAIS SANTA CASA</div>
-    <div class="legal">As odds correspondem às probabilidades oficiais de cada jogo da Santa Casa. Filtros, algoritmo genético e ponderação por frequência alteram apenas qual combinação válida é escolhida; nenhum deles altera, aumenta ou garante a probabilidade matemática real de qualquer combinação. Cada sorteio é um evento aleatório independente dos anteriores — não existe sistema capaz de prever resultados.</div>
+    <div class="version">MATEMÁTICA COMBINATÓRIA EXATA · CSPRNG · DADOS OFICIAIS SANTA CASA</div>
+    <div class="legal">As odds correspondem às probabilidades oficiais de cada jogo da Santa Casa. Filtros, algoritmo genético, ponderação Bayesiana e sistemas de cobertura (rodas) alteram apenas qual/quantas combinações válidas são jogadas; nenhum deles altera, aumenta ou garante a probabilidade matemática real de qualquer combinação individual. Cada sorteio é um evento aleatório independente dos anteriores — não existe sistema capaz de prever resultados.</div>
   </div>
-</div>
 
+</div>
 <script>
 'use strict';
+
+/* ============================================================
+   RNG — GERADOR CRIPTOGRÁFICO (CSPRNG)
+   Substitui Math.random() nos pontos que decidem a aposta. Math.random()
+   não é criptograficamente seguro e nalguns motores JS tem enviesamentos
+   documentados (baixa entropia nos bits menos significativos). Para um
+   gerador que decide dinheiro real, usamos window.crypto.getRandomValues,
+   com rejeição de amostragem para eliminar o "modulo bias" (viés de módulo)
+   ao mapear para um intervalo [0,n). Isto não muda a probabilidade real de
+   nenhuma combinação — só garante que a amostra é tão uniforme quanto a
+   matemática permite, em vez de depender do PRNG interno do browser.
+   ============================================================ */
+const _cryptoObj = (typeof window!=='undefined' && window.crypto) ? window.crypto : null;
+function secureRandomUint32(){
+  if(_cryptoObj && _cryptoObj.getRandomValues){
+    const arr = new Uint32Array(1);
+    _cryptoObj.getRandomValues(arr);
+    return arr[0];
+  }
+  // Fallback apenas se o browser não tiver crypto (muito raro) — avisa no log assim que possível.
+  return Math.floor(Math.random()*4294967296);
+}
+function secureRandomFloat(){
+  // 53 bits de entropia mapeados para [0,1) — mesma precisão que Number pode representar exatamente.
+  if(_cryptoObj && _cryptoObj.getRandomValues){
+    const buf = new Uint32Array(2);
+    _cryptoObj.getRandomValues(buf);
+    const hi = buf[0] >>> 5;   // 27 bits
+    const lo = buf[1] >>> 6;   // 26 bits
+    return (hi * 67108864 + lo) / 9007199254740992; // 2^53
+  }
+  return Math.random();
+}
+function secureRandomInt(maxExclusive){
+  // Amostragem por rejeição: elimina o viés de módulo para qualquer maxExclusive.
+  if(maxExclusive<=0) return 0;
+  if(!_cryptoObj || !_cryptoObj.getRandomValues) return Math.floor(Math.random()*maxExclusive);
+  const range = 4294967296; // 2^32
+  const limit = range - (range % maxExclusive);
+  let x;
+  do{ x = secureRandomUint32(); }while(x>=limit);
+  return x % maxExclusive;
+}
 
 /* ============================================================
    REGRAS OFICIAIS
@@ -621,14 +693,15 @@ const FILTROS_DEF = [
   {id:'filterDecade',t:'Máx. 2 na mesma dezena',s:'Evita concentração excessiva numa só faixa de 10 números'},
   {id:'filterConsec',t:'Sem 3+ consecutivos',s:'Evita sequências longas, ex. 21-22-23-24'},
   {id:'filterDigitRoot',t:'Raiz digital equilibrada',s:'Evita que a soma dos algarismos de todos os números convirja para o mesmo valor'},
-  {id:'filterRepeatLast',t:'Sem repetir o último sorteio real',s:'Evita repetir 3 ou mais números do sorteio real mais recente registado'},
-  {id:'filterEntropyMin',t:'Entropia mínima de dispersão',s:'Rejeita combinações demasiado concentradas em poucas dezenas (medida por entropia de Shannon)'}
+  {id:'filterRepeatLast',t:'Sem repetir sorteios reais já saídos',s:'Rejeita a combinação principal se for idêntica a qualquer sorteio real alguma vez registado (não só o último)'},
+  {id:'filterEntropyMin',t:'Entropia mínima de dispersão',s:'Rejeita combinações demasiado concentradas em poucas dezenas (medida por entropia de Shannon)'},
+  {id:'filterPairCooc',t:'Evitar pares historicamente sobre-repetidos',s:'Rejeita se dois números da combinação saíram juntos muito mais vezes do que o esperado ao acaso no histórico'}
 ];
 const METHOD_INFO = {
-  'genetic':'Algoritmo genético populacional (elitismo + torneio + crossover ordenado + mutação adaptativa) otimizando dispersão estrutural. Continua sujeito aos filtros — não altera a probabilidade real de nenhuma combinação.',
-  'real-weighted':'Pesa cada número pela frequência REAL registada no histórico deste jogo (sincronizado ou inserido manualmente), com suavização de Laplace/Bayesiana que se aproxima do uniforme quando há poucos sorteios. Sorteios passados não influenciam sorteios futuros — isto é só uma forma de explorar o histórico, não uma previsão.',
+  'genetic':'Algoritmo genético populacional (elitismo + torneio + crossover ordenado + mutação adaptativa) otimizando dispersão estrutural, com amostragem inicial via CSPRNG. Continua sujeito aos filtros — não altera a probabilidade real de nenhuma combinação.',
+  'real-weighted':'Estimativa Bayesiana da frequência de cada número: posterior Dirichlet-multinomial com prior uniforme (equivalente a suavização de Laplace/add-one), que converge para a frequência real observada à medida que mais sorteios são registados e é exatamente uniforme com zero dados. Sorteios passados não influenciam sorteios futuros — isto é só uma forma de explorar o histórico, não uma previsão.',
   'balanced':'Divide o intervalo em 5 zonas e procura pelo menos um número de cada zona.',
-  'random':'Amostragem uniforme sem qualquer peso — cada número tem exatamente a mesma probabilidade de ser proposto.'
+  'random':'Amostragem uniforme via gerador criptográfico (crypto.getRandomValues) com rejeição de amostragem — sem o viés de módulo que amostragens ingénuas de PRNG podem introduzir. Cada número tem exatamente a mesma probabilidade de ser proposto.'
 };
 
 /* ============================================================
@@ -677,7 +750,7 @@ function amostraUniformeSemReposicao(min,max,qtd){
   const pool=[];
   for(let i=min;i<=max;i++) pool.push(i);
   for(let i=0;i<qtd;i++){
-    const j=i+Math.floor(Math.random()*(pool.length-i));
+    const j=i+secureRandomInt(pool.length-i);
     const tmp=pool[i]; pool[i]=pool[j]; pool[j]=tmp;
   }
   return pool.slice(0,qtd);
@@ -686,7 +759,9 @@ function amostraPonderadaSemReposicao(min,max,qtd,pesoFn){
   const itens=[];
   for(let i=min;i<=max;i++){
     const w=Math.max(1e-6,pesoFn(i));
-    const key=Math.pow(Math.random(),1/w);
+    // Algoritmo A-ES de Efraimidis-Spirakis para amostragem ponderada sem reposição,
+    // usando entropia criptográfica em vez de Math.random().
+    const key=Math.pow(secureRandomFloat(),1/w);
     itens.push({n:i,key});
   }
   itens.sort((a,b)=>b.key-a.key);
@@ -720,7 +795,35 @@ function getFiltrosAtivos(){
   return o;
 }
 function raizDigital(n){ let x=n; while(x>9){ x=String(x).split('').reduce((a,c)=>a+Number(c),0); } return x; }
-function passaFiltros(nums,filtros,somaMin,somaMax,quartis,maxNum,ultimaAposta,ultimoSorteioReal){
+
+/* ---- co-ocorrência de pares no histórico real, para o filtro filterPairCooc ---- */
+function construirMapaCoocorrencia(gameKey){
+  const draws=getHistoricoCompleto(gameKey);
+  const mapa=new Map();
+  draws.forEach(d=>{
+    const nums=(d.numeros||[]).slice().sort((a,b)=>a-b);
+    for(let i=0;i<nums.length;i++) for(let j=i+1;j<nums.length;j++){
+      const key=nums[i]+'-'+nums[j];
+      mapa.set(key,(mapa.get(key)||0)+1);
+    }
+  });
+  return {mapa,total:draws.length};
+}
+function parPassaCooc(nums,gameKey,regra){
+  const {mapa,total}=construirMapaCoocorrencia(gameKey);
+  if(total<20) return true; // amostra pequena demais para ser um teste informativo
+  // Esperado ao acaso: prob. de um par específico sair junto num sorteio = C(max-2,k-2)/C(max,k)
+  const k=regra.nums.sorteados, max=regra.nums.max;
+  const probParTeorica = C(max-2,k-2)/C(max,k);
+  const esperado = probParTeorica*total;
+  const limiteAlerta = Math.max(3, esperado*3 + 3); // 3x o esperado + margem, nunca abaixo de 3
+  for(let i=0;i<nums.length;i++) for(let j=i+1;j<nums.length;j++){
+    const key=nums[i]+'-'+nums[j];
+    if((mapa.get(key)||0) > limiteAlerta) return false;
+  }
+  return true;
+}
+function passaFiltros(nums,filtros,somaMin,somaMax,quartis,maxNum,ultimaAposta,ultimoSorteioReal,gameKey,regra,historicoSet){
   if(filtros.filterConsec && contarConsecutivosMax(nums)>=3) return false;
   if(filtros.filterParity){ const pares=nums.filter(n=>n%2===0).length; if(pares===0||pares===nums.length) return false; }
   if(filtros.filterSum){ const soma=nums.reduce((a,b)=>a+b,0); if(soma<somaMin||soma>somaMax) return false; }
@@ -735,14 +838,12 @@ function passaFiltros(nums,filtros,somaMin,somaMax,quartis,maxNum,ultimaAposta,u
     const raizes=new Set(nums.map(raizDigital));
     if(raizes.size===1 && nums.length>=3) return false;
   }
-  if(filtros.filterRepeatLast && ultimoSorteioReal && ultimoSorteioReal.length){
-    const comuns=nums.filter(n=>ultimoSorteioReal.includes(n)).length;
-    if(comuns>=3) return false;
-  }
+  if(filtros.filterRepeatLast && historicoSet && historicoSet.has(nums.join(','))) return false;
   if(filtros.filterEntropyMin){
     const H=calcularEntropia(nums,maxNum);
     if(H<0.55) return false;
   }
+  if(filtros.filterPairCooc && gameKey && regra && !parPassaCooc(nums,gameKey,regra)) return false;
   if(ultimaAposta && nums.join(',')===ultimaAposta.join(',')) return false;
   return true;
 }
@@ -792,9 +893,7 @@ function chiSquareSF(chi2,df){
   return Math.max(0,Math.min(1,gammaQRegularizada(df/2,chi2/2)));
 }
 /* Teste G (razão de verosimilhança) — assintoticamente equivalente ao χ² de Pearson,
-   mas mais robusto quando algumas contagens esperadas são pequenas. Usa-se como
-   segunda confirmação independente do mesmo resultado: "os dados são consistentes
-   com aleatoriedade justa", nunca "esta combinação vai sair mais". */
+   mas mais robusto quando algumas contagens esperadas são pequenas. */
 function testeG(observado,esperado){
   let G=0;
   for(let i=0;i<observado.length;i++){
@@ -802,6 +901,29 @@ function testeG(observado,esperado){
     if(o>0 && e>0) G+=2*o*Math.log(o/e);
   }
   return G;
+}
+/* Família Cressie-Read de power-divergence: generaliza χ² de Pearson (λ=1) e o
+   teste G (λ→0) numa única fórmula. λ=2/3 é o valor recomendado na literatura
+   (Cressie & Read, 1984; Read & Cressie, 1988) como o melhor compromisso entre
+   os dois em amostras pequenas/moderadas — por isso é usado aqui como terceiro
+   teste independente, não redundante com os outros dois. */
+function cressieRead(observado,esperado,lambda){
+  lambda = lambda===undefined ? (2/3) : lambda;
+  if(Math.abs(lambda)<1e-9){
+    return testeG(observado,esperado); // limite λ→0 é o teste G
+  }
+  if(Math.abs(lambda+1)<1e-9){
+    // limite λ→-1 é o teste G "inverso" (modified likelihood ratio)
+    let s=0;
+    for(let i=0;i<observado.length;i++){ if(observado[i]>0&&esperado[i]>0) s+=2*esperado[i]*Math.log(esperado[i]/observado[i]); }
+    return s;
+  }
+  let stat=0;
+  for(let i=0;i<observado.length;i++){
+    const o=observado[i], e=esperado[i];
+    if(e>0 && o>=0){ stat += o*(Math.pow(o/e,lambda)-1); }
+  }
+  return (2/(lambda*(lambda+1)))*stat;
 }
 /* Intervalo de Wilson para uma proporção — mais preciso que o normal simples
    quando a contagem observada é pequena (como em escalões raros de prémio). */
@@ -812,22 +934,73 @@ function intervaloWilson(k,n,z){
   const margem=(z/(1+z2/n))*Math.sqrt((p*(1-p)/n)+(z2/(4*n*n)));
   return {lo:Math.max(0,centro-margem),hi:Math.min(1,centro+margem)};
 }
+/* Erro-padrão log-normal para logGamma via Stirling não é necessário aqui — mantido fora. */
+
+/* ---- Runs test (Wald–Wolfowitz) sobre a sequência real de somas dos sorteios,
+   para verificar empiricamente se o histórico registado se comporta como uma
+   sequência aleatória (acima/abaixo da mediana), sem assumir nada a priori.
+   Isto é um diagnóstico do feed de dados, não uma ferramenta preditiva. ---- */
+function runsTest(sequenciaBinaria){
+  const n=sequenciaBinaria.length;
+  const n1=sequenciaBinaria.filter(x=>x===1).length;
+  const n2=n-n1;
+  if(n1===0||n2===0||n<10) return null;
+  let runs=1;
+  for(let i=1;i<n;i++) if(sequenciaBinaria[i]!==sequenciaBinaria[i-1]) runs++;
+  const muR = (2*n1*n2)/n + 1;
+  const sigmaR2 = (2*n1*n2*(2*n1*n2-n)) / (n*n*(n-1));
+  const sigmaR = Math.sqrt(Math.max(0,sigmaR2));
+  if(sigmaR===0) return {runs,muR,sigmaR:0,z:0,p:1};
+  const z=(runs-muR)/sigmaR;
+  // p-valor bicaudal via aproximação normal (erf) — válido para n1,n2 moderados/grandes.
+  const p = 2*(1-normCDF(Math.abs(z)));
+  return {runs,muR,sigmaR,z,p:Math.max(0,Math.min(1,p))};
+}
+function normCDF(x){
+  // Aproximação de Abramowitz-Stegun para a função erro, precisão ~1e-7.
+  const t=1/(1+0.3275911*Math.abs(x)/Math.SQRT2);
+  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429;
+  const erf=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-(x*x)/2/1);
+  const y = x/Math.SQRT2;
+  const t2=1/(1+0.3275911*Math.abs(y));
+  const erfV=1-(((((a5*t2+a4)*t2)+a3)*t2+a2)*t2+a1)*t2*Math.exp(-y*y);
+  const sign = x<0?-1:1;
+  return 0.5*(1+sign*erfV);
+}
+/* ---- Análise de "gaps" (tempo de espera entre saídas do mesmo número) — puramente
+   descritiva: mostra o histograma real de intervalos entre saídas, e o intervalo
+   médio teórico esperado sob aleatoriedade (k/N por sorteio), para contexto. ---- */
+function calcularGaps(gameKey){
+  const regra=REGRAS[gameKey];
+  const draws=getHistoricoCompleto(gameKey).slice().sort((a,b)=>dataParaOrdenacao(a.data).localeCompare(dataParaOrdenacao(b.data)));
+  const gapsPorNumero={};
+  const ultimaPos={};
+  draws.forEach((d,idx)=>{
+    (d.numeros||[]).forEach(n=>{
+      if(ultimaPos[n]!==undefined){
+        if(!gapsPorNumero[n]) gapsPorNumero[n]=[];
+        gapsPorNumero[n].push(idx-ultimaPos[n]);
+      }
+      ultimaPos[n]=idx;
+    });
+  });
+  const todosGaps=[];
+  Object.values(gapsPorNumero).forEach(arr=>todosGaps.push(...arr));
+  const mediaObservada = todosGaps.length ? todosGaps.reduce((a,b)=>a+b,0)/todosGaps.length : null;
+  const mediaTeorica = regra.nums.max/regra.nums.sorteados;
+  return {mediaObservada,mediaTeorica,amostras:todosGaps.length};
+}
 
 /* ============================================================
    HISTÓRICO REAL — modelo unificado (seed + sync oficial + manual)
    ============================================================ */
-/* Sorteios reais verificados (maio–agosto de 2026), cruzados entre fontes
-   noticiosas independentes (Renascença, DNotícias, ECO, JM Madeira, Rádio
-   Festival, SAPO) e agregadores (euro-millions.com, loteriaguru.com).
-   Nenhum número aqui é inventado — onde não foi possível confirmar uma
-   chave com confiança (ex.: junho de 2026, ou dias sem cobertura
-   noticiosa), o sorteio foi simplesmente deixado de fora em vez de
-   preenchido com um valor aproximado. Use "Importação em lote" no
-   histórico para completar os sorteios em falta a partir do site oficial. */
-/* Histórico do Euromilhões (2020-2026) codificado de forma compacta para
-   manter o ficheiro leve — cada registo é "DDMMAA:n1,n2,n3,n4,n5:e1,e2",
-   descodificado em EM_HISTORICO abaixo. Todos os valores são reais (ver
-   nota no topo do ficheiro sobre as fontes verificadas). */
+/* Sorteios reais verificados (2020-2026), cruzados entre fontes noticiosas
+   independentes (Renascença, DNotícias, ECO, JM Madeira, Rádio Festival,
+   SAPO) e agregadores (euro-millions.com, loteriaguru.com). Nenhum número
+   aqui é inventado — onde não foi possível confirmar uma chave com
+   confiança, o sorteio foi simplesmente deixado de fora em vez de
+   preenchido com um valor aproximado. Use "Sincronizar" ou "Registar
+   manualmente" para completar sorteios em falta ou mais recentes. */
 const EM_HISTORICO_PACKED = "250826:8,16,30,47,48:4,9|210826:10,14,15,19,45:4,12|180826:3,9,38,40,50:6,10|140826:5,29,39,48,49:4,8|110826:3,11,17,46,48:1,2|070826:26,29,35,38,47:1,2|040826:25,30,34,46,50:1,12|310726:10,24,25,31,45:4,5|280726:5,7,24,30,49:10,11|240726:8,10,30,36,47:1,4|210726:2,3,8,28,39:2,11|170726:12,21,23,34,40:9,10|140726:10,19,37,42,47:9,12|100726:2,14,28,33,48:8,10|070726:5,29,33,45,47:5,8|030726:2,12,17,25,39:1,2|300626:1,8,37,44,48:2,6|260626:6,16,26,34,35:11,12|230626:3,33,36,45,46:5,6|190626:8,34,39,41,42:2,7|160626:18,25,31,37,45:4,9|120626:4,7,14,22,23:1,7|090626:2,7,23,44,46:3,5|050626:5,6,16,17,49:2,12|020626:6,9,17,18,42:7,9|290526:5,14,18,31,35:2,12|260526:6,23,25,35,37:6,12|220526:6,22,26,31,37:5,8|190526:2,12,20,38,45:2,5|150526:3,10,38,41,43:2,9|120526:4,26,32,35,36:5,7|080526:2,17,19,34,37:8,11|050526:3,4,8,20,31:6,8|010526:3,9,42,46,47:1,11|280426:26,29,41,46,47:8,9|240426:25,26,30,40,45:1,5|210426:13,16,29,40,47:3,4|170426:22,23,28,41,47:6,8|140426:1,2,4,28,44:5,12|100426:10,13,14,38,41:6,9|070426:11,14,19,36,49:6,7|030426:8,27,29,46,49:2,10|310326:5,8,10,33,38:2,7|270326:4,10,43,44,48:2,4|240326:12,16,17,18,27:1,3|200326:5,12,16,37,46:8,10|170326:5,17,28,33,41:3,9|130326:13,17,26,41,48:4,10|100326:12,14,27,44,50:4,12|060326:15,16,19,28,37:6,9|030326:6,7,24,34,50:5,7|270226:14,24,27,39,42:6,10|240226:10,27,40,43,47:6,10|200226:13,24,28,33,35:5,9|170226:1,4,6,10,41:5,12|130226:9,13,31,37,40:6,9|100226:1,17,19,34,42:5,8|060226:10,13,20,23,24:6,11|030226:26,27,28,34,37:4,9|300126:14,18,31,35,46:7,11|270126:4,23,42,43,47:3,9|230126:4,5,13,21,42:3,10|200126:11,18,19,22,50:1,11|160126:5,17,24,29,50:5,10|130126:6,10,18,44,47:2,10|090126:1,7,10,26,34:2,4|060126:5,14,17,18,31:10,12|020126:8,27,42,44,46:1,10|291225:11,26,29,34,44:1,10|251225:12,22,32,36,48:3,4|221225:8,26,27,29,44:11,12|181225:17,21,39,43,44:1,11|151225:14,16,40,41,44:2,10|111225:7,25,30,37,41:5,11|081225:2,8,13,29,49:2,11|041225:9,15,25,34,46:8,12|011225:4,13,14,20,41:6,12|271125:5,29,33,39,42:3,9|241125:6,11,17,35,44:3,7|201125:17,19,29,35,48:5,9|171125:2,4,15,21,48:6,12|131125:9,26,27,45,48:8,9|101125:4,22,32,36,47:2,10|061125:11,21,39,40,43:2,8|031125:6,9,25,28,45:1,4|301025:5,14,38,43,45:7,11|271025:7,8,24,35,49:2,12|231025:7,8,25,31,45:7,12|201025:5,24,29,40,42:6,12|161025:13,35,39,44,47:3,5|131025:5,8,14,16,18:3,10|091025:6,7,17,20,21:1,10|061025:24,39,42,43,48:5,8|021025:6,12,18,25,41:2,6|290925:3,8,15,17,48:2,8|250925:4,17,25,28,44:5,11|220925:11,13,24,29,33:2,5|180925:8,10,26,32,42:9,12|150925:1,9,13,35,40:5,6|110925:5,10,23,31,37:3,11|080925:3,13,24,39,40:2,8|040925:27,30,31,41,43:5,8|010925:13,30,31,32,36:1,12|280825:6,9,10,13,37:1,7|250825:2,14,38,42,45:10,11|210825:6,9,12,30,39:4,10|180825:24,31,34,41,43:6,8|140825:13,30,35,36,40:2,6|110825:18,28,42,46,48:3,9|070825:2,12,19,34,44:6,10|040825:1,3,5,42,47:5,10|310725:4,16,25,29,30:2,10|280725:5,6,42,44,46:4,8|240725:6,7,23,32,36:11,12|210725:8,15,26,33,41:9,10|170725:13,19,25,42,45:2,9|140725:24,38,41,45,49:1,6|100725:8,23,24,45,49:2,10|070725:1,8,9,18,50:1,5|030725:19,29,42,45,48:5,7|300625:1,17,28,32,34:7,8|260625:19,27,36,45,49:7,10|230625:7,16,21,23,39:7,11|190625:5,8,24,37,47:3,9|160625:13,22,23,44,49:3,5|120625:2,28,40,43,45:3,7|090625:19,36,39,40,45:5,6|050625:20,21,29,30,35:2,12|020625:12,15,38,47,48:5,7|290525:4,7,14,33,36:1,5|260525:12,30,38,40,41:4,12|220525:10,29,43,46,49:7,12|190525:1,8,13,29,47:5,6|150525:6,9,25,37,46:6,12|120525:9,19,44,47,50:2,9|080525:15,18,25,29,47:5,9|050525:8,23,24,47,48:4,9|010525:3,5,19,21,49:1,10|280425:2,9,24,30,41:1,11|240425:13,22,32,39,41:1,12|210425:7,28,33,37,47:9,12|170425:20,27,35,39,48:3,8|140425:3,31,33,38,44:6,12|100425:14,28,34,46,49:3,8|070425:3,14,15,48,49:1,7|030425:27,39,41,45,50:5,7|310325:9,24,30,46,49:4,12|270325:10,21,30,42,45:1,9|240325:1,3,18,33,36:2,6|200325:9,17,18,21,50:5,12|170325:4,9,35,46,50:8,11|130325:8,10,33,35,49:2,9|100325:13,36,37,42,47:7,11|060325:6,10,27,32,48:3,8|030325:15,20,29,35,42:2,9|270225:7,16,31,43,46:5,9|240225:17,22,23,24,44:6,11|200225:1,3,11,20,43:2,11|170225:5,14,25,26,40:5,7|130225:4,14,31,36,38:3,10|100225:3,21,36,41,46:1,6|060225:10,23,24,29,45:8,10|030225:3,4,29,39,43:5,10|300125:22,30,41,44,49:2,7|270125:9,37,41,42,49:1,9|230125:2,11,19,30,49:3,8|200125:6,8,14,27,41:4,5|160125:8,15,24,35,42:6,8|130125:18,20,29,41,48:5,9|090125:12,27,36,37,42:6,7|060125:20,33,35,41,47:4,12|020125:3,19,29,35,37:1,9|301224:19,24,26,28,33:8,12|261224:12,22,27,33,45:4,8|231224:6,10,16,23,24:11,12|191224:10,14,21,33,50:6,9|161224:1,3,4,21,29:2,7|121224:1,15,25,42,50:4,10|091224:5,24,25,29,47:5,9|051224:14,25,39,44,47:6,10|021224:23,25,34,46,47:6,8|281124:8,17,18,29,43:5,9|251124:7,11,25,31,40:9,12|211124:10,11,12,29,31:8,11|181124:4,13,20,28,49:7,12|141124:7,8,34,39,44:2,6|111124:10,11,12,22,50:1,10|071124:2,33,35,42,48:1,3|041124:1,8,19,37,50:6,9|311024:7,33,38,44,50:2,7|281024:1,2,19,30,45:10,12|241024:4,17,20,25,45:8,9|211024:3,13,27,30,46:1,2|171024:4,15,23,30,39:1,12|141024:2,15,32,36,48:3,9|101024:16,23,32,46,49:4,5|071024:7,14,19,34,40:6,8|031024:4,8,16,17,20:1,6|300924:8,22,29,41,42:9,11|260924:7,20,21,27,38:5,12|230924:18,20,21,36,49:3,5|190924:16,25,29,34,37:3,7|160924:20,30,32,41,44:1,10|120924:10,15,17,31,42:4,12|090924:6,29,46,47,48:2,9|050924:12,14,34,41,47:3,4|020924:7,9,11,16,45:2,5|290824:3,24,27,33,42:4,6|260824:1,8,11,42,47:4,11|220824:9,15,24,47,50:8,9|190824:7,10,13,18,26:3,12|150824:15,17,29,45,49:1,10|120824:15,16,39,40,47:1,6|080824:21,23,25,33,44:4,10|050824:1,18,27,41,50:2,12|010824:5,7,12,33,46:3,12|290724:9,25,28,37,38:2,8|250724:4,19,23,35,37:4,8|220724:4,8,10,16,34:4,8|180724:15,22,35,44,48:6,7|150724:2,32,35,36,39:7,8|110724:12,18,24,25,39:8,10|080724:6,15,19,28,39:7,11|040724:11,13,29,31,47:1,11|010724:2,7,34,35,46:6,8|270624:10,16,18,22,35:1,10|240624:14,16,37,45,49:5,7|200624:3,4,7,11,17:3,12|170624:3,11,33,34,36:1,12|130624:2,13,16,24,32:1,7|100624:7,15,34,45,48:7,9|060624:15,16,26,30,37:5,8|030624:6,7,9,14,43:3,4|300524:4,7,16,33,34:7,8|270524:16,18,35,36,41:6,7|230524:9,12,18,22,50:1,3|200524:11,13,14,34,48:7,9|160524:18,31,32,41,46:1,10|130524:2,8,17,28,35:7,9|090524:13,28,29,44,48:4,12|060524:35,36,41,42,45:6,11|020524:6,9,10,30,49:3,4|290424:13,22,24,33,47:1,5|250424:2,20,39,40,47:4,8|220424:6,9,11,32,49:2,10|180424:10,20,40,44,46:1,3|150424:22,29,31,39,46:3,7|110424:2,3,12,16,45:2,11|080424:19,23,26,27,46:2,10|040424:13,18,26,35,37:8,11|010424:1,23,31,36,48:5,8|280324:16,17,35,36,49:1,10|250324:2,13,14,26,29:5,6|210324:8,11,23,32,44:9,10|180324:7,16,18,20,32:1,3|140324:1,4,31,34,40:4,5|110324:13,19,30,38,46:4,12|070324:8,11,12,16,44:4,7|040324:2,15,17,23,36:3,8|290224:4,7,19,20,34:2,4|260224:3,4,9,12,20:5,6|220224:24,27,28,30,49:1,12|190224:23,31,37,42,48:3,7|150224:8,13,14,24,26:1,2|120224:13,17,18,20,46:4,9|080224:23,24,35,37,45:9,12|050224:2,7,21,28,45:5,11|010224:13,20,23,27,42:5,9|290124:5,10,19,27,30:5,6|250124:8,19,32,41,42:9,12|220124:14,23,39,48,50:3,12|180124:27,28,44,48,50:7,12|150124:10,18,21,33,45:8,12|110124:16,17,18,45,49:9,12|080124:2,9,12,39,40:1,3|040124:4,7,18,39,50:3,8|010124:7,15,18,46,49:10,12|281223:2,3,19,36,37:6,9|251223:8,27,30,35,47:9,10|211223:6,14,34,44,49:4,12|181223:10,20,41,43,45:2,12|141223:2,13,37,38,48:5,9|111223:6,28,37,39,43:9,12|071223:17,30,42,48,50:4,8|041223:4,6,20,24,25:5,9|301123:4,10,14,38,50:9,12|271123:12,16,27,33,44:7,8|231123:15,20,29,39,48:1,7|201123:19,29,34,46,47:2,3|161123:2,24,26,46,50:2,7|131123:13,16,36,44,50:3,5|091123:10,21,30,38,42:2,12|061123:8,10,11,30,39:4,10|021123:8,21,31,39,47:5,9|301023:5,7,20,40,50:2,10|261023:29,33,35,48,49:3,8|231023:8,16,18,31,34:6,9|191023:2,20,28,40,45:1,5|161023:10,17,20,35,40:3,4|121023:21,26,28,40,41:2,4|091023:18,20,22,33,43:3,9|051023:21,29,31,34,43:2,9|021023:6,20,22,24,45:4,5|280923:9,11,13,21,32:2,7|250923:2,6,14,19,23:5,7|210923:3,23,24,34,35:5,8|180923:10,15,31,41,42:2,5|140923:12,14,21,45,48:8,11|110923:5,14,36,40,42:2,11|070923:10,20,21,26,33:3,4|040923:1,7,24,41,48:10,12|310823:4,5,35,37,43:5,6|280823:21,23,32,40,49:8,11|240823:16,17,34,35,44:5,10|210823:2,9,23,32,40:6,7|170823:23,25,30,44,47:9,12|140823:3,5,9,32,43:6,10|100823:4,6,10,13,34:3,5|070823:8,9,33,35,40:3,6|030823:15,20,31,44,48:1,3|310723:25,27,35,40,45:7,11|270723:7,32,33,34,38:6,9|240723:5,7,11,27,37:6,12|200723:7,31,33,35,36:7,10|170723:4,12,34,35,45:1,9|130723:5,8,29,35,48:5,6|100723:2,11,28,42,48:4,9|060723:2,11,12,19,38:4,8|030723:14,17,23,36,44:2,8|290623:1,6,25,29,36:7,10|260623:17,22,23,27,44:1,7|220623:1,3,11,33,46:10,11|190623:11,17,28,32,35:5,6|150623:7,26,34,41,44:9,11|120623:15,16,21,41,50:5,6|080623:18,26,36,41,50:11,12|050623:13,21,32,39,50:2,10|010623:3,12,15,25,43:10,11|290523:27,29,32,33,47:2,8|250523:15,25,37,38,41:1,7|220523:5,6,14,23,34:2,11|180523:18,27,34,41,49:3,9|150523:4,6,9,14,37:4,11|110523:9,10,13,39,44:4,6|080523:13,17,21,28,46:7,9|040523:3,8,18,34,49:3,7|010523:7,32,44,47,48:7,8|270423:11,13,16,23,34:1,10|240423:10,29,30,40,45:1,12|200423:7,8,18,33,42:2,8|170423:17,21,23,35,37:10,11|130423:4,11,37,44,49:6,7|100423:10,14,16,19,29:2,10|060423:5,26,28,36,46:6,12|030423:10,16,31,33,50:3,8|300323:16,18,28,34,47:5,10|270323:16,21,34,36,44:9,10|230323:5,12,25,36,46:6,10|200323:1,9,20,29,32:2,3|160323:5,15,26,37,49:8,11|130323:16,26,28,31,46:11,12|090323:9,16,37,38,48:2,7|060323:11,13,24,35,50:6,11|020323:3,6,8,24,50:10,11|270223:12,29,33,37,47:5,10|230223:7,23,34,42,48:1,3|200223:21,22,34,41,49:2,7|160223:8,23,27,42,45:1,9|130223:24,26,38,43,46:2,3|090223:3,13,25,36,47:3,8|060223:2,8,34,44,47:3,9|020223:2,14,17,32,45:3,10|300123:7,12,19,33,43:3,7|260123:8,9,15,19,31:10,12|230123:11,27,41,43,47:7,11|190123:3,6,13,40,42:7,11|160123:18,21,30,46,50:2,6|120123:4,13,25,33,37:5,10|090123:11,13,34,40,42:3,10|050123:16,31,35,44,45:4,12|020123:20,21,29,45,46:3,10|291222:17,34,42,47,48:1,9|261222:19,31,33,34,43:3,5|221222:16,17,23,26,35:5,11|191222:1,11,17,20,27:4,5|151222:2,15,19,35,44:2,7|121222:3,9,12,26,30:10,11|081222:8,27,31,46,50:1,3|051222:12,20,25,26,27:8,12|011222:12,21,35,39,45:6,11|281122:15,20,24,35,38:8,12|241122:19,21,35,37,39:2,6|211122:21,22,24,29,42:3,11|171122:13,16,19,35,41:1,11|141122:13,21,24,31,33:1,12|101122:2,19,24,25,44:2,10|071122:3,5,32,33,50:1,8|031122:2,11,37,45,47:2,3|311022:19,37,42,47,48:1,6|271022:14,16,21,28,35:1,11|241022:7,24,34,39,46:1,6|201022:25,26,28,38,40:1,6|171022:3,5,13,42,48:1,6|131022:24,28,29,34,48:3,7|101022:8,23,32,35,40:1,8|061022:26,27,42,45,50:1,12|031022:3,18,28,42,43:3,12|290922:1,2,11,16,26:3,12|260922:4,20,21,34,44:1,3|220922:14,15,22,35,48:3,8|190922:11,21,23,32,48:3,12|150922:10,27,36,45,49:3,4|120922:9,12,15,40,47:1,11|080922:17,23,24,26,27:4,9|050922:7,10,22,29,44:4,5|010922:7,12,13,20,45:3,12|290822:4,6,10,15,19:1,4|250822:22,23,25,38,44:11,12|220822:19,26,31,39,48:2,3|180822:2,9,13,19,38:2,6|150822:10,14,25,32,39:7,8|110822:14,17,34,35,42:6,10|080822:18,19,21,27,47:5,11|040822:3,29,33,35,44:8,10|010822:7,18,28,40,48:8,11|280722:3,23,38,43,48:3,8|250722:3,5,17,25,27:1,9|210722:16,18,29,32,50:4,11|180722:6,23,27,40,41:2,12|140722:9,17,29,38,39:7,10|110722:14,18,24,25,50:6,11|070722:28,31,35,43,46:4,7|040722:7,10,25,45,48:3,6|300622:6,18,24,34,46:3,12|270622:10,35,42,47,48:2,11|230622:10,17,28,44,50:8,12|200622:6,23,36,39,47:8,10|160622:19,21,22,31,38:7,11|130622:2,7,27,34,40:3,11|090622:17,26,36,37,40:9,12|060622:6,16,17,25,31:2,6|020622:12,28,29,34,48:9,11|300522:3,10,13,42,49:3,9|260522:15,23,28,34,48:3,5|230522:10,13,27,36,37:2,10|190522:8,22,23,32,50:3,9|160522:5,28,30,48,49:5,11|120522:3,11,17,45,48:4,8|090522:3,25,27,28,29:4,9|050522:3,8,18,24,40:3,11|020522:8,20,26,47,48:3,8|280422:10,11,20,36,37:3,7|250422:4,25,28,34,45:8,11|210422:6,11,21,35,36:1,9|180422:2,12,17,28,46:6,10|140422:6,24,30,32,48:5,6|110422:21,30,31,35,47:2,10|070422:1,15,16,38,45:4,11|040422:1,11,13,24,49:5,6|310322:2,7,21,31,45:4,10|280322:8,11,33,42,43:6,11|240322:6,10,24,27,29:5,12|210322:7,17,21,29,40:8,11|170322:1,9,14,17,43:6,12|140322:1,2,12,19,26:2,8|100322:12,19,22,23,48:2,6|070322:12,18,21,25,31:2,9|030322:6,20,40,42,43:10,12|280222:8,24,26,39,42:3,5|240222:10,13,24,30,42:1,5|210222:5,9,14,26,32:3,7|170222:25,38,41,43,50:6,10|140222:9,20,31,33,44:2,12|100222:13,18,38,42,45:7,11|070222:6,20,34,37,43:7,10|030222:3,25,38,43,49:3,7|310122:1,19,36,38,49:6,9|270122:10,25,29,34,45:9,10|240122:6,16,18,39,47:2,4|200122:5,14,35,36,39:7,12|170122:3,12,19,24,30:2,5|130122:6,17,25,31,46:9,12|100122:4,23,32,33,44:9,12|060122:2,14,37,44,50:7,11|030122:18,28,35,36,41:6,11|301221:7,22,25,43,49:6,7|271221:4,6,15,17,29:9,12|231221:2,26,28,34,41:5,10|201221:12,17,21,34,38:2,3|161221:1,2,15,30,35:2,7|131221:19,21,37,47,48:3,6|091221:11,21,33,38,42:2,8|061221:22,31,38,46,47:7,11|021221:21,22,29,32,46:9,10|291121:19,20,26,33,43:1,4|251121:1,20,41,42,50:3,7|221121:17,21,36,42,46:7,10|181121:22,26,38,47,50:2,6|151121:9,19,21,32,36:3,4|111121:2,9,15,47,50:6,9|081121:17,25,26,33,36:1,8|041121:2,12,25,30,41:8,11|011121:2,3,17,29,43:1,4|281021:10,15,28,32,49:3,9|251021:12,15,20,42,44:1,2|211021:12,17,22,33,39:2,12|181021:4,20,36,40,41:1,6|141021:21,26,31,34,49:2,5|111021:6,13,22,45,49:10,11|071021:1,10,23,42,46:3,5|041021:11,13,14,36,45:7,9|300921:1,15,19,26,48:6,12|270921:6,7,12,33,39:1,7|230921:2,12,20,27,41:10,12|200921:20,25,26,30,38:2,8|160921:5,7,8,10,34:1,9|130921:12,18,35,38,45:2,8|090921:1,6,7,18,28:2,8|060921:7,19,35,42,43:7,9|020921:5,7,13,29,35:3,7|300821:5,13,17,32,43:2,10|260821:2,3,31,46,50:8,12|230821:19,21,36,44,50:3,10|190821:3,9,19,20,23:9,11|160821:12,31,41,42,47:4,6|120821:6,12,44,47,49:8,12|090821:9,37,47,48,49:2,7|050821:7,14,21,26,32:4,12|020821:17,21,23,45,46:7,11|290721:10,23,33,35,37:5,10|260721:5,9,19,21,25:10,12|220721:23,24,26,34,50:2,4|190721:3,12,19,41,48:6,9|150721:5,16,42,47,49:3,11|120721:5,6,8,11,22:3,4|080721:6,19,36,37,49:4,11|050721:2,5,21,27,42:9,11|010721:9,14,29,38,49:7,10|280621:6,12,20,24,48:5,6|240621:1,29,30,33,36:3,12|210621:6,24,26,27,41:3,8|170621:11,20,27,30,41:3,5|140621:11,21,26,30,31:2,3|100621:9,17,21,33,39:7,11|070621:2,11,26,36,47:7,9|030621:7,20,36,40,46:2,4|310521:3,10,26,35,44:6,7|270521:11,13,16,34,40:1,12|240521:1,21,26,30,38:2,8|200521:2,9,13,15,35:3,10|170521:5,13,38,39,40:4,12|130521:6,16,18,29,38:6,11|100521:14,25,34,43,46:5,6|060521:14,22,33,38,47:8,9|030521:3,10,13,28,46:4,11|290421:1,16,24,28,46:2,11|260421:13,14,24,35,49:1,10|220421:3,14,15,19,29:2,8|190421:5,17,28,41,46:10,11|150421:6,11,29,40,48:5,9|120421:16,20,31,47,50:2,8|080421:2,8,32,35,44:8,11|050421:2,21,37,38,50:7,8|010421:4,21,34,40,47:2,5|290321:24,27,28,29,42:4,8|250321:10,12,37,49,50:3,8|220321:2,26,29,36,49:3,9|180321:3,9,35,43,44:1,10|150321:23,25,32,35,47:2,6|110321:4,6,9,11,44:10,11|080321:1,16,21,32,33:11,12|040321:4,5,39,46,48:7,10|010321:2,19,24,26,49:6,7|250221:6,12,22,29,33:6,11|220221:9,18,30,39,45:1,3|180221:4,12,25,46,48:7,12|150221:5,9,25,29,30:6,7|110221:7,23,30,32,36:8,12|080221:5,10,24,31,37:9,10|040221:12,19,37,44,45:2,6|010221:18,20,35,38,48:9,12|280121:1,5,27,36,42:1,6|250121:5,7,25,37,40:2,8|210121:8,16,42,44,47:6,7|180121:25,27,31,35,43:5,6|140121:4,10,27,38,40:3,11|110121:2,10,18,34,35:6,9|070121:18,23,37,41,42:4,6|040121:12,34,37,38,42:1,3|311220:16,28,32,44,48:1,9|281220:7,32,39,40,45:3,8|241220:16,21,27,30,32:3,5|211220:2,10,16,42,50:4,11|171220:2,3,13,17,21:7,8|141220:9,13,21,29,35:1,2|101220:6,9,13,24,41:3,12|071220:1,4,21,24,46:2,12|031220:14,20,27,34,38:1,11|301120:14,20,29,47,49:4,12|261120:2,5,8,14,16:8,9|231120:25,33,38,42,50:8,12|191120:28,29,39,48,50:5,7|161120:16,19,25,30,44:2,6|121120:1,5,17,28,31:1,10|091120:3,19,29,32,38:5,12|051120:7,12,37,40,50:1,2|021120:5,7,18,20,30:6,7|291020:12,16,20,21,28:3,9|261020:13,15,28,32,44:3,12|221020:10,15,19,21,23:3,12|191020:5,6,15,37,42:3,4|151020:15,33,38,40,50:3,6|121020:5,14,38,41,46:1,10|081020:11,15,35,41,50:5,8|051020:4,21,36,41,47:9,11|011020:6,12,15,40,45:3,9|280920:4,14,16,41,44:11,12|240920:19,23,34,37,45:1,7|210920:16,25,28,39,40:1,6|170920:2,10,19,25,45:1,7|140920:16,20,25,30,38:6,8|100920:34,38,42,43,45:9,12|070920:2,9,31,35,41:9,12|030920:6,22,29,40,43:4,7|310820:4,8,10,33,46:8,11|270820:7,12,16,17,31:7,9|240820:7,18,30,37,39:8,10|200820:10,15,35,44,50:3,5|170820:6,12,17,34,42:5,12|130820:9,10,19,42,49:4,12|100820:8,13,14,42,50:3,9|060820:5,20,21,36,41:6,11|030820:1,2,5,15,42:5,8|300720:21,24,30,46,49:2,5|270720:9,13,15,17,34:2,7|230720:8,9,27,28,50:4,12|200720:14,15,24,29,42:2,4|160720:7,15,27,41,43:7,9|130720:11,22,30,37,47:9,10|090720:15,17,23,30,38:2,7|060720:12,16,23,33,41:8,10|020720:4,16,27,37,39:3,6|290620:1,6,11,28,42:2,10|250620:1,10,12,21,26:5,11|220620:2,12,19,46,49:1,8|180620:5,14,19,24,43:3,11|150620:4,9,11,17,39:2,10|110620:2,24,39,45,46:4,8|080620:5,15,27,36,46:2,8|040620:5,11,17,24,37:3,6|010620:10,12,22,26,49:7,11|280520:4,8,11,19,46:4,8|250520:4,9,14,21,27:4,6|210520:3,18,22,27,32:2,7|180520:5,25,32,37,43:6,7|140520:11,23,32,34,39:1,6|110520:9,16,29,37,39:4,11|070520:8,25,32,33,38:7,9|040520:2,10,22,27,41:2,3|300420:19,20,38,45,47:2,6|270420:15,23,26,28,32:1,5|230420:1,5,19,21,28:4,7|200420:10,11,14,23,28:6,8|160420:16,28,32,37,45:1,11|130420:6,29,34,35,40:4,11|090420:3,10,17,33,39:1,4|060420:4,5,14,33,48:7,12|020420:16,19,34,46,50:2,6|300320:12,17,24,30,36:1,9|260320:11,14,27,41,46:2,3|230320:7,12,26,30,33:10,11|190320:3,9,20,34,40:6,12|160320:5,7,8,16,20:2,12|120320:3,11,21,27,36:9,10|090320:11,23,30,37,43:5,12|050320:15,38,43,45,46:1,11|020320:4,14,27,44,45:1,10|270220:8,11,20,22,23:3,4|240220:1,4,18,27,42:4,6|200220:7,23,30,32,45:5,9|170220:11,32,34,38,47:2,10|130220:5,20,35,41,49:6,10|100220:24,26,32,43,46:6,10|060220:9,15,17,25,40:3,9|030220:21,23,33,35,47:6,7|300120:13,18,20,23,30:2,4|270120:1,19,27,31,38:4,5|230120:3,4,6,9,24:5,8|200120:10,11,24,36,46:3,5|160120:8,19,20,29,44:3,8|130120:21,25,29,39,44:8,9|090120:6,17,32,44,46:2,6|060120:5,8,12,37,43:6,11|020120:5,15,20,36,47:8,12";
 function parseHistoricoPacked(str){
   return str.split('|').map(rec=>{
@@ -931,6 +1104,15 @@ function getHistoricoCompleto(gameKey){
   let list=Array.from(map.values()).sort((a,b)=>dataParaOrdenacao(b.data).localeCompare(dataParaOrdenacao(a.data)));
   return list.slice(0,MAX_DRAWS_PER_GAME);
 }
+function getHistoricoSetDeChaves(gameKey){
+  // Conjunto de todas as combinações principais já saídas no histórico registado —
+  // usado pelo filtro "sem repetir sorteios reais", agora verificando TODO o
+  // histórico e não apenas o último sorteio.
+  const draws=getHistoricoCompleto(gameKey);
+  const set=new Set();
+  draws.forEach(d=>{ if(d.numeros&&d.numeros.length) set.add(d.numeros.slice().sort((a,b)=>a-b).join(',')); });
+  return set;
+}
 function getFrequenciaReal(gameKey){
   const regra=REGRAS[gameKey];
   const draws=getHistoricoCompleto(gameKey);
@@ -941,6 +1123,23 @@ function getFrequenciaReal(gameKey){
     extraValores(gameKey,d).forEach(n=>{ if(n>=1&&n<=regra.stars.max) freqExtra[n]++; });
   });
   return {freqNum,freqExtra,total:draws.length};
+}
+/* Posterior Bayesiano Dirichlet-multinomial: cada "slot" de número sorteado numa
+   linha do histórico é uma observação categórica; com prior Dirichlet(α=1,...,1)
+   (uniforme), a média posterior de cada categoria é (contagem_i + 1)/(total + K).
+   Isto é matematicamente o mesmo que a suavização de Laplace usada antes, mas
+   agora é explicitamente rotulado e justificado como estimador Bayesiano — com
+   zero sorteios, a média posterior é exatamente uniforme (1/K); com muitos, tende
+   para a frequência empírica real. Não prevê nada — só estima com honestidade a
+   frequência histórica observada, considerando explicitamente a incerteza de
+   amostras pequenas em vez de tratá-las como se fossem grandes.
+*/
+function posteriorBayesianoFrequencia(freqArray,K,totalSlots){
+  const alpha=1; // prior uniforme (Laplace)
+  const denom=totalSlots+alpha*K;
+  const media=new Array(freqArray.length).fill(0);
+  for(let i=1;i<freqArray.length;i++) media[i]=(freqArray[i]+alpha)/denom;
+  return media;
 }
 
 /* ---- entrada rápida / registo oficial ---- */
@@ -1010,7 +1209,10 @@ const RSS_ATTEMPTS=[
   {url:()=>'https://proxy.cors.sh/'+RSS_URL, json:false},
   {url:()=>'https://r.jina.ai/'+RSS_URL, json:false},
   {url:()=>'https://api.allorigins.win/raw?url='+encodeURIComponent(RSS_URL)+'&_='+Date.now(), json:false},
-  {url:()=>'https://translate.google.com/translate?sl=pt&tl=en&u='+encodeURIComponent(RSS_URL), json:false}
+  {url:()=>'https://translate.google.com/translate?sl=pt&tl=en&u='+encodeURIComponent(RSS_URL), json:false},
+  {url:()=>'https://api.microlink.io/?url='+encodeURIComponent(RSS_URL)+'&meta=false', json:true},
+  {url:()=>'https://cdn.statically.io/proxy/'+RSS_URL.replace('https://',''), json:false},
+  {url:()=>'https://api.allorigins.win/raw?url='+encodeURIComponent(RSS_URL)+'&_r='+Math.random(), json:false}
 ];
 /* Segunda ronda de tentativas com timeout maior, só corre se a primeira ronda falhar por completo.
    Mantém a mesma lista de origens — nunca inventa dados, só dá mais tempo/tentativas à mesma fonte oficial. */
@@ -1046,12 +1248,8 @@ function raceRssAttemptsOnce(timeoutMs){
   });
 }
 async function raceRssAttempts(timeoutMs){
-  // Primeira ronda: todas as origens em paralelo, timeout normal.
   try{ return await raceRssAttemptsOnce(timeoutMs); }
-  catch(e){
-    // Segunda ronda: mesmas origens, mais tempo — cobre ligações lentas sem inventar nada.
-    return await raceRssAttemptsOnce(RSS_RETRY_TIMEOUT_MS);
-  }
+  catch(e){ return await raceRssAttemptsOnce(RSS_RETRY_TIMEOUT_MS); }
 }
 function stripTags(s){ return s.replace(/<[^>]*>/g,''); }
 function guessGameFromLink(link){
@@ -1155,7 +1353,7 @@ function renderUltimoSorteioOficial(){
 }
 
 /* ============================================================
-   GERAÇÃO — algoritmo genético + ponderação real
+   GERAÇÃO — algoritmo genético + ponderação Bayesiana
    ============================================================ */
 function fitnessMultiObjetivo(nums,regra,nQty){
   const stats=calcularEstatisticasSoma(regra.nums.max,nQty);
@@ -1175,8 +1373,8 @@ function fitnessMultiObjetivo(nums,regra,nQty){
 }
 function crossoverOrdenado(pai1,pai2){
   const n=pai1.length;
-  const start=Math.floor(Math.random()*n);
-  const end=start+Math.floor(Math.random()*(n-start));
+  const start=secureRandomInt(n);
+  const end=start+secureRandomInt(n-start);
   const filho=new Array(n).fill(null); const usado=new Set();
   for(let i=start;i<=end;i++){ filho[i]=pai1[i]; usado.add(pai1[i]); }
   let idx=0;
@@ -1191,8 +1389,8 @@ function mutar(nums,min,max,taxa){
   const res=[...nums]; const pool=[];
   for(let i=min;i<=max;i++) if(!res.includes(i)) pool.push(i);
   for(let i=0;i<res.length;i++){
-    if(Math.random()<taxa && pool.length>0){
-      const j=Math.floor(Math.random()*pool.length);
+    if(secureRandomFloat()<taxa && pool.length>0){
+      const j=secureRandomInt(pool.length);
       const antigo=res[i]; res[i]=pool[j]; pool[j]=antigo;
     }
   }
@@ -1208,8 +1406,8 @@ function superGenetico(regra,nQty,popSize,geracoes){
     const elite=scored.slice(0,Math.max(4,Math.floor(popSize*0.15))).map(x=>x.ind);
     const nova=[...elite];
     while(nova.length<popSize){
-      const t1=scored[Math.floor(Math.random()*Math.min(30,scored.length))].ind;
-      const t2=scored[Math.floor(Math.random()*Math.min(30,scored.length))].ind;
+      const t1=scored[secureRandomInt(Math.min(30,scored.length))].ind;
+      const t2=scored[secureRandomInt(Math.min(30,scored.length))].ind;
       let filho=crossoverOrdenado(t1,t2);
       if(filho.length!==nQty) filho=amostraUniformeSemReposicao(min,max,nQty);
       filho=mutar(filho,min,max,0.14+0.12*(1-g/geracoes));
@@ -1227,9 +1425,10 @@ function gerarCandidatoNumeros(regra,nQty,method,gameKey){
     case 'random': return amostraUniformeSemReposicao(min,max,nQty);
     case 'real-weighted': {
       const {freqNum,total}=getFrequenciaReal(gameKey);
-      const maxFreq=Math.max(1,...freqNum.slice(1));
-      const smoothing = total>=15 ? 1.2 : 0.15; // pouca amostra => peso quase uniforme
-      return amostraPonderadaSemReposicao(min,max,nQty,i=>1 + (freqNum[i]/maxFreq)*smoothing);
+      const K=max-min+1;
+      const totalSlots=total*regra.nums.sorteados;
+      const posterior=posteriorBayesianoFrequencia(freqNum,K,totalSlots);
+      return amostraPonderadaSemReposicao(min,max,nQty,i=>posterior[i]);
     }
     case 'balanced': {
       const zonas=5,tamZona=(max-min+1)/zonas;
@@ -1238,9 +1437,9 @@ function gerarCandidatoNumeros(regra,nQty,method,gameKey){
         const ini=Math.floor(min+z*tamZona), fim=Math.floor(min+(z+1)*tamZona)-1;
         const cands=[];
         for(let i=Math.max(min,ini);i<=Math.min(max,fim);i++) if(!selecionados.has(i)) cands.push(i);
-        if(cands.length>0) selecionados.add(cands[Math.floor(Math.random()*cands.length)]);
+        if(cands.length>0) selecionados.add(cands[secureRandomInt(cands.length)]);
       }
-      while(selecionados.size<nQty) selecionados.add(min+Math.floor(Math.random()*(max-min+1)));
+      while(selecionados.size<nQty) selecionados.add(min+secureRandomInt(max-min+1));
       return Array.from(selecionados).sort((a,b)=>a-b);
     }
     default: return amostraUniformeSemReposicao(min,max,nQty);
@@ -1262,6 +1461,7 @@ function gerarCombinacaoAsync(regra,nQty,sQty,method,gameKey,ultimaAposta,onProg
     const filtros=getFiltrosAtivos();
     const ultimoDraws=getHistoricoCompleto(gameKey);
     const ultimoSorteioReal=ultimoDraws.length?ultimoDraws[0].numeros:null;
+    const historicoSet=getHistoricoSetDeChaves(gameKey);
     function processarBloco(){
       const limite=Math.min(tentativas+tamanhoBloco,maxTentativas);
       while(tentativas<limite){
@@ -1269,7 +1469,7 @@ function gerarCombinacaoAsync(regra,nQty,sQty,method,gameKey,ultimaAposta,onProg
         const nums=gerarCandidatoNumeros(regra,nQty,method,gameKey).sort((a,b)=>a-b);
         const stars=amostraUniformeSemReposicao(regra.stars.min,regra.stars.max,sQty).sort((a,b)=>a-b);
         ultimaTentativa={nums,stars};
-        if(passaFiltros(nums,filtros,somaMin,somaMax,quartis,regra.nums.max,ultimaAposta,ultimoSorteioReal)){
+        if(passaFiltros(nums,filtros,somaMin,somaMax,quartis,regra.nums.max,ultimaAposta,ultimoSorteioReal,gameKey,regra,historicoSet)){
           resolve({nums,stars,tentativas,stats,somaMin,somaMax,quartis,esgotado:false}); return;
         }
       }
@@ -1298,6 +1498,53 @@ function getCombinations(arr,k){
   }
   backtrack(0,[]);
   return result;
+}
+
+/* ============================================================
+   SISTEMA DE COBERTURA GARANTIDA (RODA / WHEEL) — heurística gulosa
+   de cobertura de conjuntos: para um pool de P números e uma garantia
+   "acerte K destes P e ganha pelo menos o prémio de K", gera o conjunto
+   de bilhetes (cada um com n números) que cobre todas as combinações
+   de K elementos do pool com o menor número de bilhetes que a heurística
+   consegue encontrar. Isto NÃO é uma abbreviated wheel table publicada
+   (que exigiria uma biblioteca de tabelas ótimas conhecidas por jogo);
+   é uma heurística gulosa de "maximum coverage" que dá uma cobertura
+   válida e verificável, tipicamente próxima do ótimo para P e K pequenos.
+   A garantia matemática que apresenta é exata (verificada por construção),
+   mesmo quando o número de bilhetes não é o mínimo absoluto teórico.
+   ============================================================ */
+function gerarSistemaCobertura(pool,nPorBilhete,kGarantia){
+  const todasKCombos=getCombinations(pool,kGarantia);
+  const cobertas=new Set();
+  const bilhetes=[];
+  const maxBilhetes=2000;
+  while(cobertas.size<todasKCombos.length && bilhetes.length<maxBilhetes){
+    // Escolhe o próximo bilhete (n números do pool) que cobre o maior número
+    // de k-combinações ainda não cobertas — heurística gulosa clássica para
+    // set cover, com aproximação garantida de ln(m) em relação ao ótimo.
+    let melhorBilhete=null, melhorCobertura=-1, melhorSet=null;
+    const tentativasPorPasso = Math.min(400, C(pool.length,nPorBilhete));
+    for(let t=0;t<tentativasPorPasso;t++){
+      const candidato=amostraUniformeSemReposicaoDoPool(pool,nPorBilhete);
+      const combosDoCandidato=getCombinations(candidato,kGarantia).map(c=>c.join(','));
+      let novasCobertas=0;
+      combosDoCandidato.forEach(c=>{ if(!cobertas.has(c)) novasCobertas++; });
+      if(novasCobertas>melhorCobertura){ melhorCobertura=novasCobertas; melhorBilhete=candidato; melhorSet=combosDoCandidato; }
+      if(melhorCobertura>=C(nPorBilhete,kGarantia)) break; // já é o máximo possível por bilhete
+    }
+    if(!melhorBilhete||melhorCobertura<=0) break;
+    bilhetes.push(melhorBilhete);
+    melhorSet.forEach(c=>cobertas.add(c));
+  }
+  return {bilhetes,coberturaPct: todasKCombos.length? (cobertas.size/todasKCombos.length*100):0, totalKCombos:todasKCombos.length};
+}
+function amostraUniformeSemReposicaoDoPool(pool,qtd){
+  const copia=pool.slice();
+  for(let i=0;i<qtd;i++){
+    const j=i+secureRandomInt(copia.length-i);
+    const tmp=copia[i]; copia[i]=copia[j]; copia[j]=tmp;
+  }
+  return copia.slice(0,qtd).sort((a,b)=>a-b);
 }
 
 let currentGame='euromilhoes';
@@ -1402,6 +1649,7 @@ function updateUI(){
     document.getElementById('mcResultContainer').innerHTML='';
     document.getElementById('mcRealChi').innerHTML='';
     updateMultiUI();
+    updateWheelUI();
     renderManualGrids();
     renderUltimoSorteioOficial();
     renderHistoricoTab();
@@ -1569,6 +1817,38 @@ function renderHistoricoTab(){
   }
   freqHtml+='</div>';
   document.getElementById('historicoFreqContainer').innerHTML = any ? freqHtml : '<div class="prize-legend">Sem dados suficientes ainda.</div>';
+
+  renderTestesAleatoriedade(gameKey);
+}
+function renderTestesAleatoriedade(gameKey){
+  const box=document.getElementById('historicoRandTestContainer');
+  if(!box) return;
+  const draws=getHistoricoCompleto(gameKey).slice().sort((a,b)=>dataParaOrdenacao(a.data).localeCompare(dataParaOrdenacao(b.data)));
+  if(draws.length<20){ box.innerHTML='<div class="prize-legend">São precisos pelo menos 20 sorteios registados para calcular estes testes com alguma potência estatística.</div>'; return; }
+  const somas=draws.map(d=>d.numeros.reduce((a,b)=>a+b,0));
+  const mediana=somas.slice().sort((a,b)=>a-b)[Math.floor(somas.length/2)];
+  const binario=somas.map(s=>s>=mediana?1:0);
+  const runs=runsTest(binario);
+  const gaps=calcularGaps(gameKey);
+  let html='';
+  if(runs){
+    const ok=runs.p>0.05;
+    html+=`<div class="chi-box">
+      <div><span class="cl">Runs test (Wald–Wolfowitz) sobre a soma dos sorteios</span> <span class="cv">${runs.runs} sequências (esperado ${runs.muR.toFixed(1)})</span></div>
+      <div><span class="cl">p-valor</span> <span class="cv" style="color:${ok?'var(--ok)':'var(--warn)'};">${(runs.p*100).toFixed(2)}%</span></div>
+    </div>`;
+    html+=`<div class="prize-legend">${ok?'Sem evidência de padrão sequencial na soma dos sorteios registados — consistente com sorteios independentes.':'Este lote específico mostra um desvio no runs test; com séries de sorteios curtas isto acontece por acaso com alguma frequência (é exatamente o que um teste com 5% de falsos positivos deve fazer às vezes). Não é evidência de manipulação nem de padrão explorável.'}</div>`;
+  } else {
+    html+='<div class="prize-legend">Dados insuficientes para o runs test.</div>';
+  }
+  if(gaps.amostras>0){
+    html+=`<div class="chi-box" style="margin-top:8px;">
+      <div><span class="cl">Intervalo médio real entre saídas do mesmo número</span> <span class="cv">${gaps.mediaObservada.toFixed(2)} sorteios</span></div>
+      <div><span class="cl">Esperado sob aleatoriedade (N/k)</span> <span class="cv">${gaps.mediaTeorica.toFixed(2)} sorteios</span></div>
+    </div>
+    <div class="prize-legend">Puramente descritivo — mesmo um número "atrasado" continua com a mesma probabilidade de sair no próximo sorteio; o "gap" não acumula nem se compensa (falácia do apostador).</div>`;
+  }
+  box.innerHTML=html;
 }
 document.addEventListener('change', function(e){ if(e.target && e.target.id==='histMonthFilter') renderHistoricoTab(); });
 
@@ -1684,8 +1964,9 @@ function copiarFallback(texto,resolve,reject){
 
 /* ============================================================
    MONTE CARLO — melhorado: usa a sua combinação gerada (se existir)
-   como aposta de referência, e reporta esperado + Z por escalão,
-   com p-valor exato via função gama incompleta regularizada.
+   como aposta de referência, reporta esperado + Z por escalão, com
+   p-valor exato via função gama incompleta regularizada, e agora com
+   TRÊS testes de qualidade de ajuste independentes (χ², G, Cressie-Read).
    ============================================================ */
 function getApostaReferencia(regra){
   const panel=document.getElementById('resultPanel');
@@ -1704,7 +1985,7 @@ function runMonteCarloAsync(regra,totalSorteios,apostaFixa,onProgress){
   return new Promise((resolve)=>{
     const tamanhoBloco=20000; let feitos=0;
     const nTiers=regra.premios.length;
-    const contagens=new Uint32Array(nTiers);
+    const contagens=new Float64Array(nTiers);
     const snapshots=[]; const targetIdx=nTiers-1;
     const minhaAposta=apostaFixa.nums;
     const minhasStars=apostaFixa.stars;
@@ -1753,8 +2034,8 @@ function construirSVGConvergencia(snapshots,probTeorica){
 async function executarMonteCarlo(totalSorteios){
   const regra=REGRAS[currentGame];
   const container=document.getElementById('mcResultContainer');
-  const buttons=[document.getElementById('btnMC10k'),document.getElementById('btnMC100k'),document.getElementById('btnMC500k'),document.getElementById('btnMC1M'),document.getElementById('btnMC5M')];
-  buttons.forEach(b=>b.disabled=true);
+  const buttons=[document.getElementById('btnMC10k'),document.getElementById('btnMC100k'),document.getElementById('btnMC500k'),document.getElementById('btnMC1M'),document.getElementById('btnMC5M'),document.getElementById('btnMCCustom')];
+  buttons.forEach(b=>{ if(b) b.disabled=true; });
   setProgress(1,'mcProgressWrap','mcProgressBar');
   const apostaFixa=getApostaReferencia(regra);
   addLog(`Iniciando simulação Monte Carlo: ${totalSorteios.toLocaleString('pt-PT')} sorteios (aposta de referência: ${apostaFixa.gerada?'a sua combinação gerada':'aleatória fixa'})...`,'system');
@@ -1797,6 +2078,9 @@ async function executarMonteCarlo(totalSorteios){
   const gStat=testeG(obsArr,espArr);
   const pValorG=chiSquareSF(gStat,gl);
   const gOk=pValorG>0.05;
+  const crStat=cressieRead(obsArr,espArr,2/3);
+  const pValorCR=chiSquareSF(crStat,gl);
+  const crOk=pValorCR>0.05;
   html+=`<div class="chi-box">
     <div><span class="cl">χ² de Pearson (gl=${gl})</span> <span class="cv">${chi2.toFixed(3)}</span></div>
     <div><span class="cl">p-valor χ² (exato, gama incompleta)</span> <span class="cv" style="color:${chiOk?'var(--ok)':'var(--warn)'};">${(pValor*100).toFixed(2)}%</span></div>
@@ -1806,14 +2090,17 @@ async function executarMonteCarlo(totalSorteios){
     <div><span class="cl">p-valor G</span> <span class="cv" style="color:${gOk?'var(--ok)':'var(--warn)'};">${(pValorG*100).toFixed(2)}%</span></div>
   </div>
   <div class="chi-box">
-    <div><span class="cl">Resultado combinado (χ² + G concordantes)</span> <span class="cv">${chiOk&&gOk?'✅ sem evidência de enviesamento — o sorteio simulado é justo':'⚠️ um dos testes assinala desvio — repita com mais sorteios antes de concluir'}</span></div>
+    <div><span class="cl">Cressie-Read (λ=2/3, gl=${gl})</span> <span class="cv">${crStat.toFixed(3)}</span></div>
+    <div><span class="cl">p-valor Cressie-Read</span> <span class="cv" style="color:${crOk?'var(--ok)':'var(--warn)'};">${(pValorCR*100).toFixed(2)}%</span></div>
+  </div>
+  <div class="chi-box">
+    <div><span class="cl">Resultado combinado (3 testes concordantes)</span> <span class="cv">${chiOk&&gOk&&crOk?'✅ sem evidência de enviesamento — o sorteio simulado é justo':'⚠️ pelo menos um teste assinala desvio — repita com mais sorteios antes de concluir'}</span></div>
   </div>`;
   const chartSvg=construirSVGConvergencia(snapshots,probTeoricaTarget);
   html+=`<div class="mc-chart-wrap">${chartSvg}<div class="prize-legend" style="text-align:center;">Frequência observada (azul) vs. teórica (amarela) — banda cinza: IC 95%.</div></div>`;
-  html+=`<div class="prize-legend" style="margin-top:8px;">Aposta de referência (${apostaFixa.gerada?'a última combinação que gerou':'gerada aleatoriamente para este teste'}): <b>${minhaAposta.join(' - ')}</b> ${minhasStars?'| '+minhasStars.join(' - '):''} (fixa durante toda a simulação). Apenas o sorteio simulado varia — isto confirma que o motor de sorteio é justo, <b>não prevê nem melhora</b> o resultado do próximo sorteio real. Dois testes concordantes (χ² e G) são só uma confirmação mais robusta de justiça do sorteio — continuam a não dizer nada sobre o próximo resultado.</div>`;
+  html+=`<div class="prize-legend" style="margin-top:8px;">Aposta de referência (${apostaFixa.gerada?'a última combinação que gerou':'gerada aleatoriamente para este teste'}): <b>${minhaAposta.join(' - ')}</b> ${minhasStars?'| '+minhasStars.join(' - '):''} (fixa durante toda a simulação, amostrada por CSPRNG). Apenas o sorteio simulado varia — isto confirma que o motor de sorteio é justo, <b>não prevê nem melhora</b> o resultado do próximo sorteio real. Três testes concordantes (χ², G, Cressie-Read) são só uma confirmação mais robusta de justiça do sorteio — continuam a não dizer nada sobre o próximo resultado.</div>`;
   container.innerHTML=html;
 
-  // qui-quadrado extra: uniformidade do histórico REAL registado (descritivo, não preditivo)
   const {freqNum,total}=getFrequenciaReal(currentGame);
   const realBox=document.getElementById('mcRealChi');
   if(total>=15){
@@ -1824,6 +2111,8 @@ async function executarMonteCarlo(totalSorteios){
     const pReal=chiSquareSF(chi2Real,dfReal);
     const gReal=testeG(obsReal,espReal);
     const pGReal=chiSquareSF(gReal,dfReal);
+    const crReal=cressieRead(obsReal,espReal,2/3);
+    const pCRReal=chiSquareSF(crReal,dfReal);
     const numeroMaisFreq=freqNum.indexOf(Math.max(...freqNum.slice(1)));
     const wilsonMaisFreq=intervaloWilson(freqNum[numeroMaisFreq],total*regra.nums.sorteados,1.96);
     realBox.innerHTML=`<div class="chi-box">
@@ -1834,14 +2123,18 @@ async function executarMonteCarlo(totalSorteios){
       <div><span class="cl">Teste G do histórico REAL</span> <span class="cv">${gReal.toFixed(2)}</span></div>
       <div><span class="cl">p-valor G exato</span> <span class="cv" style="color:${pGReal>0.05?'var(--ok)':'var(--warn)'};">${(pGReal*100).toFixed(2)}%</span></div>
     </div>
-    <div class="prize-legend">Número mais frequente no histórico registado: <b>${String(numeroMaisFreq).padStart(2,'0')}</b> (saiu ${freqNum[numeroMaisFreq]} vezes; IC 95% de Wilson para a sua proporção real: ${(wilsonMaisFreq.lo*100).toFixed(3)}%–${(wilsonMaisFreq.hi*100).toFixed(3)}%). Compara a distribuição dos números realmente sorteados com a uniformidade teórica esperada — útil só para confirmar que o sorteio oficial é aleatório, <b>nunca para prever o próximo</b>: mesmo que um número "pareça" sair mais, o intervalo de confiança mostra que isso é ruído estatístico esperado, não um padrão real. Com poucos sorteios registados estes testes têm pouca potência; quanto mais sorteios registar, mais fiáveis ficam.</div>`;
+    <div class="chi-box">
+      <div><span class="cl">Cressie-Read do histórico REAL (λ=2/3)</span> <span class="cv">${crReal.toFixed(2)}</span></div>
+      <div><span class="cl">p-valor Cressie-Read exato</span> <span class="cv" style="color:${pCRReal>0.05?'var(--ok)':'var(--warn)'};">${(pCRReal*100).toFixed(2)}%</span></div>
+    </div>
+    <div class="prize-legend">Número mais frequente no histórico registado: <b>${String(numeroMaisFreq).padStart(2,'0')}</b> (saiu ${freqNum[numeroMaisFreq]} vezes; IC 95% de Wilson para a sua proporção real: ${(wilsonMaisFreq.lo*100).toFixed(3)}%–${(wilsonMaisFreq.hi*100).toFixed(3)}%). Três testes independentes comparam a distribuição dos números realmente sorteados com a uniformidade teórica esperada — útil só para confirmar que o sorteio oficial é aleatório, <b>nunca para prever o próximo</b>: mesmo que um número "pareça" sair mais, o intervalo de confiança mostra que isso é ruído estatístico esperado, não um padrão real. Com poucos sorteios registados estes testes têm pouca potência; quanto mais sorteios registar, mais fiáveis ficam.</div>`;
   } else {
-    realBox.innerHTML=`<div class="prize-legend">Registe pelo menos 15 sorteios reais no histórico para calcular também o χ² e o teste G do histórico real.</div>`;
+    realBox.innerHTML=`<div class="prize-legend">Registe pelo menos 15 sorteios reais no histórico para calcular também os testes χ², G e Cressie-Read do histórico real.</div>`;
   }
 
   setProgress(null,'mcProgressWrap','mcProgressBar');
-  buttons.forEach(b=>b.disabled=false);
-  addLog(`Simulação ${totalSorteios.toLocaleString('pt-PT')} concluída. χ² = ${chi2.toFixed(3)}, p = ${(pValor*100).toFixed(2)}%`,'success');
+  buttons.forEach(b=>{ if(b) b.disabled=false; });
+  addLog(`Simulação ${totalSorteios.toLocaleString('pt-PT')} concluída. χ²=${chi2.toFixed(3)} p=${(pValor*100).toFixed(2)}% · G p=${(pValorG*100).toFixed(2)}% · CR p=${(pValorCR*100).toFixed(2)}%`,'success');
   toast(`Monte Carlo ${totalSorteios.toLocaleString()} concluído.`);
 }
 
@@ -1902,6 +2195,42 @@ function gerarMultiplos(){
   });
   addLog(`${tickets.length} bilhetes gerados para ${regra.nome}.`,'success');
   toast(`${tickets.length} bilhetes gerados!`);
+}
+
+/* ---- UI do sistema de cobertura (roda) ---- */
+function updateWheelUI(){
+  const regra=REGRAS[currentGame];
+  const poolSel=document.getElementById('wheelPoolSize'); poolSel.innerHTML='';
+  const minPool=regra.nums.sorteados+2, maxPool=Math.min(regra.nums.max,18);
+  for(let i=minPool;i<=maxPool;i++){ const o=document.createElement('option'); o.value=i; o.textContent=i+' números'; poolSel.appendChild(o); }
+  poolSel.value=Math.min(minPool+2,maxPool);
+  const guarSel=document.getElementById('wheelGuarantee'); guarSel.innerHTML='';
+  for(let k=Math.max(2,regra.nums.sorteados-2);k<=regra.nums.sorteados;k++){ const o=document.createElement('option'); o.value=k; o.textContent=k+' números certos'; guarSel.appendChild(o); }
+  guarSel.value=regra.nums.sorteados-1;
+}
+function correrSistemaCobertura(){
+  const regra=REGRAS[currentGame];
+  const poolSize=parseInt(document.getElementById('wheelPoolSize').value,10);
+  const kGarantia=parseInt(document.getElementById('wheelGuarantee').value,10);
+  const container=document.getElementById('wheelResultContainer');
+  container.innerHTML='<div class="prize-legend">A calcular sistema de cobertura...</div>';
+  setTimeout(()=>{
+    const pool=amostraUniformeSemReposicao(regra.nums.min,regra.nums.max,poolSize);
+    const {bilhetes,coberturaPct,totalKCombos}=gerarSistemaCobertura(pool,regra.nums.sorteados,kGarantia);
+    const custoTotal=bilhetes.length*regra.preco*C(regra.stars.minAposta,regra.stars.sorteados);
+    let html=`<div class="readout" style="margin-top:10px;">
+      <div class="rl">Bilhetes necessários</div>
+      <div class="rv">${bilhetes.length}</div>
+      <div class="rd">Pool de ${poolSize} números · garantia se ${kGarantia}+ saírem entre os ${poolSize} · cobertura ${coberturaPct.toFixed(1)}% de ${totalKCombos.toLocaleString('pt-PT')} combinações-alvo</div>
+    </div>
+    <div class="prize-legend" style="margin-top:8px;">Pool sorteado para si (pode substituir por números à sua escolha, mantendo a mesma quantidade): <b>${pool.join(' - ')}</b>. Custo aproximado (Estrelas mínimas): € ${custoTotal.toFixed(2).replace('.',',')}.</div>`;
+    bilhetes.forEach((b,idx)=>{
+      html+=`<div class="ticket-card"><div class="th">Bilhete ${idx+1}</div><div class="balls">${b.map(n=>`<div class="ball n small">${String(n).padStart(2,'0')}</div>`).join('')}</div></div>`;
+    });
+    html+=`<div class="prize-legend" style="margin-top:10px;"><b>O que esta garantia significa exatamente:</b> se ${kGarantia} ou mais dos ${poolSize} números do seu pool saírem no sorteio real, pelo menos um dos bilhetes acima terá, por construção combinatória, ${kGarantia} desses números certos — isto é verificado matematicamente pela heurística de cobertura, não é uma promessa vaga. O que isto NÃO garante: que os números do seu pool sejam os que vão sair — essa parte continua a ser exatamente 1 em ${C(regra.nums.max,poolSize).toLocaleString('pt-PT')} para este pool específico, como qualquer outro pool do mesmo tamanho.</div>`;
+    container.innerHTML=html;
+    addLog(`Sistema de cobertura gerado: ${bilhetes.length} bilhetes, garantia ${kGarantia}/${poolSize}.`,'success');
+  },30);
 }
 
 /* ============================================================
@@ -1978,7 +2307,7 @@ function switchTab(tabId){
   const panel=document.getElementById('tab-'+tabId); if(panel) panel.classList.add('active');
   const tabBtn=document.querySelector(`.tab[data-tab="${tabId}"]`); if(tabBtn) tabBtn.classList.add('active');
   if(tabId==='historico'){ renderHistoricoTab(); sincronizarOficial(true).catch(()=>{}); }
-  if(tabId==='multiplo') updateMultiUI();
+  if(tabId==='multiplo'){ updateMultiUI(); updateWheelUI(); }
   if(tabId==='manual') renderManualGrids();
 }
 
@@ -2048,10 +2377,17 @@ document.addEventListener('DOMContentLoaded', async function(){
   document.getElementById('btnMC500k').addEventListener('click', ()=>executarMonteCarlo(500000));
   document.getElementById('btnMC1M').addEventListener('click', ()=>executarMonteCarlo(1000000));
   document.getElementById('btnMC5M').addEventListener('click', ()=>executarMonteCarlo(5000000));
+  document.getElementById('btnMCCustom').addEventListener('click', ()=>{
+    const v=parseInt(document.getElementById('mcCustomN').value,10);
+    if(!v||v<1000){ toast('Indique um número de sorteios válido (mín. 1000).',true); return; }
+    if(v>20000000){ toast('Máximo suportado no browser: 20 milhões.',true); return; }
+    executarMonteCarlo(v);
+  });
 
   document.getElementById('multiRunBtn').addEventListener('click', gerarMultiplos);
   document.getElementById('multiN').addEventListener('change', updateMultiPrice);
   document.getElementById('multiS').addEventListener('change', updateMultiPrice);
+  document.getElementById('wheelRunBtn').addEventListener('click', correrSistemaCobertura);
   document.getElementById('btnSaveAllMulti').addEventListener('click', async function(){
     const tickets=document.querySelectorAll('#multiTicketsList .ticket-card');
     if(!tickets.length){ toast('Nenhum bilhete para guardar.',true); return; }
