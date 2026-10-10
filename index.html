@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-PT"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Observatório Combinatório v3</title>
+<title>BONNO CAMPUS THE BEST · Observatório Combinatório</title>
 <style>
 :root{--bg:#0a0d14;--p:#131926;--l:#252d40;--t:#EDEAE1;--d:#9AA3B5;--b:#EFC272;--c:#6FD6E8;--ok:#4FCB8E;--w:#E4523F}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--t);font:15px/1.5 system-ui,sans-serif;padding:12px;max-width:820px;margin:auto}
-h1{font-size:1.05rem;color:var(--b);margin-bottom:8px}
+.brand{display:flex;flex-direction:column;align-items:center;gap:9px;margin:2px 0 14px;padding:16px 10px 12px;background:#05070c;border:1px solid var(--l);border-radius:16px}
+.brand .t{font-family:"Arial Black","Segoe UI Black",Impact,system-ui,sans-serif;font-size:20px;font-weight:900;letter-spacing:.07em;line-height:1.25;text-align:center}
+.brand .t span{display:inline-block;margin:0 .22em;text-shadow:0 0 14px currentColor}
+.brand .r{color:#ff2d2d}.brand .y{color:#ffd400}.brand .g{color:#19e35a}
+.brand .bar{display:flex;width:100%;height:6px;border-radius:3px;overflow:hidden}
+.brand .bar i{flex:1}.brand .bar i:nth-child(1){background:#ff2d2d}.brand .bar i:nth-child(2){background:#ffd400}.brand .bar i:nth-child(3){background:#19e35a}
+.brand .s{font-size:12px;color:var(--d)}
 .card{background:var(--p);border:1px solid var(--l);border-radius:14px;padding:14px;margin-bottom:12px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
 label{font-size:.7rem;color:var(--d);text-transform:uppercase;display:block;margin-bottom:3px}
 select,input,textarea,button{width:100%;background:#0d111a;border:1px solid var(--l);color:var(--t);padding:10px;border-radius:9px;font:inherit}
 button{cursor:pointer;background:#1b2436;font-weight:600}button:disabled{opacity:.5}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--b);outline-offset:2px}
 button.main{background:linear-gradient(135deg,#1e4e5a,#5a4416);border-color:var(--c)}
 .tabs{display:flex;gap:6px;margin:10px 0;overflow-x:auto}.tabs button{width:auto;flex:1;white-space:nowrap;font-size:.8rem}
 .tabs button.on{background:var(--c);color:#0a0d14}
@@ -27,18 +34,26 @@ td,th{padding:5px 3px;border-bottom:1px solid var(--l);text-align:center}th{colo
 .chk{display:flex;gap:8px;align-items:flex-start;font-size:.8rem;margin:6px 0}.chk input{width:auto}
 .h{padding:6px 0;border-bottom:1px solid var(--l);font-size:.82rem}
 .ok{color:var(--ok)}.bad{color:var(--w)}
+.foot{color:#ff3b30;font-size:12px;line-height:1.6}
+.foot b{font-weight:700}
+a{color:var(--c)}
 </style></head><body>
-<h1>Observatório Combinatório v3</h1>
-<div class="card warn"><b>Nota honesta:</b> cada sorteio é independente. Nenhum filtro, sistema ou simulação aumenta a probabilidade de uma combinação sair. Esta ferramenta calcula probabilidades <b>exatas</b> e custos, para decidir com informação. O retorno médio dos jogos é inferior ao custo. Jogue só o que pode perder.</div>
-<label>Jogo</label>
+<header class="brand" id="brand">
+<div class="t" id="brandText"><span class="r">BONNO</span> <span class="y">CAMPUS</span> <span class="g">THE BEST</span></div>
+<div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="s">Observatório Combinatório · Euromilhões, Totoloto e EuroDreams</div>
+</header>
+<div class="card warn"><b>Nota honesta:</b> cada sorteio é independente. Nenhum filtro, sistema, estatística ou simulação aumenta a probabilidade de uma combinação sair. Esta ferramenta calcula probabilidades <b>exatas</b> e custos, e guarda resultados reais com indicação de quantas fontes os confirmam. O retorno médio dos jogos é inferior ao custo. Jogue só o que pode perder.</div>
+<label for="g">Jogo</label>
 <select id="g"><option value="euromilhoes">Euromilhões</option><option value="totoloto">Totoloto</option><option value="eurodreams">EuroDreams</option></select>
-<div class="tabs" id="tabs"><button data-t="calc" class="on">Calculadora</button><button data-t="gen">Gerador</button><button data-t="mc">Monte Carlo</button><button data-t="hist">Histórico</button></div>
+<div class="tabs" id="tabs"><button data-t="calc" class="on">Calculadora</button><button data-t="gen">Gerador</button><button data-t="mc">Monte Carlo</button><button data-t="hist">Histórico e fontes</button></div>
 
 <div class="tab on" id="calc"><div class="card">
 <div class="row"><div><label>Números escolhidos</label><select id="n"></select></div><div><label id="sl">Estrelas escolhidas</label><select id="s"></select></div></div>
 <div class="row"><div><label>Alvo: números certos (mín.)</label><select id="a"></select></div><div><label id="bl">Alvo: estrelas certas (mín.)</label><select id="b"></select></div></div>
 <label>Orçamento (€)</label><input id="bud" type="number" value="25" min="0">
-</div><div class="card" id="out"></div></div>
+</div><div class="card" id="out"></div>
+<div class="card"><label>Aposta simples: probabilidade exata de cada resultado</label><div id="tier"></div></div></div>
 
 <div class="tab" id="gen"><div class="card">
 <label>Cobertura da soma (distribuição exata)</label>
@@ -58,31 +73,56 @@ td,th{padding:5px 3px;border-bottom:1px solid var(--l);text-align:center}th{colo
 <div class="row"><button class="main" data-mc="5000000">5 milhões</button><button class="main" data-mc="20000000">20 milhões</button></div>
 <div class="m" id="mcp"></div></div><div class="card" id="mcout" style="display:none"></div></div>
 
-<div class="tab" id="hist"><div class="card">
-<b id="hc"></b><div id="hl" style="max-height:260px;overflow:auto;margin-top:6px"></div>
+<div class="tab" id="hist">
+<div class="card"><b id="hc"></b>
+<div class="m" id="hq"></div>
+<div id="hl" style="max-height:300px;overflow:auto;margin-top:6px"></div>
 <div class="m" id="hf"></div></div>
+
+<div class="card"><label>Atualizar a partir dos sites</label>
+<div class="row"><button class="main" id="bsync">Atualizar agora</button><button class="main" id="bsync4">Sincronizar 4 anos</button></div>
+<label for="px" style="margin-top:8px">Endereço do seu proxy (Cloudflare Worker)</label>
+<input id="px" placeholder="https://bonno-proxy.o-seu-nome.workers.dev">
+<div class="m" id="smsg">Ainda não houve sincronização nesta sessão.</div>
+<div class="m"><b>Fontes:</b> Santa Casa (oficial) para os três jogos; euromillones.com para o histórico anual do Euromilhões. Um sorteio fica ✔✔ com 2+ fontes que coincidem, ou ✔ oficial quando vem da Santa Casa. Se duas fontes divergirem, não é guardado e aparece como conflito. Sem proxy, os navegadores costumam bloquear estes pedidos (CORS): publique o worker.js e cole aqui o endereço. A página volta a atualizar sozinha a cada 3 a 15 minutos enquanto estiver aberta.</div>
+<div class="m" id="conf"></div></div>
+
+<div class="card"><label>Conferir manualmente (sites)</label>
+<div class="m">
+<a href="https://www.jogossantacasa.pt/web/ResultsBoard/" target="_blank" rel="noopener">Santa Casa · Euromilhões</a> ·
+<a href="https://www.jogossantacasa.pt/web/SCCartazResult/totolotoNew" target="_blank" rel="noopener">Santa Casa · Totoloto</a> ·
+<a href="https://www.jogossantacasa.pt/web/ResultsBoard/EuroDreams" target="_blank" rel="noopener">Santa Casa · EuroDreams</a> ·
+<a href="https://www.euromillones.com/en/results/euromillions" target="_blank" rel="noopener">euromillones.com</a></div></div>
+
 <div class="card"><label>Adicionar / Importar</label>
-<textarea id="imp" rows="4" placeholder="Uma linha por sorteio: 25/09/2026 11 12 15 38 49 | 10 12&#10;Ou cole o texto compacto antigo (DDMMAA:n,n,n,n,n:e,e|…)&#10;Ou uma cópia JSON."></textarea>
+<textarea id="imp" rows="5" placeholder="Aceita: linhas «25/09/2026 11 12 15 38 49 | 10 12»; texto copiado da lista anual do euromillones.com (formato 05-20-24-31-45-E05 -E10 + data); frases como «12 de setembro de 2026 ... números 3 - 11 - 21 - 29 - 44 e pelo Número da Sorte 2»; ou cópia JSON."></textarea>
 <div class="row"><button id="bimp">Guardar no histórico</button><button id="bexp">Gerar cópia JSON</button></div><div class="m" id="imsg"></div></div>
+
 <div class="card"><label>Conferir uma aposta no histórico</label>
 <div class="row"><input id="ckn" placeholder="Números"><input id="cke" placeholder="Estrelas"></div>
 <button id="bck">Conferir</button><div id="ckout" class="m"></div></div></div>
+
+<div class="card"><div class="foot" id="foot"></div></div>
 
 <script>
 'use strict';
 const $=id=>document.getElementById(id);
 const G={
-euromilhoes:{nome:'Euromilhões',N:50,k:5,X:12,x:2,p:2.5,nMax:12,sMax:5,ek:'estrelas',en:'Estrelas',ta:4,tb:1},
-totoloto:{nome:'Totoloto',N:49,k:5,X:13,x:1,p:1,nMax:11,sMax:1,ek:'sorte',en:'Nº Sorte',ta:4,tb:1},
-eurodreams:{nome:'EuroDreams',N:40,k:6,X:5,x:1,p:2.5,nMax:11,sMax:5,ek:'sonho',en:'Sonho',ta:5,tb:1}};
+euromilhoes:{nome:'Euromilhões',N:50,k:5,X:12,x:2,p:2.5,nMax:12,sMax:5,en:'Estrelas',ta:4,tb:1},
+totoloto:{nome:'Totoloto',N:49,k:5,X:13,x:1,p:1,nMax:11,sMax:1,en:'Nº Sorte',ta:4,tb:1},
+eurodreams:{nome:'EuroDreams',N:40,k:6,X:5,x:1,p:2.5,nMax:11,sMax:5,en:'Sonho',ta:5,tb:1}};
+const SCH={euromilhoes:[2,5],totoloto:[3,6],eurodreams:[1,4]};
+const DIAS=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+const DB='10/10/2026';
 let cur='euromilhoes';
 /* ---------- matemática exata ---------- */
 function C(n,k){if(k<0||n<0||k>n)return 0;k=Math.min(k,n-k);let r=1;for(let i=0;i<k;i++)r=r*(n-i)/(i+1);return Math.round(r)}
-const hyp=(N,k,n,i)=>C(n,i)*C(N-n,k-i)/C(N,k);      // P(acertar exatamente i) escolhendo n de N, saem k
+const hyp=(N,k,n,i)=>C(n,i)*C(N-n,k-i)/C(N,k);
 const atLeast=(N,k,n,a)=>{let s=0;for(let i=a;i<=Math.min(n,k);i++)s+=hyp(N,k,n,i);return s};
 const pct=p=>p>=0.01?(p*100).toFixed(2)+'%':p.toExponential(2);
 const one=p=>p>0?'1 em '+Math.round(1/p).toLocaleString('pt-PT'):'—';
 const eur=v=>'€ '+v.toFixed(2).replace('.',',');
+const pad=v=>String(v).padStart(2,'0');
 function sumBounds(N,k,mass){const M=k*N,dp=Array.from({length:k+1},()=>new Float64Array(M+1));dp[0][0]=1;
  for(let v=1;v<=N;v++)for(let c=Math.min(k,v);c>=1;c--)for(let s=M;s>=v;s--)dp[c][s]+=dp[c-1][s-v];
  const tot=dp[k].reduce((a,b)=>a+b,0),t=(1-mass)/2;let cum=0,lo=0,hi=M;
@@ -98,43 +138,239 @@ function wilson(k,n,z=1.96){const p=k/n,z2=z*z,c=(p+z2/(2*n))/(1+z2/n),m=z/(1+z2
 function rint(n){const l=4294967296-(4294967296%n);let x;do{x=crypto.getRandomValues(new Uint32Array(1))[0]}while(x>=l);return x%n}
 function pick(N,q){const a=[];for(let i=1;i<=N;i++)a.push(i);for(let i=0;i<q;i++){const j=i+rint(N-i);[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,q).sort((x,y)=>x-y)}
 function sfc32(a,b,c,d){return()=>{a>>>=0;b>>>=0;c>>>=0;d>>>=0;let t=(a+b)|0;a=b^(b>>>9);b=(c+(c<<3))|0;c=(c<<21|c>>>11);d=(d+1)|0;t=(t+d)|0;c=(c+t)|0;return t>>>0}}
-/* ---------- histórico ---------- */
-const KEY='jonhy_historico_v2';
+/* ---------- dados verificados (fontes indicadas por sorteio) ---------- */
+const FN={em:'euromillones.com',sc:'jogossantacasa.pt (oficial)',dn:'dnoticias.pt',jm:'jornaldemafra.pt',sp:'sapo.pt',pe:'paraeles.pt',eu:'euro-millions.com',rr:'rr.pt',mh:'magazine-hd.com',ap:'histórico anterior desta app',im:'importado',ma:'manual'};
+const MANUAL=['im','ma'];
+const nv=e=>(e.f||[]).filter(x=>!MANUAL.includes(x)).length;
+const oficial=e=>(e.f||[]).includes('sc');
+function row(s,def){const p=s.split('|');return{d:p[0],n:p[1].trim().split(/\s+/).map(Number),x:p[2].trim().split(/\s+/).map(Number),c:p[3]||'',f:p[4]?p[4].split(','):[def]}}
+const EM=[
+'09/10/2026|5 20 24 31 45|5 10|081/2026|em,sc,dn,jm',
+'06/10/2026|18 22 32 41 48|8 10|080/2026|em,sc,sp',
+'02/10/2026|7 8 10 22 35|2 10|079/2026|em,pe,eu',
+'29/09/2026|4 7 12 31 44|8 11',
+'25/09/2026|11 12 15 38 49|10 12|077/2026|em,ap',
+'22/09/2026|13 14 16 44 50|10 12|076/2026|em,ap',
+'18/09/2026|8 17 25 30 44|2 3',
+'15/09/2026|10 16 18 22 28|6 10',
+'11/09/2026|1 7 15 39 50|1 11',
+'08/09/2026|13 17 33 35 39|7 12',
+'04/09/2026|11 12 19 27 46|4 12',
+'01/09/2026|2 10 23 37 47|3 5',
+'28/08/2026|7 14 28 42 45|6 9',
+'25/08/2026|8 16 30 47 48|4 9',
+'21/08/2026|10 14 15 19 45|4 12',
+'18/08/2026|3 9 38 40 50|6 10',
+'14/08/2026|5 29 39 48 49|4 8',
+'11/08/2026|3 11 17 46 48|1 2',
+'07/08/2026|26 29 35 38 47|1 2',
+'04/08/2026|25 30 34 46 50|1 12',
+'31/07/2026|10 24 25 31 45|4 5',
+'28/07/2026|5 7 24 30 49|10 11',
+'24/07/2026|8 10 30 36 47|1 4',
+'21/07/2026|2 3 8 28 39|2 11',
+'17/07/2026|12 21 23 34 40|9 10',
+'14/07/2026|10 19 37 42 47|9 12',
+'10/07/2026|2 14 28 33 48|8 10',
+'07/07/2026|5 29 33 45 47|5 8',
+'03/07/2026|2 12 17 25 39|1 2',
+'30/06/2026|1 8 37 44 48|2 6',
+'26/06/2026|6 16 26 34 35|11 12',
+'23/06/2026|3 33 36 45 46|5 6',
+'19/06/2026|8 34 39 41 42|2 7',
+'16/06/2026|18 25 31 37 45|4 9',
+'12/06/2026|4 7 14 22 23|1 7',
+'09/06/2026|2 7 23 44 46|3 5',
+'05/06/2026|5 6 16 17 49|2 12',
+'02/06/2026|6 9 17 18 42|7 9',
+'29/05/2026|5 14 18 31 35|2 12',
+'26/05/2026|6 23 25 35 37|6 12',
+'22/05/2026|6 22 26 31 37|5 8',
+'19/05/2026|2 12 20 38 45|2 5',
+'15/05/2026|3 10 38 41 43|2 9',
+'12/05/2026|4 26 32 35 36|5 7',
+'08/05/2026|2 17 19 34 37|8 11',
+'05/05/2026|3 4 8 20 31|6 8',
+'01/05/2026|3 9 42 46 47|1 11',
+'28/04/2026|26 29 41 46 47|8 9',
+'24/04/2026|25 26 30 40 45|1 5',
+'21/04/2026|13 16 29 40 47|3 4',
+'17/04/2026|22 23 28 41 47|6 8',
+'14/04/2026|1 2 4 28 44|5 12',
+'10/04/2026|10 13 14 38 41|6 9',
+'07/04/2026|11 14 19 36 49|6 7',
+'03/04/2026|8 27 29 46 49|2 10',
+'31/03/2026|5 8 10 33 38|2 7',
+'27/03/2026|4 10 43 44 48|2 4',
+'24/03/2026|12 16 17 18 27|1 3',
+'20/03/2026|5 12 16 37 46|8 10',
+'17/03/2026|5 17 28 33 41|3 9',
+'13/03/2026|13 17 26 41 48|4 10',
+'10/03/2026|12 14 27 44 50|4 12',
+'06/03/2026|15 16 19 28 37|6 9',
+'03/03/2026|6 7 24 34 50|5 7',
+'27/02/2026|14 24 27 39 42|6 10',
+'24/02/2026|10 27 40 43 47|6 10',
+'20/02/2026|13 24 28 33 35|5 9',
+'17/02/2026|1 4 6 10 41|5 12',
+'13/02/2026|9 13 31 37 40|6 9',
+'10/02/2026|1 17 19 34 42|5 8',
+'06/02/2026|10 13 20 23 24|6 11',
+'03/02/2026|26 27 28 34 37|4 9',
+'30/01/2026|14 18 31 35 46|7 11',
+'27/01/2026|4 23 42 43 47|3 9',
+'23/01/2026|4 5 13 21 42|3 10',
+'20/01/2026|11 18 19 22 50|1 11',
+'16/01/2026|5 17 24 29 50|5 10',
+'13/01/2026|6 10 18 44 47|2 10',
+'09/01/2026|1 7 10 26 34|2 4',
+'06/01/2026|5 14 17 18 31|10 12',
+'02/01/2026|8 27 42 44 46|1 10'];
+const TT=[
+'07/10/2026|2 5 22 27 35|12|080/2026|sc',
+'03/10/2026|8 27 38 41 44|12|079/2026|mh',
+'30/09/2026|4 9 19 22 24|13|078/2026|mh',
+'12/09/2026|3 11 21 29 44|2|073/2026|rr,ap',
+'05/09/2026|13 19 29 35 46|13|071/2026|rr,ap',
+'22/07/2026|7 20 23 24 41|9|058/2026',
+'18/07/2026|8 24 28 31 47|3|057/2026',
+'03/06/2026|7 13 24 34 43|13',
+'27/05/2026|22 28 38 42 47|1',
+'11/04/2026|24 25 30 31 33|12',
+'28/02/2026|6 17 19 45 49|4',
+'21/05/2025|8 33 44 47 48|1'];
+const ED=[
+'08/10/2026|6 13 20 27 35 38|4|081/2026|sc',
+'14/09/2026|2 15 18 22 34 38|4|074/2026',
+'31/08/2026|6 14 15 17 34 37|2|070/2026',
+'03/08/2026|12 13 17 20 23 34|2|062/2026',
+'30/07/2026|4 12 21 27 34 39|1|061/2026',
+'27/07/2026|2 4 13 16 21 25|3|060/2026',
+'23/07/2026|3 4 17 21 31 33|2|059/2026',
+'20/07/2026|8 11 12 22 26 36|1|058/2026',
+'16/07/2026|1 9 14 16 30 40|3|057/2026',
+'13/07/2026|9 12 13 17 21 30|1|056/2026',
+'06/07/2026|4 5 7 12 29 37|2|054/2026',
+'01/06/2026|4 15 23 31 34 39|3|044/2026',
+'21/05/2026|10 16 25 27 29 37|5|041/2026',
+'11/05/2026|1 4 6 22 30 38|5|038/2026',
+'16/10/2025|1 4 6 10 34 38|5'];
+const BASE={euromilhoes:EM.map(s=>row(s,'em')),totoloto:TT.map(s=>row(s,'rr')),eurodreams:ED.map(s=>row(s,'rr'))};
+/* ---------- histórico (base + sincronizado + importado) ---------- */
+const KEY='jonhy_historico_v3',KEY2='jonhy_historico_v2';
 let H={euromilhoes:[],totoloto:[],eurodreams:[]};
-const SEED={
-euromilhoes:[{data:'22/09/2026',numeros:[13,14,16,44,50],estrelas:[10,12],concurso:'076/2026'},{data:'25/09/2026',numeros:[11,12,15,38,49],estrelas:[10,12],concurso:'077/2026'}],
-totoloto:[{data:'05/09/2026',numeros:[13,19,29,35,46],sorte:13},{data:'12/09/2026',numeros:[3,11,21,29,44],sorte:2,concurso:'073/2026'}],
-eurodreams:[]};
+let SYNC={t:null,msg:'',via:''},CONF=[],busy=false,tm=null;
 async function load(){try{if(window.storage){const r=await window.storage.get(KEY);return r?JSON.parse(r.value):null}return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}}
 async function save(){try{const s=JSON.stringify(H);if(window.storage)await window.storage.set(KEY,s);else localStorage.setItem(KEY,s)}catch(e){}}
+function migrate(){try{const o=JSON.parse(localStorage.getItem(KEY2));if(!o)return;for(const g in G)(o[g]||[]).forEach(d=>{const x=d.estrelas||(d.sorte!=null?[d.sorte]:[]);upsert(g,{d:d.data,n:d.numeros,x:x,c:d.concurso||'',f:['im']},true)})}catch(e){}}
 const iso=d=>d.split('/').reverse().join('');
-const extras=(g,d)=>g==='euromilhoes'?(d.estrelas||[]):[d[G[g].ek]];
-function full(g){const m=new Map();(SEED[g]||[]).concat(H[g]||[]).forEach(d=>m.set(d.data,d));return[...m.values()].sort((a,b)=>iso(b.data).localeCompare(iso(a.data)))}
-function valid(g,nums,ex){const c=G[g];return nums.length===c.k&&new Set(nums).size===c.k&&nums.every(v=>v>=1&&v<=c.N)&&ex.length===c.x&&new Set(ex).size===c.x&&ex.every(v=>v>=1&&v<=c.X)}
-function addDraw(g,data,nums,ex,fonte){nums=[...nums].sort((a,b)=>a-b);ex=[...ex].sort((a,b)=>a-b);if(!valid(g,nums,ex))return false;
- const e={data,numeros:nums,fonte};if(g==='euromilhoes')e.estrelas=ex;else e[G[g].ek]=ex[0];
- H[g]=(H[g]||[]).filter(d=>d.data!==data);H[g].push(e);return true}
-function importText(txt){const c=G[cur];let ok=0,bad=0;txt=txt.trim();
- if(txt[0]==='{'){try{const o=JSON.parse(txt);for(const g in G)(o[g]||[]).forEach(d=>{const ex=extras(g,d);addDraw(g,d.data,d.numeros||[],ex,'importado')?ok++:bad++})}catch(e){bad++}return{ok,bad}}
+const toDate=s=>{const[a,b,c]=s.split('/').map(Number);return new Date(c,b-1,a)};
+const fmt=d=>pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
+const sortN=a=>a.slice().sort((x,y)=>x-y);
+function full(g){const m=new Map();BASE[g].concat(H[g]).forEach(e=>m.set(e.d,e));return[...m.values()].sort((a,b)=>iso(b.d).localeCompare(iso(a.d)))}
+function valid(g,n,x){const c=G[g];return Array.isArray(n)&&Array.isArray(x)&&n.length===c.k&&new Set(n).size===c.k&&n.every(v=>v>=1&&v<=c.N)&&x.length===c.x&&new Set(x).size===c.x&&x.every(v=>v>=1&&v<=c.X)}
+function upsert(g,e,onlyNew){if(!valid(g,e.n,e.x))return false;e={d:e.d,n:sortN(e.n),x:sortN(e.x),c:e.c||'',f:e.f||['im']};
+ if(onlyNew&&full(g).some(z=>z.d===e.d))return false;
+ const i=H[g].findIndex(z=>z.d===e.d);if(i>=0)H[g][i]=e;else H[g].push(e);return true}
+const keyOf=e=>sortN(e.n).join(',')+'|'+sortN(e.x).join(',');
+/* funde sorteios obtidos: confirma, acrescenta ou assinala conflito */
+function merge(g,got){const have=new Map(full(g).map(e=>[e.d,e]));let add=0,conf=0;
+ for(const d in got){const L=got[d];if(new Set(L.map(keyOf)).size>1){CONF.push(`${G[g].nome} ${d}: fontes divergem (${L.map(z=>FN[z.f]||z.f).join(' vs ')})`);continue}
+  const e=L[0],fs=[...new Set(L.map(z=>z.f))],o=have.get(d);
+  if(!o){upsert(g,{d,n:e.n,x:e.x,c:e.c,f:fs});add++}
+  else if(keyOf(o)===keyOf(e)){const nf=[...new Set((o.f||[]).concat(fs))];if(nf.length!==(o.f||[]).length||(!o.c&&e.c)){upsert(g,{d,n:o.n,x:o.x,c:o.c||e.c||'',f:nf});conf++}}
+  else CONF.push(`${G[g].nome} ${d}: diverge do registo existente (${(o.f||[]).map(z=>FN[z]||z).join(', ')}); não alterado`)}
+ return{add,conf}}
+/* ---------- leitura de texto de sites ---------- */
+const MES={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+const MESPT={janeiro:1,fevereiro:2,março:3,marco:3,abril:4,maio:5,junho:6,julho:7,agosto:8,setembro:9,outubro:10,novembro:11,dezembro:12};
+const strip=t=>t.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/\s+/g,' ');
+function parseEM(t){t=strip(t);const re=/(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-E(\d{2})\s*-E(\d{2})[^0-9]{0,80}?(\d{1,2})\s+([A-Za-z]{3})[A-Za-z]*\s+(\d{4})/g,out=[];let m;
+ while((m=re.exec(t))){const mo=MES[m[9].toLowerCase()];if(!mo)continue;out.push({d:pad(+m[8])+'/'+pad(mo)+'/'+m[10],n:[1,2,3,4,5].map(i=>+m[i]),x:[+m[6],+m[7]]})}return out}
+function parseSC(t,g){const c=G[g];t=strip(t);
+ const re=new RegExp('Sorteio:?\\s*(\\d{3}/\\d{4})[\\s\\S]{0,160}?(\\d{2}/\\d{2}/\\d{4})[\\s\\S]{0,160}?(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.k-1)+'})\\s*\\+\\s*(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.x-1)+'})');
+ const m=t.match(re);return m?[{d:m[2],c:m[1],n:m[3].split(/\s+/).map(Number),x:m[4].split(/\s+/).map(Number)}]:[]}
+function parsePT(t,g){const c=G[g],out=[];t=strip(t);const re=/(\d{1,2}) de ([a-zçã]+) de (\d{4})/gi;let m;
+ while((m=re.exec(t))){const mo=MESPT[m[2].toLowerCase()];if(!mo)continue;const seg=t.slice(m.index,m.index+300);
+  const r=new RegExp('n[úu]meros\\s+((?:\\d{1,2}\\s*[-–,]\\s*){'+(c.k-1)+'}\\d{1,2})\\s*(?:\\+|e pelo|e)\\s*(?:N[úu]mero\\s+(?:da\\s+Sorte|de\\s+Sonho)\\s+)?(\\d{1,2})','i').exec(seg);
+  if(r)out.push({d:pad(+m[1])+'/'+pad(mo)+'/'+m[3],n:r[1].split(/[^\d]+/).filter(Boolean).map(Number),x:[+r[2]]})}return out}
+const SC_URL={euromilhoes:'https://www.jogossantacasa.pt/web/ResultsBoard/',totoloto:'https://www.jogossantacasa.pt/web/SCCartazResult/totolotoNew',eurodreams:'https://www.jogossantacasa.pt/web/ResultsBoard/EuroDreams'};
+const SRC={
+ euromilhoes:[{id:'em',urls:y=>['https://www.euromillones.com/en/results/euromillions--results-year-'+y],parse:parseEM},{id:'sc',once:true,urls:()=>[SC_URL.euromilhoes],parse:parseSC}],
+ totoloto:[{id:'sc',once:true,urls:()=>[SC_URL.totoloto],parse:parseSC}],
+ eurodreams:[{id:'sc',once:true,urls:()=>[SC_URL.eurodreams],parse:parseSC}]};
+function proxyUrl(u){const px=($('px').value||'').trim();if(!px)return null;return px.includes('{url}')?px.replace('{url}',encodeURIComponent(u)):px.replace(/\/+$/,'')+'/?u='+encodeURIComponent(u)}
+async function getText(url){const tries=[],pu=proxyUrl(url);
+ if(pu)tries.push(['proxy próprio',pu]);
+ tries.push(['direto',url],['allorigins','https://api.allorigins.win/raw?url='+encodeURIComponent(url)],['corsproxy','https://corsproxy.io/?'+encodeURIComponent(url)]);
+ for(const[via,u] of tries){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),15000);const r=await fetch(u,{signal:c.signal});clearTimeout(t);if(r.ok){const s=await r.text();if(s&&s.length>200)return{t:s,via}}}catch(e){}}return null}
+async function syncGame(g,anos){const fs=SRC[g];
+ const y0=new Date().getFullYear(),ys=[];for(let i=0;i<anos;i++)ys.push(y0-i);
+ const cut=new Date();cut.setFullYear(cut.getFullYear()-4);const got={};let ok=0,fail=0;
+ for(const f of fs){const urls=f.once?f.urls():ys.flatMap(y=>f.urls(y));
+  for(const u of urls){const r=await getText(u);if(!r){fail++;continue}const L=f.parse(r.t,g);if(!L.length){fail++;continue}ok++;SYNC.via=r.via;
+   L.forEach(e=>{if(!valid(g,e.n,e.x)||toDate(e.d)<cut)return;(got[e.d]=got[e.d]||[]).push({...e,f:f.id})})}}
+ if(!ok)return'sem acesso às fontes a partir deste navegador (configure o proxy)';
+ const r=merge(g,got);return`${r.add} novo(s), ${r.conf} confirmado(s)${fail?`, ${fail} página(s) sem leitura`:''}`}
+async function syncAll(anos,silent){if(busy)return;busy=true;['bsync','bsync4'].forEach(i=>$(i).disabled=true);
+ if(!silent)$('smsg').textContent='A sincronizar…';CONF.length=0;const out=[];SYNC.via='';
+ for(const g in G)out.push(`${G[g].nome}: ${await syncGame(g,anos)}`);
+ await save();SYNC.t=new Date();SYNC.msg=out.join(' · ');
+ ['bsync','bsync4'].forEach(i=>$(i).disabled=false);busy=false;renderHist();renderFoot()}
+/* ---------- importação manual ---------- */
+function importText(txt){let ok=0,bad=0;txt=txt.trim();if(!txt)return{ok,bad};
+ const put=(g,d,n,x,f,c)=>{upsert(g,{d,n,x,c,f:[f]})?ok++:bad++};
+ if(txt[0]==='{'){try{const o=JSON.parse(txt);for(const g in G)(o[g]||[]).forEach(e=>{if(e.d)put(g,e.d,e.n,e.x,'im',e.c);else put(g,e.data,e.numeros||[],e.estrelas||(e.sorte!=null?[e.sorte]:[]),'im',e.concurso)})}catch(e){bad++}return{ok,bad}}
+ const g=cur,c=G[g];
+ if(/\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-E\d{2}/.test(txt)){parseEM(txt).forEach(e=>put(g,e.d,e.n,e.x,'im'));return{ok,bad}}
+ const pt=parsePT(txt,g);if(pt.length){pt.forEach(e=>put(g,e.d,e.n,e.x,'im'));return{ok,bad}}
  txt.split('\n').forEach(line=>{const segs=/\d{6}:/.test(line)?line.split('|'):[line];segs.forEach(sg=>{sg=sg.trim();if(!sg)return;
   let m=sg.match(/^(\d{2})(\d{2})(\d{2}):([\d,]+):([\d,]+)$/);
-  if(m){addDraw(cur,`${m[1]}/${m[2]}/20${m[3]}`,m[4].split(',').map(Number),m[5].split(',').map(Number),'importado')?ok++:bad++;return}
+  if(m){put(g,`${m[1]}/${m[2]}/20${m[3]}`,m[4].split(',').map(Number),m[5].split(',').map(Number),'im');return}
   m=sg.match(/(\d{2}\/\d{2}\/\d{4})(.*)/);if(!m){bad++;return}
-  const r=(m[2].match(/\d+/g)||[]).map(Number);addDraw(cur,m[1],r.slice(0,c.k),r.slice(c.k,c.k+c.x),'manual')?ok++:bad++})});
+  const r=(m[2].match(/\d+/g)||[]).map(Number);put(g,m[1],r.slice(0,c.k),r.slice(c.k,c.k+c.x),'ma')})});
  return{ok,bad}}
+/* ---------- próximos sorteios e rodapé ---------- */
+function nextDraw(g){const l=full(g)[0],t=new Date();t.setHours(0,0,0,0);let d=l?toDate(l.d):new Date(t);d.setDate(d.getDate()+1);if(d<t)d=new Date(t);
+ for(let i=0;i<9;i++){if(SCH[g].includes(d.getDay()))return d;d.setDate(d.getDate()+1)}return d}
+function expectedLast(g){const t=new Date();t.setHours(0,0,0,0);t.setDate(t.getDate()-1);for(let i=0;i<9;i++){if(SCH[g].includes(t.getDay()))return t;t.setDate(t.getDate()-1)}return t}
+function renderFoot(){const rows=Object.keys(G).map(g=>{const l=full(g)[0],n=nextDraw(g),ex=expectedLast(g);
+  let s=`<div>${g===cur?'<b>':''}${G[g].nome}${g===cur?'</b>':''}: último sorteio registado `;
+  if(l){s+=`${DIAS[toDate(l.d).getDay()]} ${l.d}${l.c?' ('+l.c+')':''}`;if(toDate(l.d)<ex)s+=` · ⚠ possível atraso: falta o sorteio de ${fmt(ex)}`}else s+='—';
+  return s+` · próximo: ${DIAS[n.getDay()]} ${fmt(n)}</div>`}).join('');
+ $('foot').innerHTML=rows+`<div>Dados incorporados verificados em ${DB} · última sincronização: ${SYNC.t?SYNC.t.toLocaleString('pt-PT')+(SYNC.via?' (via '+SYNC.via+')':''):'ainda não efetuada nesta sessão'}${SYNC.msg?' · '+SYNC.msg:''}</div><div>Estas chaves não dispensam a consulta do site oficial da Santa Casa.</div>`}
+/* ---------- histórico: ecrã e estatísticas descritivas ---------- */
+function badge(e){const v=nv(e),tip=(e.f||[]).map(z=>FN[z]||z).join(', ');
+ if(oficial(e))return`<span class="ok" title="${tip}">✔ oficial${v>=2?' + '+(v-1)+' fonte(s)':''}</span>`;
+ return v>=2?`<span class="ok" title="${tip}">✔✔ ${v} fontes</span>`:v===1?`<span class="bad" title="${tip}">⚠ fonte única</span>`:'<span class="bad">⚠ não verificado</span>'}
+function stats(g){const c=G[g],d=full(g);if(d.length<15)return'Registe pelo menos 15 sorteios para as estatísticas descritivas.';
+ const f=new Array(c.N+1).fill(0),fx=new Array(c.X+1).fill(0),last=new Array(c.N+1).fill(-1);
+ d.forEach((s,i)=>{s.n.forEach(v=>{f[v]++;if(last[v]<0)last[v]=i});s.x.forEach(v=>fx[v]++)});
+ const e=d.length*c.k/c.N,ex=d.length*c.x/c.X;let chi=0,chx=0;for(let i=1;i<=c.N;i++)chi+=(f[i]-e)**2/e;for(let i=1;i<=c.X;i++)chx+=(fx[i]-ex)**2/ex;
+ const p1=chiSF(chi,c.N-1),p2=chiSF(chx,c.X-1),idx=[...Array(c.N).keys()].map(i=>i+1).sort((a,b)=>f[b]-f[a]||a-b);
+ const lab=a=>a.map(v=>`${pad(v)} (${f[v]}×)`).join(' · ');
+ const gap=[...Array(c.N).keys()].map(i=>i+1).sort((a,b)=>(last[b]<0?1e9:last[b])-(last[a]<0?1e9:last[a])||a-b).slice(0,5).map(v=>`${pad(v)} (${last[v]<0?'>'+d.length:last[v]} sorteios)`).join(' · ');
+ const q=(p)=>p>0.05?'<span class="ok">compatível com sorteio justo</span>':'<span class="bad">desvio (com poucos sorteios acontece por acaso)</span>';
+ return`Amostra: ${d.length} sorteios. Uniformidade χ² dos números: p=${(p1*100).toFixed(1)}% — ${q(p1)}. ${c.en}: p=${(p2*100).toFixed(1)}% — ${q(p2)}.<br>Mais saídos: ${lab(idx.slice(0,5))}<br>Menos saídos: ${lab(idx.slice(-5))}<br>Há mais tempo sem sair: ${gap}<br><i>Descritivo apenas. Os números não têm memória: «atraso» e frequência não preveem o próximo sorteio.</i>`}
 function renderHist(){const g=cur,c=G[g],d=full(g);
  $('hc').textContent=`${c.nome} · ${d.length} sorteio(s) registado(s)`;
- $('hl').innerHTML=d.slice(0,40).map(x=>`<div class="h">${x.data}${x.concurso?' · '+x.concurso:''}<br><b>${x.numeros.map(n=>String(n).padStart(2,'0')).join(' · ')}</b> <span style="color:var(--b)">| ${extras(g,x).map(n=>String(n).padStart(2,'0')).join(' · ')}</span></div>`).join('')||'<div class="m">Sem sorteios.</div>';
- if(d.length<15){$('hf').textContent='Registe pelo menos 15 sorteios para o teste de uniformidade χ².';return}
- const f=new Array(c.N+1).fill(0);d.forEach(x=>x.numeros.forEach(n=>f[n]++));
- const e=d.length*c.k/c.N;let chi=0;for(let i=1;i<=c.N;i++)chi+=(f[i]-e)**2/e;const p=chiSF(chi,c.N-1);
- $('hf').innerHTML=`Uniformidade dos números (χ², gl=${c.N-1}): p=${(p*100).toFixed(1)}% ${p>0.05?'<span class="ok">— compatível com sorteio justo</span>':'<span class="bad">— desvio; com poucos sorteios acontece por acaso</span>'}. O histórico serve para consulta; não prevê o próximo sorteio.`}
+ const cnt=d.reduce((a,e)=>{a[(oficial(e)||nv(e)>=2)?0:1]++;return a},[0,0]);
+ $('hq').textContent=`${cnt[0]} confirmado(s) (oficial ou 2+ fontes) · ${cnt[1]} com fonte única ou não verificado(s).`;
+ $('hl').innerHTML=d.slice(0,60).map(x=>{const wd=toDate(x.d).getDay(),off=!SCH[g].includes(wd);
+  return`<div class="h">${DIAS[wd]} ${x.d}${x.c?' · '+x.c:''} ${badge(x)}${off?' <span class="bad">⚠ dia fora do calendário habitual</span>':''}<br><b>${x.n.map(pad).join(' · ')}</b> <span style="color:var(--b)">| ${x.x.map(pad).join(' · ')}</span></div>`}).join('')||'<div class="m">Sem sorteios.</div>';
+ $('hf').innerHTML=stats(g);
+ $('conf').innerHTML=CONF.length?'<span class="bad">Conflitos: '+CONF.join(' | ')+'</span>':'';
+ if(SYNC.t)$('smsg').textContent=`${SYNC.t.toLocaleString('pt-PT')}${SYNC.via?' (via '+SYNC.via+')':''} — ${SYNC.msg}`}
 /* ---------- UI ---------- */
 function fill(sel,from,to,val){sel.innerHTML='';for(let i=from;i<=to;i++)sel.add(new Option(i,i));sel.value=val}
+function tier(){const c=G[cur],rows=[];
+ for(let i=c.k;i>=0;i--)for(let j=c.x;j>=0;j--){const p=hyp(c.N,c.k,c.k,i)*hyp(c.X,c.x,c.x,j);if(p>0)rows.push([i,j,p])}
+ rows.sort((a,b)=>a[2]-b[2]);
+ return`<table><tr><th>Acertos (nº+${c.en})</th><th>Probabilidade exata</th><th>Frequência</th></tr>${rows.map(r=>`<tr><td>${r[0]}+${r[1]}</td><td>${pct(r[2])}</td><td>${one(r[2])}</td></tr>`).join('')}</table><div class="m">Média de números certos por aposta simples: ${(c.k*c.k/c.N).toFixed(3)}. A soma de todas as linhas é 100%.</div>`}
 function setup(){const c=G[cur];
  fill($('n'),c.k,c.nMax,c.k);fill($('s'),c.x,c.sMax,c.x);fill($('a'),2,c.k,c.ta);fill($('b'),0,c.x,c.tb);
  $('s').disabled=c.sMax===c.x;$('sl').textContent=c.en+' escolhidas';$('bl').textContent='Alvo: '+c.en+' certas (mín.)';
- $('gout').style.display='none';$('mcout').style.display='none';calc();renderHist()}
+ $('gout').style.display='none';$('mcout').style.display='none';calc();renderHist();renderFoot()}
 function calc(){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').value,b=+$('b').value;
  const P=atLeast(c.N,c.k,n,a)*atLeast(c.X,c.x,s,b),p1=atLeast(c.N,c.k,c.k,a)*atLeast(c.X,c.x,c.x,b);
  const T=C(n,c.k)*C(s,c.x),cost=T*c.p,bud=Math.max(0,+$('bud').value||0),nb=Math.floor(bud/c.p),Pb=1-Math.pow(1-p1,nb),PT=1-Math.pow(1-p1,T);
@@ -146,9 +382,10 @@ function calc(){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').value,b
  <tr><td>Este sistema ${n}+${s}</td><td>${eur(cost)}</td><td>${pct(P)}</td></tr>
  <tr><td>${T} apostas simples independentes</td><td>${eur(cost)}</td><td>${pct(PT)}</td></tr>
  <tr><td>Orçamento: ${nb} apostas simples</td><td>${eur(nb*c.p)}</td><td>${pct(Pb)}</td></tr></table>
- <div class="m">Custo esperado até 1 sucesso ≈ ${eur(c.p/p1)} em média, seja qual for a estratégia (sistemas só concentram o risco). Acertar só uma estrela é o resultado mais comum: cerca de 1 em 6 apostas simples no Euromilhões.</div>`}
+ <div class="m">Custo esperado até 1 sucesso ≈ ${eur(c.p/p1)} em média, seja qual for a estratégia (sistemas só concentram o risco).</div>`;
+ $('tier').innerHTML=tier()}
 function genBet(){const c=G[cur],n=+$('n').value,s=+$('s').value,f={};['sum','par','seq','dec','pop','rep'].forEach(k=>f[k]=$('f'+k).checked);
- const bd=sumBounds(c.N,n,+$('mass').value),hs=new Set(full(cur).map(d=>d.numeros.join(',')));let t=0,a;
+ const bd=sumBounds(c.N,n,+$('mass').value),hs=new Set(full(cur).map(d=>d.n.join(',')));let t=0,a;
  const okf=a=>{if(f.sum){const S=a.reduce((x,y)=>x+y,0);if(S<bd.lo||S>bd.hi)return false}
   if(f.par){const e=a.filter(x=>x%2===0).length;if(e===0||e===a.length)return false}
   if(f.seq){let m=1,q=1;for(let i=1;i<a.length;i++){q=a[i]===a[i-1]+1?q+1:1;m=Math.max(m,q)}if(m>2)return false}
@@ -158,8 +395,8 @@ function genBet(){const c=G[cur],n=+$('n').value,s=+$('s').value,f={};['sum','pa
  do{a=pick(c.N,n);t++}while(!okf(a)&&t<300000);
  const ex=pick(c.X,s),S=a.reduce((x,y)=>x+y,0);
  $('gout').style.display='block';
- $('gout').innerHTML=`<div class="balls">${a.map(v=>`<div class="ball">${String(v).padStart(2,'0')}</div>`).join('')}${ex.map(v=>`<div class="ball s">${String(v).padStart(2,'0')}</div>`).join('')}</div>
- <div class="m">Soma ${S} (faixa exata ${bd.lo}–${bd.hi}) · ${t.toLocaleString('pt-PT')} tentativa(s)${t>=300000?' · <span class="bad">limite atingido, filtros demasiado apertados</span>':''}<br>Todas as combinações do mesmo tamanho têm exatamente a mesma probabilidade. Os filtros só mudam o estilo da aposta e a chance de partilhar prémio.</div>`}
+ $('gout').innerHTML=`<div class="balls">${a.map(v=>`<div class="ball">${pad(v)}</div>`).join('')}${ex.map(v=>`<div class="ball s">${pad(v)}</div>`).join('')}</div>
+ <div class="m">Soma ${S} (faixa exata ${bd.lo}–${bd.hi}) · ${t.toLocaleString('pt-PT')} tentativa(s)${t>=300000?' · <span class="bad">limite atingido, filtros demasiado apertados</span>':''}<br>Todas as combinações do mesmo tamanho têm exatamente a mesma probabilidade (${one(atLeast(c.N,c.k,c.k,c.k)*atLeast(c.X,c.x,c.x,c.x))} por aposta simples). Os filtros só mudam o estilo da aposta e a chance de partilhar prémio.</div>`}
 function runMC(total){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').value,b=+$('b').value;
  const bet=pick(c.N,n),ex=pick(c.X,s),fb=new Uint8Array(c.N+1),fe=new Uint8Array(c.X+1);bet.forEach(v=>fb[v]=1);ex.forEach(v=>fe[v]=1);
  const r=sfc32(...crypto.getRandomValues(new Uint32Array(4))),pm=Uint8Array.from({length:c.N},(_,i)=>i+1),pe=Uint8Array.from({length:c.X},(_,i)=>i+1);
@@ -187,18 +424,32 @@ function runMC(total){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').v
   <div class="m">Isto valida o motor de sorteio. Não prevê nem melhora nenhum sorteio real.</div>`;
   $('mcp').textContent=`${total.toLocaleString('pt-PT')} sorteios simulados.`;document.querySelectorAll('[data-mc]').forEach(x=>x.disabled=false)};
  step()}
+/* ---------- atualização automática adaptativa ---------- */
+function pollMinutes(){const now=new Date(),hh=now.getHours();
+ const miss=Object.keys(G).some(g=>{const l=full(g)[0];return !l||toDate(l.d)<expectedLast(g)});
+ const hoje=fmt(now),drawToday=Object.keys(G).some(g=>SCH[g].includes(now.getDay())&&(!full(g)[0]||full(g)[0].d!==hoje));
+ return(miss||(drawToday&&hh>=19))?3:15}
+function schedule(){clearTimeout(tm);tm=setTimeout(async()=>{await syncAll(1,true);schedule()},pollMinutes()*60000)}
 document.addEventListener('DOMContentLoaded',async()=>{
- const o=await load();if(o)for(const g in G)H[g]=o[g]||[];
+ try{$('px').value=localStorage.getItem('jonhy_proxy')||''}catch(e){}
+ $('px').addEventListener('change',()=>{try{localStorage.setItem('jonhy_proxy',$('px').value.trim())}catch(e){}});
+ const o=await load();if(o)for(const g in G)H[g]=(o[g]||[]).filter(e=>e&&e.d&&e.n&&e.x);
+ if(!o)migrate();
  $('g').onchange=e=>{cur=e.target.value;setup()};
  ['n','s','a','b','bud'].forEach(i=>$(i).addEventListener('input',calc));
  $('tabs').onclick=e=>{const t=e.target.dataset.t;if(!t)return;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id===t));document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===e.target));if(t==='hist')renderHist()};
  $('bgen').onclick=genBet;
  document.querySelectorAll('[data-mc]').forEach(b=>b.onclick=()=>runMC(+b.dataset.mc));
- $('bimp').onclick=async()=>{const r=importText($('imp').value);await save();$('imsg').textContent=`${r.ok} guardado(s), ${r.bad} ignorado(s) (inválidos).`;if(r.ok)$('imp').value='';renderHist()};
- $('bexp').onclick=()=>{$('imp').value=JSON.stringify(H);$('imp').select();$('imsg').textContent='Cópia JSON gerada na caixa: copie e guarde num ficheiro.'};
+ $('bsync').onclick=()=>syncAll(1);
+ $('bsync4').onclick=()=>syncAll(4);
+ $('bimp').onclick=async()=>{const r=importText($('imp').value);await save();$('imsg').textContent=`${r.ok} guardado(s), ${r.bad} ignorado(s) (inválidos).`;if(r.ok)$('imp').value='';renderHist();renderFoot()};
+ $('bexp').onclick=()=>{$('imp').value=JSON.stringify(H);$('imp').select();$('imsg').textContent='Cópia JSON dos sorteios sincronizados/importados gerada na caixa: copie e guarde num ficheiro. Os sorteios incorporados na app não entram.'};
  $('bck').onclick=()=>{const c=G[cur],nn=($('ckn').value.match(/\d+/g)||[]).map(Number),ee=($('cke').value.match(/\d+/g)||[]).map(Number);let hit=0,best=[0,0],ls='';
-  full(cur).forEach(d=>{const h=nn.filter(v=>d.numeros.includes(v)).length,x=ee.filter(v=>extras(cur,d).includes(v)).length;
-   if(h>best[0]||(h===best[0]&&x>best[1]))best=[h,x];if(h>=c.ta&&x>=c.tb){hit++;ls+=`<br>${d.data}: ${h}+${x}`}});
+  full(cur).forEach(d=>{const h=nn.filter(v=>d.n.includes(v)).length,x=ee.filter(v=>d.x.includes(v)).length;
+   if(h>best[0]||(h===best[0]&&x>best[1]))best=[h,x];if(h>=c.ta&&x>=c.tb){hit++;ls+=`<br>${d.d}: ${h}+${x}`}});
   $('ckout').innerHTML=`Melhor resultado no histórico: ${best[0]}+${best[1]}. Sorteios com ≥${c.ta}+${c.tb}: ${hit}${ls}`};
- setup()});
+ setup();
+ setTimeout(()=>syncAll(1,true).then(schedule),800);
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(!SYNC.t||Date.now()-SYNC.t.getTime()>5*60000))syncAll(1,true)});
+ setInterval(renderFoot,60000)});
 </script></body></html>
