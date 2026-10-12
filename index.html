@@ -86,10 +86,10 @@ a{color:var(--c)}
 <div class="card"><label>Atualização automática (contínua, 1 s entre ciclos)</label>
 <div class="row"><button class="main" id="bsync">Atualizar agora</button><button class="main" id="bsync4">Sincronizar 4 anos</button></div>
 <div class="row"><div><label for="minf">Mínimo de fontes para «confirmado»</label><input id="minf" type="number" value="40" min="1" max="200"></div><div><label for="px">Proxy (Cloudflare Worker)</label><input id="px" placeholder="https://bonno-proxy.o-seu-nome.workers.dev"></div></div>
-<label for="xs" style="margin-top:8px">Fontes adicionais (uma por linha: jogo|endereço; use {y} para o ano)</label>
-<textarea id="xs" rows="4" placeholder="euromilhoes|https://exemplo.pt/euromilhoes/{y}&#10;totoloto|https://exemplo.pt/totoloto&#10;eurodreams|https://exemplo.pt/eurodreams"></textarea>
+<label for="xs" style="margin-top:8px">Fontes adicionais (uma por linha: jogo|endereço; use {y} para o ano ou {d} para a data AAAA-MM-DD)</label>
+<textarea id="xs" rows="4" placeholder="euromilhoes|https://exemplo.pt/euromilhoes/{y}&#10;totoloto|https://exemplo.pt/totoloto?dia={d}&#10;eurodreams|https://exemplo.pt/eurodreams"></textarea>
 <div class="m" id="smsg">Ainda não houve sincronização nesta sessão.</div>
-<div class="m"><b>Regra de aceitação:</b> para cada sorteio, vence a combinação indicada pela <b>maioria estrita</b> das fontes que o reportam (empate = conflito, não guardado). Um sorteio novo só entra com 2+ fontes concordantes ou da Santa Casa (oficial). Fica <b>✔ confirmado</b> quando o nº de fontes concordantes atinge o mínimo definido acima; antes disso aparece <b>◐ provisório</b> com a contagem. Fontes incluídas: Santa Casa, euromillones.com e euro-millions.com; acrescente as restantes na caixa acima. Sem proxy, os navegadores costumam bloquear estes pedidos (CORS): publique o worker.js e cole aqui o endereço. Os últimos 4 anos são sincronizados no arranque; depois só o ano corrente é relido, em ciclos de 1 s (com recuo automático até 30 s se as fontes estiverem inacessíveis, para não ser bloqueado).</div>
+<div class="m"><b>Regra de aceitação:</b> para cada sorteio, vence a combinação indicada pela <b>maioria estrita</b> das fontes que o reportam (empate = conflito, não guardado). Um sorteio novo só entra com 2+ fontes concordantes ou da Santa Casa (oficial). Fica <b>✔ confirmado</b> quando o nº de fontes concordantes atinge o mínimo definido acima; antes disso aparece <b>◐ provisório</b> com a contagem. Fontes incluídas: Santa Casa, euromillones.com e euro-millions.com (Euromilhões); Santa Casa e jogoselotaria.com, esta lida dia a dia (Totoloto); acrescente as restantes na caixa acima. Os sorteios em falta do Totoloto nos últimos 90 dias são recuperados automaticamente. Sem proxy, os navegadores costumam bloquear estes pedidos (CORS): a app tenta vários proxies públicos, mas o mais fiável é publicar o worker.js e colar aqui o endereço. Os últimos 4 anos são sincronizados no arranque; depois só o ano corrente é relido, em ciclos de 1 s (com recuo automático até 30 s se as fontes estiverem inacessíveis, para não ser bloqueado).</div>
 <div class="m" id="conf"></div></div>
 
 <div class="card"><label>Conferir manualmente (sites)</label>
@@ -97,7 +97,8 @@ a{color:var(--c)}
 <a href="https://www.jogossantacasa.pt/web/ResultsBoard/" target="_blank" rel="noopener">Santa Casa · Euromilhões</a> ·
 <a href="https://www.jogossantacasa.pt/web/SCCartazResult/totolotoNew" target="_blank" rel="noopener">Santa Casa · Totoloto</a> ·
 <a href="https://www.jogossantacasa.pt/web/ResultsBoard/EuroDreams" target="_blank" rel="noopener">Santa Casa · EuroDreams</a> ·
-<a href="https://www.euromillones.com/en/results/euromillions" target="_blank" rel="noopener">euromillones.com</a></div></div>
+<a href="https://www.euromillones.com/en/results/euromillions" target="_blank" rel="noopener">euromillones.com</a> ·
+<a href="https://www.jogoselotaria.com/resultados-totoloto.php" target="_blank" rel="noopener">jogoselotaria.com · Totoloto</a></div></div>
 
 <div class="card"><label>Adicionar / Importar</label>
 <textarea id="imp" rows="5" placeholder="Aceita: linhas «25/09/2026 11 12 15 38 49 | 10 12»; texto copiado da lista anual do euromillones.com (formato 05-20-24-31-45-E05 -E10 + data); frases como «12 de setembro de 2026 ... números 3 - 11 - 21 - 29 - 44 e pelo Número da Sorte 2»; ou cópia JSON."></textarea>
@@ -118,7 +119,7 @@ totoloto:{nome:'Totoloto',N:49,k:5,X:13,x:1,p:1,nMax:11,sMax:1,en:'Nº Sorte',ta
 eurodreams:{nome:'EuroDreams',N:40,k:6,X:5,x:1,p:2.5,nMax:11,sMax:5,en:'Sonho',ta:5,tb:1}};
 const SCH={euromilhoes:[2,5],totoloto:[3,6],eurodreams:[1,4]};
 const DIAS=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
-const DB='10/10/2026';
+const DB='12/10/2026';
 let cur='euromilhoes';
 /* ---------- matemática exata ---------- */
 function C(n,k){if(k<0||n<0||k>n)return 0;k=Math.min(k,n-k);let r=1;for(let i=0;i<k;i++)r=r*(n-i)/(i+1);return Math.round(r)}
@@ -152,7 +153,7 @@ function rint(n){const l=4294967296-(4294967296%n);let x;do{x=crypto.getRandomVa
 function pick(N,q){const a=[];for(let i=1;i<=N;i++)a.push(i);for(let i=0;i<q;i++){const j=i+rint(N-i);[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,q).sort((x,y)=>x-y)}
 function sfc32(a,b,c,d){return()=>{a>>>=0;b>>>=0;c>>>=0;d>>>=0;let t=(a+b)|0;a=b^(b>>>9);b=(c+(c<<3))|0;c=(c<<21|c>>>11);d=(d+1)|0;t=(t+d)|0;c=(c+t)|0;return t>>>0}}
 /* ---------- dados incorporados (fontes indicadas por sorteio) ---------- */
-const FN={em:'euromillones.com',sc:'jogossantacasa.pt (oficial)',dn:'dnoticias.pt',jm:'jornaldemafra.pt',sp:'sapo.pt',pe:'paraeles.pt',eu:'euro-millions.com',rr:'rr.pt',mh:'magazine-hd.com',ap:'histórico anterior desta app',im:'importado',ma:'manual'};
+const FN={em:'euromillones.com',sc:'jogossantacasa.pt (oficial)',dn:'dnoticias.pt',jm:'jornaldemafra.pt',sp:'sapo.pt',pe:'paraeles.pt',eu:'euro-millions.com',rr:'rr.pt',mh:'magazine-hd.com',jc:'jogoselotaria.com',ap:'histórico anterior desta app',im:'importado',ma:'manual'};
 const MANUAL=['im','ma'];
 const nv=e=>(e.f||[]).filter(x=>!MANUAL.includes(x)).length;
 const oficial=e=>(e.f||[]).includes('sc');
@@ -241,16 +242,24 @@ const EM=[
 '06/01/2026|5 14 17 18 31|10 12',
 '02/01/2026|8 27 42 44 46|1 10'];
 const TT=[
+'10/10/2026|8 18 21 23 41|13|081/2026|sc,dn,mh,jc',
 '07/10/2026|2 5 22 27 35|12|080/2026|sc',
 '03/10/2026|8 27 38 41 44|12|079/2026|mh',
 '30/09/2026|4 9 19 22 24|13|078/2026|mh',
+'16/09/2026|1 4 7 20 30|8|074/2026',
 '12/09/2026|3 11 21 29 44|2|073/2026|rr,ap',
+'09/09/2026|4 10 18 23 27|3|072/2026',
 '05/09/2026|13 19 29 35 46|13|071/2026|rr,ap',
+'02/09/2026|5 7 8 29 45|9|070/2026',
 '22/07/2026|7 20 23 24 41|9|058/2026',
 '18/07/2026|8 24 28 31 47|3|057/2026',
+'01/07/2026|12 16 35 44 47|10',
 '03/06/2026|7 13 24 34 43|13',
 '27/05/2026|22 28 38 42 47|1',
+'13/05/2026|6 8 9 11 21|13',
 '11/04/2026|24 25 30 31 33|12',
+'08/04/2026|20 25 30 33 35|6',
+'04/04/2026|5 17 24 37 42|10',
 '28/02/2026|6 17 19 45 49|4',
 '21/05/2025|8 33 44 47 48|1'];
 const ED=[
@@ -280,6 +289,7 @@ function migrate(){try{const o=JSON.parse(localStorage.getItem(KEY2));if(!o)retu
 const iso=d=>d.split('/').reverse().join('');
 const toDate=s=>{const[a,b,c]=s.split('/').map(Number);return new Date(c,b-1,a)};
 const fmt=d=>pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear();
+const isoD=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
 const sortN=a=>a.slice().sort((x,y)=>x-y);
 function full(g){if(FC[g]&&FC[g].v===FV)return FC[g].l;const m=new Map();BASE[g].concat(H[g]).forEach(e=>m.set(e.d,e));
  const l=[...m.values()].sort((a,b)=>iso(b.d).localeCompare(iso(a.d)));FC[g]={v:FV,l};return l}
@@ -303,12 +313,18 @@ function merge(g,got){const have=new Map(full(g).map(e=>[e.d,e])),nome=G[g].nome
 /* ---------- leitura de texto de sites ---------- */
 const MES={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
 const MESPT={janeiro:1,fevereiro:2,março:3,marco:3,abril:4,maio:5,junho:6,julho:7,agosto:8,setembro:9,outubro:10,novembro:11,dezembro:12};
-const strip=t=>t.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/\s+/g,' ');
+const strip=t=>t.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&nbsp;/g,' ').replace(/&plus;/g,'+').replace(/[*_|#]/g,' ').replace(/\s+/g,' ');
 function parseEM(t){t=strip(t);const re=/(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})-E(\d{2})\s*-E(\d{2})[^0-9]{0,80}?(\d{1,2})\s+([A-Za-z]{3})[A-Za-z]*\s+(\d{4})/g,out=[];let m;
  while((m=re.exec(t))){const mo=MES[m[9].toLowerCase()];if(!mo)continue;out.push({d:pad(+m[8])+'/'+pad(mo)+'/'+m[10],n:[1,2,3,4,5].map(i=>+m[i]),x:[+m[6],+m[7]]})}return out}
+/* Santa Casa: «Sorteio: 081/2026 - sábado Data do Sorteio - 10/10/2026 Chave 8 18 21 23 41 + 13 Ordem de saída ...» (o sinal + é opcional) */
 function parseSC(t,g){const c=G[g];t=strip(t);
- const re=new RegExp('Sorteio:?\\s*(\\d{3}/\\d{4})[\\s\\S]{0,160}?(\\d{2}/\\d{2}/\\d{4})[\\s\\S]{0,160}?(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.k-1)+'})\\s*\\+\\s*(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.x-1)+'})');
+ const re=new RegExp('Sorteio:?\\s*(\\d{3}/\\d{4})[\\s\\S]{0,200}?(\\d{2}/\\d{2}/\\d{4})[\\s\\S]{0,200}?(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.k-1)+'})\\s*\\+?\\s*(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.x-1)+'})');
  const m=t.match(re);return m?[{d:m[2],c:m[1],n:m[3].split(/\s+/).map(Number),x:m[4].split(/\s+/).map(Number)}]:[]}
+/* jogoselotaria.com: «… 10 de outubro de 2026 … Ganhadores 8 18 21 23 41 13» */
+function parseJE(t,g){const c=G[g],s=strip(t);
+ const re=new RegExp('(\\d{1,2})\\s+de\\s+([a-zçã]+)\\s+de\\s+(\\d{4})[\\s\\S]{0,900}?Ganhadores\\s*((?:\\d{1,2}\\s+){'+(c.k+c.x-1)+'}\\d{1,2})','i');
+ const m=s.match(re);if(!m)return[];const mo=MESPT[m[2].toLowerCase()];if(!mo)return[];
+ const a=m[4].trim().split(/\s+/).map(Number);return[{d:pad(+m[1])+'/'+pad(mo)+'/'+m[3],n:a.slice(0,c.k),x:a.slice(c.k)}]}
 function parsePT(t,g){const c=G[g],out=[];t=strip(t);const re=/(\d{1,2}) de ([a-zçã]+) de (\d{4})/gi;let m;
  while((m=re.exec(t))){const mo=MESPT[m[2].toLowerCase()];if(!mo)continue;const seg=t.slice(m.index,m.index+300);
   const r=new RegExp('n[úu]meros\\s+((?:\\d{1,2}\\s*[-–,]\\s*){'+(c.k-1)+'}\\d{1,2})\\s*(?:\\+|e pelo|e)\\s*(?:N[úu]mero\\s+(?:da\\s+Sorte|de\\s+Sonho)\\s+)?(\\d{1,2})','i').exec(seg);
@@ -319,27 +335,37 @@ function nd(m){if(m[1])return pad(+m[1])+'/'+pad(+m[2])+'/'+m[3];if(m[4])return 
 function parseGen(t,g){const c=G[g],q=c.k+c.x,s=strip(t),out=[],re=/(\d{1,2})\/(\d{1,2})\/(\d{4})|(\d{4})-(\d{2})-(\d{2})|(\d{1,2})\s+(?:de\s+)?([A-Za-zçÇ]{3,12})\s+(?:de\s+)?(\d{4})/g;let m;
  while((m=re.exec(s))){const d=nd(m);if(!d)continue;const nums=(s.slice(re.lastIndex,re.lastIndex+160).match(/\b\d{1,2}\b/g)||[]).slice(0,q).map(Number);
   if(nums.length===q)out.push({d,n:nums.slice(0,c.k),x:nums.slice(c.k)})}return out}
-function parseAll(t,g){for(const p of[g==='euromilhoes'?parseEM:()=>[],parseSC,parsePT,parseGen]){const L=p(t,g);if(L.length)return L}return[]}
+function parseAll(t,g){for(const p of[g==='euromilhoes'?parseEM:()=>[],parseSC,parseJE,parsePT,parseGen]){const L=p(t,g);if(L.length)return L}return[]}
 const SC_URL={euromilhoes:'https://www.jogossantacasa.pt/web/ResultsBoard/',totoloto:'https://www.jogossantacasa.pt/web/SCCartazResult/totolotoNew',eurodreams:'https://www.jogossantacasa.pt/web/ResultsBoard/EuroDreams'};
+/* [id, endereço, uma-vez]; {y} = ano, {d} = data AAAA-MM-DD (só para sorteios em falta) */
 const BUILT={
  euromilhoes:[['em','https://www.euromillones.com/en/results/euromillions--results-year-{y}'],['eu','https://www.euro-millions.com/results-history-{y}'],['sc',SC_URL.euromilhoes,1]],
- totoloto:[['sc',SC_URL.totoloto,1]],
+ totoloto:[['sc',SC_URL.totoloto,1],['jc','https://www.jogoselotaria.com/resultados-totoloto.php?del-dia={d}']],
  eurodreams:[['sc',SC_URL.eurodreams,1]]};
-function sources(g){const l=BUILT[g].map(([id,u,once])=>({id,u,once}));
- ($('xs').value||'').split('\n').forEach(s=>{const m=s.trim().match(/^(\w+)\|(https?:\/\/\S+)$/);if(m&&m[1]===g){let h='x';try{h=new URL(m[2]).hostname.replace(/^www\./,'')}catch(e){}l.push({id:h,u:m[2],once:!m[2].includes('{y}')})}});return l}
+function sources(g){const mk=(id,u,once)=>{const day=u.includes('{d}');return{id,u,day,once:!day&&(once||!u.includes('{y}'))}};
+ const l=BUILT[g].map(([id,u,once])=>mk(id,u,once));
+ ($('xs').value||'').split('\n').forEach(s=>{const m=s.trim().match(/^(\w+)\|(https?:\/\/\S+)$/);if(m&&m[1]===g){let h='x';try{h=new URL(m[2].replace('{y}','2026').replace('{d}','2026-01-01')).hostname.replace(/^www\./,'')}catch(e){}l.push(mk(h,m[2],0))}});return l}
 function proxyUrl(u){const px=($('px').value||'').trim();if(!px)return null;return px.includes('{url}')?px.replace('{url}',encodeURIComponent(u)):px.replace(/\/+$/,'')+'/?u='+encodeURIComponent(u)}
 async function getText(url){const tries=[],pu=proxyUrl(url);
  if(pu)tries.push(['proxy próprio',pu]);
- tries.push(['direto',url],['allorigins','https://api.allorigins.win/raw?url='+encodeURIComponent(url)],['corsproxy','https://corsproxy.io/?'+encodeURIComponent(url)]);
+ tries.push(['direto',url],['allorigins','https://api.allorigins.win/raw?url='+encodeURIComponent(url)],['corsproxy','https://corsproxy.io/?'+encodeURIComponent(url)],['jina','https://r.jina.ai/'+url],['codetabs','https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)]);
  for(const[via,u] of tries){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);const r=await fetch(u,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(r.ok){const s=await r.text();if(s&&s.length>200)return{t:s,via}}}catch(e){}}return null}
+/* sorteios em falta (ou só com 1 fonte não oficial) dos últimos 90 dias; cada data só é tentada de 5 em 5 minutos */
+const TRY={};
+function missing(g,days){const have=new Map(full(g).map(e=>[e.d,e])),out=[],t=new Date();t.setHours(0,0,0,0);
+ for(let i=0;i<days&&out.length<12;i++){const d=new Date(t);d.setDate(t.getDate()-i);if(!SCH[g].includes(d.getDay()))continue;
+  const k=fmt(d),e=have.get(k);if(e&&(oficial(e)||nv(e)>=2))continue;
+  if(TRY[g+k]&&Date.now()-TRY[g+k]<300000)continue;TRY[g+k]=Date.now();out.push(d)}return out}
 async function syncGame(g,anos){const y0=new Date().getFullYear(),ys=[];for(let i=0;i<anos;i++)ys.push(y0-i);
  const cut=new Date();cut.setFullYear(cut.getFullYear()-4);cut.setHours(0,0,0,0);const now=new Date(),got={},ids=new Set(),jobs=[];let fail=0;
- sources(g).forEach(f=>(f.once?[f.u]:ys.map(y=>f.u.replace('{y}',y))).forEach(u=>jobs.push([f,u])));
- await Promise.all(jobs.map(async([f,u])=>{const r=await getText(u);if(!r){fail++;return}const L=parseAll(r.t,g);if(!L.length){fail++;return}ids.add(f.id);SYNC.via=r.via;
-  const seen=new Set();L.forEach(e=>{const D=toDate(e.d);if(!valid(g,e.n,e.x)||D<cut||D>now||!SCH[g].includes(D.getDay()))return;
+ const src=sources(g),md=src.some(f=>f.day)?missing(g,90):[];
+ src.forEach(f=>{if(f.day)md.forEach(d=>jobs.push([f,f.u.replace('{d}',isoD(d)),fmt(d)]));else(f.once?[f.u]:ys.map(y=>f.u.replace('{y}',y))).forEach(u=>jobs.push([f,u,null]))});
+ await Promise.all(jobs.map(async([f,u,wd])=>{const r=await getText(u);if(!r){fail++;return}const L=parseAll(r.t,g);if(!L.length){fail++;return}ids.add(f.id);SYNC.via=r.via;
+  const seen=new Set();L.forEach(e=>{if(wd&&e.d!==wd)return;const D=toDate(e.d);if(!valid(g,e.n,e.x)||D<cut||D>now||!SCH[g].includes(D.getDay()))return;
    const k=e.d+keyOf(e);if(seen.has(k))return;seen.add(k);(got[e.d]=got[e.d]||[]).push({...e,f:f.id})})}));
- if(!ids.size)return{m:'sem acesso às fontes (configure o proxy)',ch:-1};
- const r=merge(g,got);return{m:`${ids.size} fonte(s) lidas, ${r.add} novo(s), ${r.conf} confirmado(s)${fail?`, ${fail} sem leitura`:''}`,ch:r.add+r.conf}}
+ if(!ids.size)return{m:jobs.length?'sem acesso às fontes (configure o proxy)':'nada a atualizar',ch:jobs.length?-1:0};
+ const r=merge(g,got),aviso=ids.size<2&&!ids.has('sc')?' ⚠ só 1 fonte lida: sorteios novos exigem 2+ fontes ou a Santa Casa':'';
+ return{m:`${ids.size} fonte(s) lidas, ${r.add} novo(s), ${r.conf} confirmado(s)${fail?`, ${fail} sem leitura`:''}${aviso}`,ch:r.add+r.conf}}
 async function syncAll(anos){busy=true;['bsync','bsync4'].forEach(i=>$(i).disabled=true);CONF.length=0;
  const gs=Object.keys(G),res=await Promise.all(gs.map(g=>syncGame(g,anos+(new Date().getMonth()===0&&anos<2?1:0))));
  const ch=res.every(r=>r.ch<0)?-1:res.reduce((s,r)=>s+Math.max(0,r.ch),0);
