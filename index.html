@@ -37,6 +37,7 @@ td,th{padding:5px 3px;border-bottom:1px solid var(--l);text-align:center}th{colo
 .foot{color:#ff3b30;font-size:12px;line-height:1.6}
 .foot b{font-weight:700}
 a{color:var(--c)}
+summary{cursor:pointer;padding:4px 0}details{border-bottom:1px solid var(--l)}
 </style></head><body>
 <header class="brand" id="brand">
 <div class="t" id="brandText"><span class="r">BONNO</span> <span class="y">CAMPUS</span> <span class="g">THE BEST</span></div>
@@ -46,7 +47,7 @@ a{color:var(--c)}
 <div class="card warn"><b>Nota honesta:</b> cada sorteio é independente. Nenhum filtro, sistema, estatística ou simulação aumenta a probabilidade de uma combinação sair. Esta ferramenta calcula probabilidades <b>exatas</b> e custos, e guarda resultados reais com o número de fontes que os confirmam por maioria. O retorno médio dos jogos é inferior ao custo. Jogue só o que pode perder.</div>
 <label for="g">Jogo</label>
 <select id="g"><option value="euromilhoes">Euromilhões</option><option value="totoloto">Totoloto</option><option value="eurodreams">EuroDreams</option></select>
-<div class="tabs" id="tabs"><button data-t="calc" class="on">Calculadora</button><button data-t="gen">Gerador</button><button data-t="mc">Monte Carlo</button><button data-t="hist">Histórico e fontes</button></div>
+<div class="tabs" id="tabs"><button data-t="calc" class="on">Calculadora</button><button data-t="gen">Gerador</button><button data-t="mc">Monte Carlo</button><button data-t="hist">Histórico e fontes</button><button data-t="cons">Consistência</button></div>
 
 <div class="tab on" id="calc"><div class="card">
 <div class="row"><div><label>Números escolhidos</label><select id="n"></select></div><div><label id="sl">Estrelas escolhidas</label><select id="s"></select></div></div>
@@ -80,33 +81,50 @@ a{color:var(--c)}
 <div class="tab" id="hist">
 <div class="card"><b id="hc"></b>
 <div class="m" id="hq"></div>
-<div id="hl" style="max-height:300px;overflow:auto;margin-top:6px"></div>
+<div class="m" id="gp"></div>
+<div id="hl" style="max-height:560px;overflow:auto;margin-top:6px"></div>
 <div class="m" id="hf"></div></div>
 
 <div class="card"><label>Atualização automática (contínua, 1 s entre ciclos)</label>
-<div class="row"><button class="main" id="bsync">Atualizar agora</button><button class="main" id="bsync4">Sincronizar 4 anos</button></div>
+<div class="row"><button class="main" id="bsync">Atualizar agora</button><button class="main" id="bsync4">Sincronizar 5 anos</button></div>
 <div class="row"><div><label for="minf">Mínimo de fontes para «confirmado»</label><input id="minf" type="number" value="40" min="1" max="200"></div><div><label for="px">Proxy (Cloudflare Worker)</label><input id="px" placeholder="https://bonno-proxy.o-seu-nome.workers.dev"></div></div>
 <label for="xs" style="margin-top:8px">Fontes adicionais (uma por linha: jogo|endereço; use {y} para o ano ou {d} para a data AAAA-MM-DD)</label>
 <textarea id="xs" rows="4" placeholder="euromilhoes|https://exemplo.pt/euromilhoes/{y}&#10;totoloto|https://exemplo.pt/totoloto?dia={d}&#10;eurodreams|https://exemplo.pt/eurodreams"></textarea>
 <div class="m" id="smsg">Ainda não houve sincronização nesta sessão.</div>
-<div class="m"><b>Regra de aceitação:</b> para cada sorteio, vence a combinação indicada pela <b>maioria estrita</b> das fontes que o reportam (empate = conflito, não guardado). Um sorteio novo só entra com 2+ fontes concordantes ou da Santa Casa (oficial). Fica <b>✔ confirmado</b> quando o nº de fontes concordantes atinge o mínimo definido acima; antes disso aparece <b>◐ provisório</b> com a contagem. Fontes incluídas: Santa Casa, euromillones.com e euro-millions.com (Euromilhões); Santa Casa e jogoselotaria.com, esta lida dia a dia (Totoloto); acrescente as restantes na caixa acima. Os sorteios em falta do Totoloto nos últimos 90 dias são recuperados automaticamente. Sem proxy, os navegadores costumam bloquear estes pedidos (CORS): a app tenta vários proxies públicos, mas o mais fiável é publicar o worker.js e colar aqui o endereço. Os últimos 4 anos são sincronizados no arranque; depois só o ano corrente é relido, em ciclos de 1 s (com recuo automático até 30 s se as fontes estiverem inacessíveis, para não ser bloqueado).</div>
+<div class="m"><b>Regra de aceitação:</b> para cada sorteio, vence a combinação indicada pela <b>maioria estrita</b> das fontes que o reportam (empate = conflito, não guardado). Um sorteio novo só entra com 2+ fontes concordantes ou da Santa Casa (oficial). Fica <b>✔ confirmado</b> quando o nº de fontes concordantes atinge o mínimo definido acima; antes disso aparece <b>◐ provisório</b> com a contagem. Fontes incluídas: Santa Casa (páginas «Últimos Resultados», lidas por inteiro), euromillones.com, euro-millions.com e tudonumclick.com (Euromilhões); Santa Casa, tudonumclick.com e jogoselotaria.com, esta lida dia a dia (Totoloto); thelotter.com serve só de calendário de datas do Totoloto (a página não publica as chaves): indica que sorteios existem e quais faltam; acrescente as restantes na caixa acima. Os sorteios em falta do Totoloto são recuperados automaticamente (até 5 anos, 12 por ciclo). Sem proxy, os navegadores costumam bloquear estes pedidos (CORS): a app tenta vários proxies públicos, mas o mais fiável é publicar o worker.js e colar aqui o endereço. Os últimos 5 anos são sincronizados no arranque; depois só o ano corrente é relido, em ciclos de 1 s (com recuo automático até 30 s se as fontes estiverem inacessíveis, para não ser bloqueado).</div>
 <div class="m" id="conf"></div></div>
 
 <div class="card"><label>Conferir manualmente (sites)</label>
 <div class="m">
-<a href="https://www.jogossantacasa.pt/web/ResultsBoard/" target="_blank" rel="noopener">Santa Casa · Euromilhões</a> ·
+<a href="https://www.jogossantacasa.pt/web/SCCartazResult/" target="_blank" rel="noopener">Santa Casa · Euromilhões</a> ·
 <a href="https://www.jogossantacasa.pt/web/SCCartazResult/totolotoNew" target="_blank" rel="noopener">Santa Casa · Totoloto</a> ·
 <a href="https://www.jogossantacasa.pt/web/ResultsBoard/EuroDreams" target="_blank" rel="noopener">Santa Casa · EuroDreams</a> ·
 <a href="https://www.euromillones.com/en/results/euromillions" target="_blank" rel="noopener">euromillones.com</a> ·
-<a href="https://www.jogoselotaria.com/resultados-totoloto.php" target="_blank" rel="noopener">jogoselotaria.com · Totoloto</a></div></div>
+<a href="https://tudonumclick.com/jogos-santa-casa/resultados-semanas-anteriores/" target="_blank" rel="noopener">tudonumclick.com</a> ·
+<a href="https://www.jogoselotaria.com/resultados-totoloto.php" target="_blank" rel="noopener">jogoselotaria.com · Totoloto</a> ·
+<a href="https://www.thelotter.com/pt/resultados-loteria/portugal-totoloto/" target="_blank" rel="noopener">thelotter.com · calendário Totoloto</a></div>
+<div class="m" style="margin-top:8px"><b>Todos os sorteios passados (Santa Casa, oficial):</b> <a href="https://www.jogossantacasa.pt/web/SCMotorBusca/totolotoN" target="_blank" rel="noopener">Motor de Pesquisa · Totoloto</a> · <a href="https://www.jogossantacasa.pt/web/SCMotorBusca/" target="_blank" rel="noopener">Euromilhões</a> · <a href="https://www.jogossantacasa.pt/web/SCMotorBusca/EuroDreams" target="_blank" rel="noopener">EuroDreams</a>. Escolha o período e «Todos», copie o resultado e cole em «Importar vários sorteios». O site exige um formulário, por isso a app não o consegue consultar sozinha.</div></div>
 
-<div class="card"><label>Adicionar / Importar</label>
+<div class="card"><label>Acrescentar resultado que falta no histórico</label>
+<div class="row"><div><label for="adg">Jogo</label><select id="adg"><option value="euromilhoes">Euromilhões</option><option value="totoloto">Totoloto</option><option value="eurodreams">EuroDreams</option></select></div><div><label for="add">Data do sorteio</label><input id="add" type="date"></div></div>
+<div class="row"><div><label for="adn" id="adnl">Números</label><input id="adn" inputmode="numeric" autocomplete="off"></div><div><label for="ade" id="adel">Estrelas</label><input id="ade" inputmode="numeric" autocomplete="off"></div></div>
+<div class="row"><div><label for="adc">Concurso (opcional)</label><input id="adc" placeholder="082/2026" autocomplete="off"></div><div><label>&nbsp;</label><button class="main" id="badd">Adicionar ao histórico</button></div></div>
+<div class="m" id="admsg">Serve para sorteios que as fontes ainda não trouxeram. Fica guardado neste navegador e aparece no mês certo.</div></div>
+
+<div class="card"><label>Importar vários sorteios (texto copiado dos sites ou cópia JSON)</label>
 <textarea id="imp" rows="5" placeholder="Aceita: linhas «25/09/2026 11 12 15 38 49 | 10 12»; texto copiado da lista anual do euromillones.com (formato 05-20-24-31-45-E05 -E10 + data); frases como «12 de setembro de 2026 ... números 3 - 11 - 21 - 29 - 44 e pelo Número da Sorte 2»; ou cópia JSON."></textarea>
 <div class="row"><button id="bimp">Guardar no histórico</button><button id="bexp">Gerar cópia JSON</button></div><div class="m" id="imsg"></div></div>
 
 <div class="card"><label>Conferir uma aposta no histórico</label>
 <div class="row"><input id="ckn" placeholder="Números"><input id="cke" placeholder="Estrelas"></div>
 <button id="bck">Conferir</button><div id="ckout" class="m"></div></div></div>
+
+<div class="tab" id="cons"><div class="card">
+<div class="row"><div><label for="cy">Janela (anos)</label><select id="cy"><option>1</option><option>2</option><option>3</option><option>4</option><option selected>5</option></select></div>
+<div><label for="ck">Manter números (K)</label><input id="ck" type="number" value="25" min="5" max="49"></div></div>
+<div class="row"><div><label for="cs">Manter estrelas/sorte (K)</label><input id="cs" type="number" value="6" min="1" max="13"></div><div><label>&nbsp;</label><button class="main" id="bcons">Analisar</button></div></div></div>
+<div class="card" id="cout"></div>
+<div class="card"><label>Sorteios por ano e mês</label><div id="cym"></div></div></div>
 
 <div class="card"><div class="foot" id="foot"></div></div>
 
@@ -119,7 +137,7 @@ totoloto:{nome:'Totoloto',N:49,k:5,X:13,x:1,p:1,nMax:11,sMax:1,en:'Nº Sorte',ta
 eurodreams:{nome:'EuroDreams',N:40,k:6,X:5,x:1,p:2.5,nMax:11,sMax:5,en:'Sonho',ta:5,tb:1}};
 const SCH={euromilhoes:[2,5],totoloto:[3,6],eurodreams:[1,4]};
 const DIAS=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
-const DB='12/10/2026';
+const DB='15/10/2026';
 let cur='euromilhoes';
 /* ---------- matemática exata ---------- */
 function C(n,k){if(k<0||n<0||k>n)return 0;k=Math.min(k,n-k);let r=1;for(let i=0;i<k;i++)r=r*(n-i)/(i+1);return Math.round(r)}
@@ -153,13 +171,14 @@ function rint(n){const l=4294967296-(4294967296%n);let x;do{x=crypto.getRandomVa
 function pick(N,q){const a=[];for(let i=1;i<=N;i++)a.push(i);for(let i=0;i<q;i++){const j=i+rint(N-i);[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,q).sort((x,y)=>x-y)}
 function sfc32(a,b,c,d){return()=>{a>>>=0;b>>>=0;c>>>=0;d>>>=0;let t=(a+b)|0;a=b^(b>>>9);b=(c+(c<<3))|0;c=(c<<21|c>>>11);d=(d+1)|0;t=(t+d)|0;c=(c+t)|0;return t>>>0}}
 /* ---------- dados incorporados (fontes indicadas por sorteio) ---------- */
-const FN={em:'euromillones.com',sc:'jogossantacasa.pt (oficial)',dn:'dnoticias.pt',jm:'jornaldemafra.pt',sp:'sapo.pt',pe:'paraeles.pt',eu:'euro-millions.com',rr:'rr.pt',mh:'magazine-hd.com',jc:'jogoselotaria.com',ap:'histórico anterior desta app',im:'importado',ma:'manual'};
+const FN={em:'euromillones.com',sc:'jogossantacasa.pt (oficial)',dn:'dnoticias.pt',jm:'jornaldemafra.pt',sp:'sapo.pt',pe:'paraeles.pt',eu:'euro-millions.com',rr:'rr.pt',mh:'magazine-hd.com',jc:'jogoselotaria.com',tn:'tudonumclick.com',tl:'thelotter.com (só datas)',ap:'histórico anterior desta app',im:'importado',ma:'manual'};
 const MANUAL=['im','ma'];
 const nv=e=>(e.f||[]).filter(x=>!MANUAL.includes(x)).length;
 const oficial=e=>(e.f||[]).includes('sc');
 const nvMin=()=>Math.max(1,Math.round(+($('minf')&&$('minf').value)||40));
 function row(s,def){const p=s.split('|');return{d:p[0],n:p[1].trim().split(/\s+/).map(Number),x:p[2].trim().split(/\s+/).map(Number),c:p[3]||'',f:p[4]?p[4].split(','):[def]}}
 const EM=[
+'13/10/2026|21 23 39 44 49|4 11|082/2026|sc',
 '09/10/2026|5 20 24 31 45|5 10|081/2026|em,sc,dn,jm',
 '06/10/2026|18 22 32 41 48|8 10|080/2026|em,sc,sp',
 '02/10/2026|7 8 10 22 35|2 10|079/2026|em,pe,eu',
@@ -242,10 +261,14 @@ const EM=[
 '06/01/2026|5 14 17 18 31|10 12',
 '02/01/2026|8 27 42 44 46|1 10'];
 const TT=[
+'14/10/2026|5 20 42 43 46|2|082/2026|sc',
 '10/10/2026|8 18 21 23 41|13|081/2026|sc,dn,mh,jc',
 '07/10/2026|2 5 22 27 35|12|080/2026|sc',
 '03/10/2026|8 27 38 41 44|12|079/2026|mh',
 '30/09/2026|4 9 19 22 24|13|078/2026|mh',
+'26/09/2026|12 13 17 38 45|11||tn',
+'23/09/2026|1 3 4 29 46|2||tn',
+'19/09/2026|1 2 6 31 36|3||tn',
 '16/09/2026|1 4 7 20 30|8|074/2026',
 '12/09/2026|3 11 21 29 44|2|073/2026|rr,ap',
 '09/09/2026|4 10 18 23 27|3|072/2026',
@@ -263,6 +286,7 @@ const TT=[
 '28/02/2026|6 17 19 45 49|4',
 '21/05/2025|8 33 44 47 48|1'];
 const ED=[
+'12/10/2026|3 4 6 19 30 36|2|082/2026|sc',
 '08/10/2026|6 13 20 27 35 38|4|081/2026|sc',
 '14/09/2026|2 15 18 22 34 38|4|074/2026',
 '31/08/2026|6 14 15 17 34 37|2|070/2026',
@@ -318,8 +342,13 @@ function parseEM(t){t=strip(t);const re=/(\d{2})-(\d{2})-(\d{2})-(\d{2})-(\d{2})
  while((m=re.exec(t))){const mo=MES[m[9].toLowerCase()];if(!mo)continue;out.push({d:pad(+m[8])+'/'+pad(mo)+'/'+m[10],n:[1,2,3,4,5].map(i=>+m[i]),x:[+m[6],+m[7]]})}return out}
 /* Santa Casa: «Sorteio: 081/2026 - sábado Data do Sorteio - 10/10/2026 Chave 8 18 21 23 41 + 13 Ordem de saída ...» (o sinal + é opcional) */
 function parseSC(t,g){const c=G[g];t=strip(t);
- const re=new RegExp('Sorteio:?\\s*(\\d{3}/\\d{4})[\\s\\S]{0,200}?(\\d{2}/\\d{2}/\\d{4})[\\s\\S]{0,200}?(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.k-1)+'})\\s*\\+?\\s*(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.x-1)+'})');
- const m=t.match(re);return m?[{d:m[2],c:m[1],n:m[3].split(/\s+/).map(Number),x:m[4].split(/\s+/).map(Number)}]:[]}
+ const re=new RegExp('Sorteio:?\\s*(\\d{3}/\\d{4})[\\s\\S]{0,200}?(\\d{2}/\\d{2}/\\d{4})[\\s\\S]{0,200}?(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.k-1)+'})\\s*\\+?\\s*(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.x-1)+'})','g'),out=[];let m;
+ while((m=re.exec(t)))out.push({d:m[2],c:m[1],n:m[3].split(/\s+/).map(Number),x:m[4].split(/\s+/).map(Number)});return out}
+/* tudonumclick.com «Chaves anteriores»: «Sorteios do Euromilhões … Sexta dia 09/10/2026 5 20 24 31 45 + 5 10» */
+function parseTN(t,g){const c=G[g],s=strip(t),nome={euromilhoes:'Euromilhões',totoloto:'Totoloto'}[g];if(!nome)return[];
+ const i=s.indexOf('Sorteios do '+nome);if(i<0)return[];let j=s.indexOf('Sorteios do ',i+10);if(j<0)j=s.length;
+ const re=new RegExp('dia\\s+(\\d{2}/\\d{2}/\\d{4})\\s+(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.k-1)+'})\\s*\\+?\\s*(\\d{1,2}(?:\\s+\\d{1,2}){'+(c.x-1)+'})','g'),out=[];let m;
+ while((m=re.exec(s.slice(i,j))))out.push({d:m[1],n:m[2].split(/\s+/).map(Number),x:m[3].split(/\s+/).map(Number)});return out}
 /* jogoselotaria.com: «… 10 de outubro de 2026 … Ganhadores 8 18 21 23 41 13» */
 function parseJE(t,g){const c=G[g],s=strip(t);
  const re=new RegExp('(\\d{1,2})\\s+de\\s+([a-zçã]+)\\s+de\\s+(\\d{4})[\\s\\S]{0,900}?Ganhadores\\s*((?:\\d{1,2}\\s+){'+(c.k+c.x-1)+'}\\d{1,2})','i');
@@ -335,12 +364,13 @@ function nd(m){if(m[1])return pad(+m[1])+'/'+pad(+m[2])+'/'+m[3];if(m[4])return 
 function parseGen(t,g){const c=G[g],q=c.k+c.x,s=strip(t),out=[],re=/(\d{1,2})\/(\d{1,2})\/(\d{4})|(\d{4})-(\d{2})-(\d{2})|(\d{1,2})\s+(?:de\s+)?([A-Za-zçÇ]{3,12})\s+(?:de\s+)?(\d{4})/g;let m;
  while((m=re.exec(s))){const d=nd(m);if(!d)continue;const nums=(s.slice(re.lastIndex,re.lastIndex+160).match(/\b\d{1,2}\b/g)||[]).slice(0,q).map(Number);
   if(nums.length===q)out.push({d,n:nums.slice(0,c.k),x:nums.slice(c.k)})}return out}
-function parseAll(t,g){for(const p of[g==='euromilhoes'?parseEM:()=>[],parseSC,parseJE,parsePT,parseGen]){const L=p(t,g);if(L.length)return L}return[]}
-const SC_URL={euromilhoes:'https://www.jogossantacasa.pt/web/ResultsBoard/',totoloto:'https://www.jogossantacasa.pt/web/SCCartazResult/totolotoNew',eurodreams:'https://www.jogossantacasa.pt/web/ResultsBoard/EuroDreams'};
+function parseAll(t,g){for(const p of[parseTN,g==='euromilhoes'?parseEM:()=>[],parseSC,parseJE,parsePT,parseGen]){const L=p(t,g);if(L.length)return L}return[]}
+const SC_URL={euromilhoes:'https://www.jogossantacasa.pt/web/SCCartazResult/',totoloto:'https://www.jogossantacasa.pt/web/SCCartazResult/totolotoNew',eurodreams:'https://www.jogossantacasa.pt/web/ResultsBoard/EuroDreams'};
+const TN_URL='https://tudonumclick.com/jogos-santa-casa/resultados-semanas-anteriores/';
 /* [id, endereço, uma-vez]; {y} = ano, {d} = data AAAA-MM-DD (só para sorteios em falta) */
 const BUILT={
- euromilhoes:[['em','https://www.euromillones.com/en/results/euromillions--results-year-{y}'],['eu','https://www.euro-millions.com/results-history-{y}'],['sc',SC_URL.euromilhoes,1]],
- totoloto:[['sc',SC_URL.totoloto,1],['jc','https://www.jogoselotaria.com/resultados-totoloto.php?del-dia={d}']],
+ euromilhoes:[['em','https://www.euromillones.com/en/results/euromillions--results-year-{y}'],['eu','https://www.euro-millions.com/results-history-{y}'],['sc',SC_URL.euromilhoes,1],['tn',TN_URL,1]],
+ totoloto:[['sc',SC_URL.totoloto,1],['tn',TN_URL,1],['jc','https://www.jogoselotaria.com/resultados-totoloto.php?del-dia={d}']],
  eurodreams:[['sc',SC_URL.eurodreams,1]]};
 function sources(g){const mk=(id,u,once)=>{const day=u.includes('{d}');return{id,u,day,once:!day&&(once||!u.includes('{y}'))}};
  const l=BUILT[g].map(([id,u,once])=>mk(id,u,once));
@@ -350,15 +380,29 @@ async function getText(url){const tries=[],pu=proxyUrl(url);
  if(pu)tries.push(['proxy próprio',pu]);
  tries.push(['direto',url],['allorigins','https://api.allorigins.win/raw?url='+encodeURIComponent(url)],['corsproxy','https://corsproxy.io/?'+encodeURIComponent(url)],['jina','https://r.jina.ai/'+url],['codetabs','https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)]);
  for(const[via,u] of tries){try{const c=new AbortController(),t=setTimeout(()=>c.abort(),8000);const r=await fetch(u,{signal:c.signal,cache:'no-store'});clearTimeout(t);if(r.ok){const s=await r.text();if(s&&s.length>200)return{t:s,via}}}catch(e){}}return null}
-/* sorteios em falta (ou só com 1 fonte não oficial) dos últimos 90 dias; cada data só é tentada de 5 em 5 minutos */
+/* calendário real de sorteios do Totoloto (thelotter.com): só datas; as chaves não vêm na página */
+const TL_URL='https://www.thelotter.com/pt/resultados-loteria/portugal-totoloto/';
+const MESAB={jan:1,fev:2,mar:3,abr:4,mai:5,jun:6,jul:7,ago:8,set:9,out:10,nov:11,dez:12};
+let CAL={},CALT=0;
+function parseTL(t){const s=strip(t),re=/(\d{1,2})\s+(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\s+(\d{4})\s+\d{2}:\d{2}/gi,out=new Set();let m;
+ while((m=re.exec(s)))out.add(pad(+m[1])+'/'+pad(MESAB[m[2].toLowerCase()])+'/'+m[3]);return out}
+async function syncCal(){if(Date.now()-CALT<6*3600e3)return;CALT=Date.now()-5.5*3600e3;
+ const r=await getText(TL_URL);if(!r)return;const t=new Date();t.setHours(0,0,0,0);
+ const past=[...parseTL(r.t)].map(toDate).filter(d=>d<t&&SCH.totoloto.includes(d.getDay()));if(past.length<50)return;
+ CAL.totoloto={set:new Set(past.map(fmt)),min:new Date(Math.min(...past)),n:past.length};CALT=Date.now();renderHist()}
+function gaps(g){const cal=CAL[g];if(!cal)return'Calendário thelotter.com ainda não lido.';
+ const have=new Set(full(g).map(e=>e.d)),miss=[...cal.set].filter(k=>!have.has(k)).sort((a,b)=>iso(b).localeCompare(iso(a)));
+ return`Calendário real (thelotter.com, só datas): ${cal.n} sorteios desde ${fmt(cal.min)}; <b>${miss.length} sem números no histórico</b>${miss.length?': '+miss.slice(0,30).join(' · ')+(miss.length>30?' · …':''):''}. São recuperados pela fonte dia a dia (12 por ciclo) ou pode importá-los.`}
+/* sorteios em falta (ou só com 1 fonte não oficial) dos últimos 5 anos; cada data só é tentada de 5 em 5 minutos */
 const TRY={};
 function missing(g,days){const have=new Map(full(g).map(e=>[e.d,e])),out=[],t=new Date();t.setHours(0,0,0,0);
  for(let i=0;i<days&&out.length<12;i++){const d=new Date(t);d.setDate(t.getDate()-i);if(!SCH[g].includes(d.getDay()))continue;
+  if(CAL[g]&&d>=CAL[g].min&&!CAL[g].set.has(fmt(d)))continue;
   const k=fmt(d),e=have.get(k);if(e&&(oficial(e)||nv(e)>=2))continue;
   if(TRY[g+k]&&Date.now()-TRY[g+k]<300000)continue;TRY[g+k]=Date.now();out.push(d)}return out}
 async function syncGame(g,anos){const y0=new Date().getFullYear(),ys=[];for(let i=0;i<anos;i++)ys.push(y0-i);
- const cut=new Date();cut.setFullYear(cut.getFullYear()-4);cut.setHours(0,0,0,0);const now=new Date(),got={},ids=new Set(),jobs=[];let fail=0;
- const src=sources(g),md=src.some(f=>f.day)?missing(g,90):[];
+ const cut=new Date();cut.setFullYear(cut.getFullYear()-5);cut.setHours(0,0,0,0);const now=new Date(),got={},ids=new Set(),jobs=[];let fail=0;
+ const src=sources(g),md=src.some(f=>f.day)?missing(g,1830):[];
  src.forEach(f=>{if(f.day)md.forEach(d=>jobs.push([f,f.u.replace('{d}',isoD(d)),fmt(d)]));else(f.once?[f.u]:ys.map(y=>f.u.replace('{y}',y))).forEach(u=>jobs.push([f,u,null]))});
  await Promise.all(jobs.map(async([f,u,wd])=>{const r=await getText(u);if(!r){fail++;return}const L=parseAll(r.t,g);if(!L.length){fail++;return}ids.add(f.id);SYNC.via=r.via;
   const seen=new Set();L.forEach(e=>{if(wd&&e.d!==wd)return;const D=toDate(e.d);if(!valid(g,e.n,e.x)||D<cut||D>now||!SCH[g].includes(D.getDay()))return;
@@ -366,7 +410,7 @@ async function syncGame(g,anos){const y0=new Date().getFullYear(),ys=[];for(let 
  if(!ids.size)return{m:jobs.length?'sem acesso às fontes (configure o proxy)':'nada a atualizar',ch:jobs.length?-1:0};
  const r=merge(g,got),aviso=ids.size<2&&!ids.has('sc')?' ⚠ só 1 fonte lida: sorteios novos exigem 2+ fontes ou a Santa Casa':'';
  return{m:`${ids.size} fonte(s) lidas, ${r.add} novo(s), ${r.conf} confirmado(s)${fail?`, ${fail} sem leitura`:''}${aviso}`,ch:r.add+r.conf}}
-async function syncAll(anos){busy=true;['bsync','bsync4'].forEach(i=>$(i).disabled=true);CONF.length=0;
+async function syncAll(anos){syncCal().catch(()=>{});busy=true;['bsync','bsync4'].forEach(i=>$(i).disabled=true);CONF.length=0;
  const gs=Object.keys(G),res=await Promise.all(gs.map(g=>syncGame(g,anos+(new Date().getMonth()===0&&anos<2?1:0))));
  const ch=res.every(r=>r.ch<0)?-1:res.reduce((s,r)=>s+Math.max(0,r.ch),0);
  if(ch>0)await save();
@@ -374,7 +418,7 @@ async function syncAll(anos){busy=true;['bsync','bsync4'].forEach(i=>$(i).disabl
  ['bsync','bsync4'].forEach(i=>$(i).disabled=false);busy=false;if(ch!==0)renderHist();renderFoot();return ch}
 /* ciclo contínuo: 1 s entre ciclos; recuo até 30 s se não houver acesso às fontes */
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-async function loop(){let wait=1000;want=4;
+async function loop(){let wait=1000;want=5;
  for(;;){const a=want||1;want=0;const ch=await syncAll(a);wait=ch<0?Math.min(wait*2,30000):1000;
   for(let t=0;t<wait&&!want;t+=250)await sleep(250)}}
 /* ---------- importação manual ---------- */
@@ -383,18 +427,21 @@ function importText(txt){let ok=0,bad=0;txt=txt.trim();if(!txt)return{ok,bad};
  if(txt[0]==='{'){try{const o=JSON.parse(txt);for(const g in G)(o[g]||[]).forEach(e=>{if(e.d)put(g,e.d,e.n,e.x,'im',e.c);else put(g,e.data,e.numeros||[],e.estrelas||(e.sorte!=null?[e.sorte]:[]),'im',e.concurso)})}catch(e){bad++}return{ok,bad}}
  const g=cur,c=G[g];
  if(/\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-E\d{2}/.test(txt)){parseEM(txt).forEach(e=>put(g,e.d,e.n,e.x,'im'));return{ok,bad}}
+ const sc=parseSC(txt,g);if(sc.length){sc.forEach(e=>put(g,e.d,e.n,e.x,'im',e.c));return{ok,bad}}
  const pt=parsePT(txt,g);if(pt.length){pt.forEach(e=>put(g,e.d,e.n,e.x,'im'));return{ok,bad}}
  txt.split('\n').forEach(line=>{const segs=/\d{6}:/.test(line)?line.split('|'):[line];segs.forEach(sg=>{sg=sg.trim();if(!sg)return;
   let m=sg.match(/^(\d{2})(\d{2})(\d{2}):([\d,]+):([\d,]+)$/);
   if(m){put(g,`${m[1]}/${m[2]}/20${m[3]}`,m[4].split(',').map(Number),m[5].split(',').map(Number),'im');return}
   m=sg.match(/(\d{2}\/\d{2}\/\d{4})(.*)/);if(!m){bad++;return}
   const r=(m[2].match(/\d+/g)||[]).map(Number);put(g,m[1],r.slice(0,c.k),r.slice(c.k,c.k+c.x),'ma')})});
+
+ if(!ok){const L=parseGen(txt,g);if(L.length){bad=0;L.forEach(e=>put(g,e.d,e.n,e.x,'im'))}}
  return{ok,bad}}
 /* ---------- próximos sorteios e rodapé ---------- */
 function nextDraw(g){const l=full(g)[0],t=new Date();t.setHours(0,0,0,0);let d=l?toDate(l.d):new Date(t);d.setDate(d.getDate()+1);if(d<t)d=new Date(t);
  for(let i=0;i<9;i++){if(SCH[g].includes(d.getDay()))return d;d.setDate(d.getDate()+1)}return d}
 function expectedLast(g){const t=new Date();t.setHours(0,0,0,0);t.setDate(t.getDate()-1);for(let i=0;i<9;i++){if(SCH[g].includes(t.getDay()))return t;t.setDate(t.getDate()-1)}return t}
-function cov(g){const cut=new Date();cut.setFullYear(cut.getFullYear()-4);cut.setHours(0,0,0,0);const t=new Date();t.setHours(0,0,0,0);let ex=0;
+function cov(g){const cut=new Date();cut.setFullYear(cut.getFullYear()-5);cut.setHours(0,0,0,0);const t=new Date();t.setHours(0,0,0,0);let ex=0;
  for(const d=new Date(cut);d<=t;d.setDate(d.getDate()+1))if(SCH[g].includes(d.getDay()))ex++;
  return{have:full(g).filter(e=>toDate(e.d)>=cut).length,ex}}
 function renderFoot(){const rows=Object.keys(G).map(g=>{const l=full(g)[0],n=nextDraw(g),ex=expectedLast(g);
@@ -420,16 +467,77 @@ function stats(g){const c=G[g],d=full(g),L=d.length;if(L<15)return'Registe pelo 
  d.forEach(z=>ob[binOf[z.n.reduce((a,b)=>a+b,0)]]++);
  const od=Math.ceil(c.N/2),eo=Array.from({length:c.k+1},(_,i)=>hyp(c.N,c.k,od,i)*L),oo=new Array(c.k+1).fill(0);d.forEach(z=>oo[z.n.filter(v=>v%2).length]++);
  const ps=chiP(ob,eb),pp=chiP(oo,eo),cv=cov(g);
- return`Amostra: ${L} sorteios (cobertura 4 anos: ${cv.have} de ${cv.ex} esperados, ${(cv.have/cv.ex*100).toFixed(0)}%). Testes de aleatoriedade contra a distribuição <b>exata</b>:<br>Uniformidade χ² dos números: p=${(p1*100).toFixed(1)}% — ${q(p1)}. ${c.en}: p=${(p2*100).toFixed(1)}% — ${q(p2)}.<br>Soma (deciles exatos): p=${(ps.p*100).toFixed(1)}% — ${q(ps.p)}. Ímpares por sorteio: p=${(pp.p*100).toFixed(1)}% — ${q(pp.p)}.<br>Mais saídos: ${lab(idx.slice(0,5))}<br>Menos saídos: ${lab(idx.slice(-5))}<br>Há mais tempo sem sair: ${gap}<br><i>Descritivo apenas. Os números não têm memória: «atraso» e frequência não preveem o próximo sorteio.</i>`}
+ return`Amostra: ${L} sorteios (cobertura 5 anos: ${cv.have} de ${cv.ex} esperados, ${(cv.have/cv.ex*100).toFixed(0)}%). Testes de aleatoriedade contra a distribuição <b>exata</b>:<br>Uniformidade χ² dos números: p=${(p1*100).toFixed(1)}% — ${q(p1)}. ${c.en}: p=${(p2*100).toFixed(1)}% — ${q(p2)}.<br>Soma (deciles exatos): p=${(ps.p*100).toFixed(1)}% — ${q(ps.p)}. Ímpares por sorteio: p=${(pp.p*100).toFixed(1)}% — ${q(pp.p)}.<br>Mais saídos: ${lab(idx.slice(0,5))}<br>Menos saídos: ${lab(idx.slice(-5))}<br>Há mais tempo sem sair: ${gap}<br><i>Descritivo apenas. Os números não têm memória: «atraso» e frequência não preveem o próximo sorteio.</i>`}
+let OPEN=new Set([String(new Date().getFullYear()),new Date().getFullYear()+'-'+pad(new Date().getMonth()+1)]);
+function drawRow(g,x){const wd=toDate(x.d).getDay(),off=!SCH[g].includes(wd)||(CAL[g]&&toDate(x.d)>=CAL[g].min&&toDate(x.d)<new Date(new Date().setHours(0,0,0,0))&&!CAL[g].set.has(x.d));
+ return`<div class="h">${DIAS[wd]} ${x.d}${x.c?' · '+x.c:''} ${badge(x)}${off?' <span class="bad">⚠ dia fora do calendário habitual</span>':''}<br><b>${x.n.map(pad).join(' · ')}</b> <span style="color:var(--b)">| ${x.x.map(pad).join(' · ')}</span></div>`}
+function expMonth(g,y,m){const t=new Date();t.setHours(0,0,0,0);const cal=CAL[g];let n=0;
+ for(const d=new Date(y,m-1,1);d.getMonth()===m-1&&d<t;d.setDate(d.getDate()+1)){if(cal&&d>=cal.min){if(cal.set.has(fmt(d)))n++}else if(SCH[g].includes(d.getDay()))n++}return n}
+function ymHist(g,d){const Y={},t=new Date(),c0=new Date();c0.setFullYear(c0.getFullYear()-5);let a=c0.getFullYear()*12+c0.getMonth();
+ d.forEach(e=>{const mm=e.d.slice(3,5),yy=e.d.slice(6);((Y[yy]=Y[yy]||{})[mm]=Y[yy][mm]||[]).push(e)});
+ if(d.length){const o=toDate(d[d.length-1].d);a=Math.min(a,o.getFullYear()*12+o.getMonth())}
+ for(let i=a;i<=t.getFullYear()*12+t.getMonth();i++){const y=String(Math.floor(i/12)),m=pad(i%12+1);(Y[y]=Y[y]||{})[m]=Y[y][m]||[]}
+ return Object.keys(Y).sort().reverse().map(y=>{let have=0,exp=0;
+  const body=Object.keys(Y[y]).sort().reverse().map(m=>{const L=Y[y][m],ex=expMonth(g,+y,+m);have+=L.length;exp+=ex;
+   return`<details data-k="${y}-${m}"${OPEN.has(y+'-'+m)?' open':''} style="margin-left:10px"><summary>${MESN[+m-1]} · <span class="${L.length>=ex?'ok':'bad'}">${L.length}/${ex}</span></summary>${L.map(x=>drawRow(g,x)).join('')||'<div class="m">Sem sorteios registados neste mês.</div>'}</details>`}).join('');
+  return`<details data-k="${y}"${OPEN.has(y)?' open':''}><summary><b>${y}</b> · <span class="${have>=exp?'ok':'bad'}">${have}/${exp}</span> sorteios</summary>${body}</details>`}).join('')}
 function renderHist(){const g=cur,c=G[g],d=full(g),M=nvMin();
  $('hc').textContent=`${c.nome} · ${d.length} sorteio(s) registado(s)`;
  const cnt=d.reduce((a,e)=>{const v=nv(e);a[v>=M?0:(v>=2||oficial(e))?1:2]++;return a},[0,0,0]);
- $('hq').textContent=`${cnt[0]} confirmado(s) (≥${M} fontes) · ${cnt[1]} provisório(s) (maioria com 2+ fontes ou oficial) · ${cnt[2]} com fonte única ou não verificado(s).`;
- $('hl').innerHTML=d.slice(0,60).map(x=>{const wd=toDate(x.d).getDay(),off=!SCH[g].includes(wd);
-  return`<div class="h">${DIAS[wd]} ${x.d}${x.c?' · '+x.c:''} ${badge(x)}${off?' <span class="bad">⚠ dia fora do calendário habitual</span>':''}<br><b>${x.n.map(pad).join(' · ')}</b> <span style="color:var(--b)">| ${x.x.map(pad).join(' · ')}</span></div>`}).join('')||'<div class="m">Sem sorteios.</div>';
+ $('gp').innerHTML=g==='totoloto'?gaps(g):'';
+ $('hq').textContent=`${cnt[0]} confirmado(s) (≥${M} fontes) · ${cnt[1]} provisório(s) (maioria com 2+ fontes ou oficial) · ${cnt[2]} com fonte única ou não verificado(s). Verde = mês completo; vermelho = faltam sorteios (registados/esperados).`;
+ $('hl').innerHTML=ymHist(g,d);
  $('hf').innerHTML=stats(g);
  $('conf').innerHTML=CONF.length?'<span class="bad">Notas de votação: '+CONF.slice(0,12).join(' | ')+(CONF.length>12?` | … +${CONF.length-12}`:'')+'</span>':'';
  if(SYNC.t)$('smsg').textContent=`${SYNC.t.toLocaleTimeString('pt-PT')}${SYNC.via?' (via '+SYNC.via+')':''} — ${SYNC.msg}`}
+/* acrescentar um resultado em falta */
+function adLabels(){const c=G[$('adg').value];$('adnl').textContent='Números ('+c.k+')';$('adel').textContent=c.en+' ('+c.x+')';
+ $('adn').placeholder='ex.: '+Array.from({length:c.k},(_,i)=>pad(i*7+3)).join(' ');$('ade').placeholder=c.x>1?'ex.: 04 09':'ex.: 07'}
+async function addOne(){const g=$('adg').value,c=G[g],v=$('add').value,out=t=>$('admsg').innerHTML=t;
+ if(!v){out('<span class="bad">Escolha a data do sorteio.</span>');return}
+ const[Y,M,D]=v.split('-'),d=`${D}/${M}/${Y}`,n=($('adn').value.match(/\d+/g)||[]).map(Number),x=($('ade').value.match(/\d+/g)||[]).map(Number),cc=$('adc').value.trim();
+ if(!valid(g,n,x)){out(`<span class="bad">Inválido: ${c.nome} precisa de ${c.k} números diferentes (1–${c.N}) e ${c.x} ${c.en} (1–${c.X}).</span>`);return}
+ if(toDate(d)>new Date()){out('<span class="bad">A data ainda não aconteceu.</span>');return}
+ const old=full(g).find(e=>e.d===d);
+ if(old&&keyOf(old)===keyOf({n,x})){out('Esse sorteio já existe com a mesma chave.');return}
+ const off=!SCH[g].includes(toDate(d).getDay());
+ upsert(g,{d,n,x,c:cc,f:['ma']});await save();
+ out(`<span class="ok">${old?'Substituído':'Guardado'}:</span> ${c.nome} ${d} → <b>${sortN(n).map(pad).join(' ')}</b> | ${sortN(x).map(pad).join(' ')}${off?' <span class="bad">⚠ dia fora do calendário habitual</span>':''}${old?' (a chave anterior foi trocada; se as fontes divergirem, a votação por maioria pode repô-la)':''}`);
+ $('adn').value='';$('ade').value='';$('adc').value='';renderHist();renderFoot()}
+/* ---------- consistência, ano/mês e redução ---------- */
+let POOL={n:null,x:null},LAST=null;
+const MESN=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+function pickFrom(arr,q){const a=arr.slice();for(let i=0;i<q;i++){const j=i+rint(a.length-i);[a[i],a[j]]=[a[j],a[i]]}return a.slice(0,q).sort((x,y)=>x-y)}
+const pickN=n=>POOL.n&&POOL.n.length>=n?pickFrom(POOL.n,n):pick(G[cur].N,n);
+const pickX=s=>POOL.x&&POOL.x.length>=s?pickFrom(POOL.x,s):pick(G[cur].X,s);
+function rk(d,M,q,key){const p=q/M,L=d.length,f=new Array(M+1).fill(0),pm=new Array(M+1).fill(0),mo={},by={};
+ d.forEach(e=>{const y=e.d.slice(6),m=e.d.slice(3,5);e[key].forEach(v=>f[v]++);
+  const b=by[y]=by[y]||{L:0,f:new Array(M+1).fill(0)};b.L++;e[key].forEach(v=>b.f[v]++);
+  const s=mo[y+m]=mo[y+m]||{L:0,s:new Set()};s.L++;e[key].forEach(v=>s.s.add(v))});
+ Object.values(mo).forEach(o=>o.s.forEach(v=>pm[v]++));
+ const pe=Object.values(mo).map(o=>1-Math.pow(1-p,o.L)),Ep=pe.reduce((a,b)=>a+b,0),vp=pe.reduce((a,b)=>a+b*(1-b),0),E=L*p,sd=Math.sqrt(E*(1-p)),Y=Object.values(by),r=[];
+ for(let v=1;v<=M;v++){const z1=(f[v]-E)/sd,z2=vp>0?(pm[v]-Ep)/Math.sqrt(vp):0;r.push({v,f:f[v],m:pm[v],a:Y.filter(o=>o.f[v]>=o.L*p).length,s:(z1+z2)/2})}
+ return{r:r.sort((a,b)=>b.s-a.s||a.v-b.v),E,nm:pe.length,ny:Y.length}}
+function bt(d,M,q,key,K){const t=Math.floor(d.length*.2);if(t<10||K>=M)return'n/d';const S=new Set(rk(d.slice(t),M,q,key).r.slice(0,K).map(o=>o.v));
+ let h=0;d.slice(0,t).forEach(e=>e[key].forEach(v=>{if(S.has(v))h++}));const E=t*K*q/M,V=t*q*(K/M)*(1-K/M)*(M-q)/(M-1);
+ return`${h} vs ${E.toFixed(1)} esperados (Z=${V>0?((h-E)/Math.sqrt(V)).toFixed(2):'0'})`}
+function ymRender(d){const Y={};d.forEach(e=>{const[dd,mm,yy]=e.d.split('/');((Y[yy]=Y[yy]||{})[mm]=Y[yy][mm]||[]).push(e)});
+ return Object.keys(Y).sort().reverse().map((y,i)=>`<details${i?'':' open'}><summary><b>${y}</b> · ${Object.values(Y[y]).reduce((s,a)=>s+a.length,0)} sorteios</summary>${Object.keys(Y[y]).sort().reverse().map(m=>`<details style="margin-left:10px"><summary>${MESN[+m-1]} · ${Y[y][m].length}</summary>${Y[y][m].map(e=>`<div class="h">${e.d.slice(0,2)} · <b>${e.n.map(pad).join(' ')}</b> <span style="color:var(--b)">| ${e.x.map(pad).join(' ')}</span></div>`).join('')}</details>`).join('')}</details>`).join('')}
+function consRender(){const g=cur,c=G[g],yrs=+$('cy').value,cut=new Date();cut.setFullYear(cut.getFullYear()-yrs);cut.setHours(0,0,0,0);
+ const d=full(g).filter(e=>toDate(e.d)>=cut),K=Math.min(c.N,Math.max(c.k,+$('ck').value||c.k)),Ks=Math.min(c.X,Math.max(c.x,+$('cs').value||c.x));
+ $('cym').innerHTML=ymRender(d);
+ if(d.length<30){$('cout').innerHTML='Poucos sorteios na janela ('+d.length+'). Sincronize primeiro.';return}
+ const A=rk(d,c.N,c.k,'n'),B=rk(d,c.X,c.x,'x'),vs=(R,k)=>R.r.slice(0,k).map(o=>o.v).sort((a,b)=>a-b);LAST={n:vs(A,K),x:vs(B,Ks)};
+ const tb=(R,k)=>`<div style="max-height:260px;overflow:auto"><table><tr><th>Nº</th><th>Saídas</th><th>Meses</th><th>Anos≥média</th><th>Índice</th></tr>${R.r.map((o,i)=>`<tr class="${i<k?'ok':''}"><td>${pad(o.v)}</td><td>${o.f} (esp. ${R.E.toFixed(1)})</td><td>${o.m}/${R.nm}</td><td>${o.a}/${R.ny}</td><td>${o.s.toFixed(2)}</td></tr>`).join('')}</table></div>`;
+ const lst=R=>`Mais consistentes: <b>${R.r.slice(0,5).map(o=>pad(o.v)).join(' · ')}</b> · Menos: <b>${R.r.slice(-5).reverse().map(o=>pad(o.v)).join(' · ')}</b>`;
+ const pr=C(K,c.k)/C(c.N,c.k)*C(Ks,c.x)/C(c.X,c.x),T=C(K,c.k)*C(Ks,c.x);
+ $('cout').innerHTML=`<div class="m">${d.length} sorteios em ${yrs} ano(s). Índice = média dos Z de frequência e de presença mensal (exatos, binomiais). «Anos≥média» = anos em que saiu pelo menos o esperado. A verde: os que ficam na redução.</div>
+ <label style="margin-top:8px">${c.nome} · números</label>${lst(A)}${tb(A,K)}<div class="m">Teste fora da amostra (ordena com os 80% mais antigos, mede nos 20% mais recentes, top ${K}): ${bt(d,c.N,c.k,'n',K)}</div>
+ <label style="margin-top:10px">${c.en}</label>${lst(B)}${tb(B,Ks)}<div class="m">Teste fora da amostra (top ${Ks}): ${bt(d,c.X,c.x,'x',Ks)}</div>
+ <div class="card warn" style="margin-top:10px">Manter ${K} números + ${Ks} ${c.en.toLowerCase()}: a chave sai toda dentro do que manteve com probabilidade ${pct(pr)} (${one(pr)}), igual a qualquer outro subconjunto do mesmo tamanho. Sistema completo: ${T.toLocaleString('pt-PT')} apostas = ${eur(T*c.p)}. Reduzir não aumenta a probabilidade por euro gasto.</div>
+ <div class="row"><button class="main" id="buse">Usar no Gerador e Monte Carlo</button><button id="bclr">Limpar redução</button></div><div class="m" id="umsg"></div>`;
+ $('buse').onclick=()=>{POOL={n:LAST.n,x:LAST.x};$('umsg').textContent=`Redução ativa: ${POOL.n.length} números e ${POOL.x.length} ${c.en.toLowerCase()}. Em «Números escolhidos» use um valor ≤ ${POOL.n.length}.`};
+ $('bclr').onclick=()=>{POOL={n:null,x:null};$('umsg').textContent='Redução removida.'}}
 /* ---------- UI ---------- */
 function fill(sel,from,to,val){sel.innerHTML='';for(let i=from;i<=to;i++)sel.add(new Option(i,i));sel.value=val}
 function tier(){const c=G[cur],n=+$('n').value,s=+$('s').value,T=C(n,c.k)*C(s,c.x),rows=[];
@@ -437,6 +545,8 @@ function tier(){const c=G[cur],n=+$('n').value,s=+$('s').value,T=C(n,c.k)*C(s,c.
  rows.sort((a,b)=>a[2]-b[2]);
  return`<table><tr><th>Acertos (nº+${c.en})</th><th>Prob. aposta simples</th><th>Frequência</th><th>Bilhetes esperados no sistema ${n}+${s}</th></tr>${rows.map(r=>`<tr><td>${r[0]}+${r[1]}</td><td>${pct(r[2])}</td><td>${one(r[2])}</td><td>${(T*r[2]).toExponential(2)}</td></tr>`).join('')}</table><div class="m">Média de números certos por aposta simples: ${(c.k*c.k/c.N).toFixed(3)}. A soma de todas as linhas é 100%. A última coluna é o valor esperado exato (linearidade): ${T} bilhete(s) × probabilidade de cada categoria.</div>`}
 function setup(){const c=G[cur];
+ $('add').max=isoD(new Date());
+ $('ck').value=Math.round(c.N/2);$('cs').value=Math.max(c.x,Math.ceil(c.X/2));POOL={n:null,x:null};$('cout').innerHTML='';$('cym').innerHTML='';
  fill($('n'),c.k,c.nMax,c.k);fill($('s'),c.x,c.sMax,c.x);fill($('a'),2,c.k,c.ta);fill($('b'),0,c.x,c.tb);
  $('s').disabled=c.sMax===c.x;$('sl').textContent=c.en+' escolhidas';$('bl').textContent='Alvo: '+c.en+' certas (mín.)';
  $('gout').style.display='none';$('mcout').style.display='none';calc();renderHist();renderFoot()}
@@ -468,15 +578,15 @@ function filt(){const c=G[cur],n=+$('n').value,f={};['sum','par','alt','seq','de
   if(f.rep&&n===c.k&&hs.has(a.join(',')))return false;return true};
  return{ok,bd,n}}
 function genBet(){const c=G[cur],s=+$('s').value,F=filt(),n=F.n,cnt=Math.min(20,Math.max(1,+$('nb').value||1)),ov=Math.max(0,+$('ov').value||0),res=[];
- for(let b=0;b<cnt;b++){let a,t=0;do{a=pick(c.N,n);t++}while((!F.ok(a)||res.some(r=>r.a.filter(v=>a.includes(v)).length>ov))&&t<200000);res.push({a,x:pick(c.X,s),t})}
- let acc=0;const TT=20000;for(let i=0;i<TT;i++)if(F.ok(pick(c.N,n)))acc++;
+ for(let b=0;b<cnt;b++){let a,t=0;do{a=pickN(n);t++}while((!F.ok(a)||res.some(r=>r.a.filter(v=>a.includes(v)).length>ov))&&t<200000);res.push({a,x:pickX(s),t})}
+ let acc=0;const TT=20000;for(let i=0;i<TT;i++)if(F.ok(pickN(n)))acc++;
  $('gout').style.display='block';
  $('gout').innerHTML=res.map((r,i)=>{const S=r.a.reduce((x,y)=>x+y,0);return`<div class="balls">${cnt>1?`<b>${i+1}.</b>`:''}${r.a.map(v=>`<div class="ball">${pad(v)}</div>`).join('')}${r.x.map(v=>`<div class="ball s">${pad(v)}</div>`).join('')}</div>
  <div class="m">Soma ${S} (faixa exata ${F.bd.lo}–${F.bd.hi}) · ${r.t.toLocaleString('pt-PT')} tentativa(s)${r.t>=200000?' · <span class="bad">limite atingido, filtros/sobreposição demasiado apertados</span>':''}</div>`}).join('')+
  `<div class="m">Os filtros retêm ≈ ${(acc/TT*100).toFixed(1)}% de todas as combinações de ${n} números (amostra de ${TT.toLocaleString('pt-PT')}). Todas as combinações do mesmo tamanho têm exatamente a mesma probabilidade (${one(atLeast(c.N,c.k,c.k,c.k)*atLeast(c.X,c.x,c.x,c.x))} por aposta simples). Os filtros só mudam o estilo da aposta e a chance de partilhar prémio; a opção de Monte Carlo com filtros demonstra-o.</div>`}
 function runMC(total){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').value,b=+$('b').value,useF=$('mcf').checked;let bet;
- if(useF){const F=filt();let t=0;do{bet=pick(c.N,n);t++}while(!F.ok(bet)&&t<200000)}else bet=pick(c.N,n);
- const ex=pick(c.X,s),fb=new Uint8Array(c.N+1),fe=new Uint8Array(c.X+1);bet.forEach(v=>fb[v]=1);ex.forEach(v=>fe[v]=1);
+ if(useF){const F=filt();let t=0;do{bet=pickN(n);t++}while(!F.ok(bet)&&t<200000)}else bet=pickN(n);
+ const ex=pickX(s),fb=new Uint8Array(c.N+1),fe=new Uint8Array(c.X+1);bet.forEach(v=>fb[v]=1);ex.forEach(v=>fe[v]=1);
  const seed=crypto.getRandomValues(new Uint32Array(4)),r=sfc32(...seed),pm=Uint8Array.from({length:c.N},(_,i)=>i+1),pe=Uint8Array.from({length:c.X},(_,i)=>i+1);
  const W=c.x+1,cnt=new Float64Array((c.k+1)*W);let done=0;const t0=performance.now();document.querySelectorAll('[data-mc]').forEach(x=>x.disabled=true);
  const step=()=>{const lim=Math.min(done+200000,total);
@@ -507,13 +617,16 @@ document.addEventListener('DOMContentLoaded',async()=>{
  $('minf').addEventListener('change',()=>{try{localStorage.setItem('jonhy_minf',$('minf').value)}catch(e){}renderHist()});
  const o=await load();if(o)for(const g in G)H[g]=(o[g]||[]).filter(e=>e&&e.d&&e.n&&e.x);
  FV++;if(!o)migrate();
- $('g').onchange=e=>{cur=e.target.value;setup()};
+ $('g').onchange=e=>{cur=e.target.value;$('adg').value=cur;adLabels();setup()};
  ['n','s','a','b','bud','dr'].forEach(i=>$(i).addEventListener('input',calc));
- $('tabs').onclick=e=>{const t=e.target.dataset.t;if(!t)return;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id===t));document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===e.target));if(t==='hist')renderHist()};
+ $('tabs').onclick=e=>{const t=e.target.dataset.t;if(!t)return;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id===t));document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===e.target));if(t==='hist')renderHist();if(t==='cons')consRender()};
  $('bgen').onclick=genBet;
+ $('badd').onclick=addOne;$('adg').addEventListener('change',adLabels);$('adg').value=cur;adLabels();
+ $('hl').addEventListener('toggle',e=>{const k=e.target.dataset&&e.target.dataset.k;if(!k)return;if(e.target.open)OPEN.add(k);else OPEN.delete(k)},true);
+ $('bcons').onclick=consRender;$('cy').addEventListener('change',consRender);
  document.querySelectorAll('[data-mc]').forEach(b=>b.onclick=()=>runMC(+b.dataset.mc));
  $('bsync').onclick=()=>{want=1;$('smsg').textContent='A sincronizar…'};
- $('bsync4').onclick=()=>{want=4;$('smsg').textContent='A sincronizar 4 anos…'};
+ $('bsync4').onclick=()=>{want=5;$('smsg').textContent='A sincronizar 5 anos…'};
  $('bimp').onclick=async()=>{const r=importText($('imp').value);await save();$('imsg').textContent=`${r.ok} guardado(s), ${r.bad} ignorado(s) (inválidos).`;if(r.ok)$('imp').value='';renderHist();renderFoot()};
  $('bexp').onclick=()=>{$('imp').value=JSON.stringify(H);$('imp').select();$('imsg').textContent='Cópia JSON dos sorteios sincronizados/importados gerada na caixa: copie e guarde num ficheiro. Os sorteios incorporados na app não entram.'};
  $('bck').onclick=()=>{const c=G[cur],nn=($('ckn').value.match(/\d+/g)||[]).map(Number),ee=($('cke').value.match(/\d+/g)||[]).map(Number);let hit=0,best=[0,0],ls='';
