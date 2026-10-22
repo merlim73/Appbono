@@ -60,6 +60,7 @@ summary{cursor:pointer;padding:4px 0}details{border-bottom:1px solid var(--l)}
 <label>Cobertura da soma (distribuição exata)</label>
 <select id="mass"><option value=".8">80% central</option><option value=".9" selected>90% central</option><option value=".95">95% central</option></select>
 <div class="chk"><input type="checkbox" id="fsum" checked><span>Soma dentro da faixa exata</span></div>
+<div class="chk"><input type="checkbox" id="frng" checked><span>Amplitude (maior − menor) dentro da faixa exata</span></div>
 <div class="chk"><input type="checkbox" id="fpar" checked><span>Par/ímpar: só contagens com probabilidade exata ≥ 5%</span></div>
 <div class="chk"><input type="checkbox" id="falt" checked><span>Baixos/altos equilibrados (nem todos na mesma metade)</span></div>
 <div class="chk"><input type="checkbox" id="fseq" checked><span>Sem 3+ consecutivos</span></div>
@@ -91,7 +92,7 @@ summary{cursor:pointer;padding:4px 0}details{border-bottom:1px solid var(--l)}
 <label for="xs" style="margin-top:8px">Fontes adicionais (uma por linha: jogo|endereço; use {y} para o ano ou {d} para a data AAAA-MM-DD)</label>
 <textarea id="xs" rows="4" placeholder="euromilhoes|https://exemplo.pt/euromilhoes/{y}&#10;totoloto|https://exemplo.pt/totoloto?dia={d}&#10;eurodreams|https://exemplo.pt/eurodreams"></textarea>
 <div class="m" id="smsg">Ainda não houve sincronização nesta sessão.</div>
-<div class="m"><b>Regra de aceitação:</b> para cada sorteio, vence a combinação indicada pela <b>maioria estrita</b> das fontes que o reportam (empate = conflito, não guardado). Um sorteio novo só entra com 2+ fontes concordantes ou da Santa Casa (oficial). Fica <b>✔ confirmado</b> quando o nº de fontes concordantes atinge o mínimo definido acima; antes disso aparece <b>◐ provisório</b> com a contagem. Fontes incluídas: Santa Casa (páginas «Últimos Resultados», lidas por inteiro), euromillones.com, euro-millions.com e tudonumclick.com (Euromilhões); Santa Casa, tudonumclick.com e jogoselotaria.com, esta lida dia a dia (Totoloto); thelotter.com serve só de calendário de datas do Totoloto (a página não publica as chaves): indica que sorteios existem e quais faltam; acrescente as restantes na caixa acima. Os sorteios em falta do Totoloto são recuperados automaticamente (até 5 anos, 12 por ciclo). Sem proxy, os navegadores costumam bloquear estes pedidos (CORS): a app tenta vários proxies públicos, mas o mais fiável é publicar o worker.js e colar aqui o endereço. Os últimos 5 anos são sincronizados no arranque; depois só o ano corrente é relido, em ciclos de 1 s (com recuo automático até 30 s se as fontes estiverem inacessíveis, para não ser bloqueado).</div>
+<div class="m"><b>Regra de aceitação:</b> para cada sorteio, vence a combinação indicada pela <b>maioria estrita</b> das fontes que o reportam (empate = conflito, não guardado). Um sorteio novo só entra com 2+ fontes concordantes ou da Santa Casa (oficial). Fica <b>✔ confirmado</b> quando o nº de fontes concordantes atinge o mínimo definido acima; antes disso aparece <b>◐ provisório</b> com a contagem. Fontes incluídas: Santa Casa (páginas «Últimos Resultados», lidas por inteiro), euromillones.com, euro-millions.com e tudonumclick.com (Euromilhões); Santa Casa, tudonumclick.com e jogoselotaria.com, esta lida dia a dia (Totoloto); thelotter.com serve só de calendário de datas do Totoloto (a página não publica as chaves): indica que sorteios existem e quais faltam; acrescente as restantes na caixa acima. Os sorteios em falta do Totoloto são recuperados automaticamente (até 5 anos, 30 por ciclo). Sem proxy, os navegadores costumam bloquear estes pedidos (CORS): a app tenta vários proxies públicos, mas o mais fiável é publicar o worker.js e colar aqui o endereço. Os últimos 5 anos são sincronizados no arranque; depois só o ano corrente é relido, em ciclos de 1 s (com recuo automático até 30 s se as fontes estiverem inacessíveis, para não ser bloqueado).</div>
 <div class="m" id="conf"></div></div>
 
 <div class="card"><label>Conferir manualmente (sites)</label>
@@ -106,10 +107,10 @@ summary{cursor:pointer;padding:4px 0}details{border-bottom:1px solid var(--l)}
 <div class="m" style="margin-top:8px"><b>Todos os sorteios passados (Santa Casa, oficial):</b> <a href="https://www.jogossantacasa.pt/web/SCMotorBusca/totolotoN" target="_blank" rel="noopener">Motor de Pesquisa · Totoloto</a> · <a href="https://www.jogossantacasa.pt/web/SCMotorBusca/" target="_blank" rel="noopener">Euromilhões</a> · <a href="https://www.jogossantacasa.pt/web/SCMotorBusca/EuroDreams" target="_blank" rel="noopener">EuroDreams</a>. Escolha o período e «Todos», copie o resultado e cole em «Importar vários sorteios». O site exige um formulário, por isso a app não o consegue consultar sozinha.</div></div>
 
 <div class="card"><label>Acrescentar resultado que falta no histórico</label>
-<div class="row"><div><label for="adg">Jogo</label><select id="adg"><option value="euromilhoes">Euromilhões</option><option value="totoloto">Totoloto</option><option value="eurodreams">EuroDreams</option></select></div><div><label for="add">Data do sorteio</label><input id="add" type="date"></div></div>
+<div class="row"><div><label for="adg">Jogo</label><select id="adg"><option value="euromilhoes">Euromilhões</option><option value="totoloto">Totoloto</option><option value="eurodreams">EuroDreams</option></select></div><div><label for="add">Data do sorteio</label><input id="add" inputmode="numeric" placeholder="dd/mm/aaaa" maxlength="10" autocomplete="off"></div></div>
 <div class="row"><div><label for="adn" id="adnl">Números</label><input id="adn" inputmode="numeric" autocomplete="off"></div><div><label for="ade" id="adel">Estrelas</label><input id="ade" inputmode="numeric" autocomplete="off"></div></div>
 <div class="row"><div><label for="adc">Concurso (opcional)</label><input id="adc" placeholder="082/2026" autocomplete="off"></div><div><label>&nbsp;</label><button class="main" id="badd">Adicionar ao histórico</button></div></div>
-<div class="m" id="admsg">Serve para sorteios que as fontes ainda não trouxeram. Fica guardado neste navegador e aparece no mês certo.</div></div>
+<div class="m" id="admsg">Serve para sorteios que as fontes ainda não trouxeram. Escreva a data como dd/mm/aaaa. Fica guardado neste navegador e aparece no mês certo.</div></div>
 
 <div class="card"><label>Importar vários sorteios (texto copiado dos sites ou cópia JSON)</label>
 <textarea id="imp" rows="5" placeholder="Aceita: linhas «25/09/2026 11 12 15 38 49 | 10 12»; texto copiado da lista anual do euromillones.com (formato 05-20-24-31-45-E05 -E10 + data); frases como «12 de setembro de 2026 ... números 3 - 11 - 21 - 29 - 44 e pelo Número da Sorte 2»; ou cópia JSON."></textarea>
@@ -137,7 +138,7 @@ totoloto:{nome:'Totoloto',N:49,k:5,X:13,x:1,p:1,nMax:11,sMax:1,en:'Nº Sorte',ta
 eurodreams:{nome:'EuroDreams',N:40,k:6,X:5,x:1,p:2.5,nMax:11,sMax:5,en:'Sonho',ta:5,tb:1}};
 const SCH={euromilhoes:[2,5],totoloto:[3,6],eurodreams:[1,4]};
 const DIAS=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
-const DB='15/10/2026';
+const DB='21/10/2026';
 let cur='euromilhoes';
 /* ---------- matemática exata ---------- */
 function C(n,k){if(k<0||n<0||k>n)return 0;k=Math.min(k,n-k);let r=1;for(let i=0;i<k;i++)r=r*(n-i)/(i+1);return Math.round(r)}
@@ -156,6 +157,10 @@ function sumDist(N,k){const key=N+','+k;if(SD[key])return SD[key];const M=k*N,dp
 function sumBounds(N,k,mass){const d=sumDist(N,k),M=d.length-1,t=(1-mass)/2;let cum=0,lo=0,hi=M;
  for(let s=0;s<=M;s++){cum+=d[s];if(cum>=t){lo=s;break}}
  cum=0;for(let s=M;s>=0;s--){cum+=d[s];if(cum>=t){hi=s;break}}return{lo,hi}}
+/* distribuição exata da amplitude (máx−mín) de k números em 1..N: P(r)=(N−r)·C(r−1,k−2)/C(N,k) */
+function rangeBounds(N,k,mass){const T=C(N,k),t=(1-mass)/2,p=r=>(N-r)*C(r-1,k-2)/T;let cum=0,lo=k-1,hi=N-1;
+ for(let r=k-1;r<=N-1;r++){cum+=p(r);if(cum>=t){lo=r;break}}
+ cum=0;for(let r=N-1;r>=k-1;r--){cum+=p(r);if(cum>=t){hi=r;break}}return{lo,hi}}
 function lg(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,.001208650973866179,-5.395239384953e-6];let y=x,t=x+5.5;t-=(x+.5)*Math.log(t);let s=1.000000000190015;for(const q of c)s+=q/++y;return -t+Math.log(2.5066282746310005*s/x)}
 function chiSF(x,df){if(x<=0||df<=0)return 1;const a=df/2,z=x/2;
  if(z<a+1){let ap=a,sum=1/a,d=sum;for(let n=0;n<500;n++){ap++;d*=z/ap;sum+=d;if(Math.abs(d)<Math.abs(sum)*1e-14)break}return Math.max(0,1-sum*Math.exp(-z+a*Math.log(z)-lg(a)))}
@@ -261,9 +266,9 @@ const EM=[
 '06/01/2026|5 14 17 18 31|10 12',
 '02/01/2026|8 27 42 44 46|1 10'];
 const TT=[
-'14/10/2026|5 20 42 43 46|2|082/2026|sc',
+'14/10/2026|5 20 42 43 46|2|082/2026|sc,mh',
 '10/10/2026|8 18 21 23 41|13|081/2026|sc,dn,mh,jc',
-'07/10/2026|2 5 22 27 35|12|080/2026|sc',
+'07/10/2026|2 5 22 27 35|12|080/2026|sc,dn,mh',
 '03/10/2026|8 27 38 41 44|12|079/2026|mh',
 '30/09/2026|4 9 19 22 24|13|078/2026|mh',
 '26/09/2026|12 13 17 38 45|11||tn',
@@ -283,7 +288,7 @@ const TT=[
 '11/04/2026|24 25 30 31 33|12',
 '08/04/2026|20 25 30 33 35|6',
 '04/04/2026|5 17 24 37 42|10',
-'28/02/2026|6 17 19 45 49|4',
+'28/02/2026|6 17 19 45 49|4|||rr',
 '21/05/2025|8 33 44 47 48|1'];
 const ED=[
 '12/10/2026|3 4 6 19 30 36|2|082/2026|sc',
@@ -392,11 +397,11 @@ async function syncCal(){if(Date.now()-CALT<6*3600e3)return;CALT=Date.now()-5.5*
  CAL.totoloto={set:new Set(past.map(fmt)),min:new Date(Math.min(...past)),n:past.length};CALT=Date.now();renderHist()}
 function gaps(g){const cal=CAL[g];if(!cal)return'Calendário thelotter.com ainda não lido.';
  const have=new Set(full(g).map(e=>e.d)),miss=[...cal.set].filter(k=>!have.has(k)).sort((a,b)=>iso(b).localeCompare(iso(a)));
- return`Calendário real (thelotter.com, só datas): ${cal.n} sorteios desde ${fmt(cal.min)}; <b>${miss.length} sem números no histórico</b>${miss.length?': '+miss.slice(0,30).join(' · ')+(miss.length>30?' · …':''):''}. São recuperados pela fonte dia a dia (12 por ciclo) ou pode importá-los.`}
+ return`Calendário real (thelotter.com, só datas): ${cal.n} sorteios desde ${fmt(cal.min)}; <b>${miss.length} sem números no histórico</b>${miss.length?': '+miss.slice(0,30).join(' · ')+(miss.length>30?' · …':''):''}. São recuperados pela fonte dia a dia (30 por ciclo) ou pode importá-los.`}
 /* sorteios em falta (ou só com 1 fonte não oficial) dos últimos 5 anos; cada data só é tentada de 5 em 5 minutos */
 const TRY={};
 function missing(g,days){const have=new Map(full(g).map(e=>[e.d,e])),out=[],t=new Date();t.setHours(0,0,0,0);
- for(let i=0;i<days&&out.length<12;i++){const d=new Date(t);d.setDate(t.getDate()-i);if(!SCH[g].includes(d.getDay()))continue;
+ for(let i=0;i<days&&out.length<30;i++){const d=new Date(t);d.setDate(t.getDate()-i);if(!SCH[g].includes(d.getDay()))continue;
   if(CAL[g]&&d>=CAL[g].min&&!CAL[g].set.has(fmt(d)))continue;
   const k=fmt(d),e=have.get(k);if(e&&(oficial(e)||nv(e)>=2))continue;
   if(TRY[g+k]&&Date.now()-TRY[g+k]<300000)continue;TRY[g+k]=Date.now();out.push(d)}return out}
@@ -437,7 +442,7 @@ function importText(txt){let ok=0,bad=0;txt=txt.trim();if(!txt)return{ok,bad};
 
  if(!ok){const L=parseGen(txt,g);if(L.length){bad=0;L.forEach(e=>put(g,e.d,e.n,e.x,'im'))}}
  return{ok,bad}}
-/* ---------- próximos sorteios e rodapé ---------- */
+ /* ---------- próximos sorteios e rodapé ---------- */
 function nextDraw(g){const l=full(g)[0],t=new Date();t.setHours(0,0,0,0);let d=l?toDate(l.d):new Date(t);d.setDate(d.getDate()+1);if(d<t)d=new Date(t);
  for(let i=0;i<9;i++){if(SCH[g].includes(d.getDay()))return d;d.setDate(d.getDate()+1)}return d}
 function expectedLast(g){const t=new Date();t.setHours(0,0,0,0);t.setDate(t.getDate()-1);for(let i=0;i<9;i++){if(SCH[g].includes(t.getDay()))return t;t.setDate(t.getDate()-1)}return t}
@@ -490,12 +495,15 @@ function renderHist(){const g=cur,c=G[g],d=full(g),M=nvMin();
  $('hf').innerHTML=stats(g);
  $('conf').innerHTML=CONF.length?'<span class="bad">Notas de votação: '+CONF.slice(0,12).join(' | ')+(CONF.length>12?` | … +${CONF.length-12}`:'')+'</span>':'';
  if(SYNC.t)$('smsg').textContent=`${SYNC.t.toLocaleTimeString('pt-PT')}${SYNC.via?' (via '+SYNC.via+')':''} — ${SYNC.msg}`}
-/* acrescentar um resultado em falta */
+/* acrescentar um resultado em falta (data escrita como dd/mm/aaaa) */
 function adLabels(){const c=G[$('adg').value];$('adnl').textContent='Números ('+c.k+')';$('adel').textContent=c.en+' ('+c.x+')';
  $('adn').placeholder='ex.: '+Array.from({length:c.k},(_,i)=>pad(i*7+3)).join(' ');$('ade').placeholder=c.x>1?'ex.: 04 09':'ex.: 07'}
-async function addOne(){const g=$('adg').value,c=G[g],v=$('add').value,out=t=>$('admsg').innerHTML=t;
- if(!v){out('<span class="bad">Escolha a data do sorteio.</span>');return}
- const[Y,M,D]=v.split('-'),d=`${D}/${M}/${Y}`,n=($('adn').value.match(/\d+/g)||[]).map(Number),x=($('ade').value.match(/\d+/g)||[]).map(Number),cc=$('adc').value.trim();
+async function addOne(){const g=$('adg').value,c=G[g],out=t=>$('admsg').innerHTML=t;
+ const dm=$('add').value.trim().match(/^(\d{1,2})\D(\d{1,2})\D(\d{4})$/);
+ if(!dm){out('<span class="bad">Escreva a data como dd/mm/aaaa.</span>');return}
+ const d=pad(+dm[1])+'/'+pad(+dm[2])+'/'+dm[3];
+ if(toDate(d).getMonth()+1!==+dm[2]||toDate(d).getDate()!==+dm[1]){out('<span class="bad">Data inexistente.</span>');return}
+ const n=($('adn').value.match(/\d+/g)||[]).map(Number),x=($('ade').value.match(/\d+/g)||[]).map(Number),cc=$('adc').value.trim();
  if(!valid(g,n,x)){out(`<span class="bad">Inválido: ${c.nome} precisa de ${c.k} números diferentes (1–${c.N}) e ${c.x} ${c.en} (1–${c.X}).</span>`);return}
  if(toDate(d)>new Date()){out('<span class="bad">A data ainda não aconteceu.</span>');return}
  const old=full(g).find(e=>e.d===d);
@@ -503,7 +511,7 @@ async function addOne(){const g=$('adg').value,c=G[g],v=$('add').value,out=t=>$(
  const off=!SCH[g].includes(toDate(d).getDay());
  upsert(g,{d,n,x,c:cc,f:['ma']});await save();
  out(`<span class="ok">${old?'Substituído':'Guardado'}:</span> ${c.nome} ${d} → <b>${sortN(n).map(pad).join(' ')}</b> | ${sortN(x).map(pad).join(' ')}${off?' <span class="bad">⚠ dia fora do calendário habitual</span>':''}${old?' (a chave anterior foi trocada; se as fontes divergirem, a votação por maioria pode repô-la)':''}`);
- $('adn').value='';$('ade').value='';$('adc').value='';renderHist();renderFoot()}
+ $('adn').value='';$('ade').value='';$('adc').value='';$('add').value='';renderHist();renderFoot()}
 /* ---------- consistência, ano/mês e redução ---------- */
 let POOL={n:null,x:null},LAST=null;
 const MESN=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
@@ -545,7 +553,6 @@ function tier(){const c=G[cur],n=+$('n').value,s=+$('s').value,T=C(n,c.k)*C(s,c.
  rows.sort((a,b)=>a[2]-b[2]);
  return`<table><tr><th>Acertos (nº+${c.en})</th><th>Prob. aposta simples</th><th>Frequência</th><th>Bilhetes esperados no sistema ${n}+${s}</th></tr>${rows.map(r=>`<tr><td>${r[0]}+${r[1]}</td><td>${pct(r[2])}</td><td>${one(r[2])}</td><td>${(T*r[2]).toExponential(2)}</td></tr>`).join('')}</table><div class="m">Média de números certos por aposta simples: ${(c.k*c.k/c.N).toFixed(3)}. A soma de todas as linhas é 100%. A última coluna é o valor esperado exato (linearidade): ${T} bilhete(s) × probabilidade de cada categoria.</div>`}
 function setup(){const c=G[cur];
- $('add').max=isoD(new Date());
  $('ck').value=Math.round(c.N/2);$('cs').value=Math.max(c.x,Math.ceil(c.X/2));POOL={n:null,x:null};$('cout').innerHTML='';$('cym').innerHTML='';
  fill($('n'),c.k,c.nMax,c.k);fill($('s'),c.x,c.sMax,c.x);fill($('a'),2,c.k,c.ta);fill($('b'),0,c.x,c.tb);
  $('s').disabled=c.sMax===c.x;$('sl').textContent=c.en+' escolhidas';$('bl').textContent='Alvo: '+c.en+' certas (mín.)';
@@ -554,6 +561,7 @@ function calc(){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').value,b
  const P=atLeast(c.N,c.k,n,a)*atLeast(c.X,c.x,s,b),p1=atLeast(c.N,c.k,c.k,a)*atLeast(c.X,c.x,c.x,b);
  const T=C(n,c.k)*C(s,c.x),cost=T*c.p,bud=Math.max(0,+$('bud').value||0),nb=Math.floor(bud/c.p),Pb=pAny(p1,nb),PT=pAny(p1,T);
  const D=Math.max(1,Math.round(+$('dr').value||52)),ex=hyp(c.N,c.k,c.k,a)*(b<=c.x?hyp(c.X,c.x,c.x,b):0),nd=q=>{const v=drawsFor(P,q);return isFinite(v)?v.toLocaleString('pt-PT'):'—'};
+ const ge2=P>=1?1:Math.max(0,pAny(P,D)-D*P*Math.exp((D-1)*Math.log1p(-P)));
  $('out').innerHTML=`<label>Prob. de acertar pelo menos ${a} + ${b} ${c.en} (${n}+${s})</label>
  <div class="big">${pct(P)}</div><div>${one(P)} · custo ${eur(cost)} (${T.toLocaleString('pt-PT')} combinação(ões))</div>
  <div class="m">Aposta simples: ${one(p1)} (exatamente ${a}+${b}: ${one(ex)}). Nº esperado de bilhetes premiados no sistema: ${(T*p1).toExponential(2)}.</div>
@@ -563,12 +571,14 @@ function calc(){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').value,b
  <tr><td>Orçamento: ${nb} apostas simples</td><td>${eur(nb*c.p)}</td><td>${pct(Pb)}</td></tr>
  <tr><td>Este sistema em ${D} sorteios</td><td>${eur(cost*D)}</td><td>${pct(pAny(P,D))}</td></tr></table>
  <div class="m">Sorteios necessários com este sistema para 50% / 90% / 99% de hipótese de pelo menos 1 sucesso: ${nd(.5)} / ${nd(.9)} / ${nd(.99)}.</div>
+ <div class="m">Em ${D} sorteios: sucessos esperados ${(D*P).toExponential(2)} · desvio-padrão ${Math.sqrt(D*P*(1-P)).toExponential(2)} · P(≥2 sucessos) ${pct(ge2)}.</div>
  <div class="m">Custo esperado até 1 sucesso ≈ ${eur(c.p/p1)} em média, seja qual for a estratégia (sistemas só concentram o risco).</div>`;
  $('tier').innerHTML=tier()}
-function filt(){const c=G[cur],n=+$('n').value,f={};['sum','par','alt','seq','dec','fin','pop','rep'].forEach(k=>f[k]=$('f'+k).checked);
- const bd=sumBounds(c.N,n,+$('mass').value),hs=new Set(full(cur).map(d=>d.n.join(','))),odd=Math.ceil(c.N/2),oddOK=new Set();
+function filt(){const c=G[cur],n=+$('n').value,f={};['sum','rng','par','alt','seq','dec','fin','pop','rep'].forEach(k=>f[k]=$('f'+k).checked);
+ const bd=sumBounds(c.N,n,+$('mass').value),rb=rangeBounds(c.N,n,+$('mass').value),hs=new Set(full(cur).map(d=>d.n.join(','))),odd=Math.ceil(c.N/2),oddOK=new Set();
  for(let i=0;i<=n;i++)if(hyp(c.N,n,odd,i)>=0.05)oddOK.add(i);
  const ok=a=>{if(f.sum){const S=a.reduce((x,y)=>x+y,0);if(S<bd.lo||S>bd.hi)return false}
+  if(f.rng){const R=a[a.length-1]-a[0];if(R<rb.lo||R>rb.hi)return false}
   if(f.par&&!oddOK.has(a.filter(x=>x%2).length))return false;
   if(f.alt){const l=a.filter(x=>x<=c.N/2).length;if(l===0||l===a.length)return false}
   if(f.seq){let m=1,q=1;for(let i=1;i<a.length;i++){q=a[i]===a[i-1]+1?q+1:1;m=Math.max(m,q)}if(m>2)return false}
@@ -576,14 +586,17 @@ function filt(){const c=G[cur],n=+$('n').value,f={};['sum','par','alt','seq','de
   if(f.fin){const d={};a.forEach(x=>{d[x%10]=(d[x%10]||0)+1});if(Math.max(...Object.values(d))>2)return false}
   if(f.pop){if(a.filter(x=>x>31).length<2)return false;const d=a[1]-a[0];if(a.every((x,i)=>!i||x-a[i-1]===d))return false}
   if(f.rep&&n===c.k&&hs.has(a.join(',')))return false;return true};
- return{ok,bd,n}}
+ return{ok,bd,rb,n}}
+/* retenção exata: enumera todas as combinações (só quando n = k) */
+function exactKeep(){const c=G[cur],n=+$('n').value;if(n!==c.k)return null;const F=filt(),a=new Array(n);let tot=0,ok=0;
+ (function rec(i,s){if(i===n){tot++;if(F.ok(a))ok++;return}for(let v=s;v<=c.N-(n-i)+1;v++){a[i]=v;rec(i+1,v+1)}})(0,1);return{ok,tot}}
 function genBet(){const c=G[cur],s=+$('s').value,F=filt(),n=F.n,cnt=Math.min(20,Math.max(1,+$('nb').value||1)),ov=Math.max(0,+$('ov').value||0),res=[];
  for(let b=0;b<cnt;b++){let a,t=0;do{a=pickN(n);t++}while((!F.ok(a)||res.some(r=>r.a.filter(v=>a.includes(v)).length>ov))&&t<200000);res.push({a,x:pickX(s),t})}
  let acc=0;const TT=20000;for(let i=0;i<TT;i++)if(F.ok(pickN(n)))acc++;
  $('gout').style.display='block';
  $('gout').innerHTML=res.map((r,i)=>{const S=r.a.reduce((x,y)=>x+y,0);return`<div class="balls">${cnt>1?`<b>${i+1}.</b>`:''}${r.a.map(v=>`<div class="ball">${pad(v)}</div>`).join('')}${r.x.map(v=>`<div class="ball s">${pad(v)}</div>`).join('')}</div>
- <div class="m">Soma ${S} (faixa exata ${F.bd.lo}–${F.bd.hi}) · ${r.t.toLocaleString('pt-PT')} tentativa(s)${r.t>=200000?' · <span class="bad">limite atingido, filtros/sobreposição demasiado apertados</span>':''}</div>`}).join('')+
- `<div class="m">Os filtros retêm ≈ ${(acc/TT*100).toFixed(1)}% de todas as combinações de ${n} números (amostra de ${TT.toLocaleString('pt-PT')}). Todas as combinações do mesmo tamanho têm exatamente a mesma probabilidade (${one(atLeast(c.N,c.k,c.k,c.k)*atLeast(c.X,c.x,c.x,c.x))} por aposta simples). Os filtros só mudam o estilo da aposta e a chance de partilhar prémio; a opção de Monte Carlo com filtros demonstra-o.</div>`}
+ <div class="m">Soma ${S} (faixa exata ${F.bd.lo}–${F.bd.hi}) · amplitude ${r.a[r.a.length-1]-r.a[0]} (faixa exata ${F.rb.lo}–${F.rb.hi}) · ${r.t.toLocaleString('pt-PT')} tentativa(s)${r.t>=200000?' · <span class="bad">limite atingido, filtros/sobreposição demasiado apertados</span>':''}</div>`}).join('')+
+ `<div class="m">Os filtros retêm ≈ ${(acc/TT*100).toFixed(1)}% de todas as combinações de ${n} números (amostra de ${TT.toLocaleString('pt-PT')}). Todas as combinações do mesmo tamanho têm exatamente a mesma probabilidade (${one(atLeast(c.N,c.k,c.k,c.k)*atLeast(c.X,c.x,c.x,c.x))} por aposta simples). Os filtros só mudam o estilo da aposta e a chance de partilhar prémio; a opção de Monte Carlo com filtros demonstra-o.</div><button id="bex" style="margin-top:8px">Calcular retenção exata (todas as combinações)</button><div class="m" id="exo"></div>`}
 function runMC(total){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').value,b=+$('b').value,useF=$('mcf').checked;let bet;
  if(useF){const F=filt();let t=0;do{bet=pickN(n);t++}while(!F.ok(bet)&&t<200000)}else bet=pickN(n);
  const ex=pickX(s),fb=new Uint8Array(c.N+1),fe=new Uint8Array(c.X+1);bet.forEach(v=>fb[v]=1);ex.forEach(v=>fe[v]=1);
@@ -603,7 +616,7 @@ function runMC(total){const c=G[cur],n=+$('n').value,s=+$('s').value,a=+$('a').v
   const pT=expT/total,sd=Math.sqrt(total*pT*(1-pT)),z=sd>0?(obsT-expT)/sd:0,w=wilson(obsT,total),se=Math.sqrt(pT*(1-pT)/total);
   $('mcout').style.display='block';
   $('mcout').innerHTML=`<label>Aposta simulada (${n}+${s})${useF?' · com filtros do Gerador':' · aleatória pura'}</label><div class="balls">${bet.map(v=>`<div class="ball" style="width:34px;height:34px">${v}</div>`).join('')}${ex.map(v=>`<div class="ball s" style="width:34px;height:34px">${v}</div>`).join('')}</div>
-  <b>Alvo ≥${a}+${b}:</b> observado ${obsT.toLocaleString('pt-PT')} · esperado ${expT.toFixed(1)} · Z=${z.toFixed(2)}<br>
+  <b>Alvo ≥${a}+${b}:</b> observado ${obsT.toLocaleString('pt-PT')} · esperado ${expT.toFixed(1)} · Z=${z.toFixed(2)} · p bilateral ${(chiSF(z*z,1)*100).toFixed(1)}%<br>
   Teórico ${pct(pT)} · simulado ${pct(obsT/total)} · IC 95% Wilson [${pct(w[0])} – ${pct(w[1])}] · erro-padrão ${pct(se)}
   <table><tr><th>Acertos</th><th>Obs.</th><th>Esp.</th><th>Z</th></tr>${rows}</table>
   <div style="margin-top:8px">χ² = ${cp.chi.toFixed(2)} (gl=${cp.df}, células agrupadas a esperado ≥ 5) · p = <b class="${pv>0.05?'ok':'bad'}">${(pv*100).toFixed(1)}%</b> ${pv>0.05?'— simulação coerente com a teoria':'— desvio (repita: 1 em 20 corridas dá p<5% por acaso)'}</div>
@@ -621,7 +634,10 @@ document.addEventListener('DOMContentLoaded',async()=>{
  ['n','s','a','b','bud','dr'].forEach(i=>$(i).addEventListener('input',calc));
  $('tabs').onclick=e=>{const t=e.target.dataset.t;if(!t)return;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id===t));document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===e.target));if(t==='hist')renderHist();if(t==='cons')consRender()};
  $('bgen').onclick=genBet;
+ $('gout').addEventListener('click',e=>{if(e.target.id!=='bex')return;$('exo').textContent='A enumerar…';
+  setTimeout(()=>{const r=exactKeep();$('exo').innerHTML=r?`Exato: <b>${r.ok.toLocaleString('pt-PT')}</b> de ${r.tot.toLocaleString('pt-PT')} combinações passam (${(r.ok/r.tot*100).toFixed(3)}%).`:'Só disponível com «Números escolhidos» = '+G[cur].k+'.'},30)});
  $('badd').onclick=addOne;$('adg').addEventListener('change',adLabels);$('adg').value=cur;adLabels();
+ $('add').addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'').slice(0,8);e.target.value=v.length>4?v.slice(0,2)+'/'+v.slice(2,4)+'/'+v.slice(4):v.length>2?v.slice(0,2)+'/'+v.slice(2):v});
  $('hl').addEventListener('toggle',e=>{const k=e.target.dataset&&e.target.dataset.k;if(!k)return;if(e.target.open)OPEN.add(k);else OPEN.delete(k)},true);
  $('bcons').onclick=consRender;$('cy').addEventListener('change',consRender);
  document.querySelectorAll('[data-mc]').forEach(b=>b.onclick=()=>runMC(+b.dataset.mc));
